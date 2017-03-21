@@ -8,6 +8,8 @@ import './config/rem'
 import FastClick from 'fastclick'
 import Vuex from 'vuex'
 
+import VueHtml5Editor from 'vue-html5-editor'
+Vue.use(VueHtml5Editor);
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
     FastClick.attach(document.body);

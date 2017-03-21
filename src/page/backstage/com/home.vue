@@ -2,7 +2,7 @@
     <div class="wrapper">
         <v-head></v-head>
         <v-sidebar></v-sidebar>
-        <div class="content">
+        <div class="backStagecontent">
             <transition name="move" mode="out-in"><router-view></router-view></transition>
         </div>
     </div>
@@ -34,7 +34,7 @@
     }
 </script>
 <style>
-    .content{
+    .backStagecontent{
     background: none repeat scroll 0 0 #fff;
     position: absolute;
     left: 250px;

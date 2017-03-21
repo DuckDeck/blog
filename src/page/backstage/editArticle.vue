@@ -27,8 +27,8 @@
                 </el-form-item>
 
 
-                <quill-editor ref="articleTextEditor" @editor-change = "editChange" style="font-size: 20px" v-model="content" :config="editorOption"></quill-editor>
-
+                <!--<quill-editor ref="articleTextEditor" @editor-change = "editChange" style="font-size: 20px" v-model="content" :config="editorOption"></quill-editor>-->
+                <vue-html5-editor :content="content" @change="updateData" ></vue-html5-editor>
                 <div class="handleArticleClass">
                     
                     <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
@@ -45,7 +45,7 @@
 
 <script>
 import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
-import { quillEditor } from 'vue-quill-editor';
+
 
     export default {
         data: function(){
@@ -139,8 +139,8 @@ import { quillEditor } from 'vue-quill-editor';
             dropdownSelect(command){
                 this.selectedSortId = parseInt(command)
             },
-            editChange(change, ...args){
-                console.log(change)
+            updateData(data){
+                this.content = data
             },
             save(formName,mode){
                 let self = this;
@@ -160,6 +160,7 @@ import { quillEditor } from 'vue-quill-editor';
                     })
                     return
                 }
+                console.log(this.content)
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let article = {
@@ -215,7 +216,7 @@ import { quillEditor } from 'vue-quill-editor';
             }
         },
         components:{
-            quillEditor
+            
         }
     }
 </script>
