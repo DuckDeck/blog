@@ -5,18 +5,18 @@
         </div>
 
         <el-table :data="tableData" border style="width: 100%">
-            <el-table-column  label="标题" width="120">
+            <el-table-column  label="标题" >
                 <template scope="scope">
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.article_name}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="article_create_time" label="日期" sortable width="150" :formatter="formatter">
+            <el-table-column prop="article_create_time" label="日期" sortable width="160" :formatter="formatter">
             </el-table-column>
             <el-table-column prop="article_click" label="浏览量" sortable width="100">
             </el-table-column>
-            <el-table-column prop="article_sort_name" label="所属类型" >
+            <el-table-column prop="article_sort_name"  width="100" label="所属类型" >
             </el-table-column>
-            <el-table-column prop="article_status" label="发布状态" :formatter="formatter" >
+            <el-table-column prop="article_status" width="100" label="发布状态" :formatter="formatter" >
             </el-table-column>
             <el-table-column  label="标签" >
                  <template scope="scope">
@@ -129,5 +129,18 @@ import {articleList,deleteAticle} from '../../store/service'
 }
 .el-dialog__headerbtn{
 display:  none;
+}
+.table td, .table th{
+    padding: 0rem;
+}
+.table thead th{
+    vertical-align: middle;
+    text-align: center;
+}
+.el-table--border td, .el-table--border th{
+    border-right:0px;
+}
+.cell{
+    text-align: center;
 }
 </style>

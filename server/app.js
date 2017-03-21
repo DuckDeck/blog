@@ -1,12 +1,12 @@
 const Koa = require('koa');
 
-const bodyParser = require('koa-bodyparser');
+
 
 const controller = require('./controller');
 
 const rest = require('./rest');
 
-const multer = require('koa-multer')
+
 
 const app = new Koa();
 
@@ -50,17 +50,6 @@ actions.createTbs()
 //43112
 
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './vue/static/img')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-});
-var upload = multer({ storage: storage });
-var cpUpload = upload.any();
-app.use(cpUpload);
 
 // log request URL:
 app.use(async (ctx, next) => {
@@ -81,7 +70,7 @@ app.use(cors());
 
 // parse request body:
 
-app.use(bodyParser({}));
+
 
 // bind .rest() for ctx:
 app.use(rest.restify());
