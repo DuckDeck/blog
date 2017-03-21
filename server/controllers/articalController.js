@@ -99,6 +99,9 @@ module.exports = {
             ctx.rest(Result.create(10,{msg:'miss articalContent'})) 
             return
         }
+       // if(t.articalContent.match(/^data:image\/\w+;base64,/))
+       //使用正则来取出里面的图片也不是好办法
+       //大一点点的图片都无法直接保存在数据库了
         let m =new Article(t.articalTitle,t.articalContent)
         m.category = t.articalSort
         m.userId = id
