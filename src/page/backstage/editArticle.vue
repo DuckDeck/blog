@@ -27,7 +27,7 @@
                 </el-form-item>
 
 
-                <quill-editor ref="articleTextEditor" style="font-size: 20px" v-model="content" :config="editorOption"></quill-editor>
+                <quill-editor ref="articleTextEditor" @editor-change = "editChange" style="font-size: 20px" v-model="content" :config="editorOption"></quill-editor>
 
                 <div class="handleArticleClass">
                     
@@ -138,6 +138,9 @@ import { quillEditor } from 'vue-quill-editor';
             },
             dropdownSelect(command){
                 this.selectedSortId = parseInt(command)
+            },
+            editChange(change, ...args){
+                console.log(change)
             },
             save(formName,mode){
                 let self = this;
