@@ -33,7 +33,7 @@ Vue.use(VueHtml5Editor,{
         uploadHandler(responseText){
             //default accept json data like  {ok:false,msg:"unexpected"} or {ok:true,data:"image url"}
             var json = JSON.parse(responseText)
-            upImgCb(json)
+            callBack(json)
         }
     },
 

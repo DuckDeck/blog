@@ -31,16 +31,12 @@
                     <el-button v-if="articleId>0" class="editor-btn" type="primary" @click="cancle">取消</el-button>
                 </div>
             </el-form>
-
-          
-         
       </div>
     </div>
 </template>
-
 <script>
 import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
-
+//wait to do auto save feature
 
     export default {
         data: function(){
@@ -97,6 +93,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 this.selectedSortId = articleDetail.article_sort__id
                 this.content = articleDetail.article_content
             }
+            setGlobalVue(this)
         },
         methods:{
             selectTag(tag){
@@ -125,6 +122,15 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             updateData(data){
                 this.content = data
             },
+            imgCallBack(result){
+                console.log(result)
+                if(result.code == 0){
+                    this.content = this.content + "<img src="+ result.data +" ></img>"
+                }
+                else{
+                    toast(this,result.ChineseMsg)
+                }
+            },
             save(formName,mode){
                 let self = this;
                 if(self.selectedTags.length <= 0){
@@ -150,7 +156,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                             articalTitle:self.article.title,
                             articalSort:self.selectedSortId,
                             articalTags:self.selectedTags.map((s=>{
-                                            return s.id
+                                            return s.tag_id
                                         })),
                             articalContent:self.content,
                             articleStatus:mode,

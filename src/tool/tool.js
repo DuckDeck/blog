@@ -1,6 +1,7 @@
 
 const realNameRegex = /\S+/
 const phoneRegex = /(13|14|15|17|18)\d{9}$/
+let globalVue = {}
 export function validate(type,value){
     switch (type) {
         case 'realName':
@@ -173,9 +174,22 @@ global.createToken = function(){
 }
 
 global.toast = function(vue,message){
+    if(globalVue != vue){
+        globalVue = vue
+    }
     vue.$vux.toast.show({
         text: message,
         position:"bottom",
         type:'text'
     })
+}
+
+global.callBack = function(result){
+    globalVue.imgCallBack(result)
+}
+
+global.setGlobalVue = function(vue){
+    if(globalVue != vue){
+        globalVue = vue
+    }
 }
