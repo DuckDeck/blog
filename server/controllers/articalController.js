@@ -173,4 +173,16 @@ module.exports = {
        })
     },
 
+    'POST /api/uploadImg/:userId/:token': async (ctx, next) => {
+        let result0 = await Tool.checkToken(ctx)
+        if(result0.code != 0){
+            ctx.rest(result0)
+            return
+        }
+       let id = ctx.params.userId
+       let token = ctx.params.token
+       let  t = ctx.request.body
+       console.log(t)
+    },
+
 }

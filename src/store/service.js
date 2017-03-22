@@ -3,6 +3,9 @@ import {getUrl} from  '../tool/urlTool'
 import qs from 'qs'
 import {tool} from '../tool/tool'
 const HostName = 'http://localhost:3000/api/'
+
+
+
 const setpromiseGet = (url,para) => {
     console.log(url)
 	return new Promise((resolve, reject) => {
@@ -73,6 +76,8 @@ const setpromisePut = (url,para) => {
 }
 
 
+export const uploadImgUrl =  HostName +  'uploadImg/' + getStore('token').user_id + '/' + createToken()
+
 export const manageLogin = function(userName,password){
     const url =  HostName + 'login'
     return setpromisePost(url,{userName:userName,password:password})
@@ -142,3 +147,5 @@ export const articleById = function(article_id){
     const url = HostName +  'article/' + article_id + '/' + getStore('token').user_id + '/' + createToken()
     return setpromiseGet(url)
 }
+
+

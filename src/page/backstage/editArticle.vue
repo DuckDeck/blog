@@ -9,21 +9,16 @@
                     <el-input v-model="article.title" placeholder="文章标题"></el-input>
                 </el-form-item>
                 <el-form-item >
-                    <el-autocomplete  v-model="tag" :fetch-suggestions="getTags" placeholder="请输入标签" @select="handleSelect" ></el-autocomplete>
-                    <el-tag class="selectedTagClass" v-for="tag in selectedTags" :closable="true"  type="primary" @close = "deleteTag(tag)" >
-                    {{tag.value}}
-                    </el-tag>
-                    
+                    <span>请选择文章标签:   </span>
+                    <el-button   :class="[{selectedTag:isTagContain(tag)},'tagClass']" v-for="tag in tags"   @click="selectTag(tag)" >
+                      {{tag.tag_name}}
+                    </el-button>      
                 </el-form-item>
                 <el-form-item >
-                  <el-dropdown @command="dropdownSelect">
-                    <el-button type="primary"> 文章分类<i class="el-icon-caret-bottom el-icon--right"></i>
+                    <span>请选择文章类型:   </span>
+                    <el-button :class="[{selectedTag:sort.sort_article_id == selectedSortId},'tagClass']"  v-for="sort in articleSort"   @click="selectSort(sort)" >
+                         {{sort.sort_article_name}}
                     </el-button>
-                    <el-dropdown-menu slot="dropdown" style="font-size: 21px" >
-                        <el-dropdown-item v-for="sort in articleSort" :command="sort.sort_article_id.toString()" >{{sort.sort_article_name}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                  <span class="selectedTagClass" v-show="selectedSortId > 0">{{selectedSortName}}</span>
                 </el-form-item>
 
 
@@ -59,9 +54,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                     ],
                 },
                 tags: [],
-                disposedTag:[],
                 selectedTags:[],
-                filteredTags:[],
                 tag:'',
                 articleSort:[],
                 selectedSortId:0,
@@ -79,9 +72,6 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             getTags().then(function(result){
                 if(result.code == 0){
                     self.tags = result.data
-                    for(var item of self.tags){
-                        self.disposedTag.push({value:item.tag_name,id:item.tag_id})
-                    }
                 }
             })
             getSorts().then(function(result){
@@ -109,36 +99,29 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             }
         },
         methods:{
-            getTags(str,cb){
-                if(str.length == 0){
-                    this.filteredTags = this.disposedTag
-                    cb(this.filteredTags)
+            selectTag(tag){
+                let index = this.selectedTags.findIndex(s=>{
+                    return s.tag_id == tag.tag_id
+                })
+                if(index < 0 ){
+                    this.selectedTags.push(tag)
                 }
                 else{
-                    this.filteredTags  = this.disposedTag.filter(function(item){
-                        return item.value.indexOf(str) >= 0
-                    })
-                    cb(this.filteredTags)
-                }
-              
-            },
-            handleSelect(item) {
-                if(this.selectedTags.find((s)=>{
-                    return item.id == s.id
-                })){
-                    return
-                }
-                this.selectedTags.push(item)
-            },
-            deleteTag(tag){
-                let index = this.selectedTags.indexOf(tag)
-                if(index >= 0){
                     this.selectedTags.splice(index,1)
                 }
+                console.log(this.selectedTags)
             },
-            dropdownSelect(command){
-                this.selectedSortId = parseInt(command)
+            isTagContain(tag){
+                let index = this.selectedTags.findIndex(s=>{
+                    return s.tag_id == tag.tag_id
+                })
+                return index >= 0
             },
+            selectSort(sort) {
+                this.selectedSortId = sort.sort_article_id
+            },
+
+
             updateData(data){
                 this.content = data
             },
@@ -206,14 +189,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             }
         },
         computed:{
-            selectedSortName(){
-                let s =  this.articleSort.find((item)=>{
-                    return item.sort_article_id == this.selectedSortId
-                })
-                if(s!=undefined)
-                     return s.sort_article_name
-                
-            }
+            
         },
         components:{
             
@@ -224,15 +200,16 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
 <style scoped>
 
 
- .selectedTagClass{
-    margin-left: 0.15rem;
-    margin-right: 0.05rem;
+ .tagClass{
+    cursor: pointer;
+    margin-right: 0.15rem;
 
  }
-.selectedTagDeleteClass{
-    background: white;
-    color: black;
-}
+ .selectedTag{
+    background: #20a0ff;
+    color: white;
+ }
+
 .handleArticleClass{
     margin-top: 20px;
 }
