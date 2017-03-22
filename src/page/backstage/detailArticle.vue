@@ -5,10 +5,10 @@
                {{articleDetail.article_name}}
            </div>
            <div class="articleInfoClass">
-               发布于<span>{{releaseDate}}</span>  <span>  {{articleDetail.article_sort_name}}</span> <span>  {{articleDetail.article_click}}</span>浏览
+               发布于<span>{{releaseDate}}</span>  <span>  {{articleDetail.sort_name}}</span> <span>  {{articleDetail.article_click}}</span>浏览
            </div>
            <div  class="articleTagClass">
-                <el-tag  v-for="t in articleDetail.tag"   type="primary"  >{{t.tag_name}}</el-tag>
+                <el-tag  v-for="t in articleDetail.tags"   type="primary"  >{{t.tag_name}}</el-tag>
            </div>
        </header>
        <div class="articleSeperateLine"></div>
@@ -26,22 +26,18 @@ import {articleById} from '../../store/service'
         },
         mounted(){
              let id = this.$route.params.id
-             let article = getStore('article' + id)
-             if(article){
-                 this.articleDetail = article
-             }
-             else{
-                let self = this
-                articleById(id).then(res=>{
-                    if(res.code == 0){
-                        self.articleDetail = res.data
-                    }else{
-                        toast(self,err.ChineseMsg)
-                    }
-                }).catch(err=>{
+
+            let self = this
+            articleById(id).then(res=>{
+                if(res.code == 0){
+                    self.articleDetail = res.data
+                }else{
                     toast(self,err.ChineseMsg)
-                })
-             }
+                }
+            }).catch(err=>{
+                toast(self,err.ChineseMsg)
+            })
+             
             
         },
         computed:{

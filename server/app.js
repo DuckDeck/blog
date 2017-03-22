@@ -1,12 +1,8 @@
 const Koa = require('koa');
 
-
-
 const controller = require('./controller');
 
 const rest = require('./rest');
-
-
 
 const app = new Koa();
 
@@ -72,7 +68,9 @@ app.use(cors());
 
 // parse request body:
 
-
+var log4js = require('log4js')
+var logger = log4js.getLogger()
+logger.debug("Some debug messages")
 
 // bind .rest() for ctx:
 app.use(rest.restify());
