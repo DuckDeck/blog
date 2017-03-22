@@ -74,15 +74,14 @@
                                 <div class="banner-main-home">                                
                                     <div class="banner-main-home-text">
                                         <div class="heading">
-                                            <h1>ACCORD</h1>
-                                            <p class="text-uppercase">Proin gravida nibhISI</p>
+                                            <h1>{{top.article_name}}</h1>
                                         </div>
                                         <div class="desc">
-                                            <p>This is free Bootstrap v3.3.6 website theme brought to you by templatemo. Feel free to use it. Please tell your friends about it. Images are provided by <a rel="nofollow" href="http://unsplash.com" target="_parent">Unsplash</a> (free photo website). Icons are from Smashing Magazine.</p>
-                                            <button type="button" class="">SAGITIS SELIT</button>
+                                            <p>{{top.article_brief}}</p>
+                                            <button type="button" style="cursor: pointer">查看详情</button>
                                         </div>
                                     </div>
-                                    <img src="static/img/home-img-1.png" alt="Image" class="img-responsive">
+                                    <img :src="top.article_main_img" alt="Image" class="img-responsive">
                                 </div>                        
                             </div>    
                         </div>
@@ -90,17 +89,16 @@
 
 
                         <div class="row margin-b-30">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" v-for='art in articles'>
                                 <div class="box">
                                     <div class="box-icon">
-                                        <img src="/static/img/home-img-1.png" alt="Image" class="img-responsive">
+                                        <img :src="art.article_main_img" alt="Image" class="img-responsive">
                                     </div>
                                     <div class="info float-container">
                                         <div class="col-sm-12 article-title">
-                                            <h5 class="text-uppercase">Proin gravida nibhvel</h5>
-                                            
+                                            <h5 class="text-uppercase">{{art.article_name}}</h5>
                                         </div>
-                                        <p>Sean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. </p>
+                                        <p> {{art.article_brief}}</p>
                                         <hr class="box-separate" />
                                         <div class="col-sm-12 location-main"> 
                                             <div class="pull-right user-icons">
@@ -113,28 +111,7 @@
                                 </div>
                             </div>
 
-                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="box">
-                                    <div class="box-icon">
-                                        <img src="/static/img/home-img-1.png" alt="Image" class="img-responsive">
-                                    </div>
-                                    <div class="info float-container">
-                                        <div class="col-sm-12 article-title">
-                                            <h5 class="text-uppercase">Proin gravida nibhvel</h5>
-                                            
-                                        </div>
-                                        <p>Sean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. </p>
-                                        <hr class="box-separate" />
-                                        <div class="col-sm-12 location-main"> 
-                                            <div class="pull-right user-icons">
-                                                <a href="#"><i class="fa fa-star fa-2x"></i></a>
-                                                <a href="#"><i class="fa fa-user fa-2x"></i></a>
-                                                <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                
                         </div>  
 
                        
@@ -148,15 +125,27 @@
 </template>
 
 <script>
-
+import {inxexArticle} from '../../store/service'
   export default {
     data() {
       return {
-     
+            top:'',
+            articles:[]
       }
     },
     mounted(){
-  
+        let self= this
+        inxexArticle().then(res=>{
+            if(res.code == 0){
+                this.top = res.data.top
+                this.articles = res.data.artilces
+            }
+            else{
+                toast(self,err.ChineseMsg)
+            }
+        }).catch(err=>{
+            toast(self,err.ChineseMsg)
+        })
     },
 
 
@@ -300,7 +289,10 @@
 	height: auto;
 }
 .margin-b-30 { margin-bottom: 30px; }
-
+.img-responsive{
+    width: 293px;
+    height: 200px;
+}
 .banner-main-home-text,
 .banner-main-about-text {
 	position: relative;

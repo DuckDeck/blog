@@ -148,8 +148,9 @@ export const articleById = function(article_id){
     return setpromiseGet(url)
 }
 
-export const upImgCb = function(res){
-    
+export const inxexArticle = function(){
+    const url = HostName +  'article/'  + getStore('token').user_id 
+    return setpromiseGet(url)
 }
 
 
