@@ -7,6 +7,7 @@
           <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
                 <el-form-item prop="title">
                     <el-input v-model="article.title" placeholder="文章标题"></el-input>
+                    <!--<el-button class="editor-btn" type="primary" @click="save('article',1)"></el-button>-->
                 </el-form-item>
                 <el-form-item >
                     <span>请选择文章标签:   </span>
@@ -59,6 +60,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                     // something config
                     placeholder:'从这里开始写你的文章'
                 },
+                mainImage:'',
                 articleId:0,
             }
         },
@@ -125,7 +127,10 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             imgCallBack(result){
                 console.log(result)
                 if(result.code == 0){
-                    this.content = this.content + "<img src="+ result.data +" ></img>"
+                    if(this.mainImage == ''){
+                        this.mainImage = result.data
+                    }
+                    this.content = this.content +  "<img src="+ result.data +" ></img>"
                 }
                 else{
                     toast(this,result.ChineseMsg)
@@ -152,6 +157,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 console.log(this.content)
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
+                        let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
                         let article = {
                             articalTitle:self.article.title,
                             articalSort:self.selectedSortId,
@@ -160,7 +166,9 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                                         })),
                             articalContent:self.content,
                             articleStatus:mode,
-                            articleId:self.articleId
+                            articleId:self.articleId,
+                            articelImage:self.mainImage,
+                            articleBrief:filterContent,
                         }
                         saveArticle(article).then(function(data){
                             if(data.code == 0){

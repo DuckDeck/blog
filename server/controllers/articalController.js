@@ -107,6 +107,8 @@ module.exports = {
         let m =new Article(t.articalTitle,t.articalContent)
         m.category = t.articalSort
         m.userId = id
+        m.articleBrief = t.articleBrief || ''
+        m.articleMainImage = t.articelImage || ''
         let result2 = await Article.save(m)
         if(result2.code != 0)
         {

@@ -288,6 +288,8 @@ CREATE TABLE  IF NOT EXISTS article (
  article_type_id tinyint(3) NOT NULL DEFAULT 1 COMMENT '栏目ID',
  article_type int(13) NOT NULL DEFAULT 1 COMMENT '文章的模式:0为私有，1为公开，2为仅好友查看',
  article_content text NOT NULL COMMENT '文章内容',
+ article_brief varchar(1000) NOT NULL DEFAULT '' COMMENT '文章简要',
+ article_main_img varchar(128) NOT NULL DEFAULT '' COMMENT '文章主要图片',
  article_up tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否置顶:0为否，1为是',
  article_recommend tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否博主推荐:0为否，1为是',
  article_status tinyint(3) NOT NULL DEFAULT 0 COMMENT '文章状态，0为没有发布，也就是草稿，1 为发布',
