@@ -148,4 +148,8 @@ export const articleById = function(article_id){
     return setpromiseGet(url)
 }
 
+export const upImgCb = function(res){
+    
+}
+
 

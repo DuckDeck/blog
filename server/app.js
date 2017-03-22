@@ -49,6 +49,8 @@ actions.createTbs()
 //answer 是 
 //43112
 
+// var fs = require('fs')
+// fs.createReadStream(__filename+'/stat')
 
 
 // log request URL:

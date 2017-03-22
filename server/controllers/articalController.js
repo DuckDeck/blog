@@ -3,6 +3,8 @@ const Article = require('../model/article')
 const Tag = require('../model/tag')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
+const fs = require('fs')
+const path = require('path')
 let articles = [] //需要一个中间变量来保存，用promiss来传递参数很不方便，只有用中间变量来保存了 但是这样也明显不合理，现在要全部修改
 //同时也要一个中间函数来桥接才行，这个是promise的坑
 function handlePromiseResult(result){
@@ -181,8 +183,53 @@ module.exports = {
         }
        let id = ctx.params.userId
        let token = ctx.params.token
-       let  t = ctx.request.body
-       console.log(t)
+       let  t = ctx.request.body.files.image
+       let oldPath = t.path
+       if (!fs.existsSync(oldPath)){
+           ctx.rest(Result.create(9))
+       }
+       let fileType = t.type
+       let extension = fileType.split('/')[1]
+       let newFileName = id + '-' + new Date().getTime()+ '.' + extension
+       let newPath =    path.join(__dirname,'../static/img/' + newFileName)
+       fs.renameSync(oldPath,newPath)
+       
+       ctx.rest(Result.create(0),newPath)
     },
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,7 +7,8 @@ import {routerMode} from './config/env'
 import './config/rem'
 import FastClick from 'fastclick'
 import Vuex from 'vuex'
-import uploadImgUrl from './store/service'
+import {uploadImgUrl,upImgCb} from './store/service'
+
 import VueHtml5Editor from 'vue-html5-editor'
 Vue.use(VueHtml5Editor,{
     image: {
@@ -32,11 +33,7 @@ Vue.use(VueHtml5Editor,{
         uploadHandler(responseText){
             //default accept json data like  {ok:false,msg:"unexpected"} or {ok:true,data:"image url"}
             var json = JSON.parse(responseText)
-            if (!json.ok) {
-                alert(json.msg)
-            } else {
-                return json.data
-            }
+            upImgCb(json)
         }
     },
 

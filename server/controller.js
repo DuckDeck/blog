@@ -1,6 +1,6 @@
 
 const fs = require('fs');
-const koaBody = require('koa-body')({formidable:{uploadDir: __dirname + `/static/temp`},multipart:true,formLimit:10000000});
+const koaBody = require('koa-body')({formidable:{uploadDir: __dirname + `/static/tmp`},multipart:true,formLimit:10000000});
 // add url-route in /controllers:
 
 function addMapping(router, mapping) {
