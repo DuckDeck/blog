@@ -14,7 +14,7 @@ Vue.use(VueHtml5Editor,{
     image: {
         // 后端图片上传的地址，如果为空，默认转图片为base64
         // Url of the server-side,default null and convert image to base64
-        server: uploadImgUrl,
+        server: uploadImgUrl(),
         // 请求时表单参数名
         // the name for file field in multipart request
         fieldName: "image",

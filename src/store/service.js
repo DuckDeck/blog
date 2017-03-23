@@ -76,7 +76,13 @@ const setpromisePut = (url,para) => {
 }
 
 
-export const uploadImgUrl =  HostName +  'uploadImg/' + getStore('token').user_id + '/' + createToken()
+ export const uploadImgUrl =  function(){
+     let userId = 0
+     if (getStore('token')){
+         userId =  getStore('token').user_id
+     }
+    return HostName +  'uploadImg/' + userId  + '/' + createToken()
+ }
 
 export const manageLogin = function(userName,password){
     const url =  HostName + 'login'

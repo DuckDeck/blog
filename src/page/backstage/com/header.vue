@@ -9,6 +9,7 @@
                     {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="userSetting">个人设置</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -19,21 +20,27 @@
 <script>
     export default {
         data() {
-            return {
-                name: 'linxin'
-            }
+            return{}
+        },
+        props:{
+            username: {
+               type: String,
+               default:''
+            },
+           
         },
         computed:{
-            username(){
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
-            }
+          
         },
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
-                    this.$router.push('/login');
+                    removeStore('userInfo')
+                    removeStore('token')
+                    this.$router.replace('/manage/login');
+                }
+                else if(command == 'userSetting'){
+                    this.$router.replace('/manage/userSetting');
                 }
             }
         }
@@ -79,5 +86,6 @@
     }
     .el-dropdown-menu__item{
         text-align: center;
+        font-size: 16px;
     }
 </style>

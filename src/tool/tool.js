@@ -167,6 +167,9 @@ class Tool{
 
 global.createToken = function(){
     let date = Date.parse(new Date())
+    if(getStore('token') == null){
+        return '0'
+    }
     let to = getStore('token').token
     let criptDa = Tool.encrypt(key,iv,to + '=' + date)
     criptDa = encodeURIComponent(criptDa)

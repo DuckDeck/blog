@@ -23,6 +23,14 @@ const manageArticleDetail =  r => require.ensure([], () => r(require('../page/ba
 
 const manageTag =  r => require.ensure([], () => r(require('../page/backstage/manageTag')), 'manageTag')
 
+
+
+
+
+const userSetting =  r => require.ensure([], () => r(require('../page/backstage/userSetting')), 'userSetting')
+
+
+
 export default [
     {
         path: '/',
@@ -65,6 +73,10 @@ export default [
             {
                 path:'tag',
                 component:manageTag
+            },
+            {
+                path:'userSetting',
+                component:userSetting
             }
         ]
     },

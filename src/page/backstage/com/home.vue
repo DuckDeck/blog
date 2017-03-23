@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
-        <v-head></v-head>
-        <v-sidebar></v-sidebar>
+        <v-head :username="userInfo.user_name"></v-head>
+        <v-sidebar ></v-sidebar>
         <div class="backStagecontent">
             <transition name="move" mode="out-in"><router-view></router-view></transition>
         </div>
@@ -13,20 +13,30 @@
     import vSidebar from './sidebar.vue';
     import {getUserInfo} from '../../../store/service'
     export default {
+        data(){
+            return{
+                userInfo:{}
+            }
+        },
         components:{
             vHead, vSidebar
         },
         mounted(){
             if(getStore('userInfo')){
-
+                this.userInfo = getStore('userInfo')
             }
             else{
+                let self = this
                  getUserInfo().then(function(data){
                     if(data.code == 0){
+                        self.userInfo = data.data
                         setStore('userInfo',data.data)
                     }
+                    else{
+                        toast(self,data.ChineseMsg)
+                    }
                 },function(err){
-                    console.log(err)
+                   toast(self,err.ChineseMsg)
                 })
             }
           
