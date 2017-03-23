@@ -28,7 +28,7 @@ const manageTag =  r => require.ensure([], () => r(require('../page/backstage/ma
 
 
 const userSetting =  r => require.ensure([], () => r(require('../page/backstage/userSetting')), 'userSetting')
-
+const systemSetting =  r => require.ensure([], () => r(require('../page/backstage/systemSetting')), 'systemSetting')
 
 
 export default [
@@ -77,6 +77,10 @@ export default [
             {
                 path:'userSetting',
                 component:userSetting
+            },
+            {
+                path:'systemSetting',
+                component:systemSetting
             }
         ]
     },

@@ -4,8 +4,7 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
-    userInfoById:`select user_name,user_phone,user_gender,user_qq,user_email,
-    user_address,user_mark,user_rank_id,user_image_url,user_says from user where user_id = ?`
+    userInfoById:`select * from user where user_id = ?`
 }
 class User{
     constructor(userName,password){
