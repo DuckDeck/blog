@@ -175,3 +175,8 @@ export const getUserLinks = function(){
     const url = HostName +  'link/' + getStore('token').user_id + '/' + createToken()
     return setpromiseGet(url)
 }
+
+export const updateUserLinks = function(links){
+    const url = HostName +  'link/' + getStore('token').user_id + '/' + createToken()
+    return setpromisePost(url,links)
+}

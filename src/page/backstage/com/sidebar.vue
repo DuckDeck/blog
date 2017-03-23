@@ -19,7 +19,7 @@
             <el-menu-item index="vuetable">
                 <i class="el-icon-menu"> </i>文件管理
             </el-menu-item>
-            <el-menu-item index="vuetable">
+            <el-menu-item index="manageLink">
                 <i class="el-icon-menu"> </i>友情链接
             </el-menu-item>
             <el-menu-item index="systemSetting">

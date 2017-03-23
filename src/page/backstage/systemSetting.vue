@@ -6,7 +6,7 @@
         <div class="systemInfoManageClass"> 
             <div class="basicInfoManageClass" >
                 <div class="basicInfoManageTitleClass">
-                    基本信息  <el-button class="saveInfoButton" type="primary" @click="submitForm('systemInfo')">保存</el-button>
+                    基本信息  <el-button class="saveInfoButton" type="primary" @click="saveSystemInfo()">保存</el-button>
                 </div>
                 <div class="basicInfoEditManageClass">
                   <el-form :model="systemInfo" :rules="rules" ref="systemInfo" label-width="0px" >
@@ -24,18 +24,18 @@
             </div>
              <div class="basicInfoManageClass" >
                 <div class="basicInfoManageTitleClass" style="background: coral">
-                    个性化设置 <el-button class="saveInfoButton" type="primary" @click="submitForm('myLink')">保存</el-button>
+                    个性化设置 <el-button class="saveInfoButton" type="primary" @click="saveUserLinkInfo()">保存</el-button>
                 </div>
                 <div class="basicInfoEditManageClass">
                     <el-form :model="myLink" :rules="linkRules" ref="myLink" label-width="0px" >
-                    <el-form-item prop="url" >
-                       <span class="infoTitleClass">微博账号</span>   <el-input v-model="myLink.weibo.link_url"></el-input>
+                    <el-form-item prop="weibo" >
+                       <span class="infoTitleClass">微博账号</span>   <el-input v-model="myLink.weibo"></el-input>
+                    </el-form-item >
+                     <el-form-item prop="github" >
+                        <span class="infoTitleClass">Github账号</span>  <el-input v-model="myLink.github" ></el-input>
                     </el-form-item>
-                     <el-form-item prop="user_real_name" >
-                        <span class="infoTitleClass">Github账号</span>  <el-input v-model="myLink.github.link_url" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">知乎账号</span>  <el-input v-model="myLink.zhihu.link_url" ></el-input>
+                     <el-form-item  prop="zhihu" >
+                        <span class="infoTitleClass">知乎账号</span>  <el-input v-model="myLink.zhihu" ></el-input>
                     </el-form-item>
                     </el-form>
                 </div>
@@ -46,9 +46,22 @@
 </template>
 
 <script>
-    import {getSysytemInfo,uploadSysytemInfo,getUserLinks} from '../../store/service'
+    import {getSysytemInfo,uploadSysytemInfo,getUserLinks,updateUserLinks} from '../../store/service'
     export default {
         data: function(){
+            var validateUrl = (rule, value, callback) => {
+                if (value == '') {
+                //    this.$refs.myLink.validateField('checkPass');
+                callback()
+                   return
+                } 
+                else {
+                    if (!/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(value)) {
+                        callback(new Error('必须为正确的URL'));
+                   }
+                   callback()
+              }
+            };
             return {
                 systemInfo:{
                     blog_name:'',
@@ -67,13 +80,24 @@
                     ]
                 },
                 myLink:{
-                    weibo:{},
-                    github:{},
-                    zhihu:{}
+                    weibo:'',
+                    github:'',
+                    zhihu:''
+                },
+                myLinkId:{
+                    weiboId:0,
+                    githubId:0,
+                    zhihuId:0
                 },
                 linkRules:{
-                    url:[
-                        { required: false, type:'url', message: '请输入名称', trigger: 'blur' }
+                    weibo:[
+                        { validator: validateUrl, trigger: 'blur' }
+                    ],
+                    github:[
+                        { validator: validateUrl, trigger: 'blur' }
+                    ],
+                    zhihu:[
+                        { validator: validateUrl, trigger: 'blur' }
                     ]
                 }
             }
@@ -92,15 +116,19 @@
             })
             getUserLinks().then(res=>{
                 if(res.code == 0){
-                    for(link in res.data){
+                    for(var link of res.data){
                         if(link.link_name == 'weibo'){
-                            self.myLink.weibo = link
+                            self.myLink.weibo = link.link_url
+                            self.myLinkId.weiboId = link.link_id
                         }
                         if(link.link_name == 'github'){
-                            self.myLink.weibo = link
+                            self.myLink.github = link.link_url
+                            self.myLinkId.githubId = link.link_id
+                           
                         }
                         if(link.link_name == 'zhihu'){
-                            self.myLink.weibo = link
+                            self.myLink.zhihu = link.link_url
+                            self.myLinkId.zhihuId = link.link_id
                         }
                     }
                 }
@@ -112,9 +140,9 @@
             })
         },
         methods:{
-          submitForm(formName){
+          saveSystemInfo(){
                 const self = this;
-                self.$refs[formName].validate((valid) => {
+                self.$refs['systemInfo'].validate((valid) => {
                     if (valid) {
                         let system = {
                             blog_name:self.systemInfo.blog_name,
@@ -128,8 +156,37 @@
                        })
                     }
                 });
-               
-                
+            },
+
+            saveUserLinkInfo(){
+                const self = this;
+                self.$refs['myLink'].validate((valid) => {
+                    if (valid) {
+                        if(self.myLink.weibo.trim().length == 0 && self.myLink.github.trim().length == 0 && self.myLink.zhihu.trim().length == 0 ){
+                            return
+                        }
+                        let links = [{
+                            link_name:'weibo',
+                            link_url:self.myLink.weibo,
+                            link_id:self.myLinkId.weiboId
+                        },
+                        {
+                            link_name:'zhihu',
+                            link_url:self.myLink.zhihu,
+                            link_id:self.myLinkId.zhihuId
+                        },
+                        {
+                            link_name:'github',
+                            link_url:self.myLink.github,
+                            link_id:self.myLinkId.githubId
+                        }]
+                       updateUserLinks(links).then(res=>{
+                          toast(self,res.ChineseMsg)               
+                       }).catch(err=>{
+                           toast(self,err.ChineseMsg)
+                       })
+                    }
+                });
             }
             
         }

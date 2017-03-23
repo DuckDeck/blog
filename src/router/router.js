@@ -9,8 +9,6 @@ const index = r => require.ensure([], () => r(require('../page/blog/index')), 'i
 
 
 
-
-
 const manageLogin = r => require.ensure([], () => r(require('../page/backstage/login')), 'manageLogin')
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
@@ -26,7 +24,7 @@ const manageTag =  r => require.ensure([], () => r(require('../page/backstage/ma
 
 
 
-
+const manageLink =  r => require.ensure([], () => r(require('../page/backstage/manageLink')), 'manageLink')
 const userSetting =  r => require.ensure([], () => r(require('../page/backstage/userSetting')), 'userSetting')
 const systemSetting =  r => require.ensure([], () => r(require('../page/backstage/systemSetting')), 'systemSetting')
 
@@ -81,6 +79,10 @@ export default [
             {
                 path:'systemSetting',
                 component:systemSetting
+            },
+            {
+                path:'manageLink',
+                component:manageLink
             }
         ]
     },
