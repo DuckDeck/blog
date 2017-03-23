@@ -13,7 +13,7 @@
             </el-table-column>
             <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
             </el-table-column>
-            <el-table-column prop="show_order"  label="链接排序" >
+            <el-table-column prop="show_order"  label="链接排序,默认为0" >
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
@@ -39,20 +39,20 @@
                 </div>
                 <div >
                   <el-form :model="editLink" :rules="rules" ref="editLink" label-width="0px"  class="linkEditFormClass" >
-                    <el-form-item prop='blog_name' >
+                    <el-form-item prop='link_name' >
                          <el-input  placeholder="请输入链接名称" ></el-input>
                     </el-form-item>
-                     <el-form-item prop="blog_description" >
+                     <el-form-item prop="link_url" >
                          <el-input placeholder="请输入链接地址" ></el-input>
                     </el-form-item>
-                     <el-form-item prop='blog_keyword' >
+                     <el-form-item prop='link_logo' >
                           <el-input placeholder="请输入链接LOGO，没有不填" ></el-input>
                     </el-form-item>
-                    <el-form-item prop='blog_keyword' >
-                          <el-input  ></el-input>
+                    <el-form-item prop='show_order' >
+                          <el-input placeholder="链接排序"  ></el-input>
                     </el-form-item>
-                    <el-form-item prop='blog_keyword' >
-                         <el-button class="saveInfoButton" type="primary" @click="saveSystemInfo()">保存链接</el-button>
+                    <el-form-item  >
+                         <el-button class="saveInfoButton" type="primary" @click="saveLink()">保存链接</el-button>
                     </el-form-item>
                   </el-form>
                 </div>
@@ -71,17 +71,40 @@
 </template>
 
 <script>
-import {getUserLinks} from '../../store/service'
+import {getUserLinks,updateFriendLinks} from '../../store/service'
     export default {
         data() {
+            var validateUrl = (rule, value, callback) => {
+                if (value == '') {
+               
+                   callback(new Error('请输入链接URL'));
+                   return
+                } 
+                else {
+                    if (!/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(value)) {
+                        callback(new Error('必须为正确的URL'));
+                   }
+                   callback()
+              }
+            };
             return {
                 tableData: [],
                 dialogVisible:false,
                 deleteMessage:'',
                 deleteLink:{},
-                editLink:{},
+                editLink:{
+                    link_name:'',
+                    link_url:'',
+                    link_logo:'',
+                    show_order:0
+                },
                 rules:{
-
+                    link_name: [
+                        { required: true, message: '请输入链接名称', trigger: 'blur' }
+                    ],
+                    link_url: [ 
+                        { validator: validateUrl, trigger: 'blur' }
+                    ]
                 }
             }
         },
@@ -125,6 +148,36 @@ import {getUserLinks} from '../../store/service'
                 //         this.tableData.splice(index,1)
                 //     }
                 // }
+            },
+            saveLink(){
+            
+                const self = this;
+                self.$refs['editLink'].validate((valid) => {
+                    if (valid) {
+                       let sort = parseInt(self.editLink.show_order)
+                       if(isNaN(sort)){
+                           sort = 0
+                       }
+                       let link = {
+                           link_name:self.editLink.link_name,
+                           link_url:self.editLink.link_url,
+                           link_logo:self.editLink.link_logo,
+                           show_order:sort
+                       }
+                        updateFriendLinks(link).then(res=>{
+                            if(res.code == 0){
+                                self.tableData.push(link)
+                            }
+                            else{
+                                toast(self,res.ChineseMsg)
+                            }
+                        }).catch(err=>{
+                            toast(self,err.ChineseMsg)
+                        })
+                      
+                    }
+                });
+            
             }
         }
     }

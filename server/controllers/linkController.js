@@ -55,7 +55,31 @@ module.exports = {
        let result =await Link.userLinks(id)
        ctx.rest(result)  
     },
-
+    'GET /api/link/:linkId/:userId/:token': async (ctx, next) => {
+        let tokenResult = await Tool.checkToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+       var  id = ctx.params.userId,
+            token = ctx.params.token,
+            t = ctx.request.body;
+        if(!t.link_name || !t.link_name.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss link_name'})) 
+            return
+        }
+        if (!t.link_url || !t.link_url.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss link_url'})) 
+            return
+        }
+        //需要正则check
+        let link = new Link(t.link_name,t.link_url,t.link_logo||'')
+        link.link_id = t.link_id
+        link.link_type = 0
+        link.link_user_id = id
+        let res = await Link.update(link)
+         ctx.rest(reressult)  
+    },
 
 }
 

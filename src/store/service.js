@@ -180,3 +180,8 @@ export const updateUserLinks = function(links){
     const url = HostName +  'link/' + getStore('token').user_id + '/' + createToken()
     return setpromisePost(url,links)
 }
+
+export const updateFriendLinks = function(link){
+    const url = HostName +  'link/'+ link.link_id +'/' + getStore('token').user_id + '/' + createToken()
+    return setpromisePost(url,link)
+}
