@@ -1,35 +1,25 @@
 <template>
     <div class="table">
          <div class="featureTitle">
-          管理文章
+          管理链接
         </div>
-
         <el-table :data="tableData" border style="width: 100%">
-            <el-table-column  label="标题" >
+            <el-table-column prop="link_name" label="链接名称" sortable width="160" >
+            </el-table-column>
+            <el-table-column  label="链接地址" >
                 <template scope="scope">
-                    <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.article_name}}</a>
+                    <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.link_url}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="article_create_time" label="日期" sortable width="160" :formatter="formatter">
+            <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
             </el-table-column>
-            <el-table-column prop="article_click" label="浏览量" sortable width="100">
-            </el-table-column>
-            <el-table-column prop="article_sort_name"  width="100" label="所属类型" >
-            </el-table-column>
-            <el-table-column prop="article_status" width="100" label="发布状态" :formatter="formatter" >
-            </el-table-column>
-            <el-table-column  label="标签" >
-                 <template scope="scope">
-                      <el-tag class="tagSpanClass" v-for="tag in scope.row.tag"  type="primary"  >
-                    {{tag.tag_name}}
-                    </el-tag>
-                </template>
+            <el-table-column prop="show_order"  label="链接排序" >
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click = "editArtilcle(scope.row)"
+                    <el-button size="small" @click = "editLink(scope.row)"
                             >编辑</el-button>
-                    <el-button size="small" type="danger" @click = "deleteArtilcle(scope.row)"
+                    <el-button size="small" type="danger" @click = "deleteLink(scope.row)"
                             >删除</el-button>
                 </template>
             </el-table-column>
@@ -40,12 +30,40 @@
                     :total="tableData.length">
             </el-pagination>
         </div>
+        <div style="clear: both">
+            
+        </div>
+        <div class="addLinkDivClass">
+             <div class="addLinkTitleClass">
+                    基本信息 
+                </div>
+                <div >
+                  <el-form :model="editLink" :rules="rules" ref="editLink" label-width="0px"  class="linkEditFormClass" >
+                    <el-form-item prop='blog_name' >
+                         <el-input  placeholder="请输入链接名称" ></el-input>
+                    </el-form-item>
+                     <el-form-item prop="blog_description" >
+                         <el-input placeholder="请输入链接地址" ></el-input>
+                    </el-form-item>
+                     <el-form-item prop='blog_keyword' >
+                          <el-input placeholder="请输入链接LOGO，没有不填" ></el-input>
+                    </el-form-item>
+                    <el-form-item prop='blog_keyword' >
+                          <el-input  ></el-input>
+                    </el-form-item>
+                    <el-form-item prop='blog_keyword' >
+                         <el-button class="saveInfoButton" type="primary" @click="saveSystemInfo()">保存链接</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
+        </div>
+
 
         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>{{deleteMessage}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteArticleConfirm">确 定</el-button>
+                <el-button type="primary" @click="deleteLinkConfirm">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -53,72 +71,65 @@
 </template>
 
 <script>
-import {articleList,deleteAticle} from '../../store/service'
+import {getUserLinks} from '../../store/service'
     export default {
         data() {
             return {
                 tableData: [],
                 dialogVisible:false,
                 deleteMessage:'',
-                deleteArticle:{}
+                deleteLink:{},
+                editLink:{},
+                rules:{
+
+                }
             }
         },
         mounted(){
             let self = this
-            articleList().then((res)=>{
+            getUserLinks().then((res)=>{
                 if(res.code == 0){
-                    self.tableData = res.data
-                }
-                else{
-                    self.$vux.toast.show({
-                        text: err.ChineseMsg,
-                        position:"bottom",
-                        type:'text'
+                    self.tableData = res.data.filter(s=>{
+                        return s.link_type == 0
                     })
                 }
+                else{
+                    toast(self,res.ChineseMsg)
+                }
+            }).catch(err=>{
+                toast(self,err.ChineseMsg)
             })
         },
         methods: {
-           formatter(row, column) {
-                if(column.label == "日期"){
-                    return formatTime(new Date(row.article_create_time))
-                }
-                if(column.label == "发布状态"){
-                    return row.article_status == 0 ? "未发布" : "已发布"
-                }
-            },
+           
 
-            gotoArticleDetail(article){
-                setStore('article' + article.article_id ,article)
-                this.$router.push('/manage/article/' + article.article_id);
+           
+            editLink(link){
+                
             },
-            editArtilcle(article){
-                setStore('article' + article.article_id ,article)
-                this.$router.replace('/manage/editArticle/' + article.article_id);
-            },
-            deleteArtilcle(article){
-                this.deleteMessage = "你确定要删除文章 " + article.article_name +" 吗？"
-                this.deleteArticle = article
+            deleteLink(link){
+                this.deleteMessage = "你确定要删除链接 " + link.link_name +" 吗？"
+                this.deleteLink = article
                 this.dialogVisible = true
             },
-            async deleteArticleConfirm(){
+            async deleteLinkConfirm(){
                 this.dialogVisible = false
-                if(!this.deleteArticle){
+                if(!this.deleteLink){
                     return
                 }
-                let result = await deleteAticle(this.deleteArticle)
-                toast(this,result.ChineseMsg)
-                if(result.code == 0){
-                    let index = this.tableData.indexOf(this.deleteArticle)
-                    if(index >=0){
-                        this.tableData.splice(index,1)
-                    }
-                }
+                // let result = await deleteAticle(this.deleteArticle)
+                // toast(this,result.ChineseMsg)
+                // if(result.code == 0){
+                //     let index = this.tableData.indexOf(this.deleteArticle)
+                //     if(index >=0){
+                //         this.tableData.splice(index,1)
+                //     }
+                // }
             }
         }
     }
 </script>
-<style scoped> 
+<style > 
 .articleTitleClass{
     cursor: pointer;
     color:#20a0ff
@@ -142,5 +153,21 @@ display:  none;
 }
 .cell{
     text-align: center;
+}
+.addLinkTitleClass{
+    color: white;
+    background: lightseagreen;
+    height: 60px;
+    padding: 5px 10px;
+    line-height: 50px;
+    font-size: 20px;
+}
+.linkEditFormClass{
+    display: flex;
+    margin-top: 20px;
+
+}
+.linkEditFormClass div{
+    margin-right: 5px;
 }
 </style>

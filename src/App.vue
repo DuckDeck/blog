@@ -28,6 +28,7 @@
 	.pagination{
     margin: 20px 0;
     text-align: right;
+	float: right;
 }
  .featureTitle{
      font-size: 30px;

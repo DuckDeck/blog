@@ -1,7 +1,7 @@
 <template>
     <div class="table">
          <div class="featureTitle">
-          管理文章
+          管理链接
         </div>
 
         <el-table :data="tableData" border style="width: 100%">
@@ -69,14 +69,13 @@ import {articleList,deleteAticle} from '../../store/service'
                 if(res.code == 0){
                     self.tableData = res.data
                 }
-                else{
-                    self.$vux.toast.show({
-                        text: err.ChineseMsg,
-                        position:"bottom",
-                        type:'text'
-                    })
+                 else{
+                    toast(self,res.ChineseMsg)
                 }
+            }).catch(err=>{
+                toast(self,err.ChineseMsg)
             })
+            
         },
         methods: {
            formatter(row, column) {

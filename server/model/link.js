@@ -2,7 +2,7 @@
 const db = require('../sqlhelp/mysql') 
 const Tool = require('../tool/tool')
 const sqls = {
-   allUserTypeLink:'select * from friendly_link where link_user_id = ? and link_type = 1',
+   allUserTypeLink:'select * from friendly_link where link_user_id = ?',
    update:`replace friendly_link (link_id,link_user_id,link_type,link_name,link_url,link_logo,show_order) values (?,?,?,?,?,?,?)`
 }
 class Link{
