@@ -8,6 +8,16 @@ class Tool{
         return Object.prototype.toString.call(data).slice(8, -1);
     }
 
+    static convertResultData(result){
+        if(result.data.length > 0){
+           result.data = result.data[0]
+       }
+       else{
+           result.data = {}
+       }
+       return result
+    }
+
     static md5(str){
         var md5sum = crypto.createHash('md5');
         md5sum.update(str);

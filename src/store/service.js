@@ -160,3 +160,18 @@ export const inxexArticle = function(){
 }
 
 
+
+
+export const getSysytemInfo = function(){
+    const url = HostName +  'system/' + getStore('token').user_id + '/' + createToken()
+    return setpromiseGet(url)
+}
+export const uploadSysytemInfo = function(system){
+    const url = HostName +  'system/' + getStore('token').user_id + '/' + createToken()
+    return setpromisePost(url,system)
+}
+
+export const getUserLinks = function(){
+    const url = HostName +  'link/' + getStore('token').user_id + '/' + createToken()
+    return setpromiseGet(url)
+}

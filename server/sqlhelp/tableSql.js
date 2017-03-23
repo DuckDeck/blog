@@ -100,10 +100,12 @@ const sqls = {
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
     createFriendLinkTb:`CREATE TABLE  IF NOT EXISTS friendly_link (
  link_id smallint(5) NOT NULL AUTO_INCREMENT COMMENT '友情链接自增ID',
+ link_user_id smallint(8) NOT NULL DEFAULT 0 COMMENT '友情链接的所属用户',
+ link_type smallint(8) NOT NULL DEFAULT 0 COMMENT '友情链接的类型 0表示系统，1 表示自定义', 
  link_name varchar(60) NOT NULL COMMENT '友情链接名称',
  link_url varchar(255) NOT NULL COMMENT '链接地址',
  link_logo varchar(255) NOT NULL COMMENT 'LOGO图片',
- show_order tinyint(3) NOT NULL COMMENT '在页面显示的顺序',
+ show_order tinyint(3) NOT NULL DEFAULT 0 COMMENT '在页面显示的顺序',
  PRIMARY KEY (link_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
     createAdTb:`CREATE TABLE  IF NOT EXISTS ad (

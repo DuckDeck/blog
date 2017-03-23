@@ -168,7 +168,7 @@
 
 .basicInfoManageTitleClass{
     color: white;
-    background: red;
+    background: palevioletred;
     height: 60px;
     padding: 5px 10px;
     line-height: 50px;
