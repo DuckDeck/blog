@@ -213,6 +213,18 @@ const sqls = {
  commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
  PRIMARY KEY (c_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
+    createUserSubCommentTb:`
+CREATE TABLE  IF NOT EXISTS user_sub_comment (
+ c_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
+ user_id mediumint(8) NOT NULL COMMENT '回复评论的用户ID',
+ commit_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
+ commit_content varchar(255) NOT NULL COMMENT '评论内容',
+ commit_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
+ commit_time int(13) NOT NULL COMMENT '评论时间',
+ commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
+ PRIMARY KEY (c_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
     createSMSTb:`CREATE TABLE  IF NOT EXISTS phone_message (
  phone_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
  phone_num varchar(12) NOT NULL COMMENT '用户手机号码',

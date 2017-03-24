@@ -158,8 +158,8 @@ CREATE TABLE  IF NOT EXISTS ad (
 
 
 ------------------
-stay_message 用户留言表
-------------------
+stay_message 用户留言表 相当于是给blog主人留言，不是评论
+------------------ 
 CREATE TABLE  IF NOT EXISTS stay_message (
  stay_id smallint(5) NOT NULL AUTO_INCREMENT COMMENT '留言表自增ID',
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
@@ -306,14 +306,33 @@ user_comment 用户评论表
 CREATE TABLE  IF NOT EXISTS user_comment (
  c_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
  user_id mediumint(8) NOT NULL COMMENT '收到评论的用户ID',
- type_id tinyint(3) NOT NULL COMMENT '评论栏目ID',
- commit_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
+ type_id tinyint(3) DEFAULT 0 NOT NULL COMMENT '评论栏目ID',
+ commit_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
  commit_content varchar(255) NOT NULL COMMENT '评论内容',
  commit_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
  commit_time int(13) NOT NULL COMMENT '评论时间',
  commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (c_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+
+
+--------------------------
+user_comment 用户子评论表
+--------------------------
+CREATE TABLE  IF NOT EXISTS user_sub_comment (
+ c_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
+ user_id mediumint(8) NOT NULL COMMENT '回复评论的用户ID',
+ commit_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
+ commit_content varchar(255) NOT NULL COMMENT '评论内容',
+ commit_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
+ commit_time int(13) NOT NULL COMMENT '评论时间',
+ commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
+ PRIMARY KEY (c_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
 
 ----------------------------
 phone_message 短信记录表

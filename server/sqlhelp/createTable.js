@@ -58,6 +58,7 @@ const actions = {
         pool.query(sqls.createArticleTagMapTb)
 
         pool.query(sqls.createUserCommentTb)
+        pool.query(sqls.createUserSubCommentTb)
         pool.query(sqls.createSMSTb)
 
 
