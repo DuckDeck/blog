@@ -185,3 +185,7 @@ export const updateFriendLinks = function(link){
     const url = HostName +  'link/'+ link.link_id +'/' + getStore('token').user_id + '/' + createToken()
     return setpromisePost(url,link)
 }
+export const deleteLink = function(link_id){
+    const url = HostName +  'link/'+ link_id +'/' + getStore('token').user_id + '/' + createToken()
+    return setpromiseDelete(url)
+}

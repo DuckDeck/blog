@@ -3,7 +3,8 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 const sqls = {
    allUserTypeLink:'select * from friendly_link where link_user_id = ?',
-   update:`replace friendly_link (link_id,link_user_id,link_type,link_name,link_url,link_logo,show_order) values (?,?,?,?,?,?,?)`
+   update:`replace friendly_link (link_id,link_user_id,link_type,link_name,link_url,link_logo,show_order) values (?,?,?,?,?,?,?)`,
+   delete:`delete from friendly_link where link_id = ?`
 }
 class Link{
     constructor(link_name,link_url,link_logo){
@@ -22,7 +23,9 @@ class Link{
     static userLinks(user_id){
         return db.exec(sqls.allUserTypeLink,[user_id])
     }
-  
+    static deleteLink(link_id){
+        return db.exec(sqls.delete,[link_id])
+    }
 
 }
 module.exports = Link

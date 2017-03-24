@@ -55,13 +55,14 @@ module.exports = {
        let result =await Link.userLinks(id)
        ctx.rest(result)  
     },
-    'GET /api/link/:linkId/:userId/:token': async (ctx, next) => {
+    'POST /api/link/:linkId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
         }
        var  id = ctx.params.userId,
+            link_id =  ctx.params.linkId,
             token = ctx.params.token,
             t = ctx.request.body;
         if(!t.link_name || !t.link_name.trim()) {
@@ -74,12 +75,25 @@ module.exports = {
         }
         //需要正则check
         let link = new Link(t.link_name,t.link_url,t.link_logo||'')
-        link.link_id = t.link_id
+        link.link_id = link_id
         link.link_type = 0
+        link.show_order = t.show_order
         link.link_user_id = id
         let res = await Link.update(link)
-         ctx.rest(reressult)  
+         ctx.rest(res)  
     },
 
+     'DELETE /api/link/:linkId/:userId/:token': async (ctx, next) => {
+        let tokenResult = await Tool.checkToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+       let id = ctx.params.userId
+       let token = ctx.params.token
+       let link_id = ctx.params.linkId
+       let result =await Link.deleteLink(link_id)
+       ctx.rest(result)  
+    },
 }
 

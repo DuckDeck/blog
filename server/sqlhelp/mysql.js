@@ -30,7 +30,7 @@ db.exec = function(sql,data){
               return;    
             }
             let res = result.create(0,rows)
-            if(sql.trim().substr(0,6) == 'insert'){
+            if(sql.trim().substr(0,6) == 'insert' || sql.trim().substr(0,6) == 'replac'){
                 if(rows.insertId){
                     res.data = {id:rows.insertId}
                 }

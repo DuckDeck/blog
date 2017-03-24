@@ -8,7 +8,7 @@
             </el-table-column>
             <el-table-column  label="链接地址" >
                 <template scope="scope">
-                    <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.link_url}}</a>
+                    <a class="articleTitleClass" @click="gotoLink(scope.row)" >{{scope.row.link_url}}</a>
                 </template>
             </el-table-column>
             <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
@@ -17,9 +17,9 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click = "editLink(scope.row)"
+                    <el-button size="small" @click = "editFriendLink(scope.row)"
                             >编辑</el-button>
-                    <el-button size="small" type="danger" @click = "deleteLink(scope.row)"
+                    <el-button size="small" type="danger" @click = "deleteFriendLink(scope.row)"
                             >删除</el-button>
                 </template>
             </el-table-column>
@@ -40,16 +40,16 @@
                 <div >
                   <el-form :model="editLink" :rules="rules" ref="editLink" label-width="0px"  class="linkEditFormClass" >
                     <el-form-item prop='link_name' >
-                         <el-input  placeholder="请输入链接名称" ></el-input>
+                         <el-input  placeholder="请输入链接名称" v-model="editLink.link_name" ></el-input>
                     </el-form-item>
                      <el-form-item prop="link_url" >
-                         <el-input placeholder="请输入链接地址" ></el-input>
+                         <el-input placeholder="请输入链接地址" v-model="editLink.link_url" ></el-input>
                     </el-form-item>
                      <el-form-item prop='link_logo' >
-                          <el-input placeholder="请输入链接LOGO，没有不填" ></el-input>
+                          <el-input placeholder="请输入链接LOGO，没有不填" v-model="editLink.link_logo" ></el-input>
                     </el-form-item>
                     <el-form-item prop='show_order' >
-                          <el-input placeholder="链接排序"  ></el-input>
+                          <el-input placeholder="链接排序" v-model="editLink.show_order" ></el-input>
                     </el-form-item>
                     <el-form-item  >
                          <el-button class="saveInfoButton" type="primary" @click="saveLink()">保存链接</el-button>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import {getUserLinks,updateFriendLinks} from '../../store/service'
+import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
     export default {
         data() {
             var validateUrl = (rule, value, callback) => {
@@ -96,7 +96,8 @@ import {getUserLinks,updateFriendLinks} from '../../store/service'
                     link_name:'',
                     link_url:'',
                     link_logo:'',
-                    show_order:0
+                    show_order:0,
+                    link_id:0
                 },
                 rules:{
                     link_name: [
@@ -124,15 +125,13 @@ import {getUserLinks,updateFriendLinks} from '../../store/service'
             })
         },
         methods: {
-           
-
-           
-            editLink(link){
-                
+            editFriendLink(link){
+                console.log(link)
+                this.editLink = clone(link)
             },
-            deleteLink(link){
+            deleteFriendLink(link){
                 this.deleteMessage = "你确定要删除链接 " + link.link_name +" 吗？"
-                this.deleteLink = article
+                this.deleteLink = link
                 this.dialogVisible = true
             },
             async deleteLinkConfirm(){
@@ -140,17 +139,17 @@ import {getUserLinks,updateFriendLinks} from '../../store/service'
                 if(!this.deleteLink){
                     return
                 }
-                // let result = await deleteAticle(this.deleteArticle)
-                // toast(this,result.ChineseMsg)
-                // if(result.code == 0){
-                //     let index = this.tableData.indexOf(this.deleteArticle)
-                //     if(index >=0){
-                //         this.tableData.splice(index,1)
-                //     }
-                // }
+                console.log(this.deleteLink)
+                let result = await deleteLink(this.deleteLink.link_id)
+                toast(this,result.ChineseMsg)
+                if(result.code == 0){
+                    let index = this.tableData.indexOf(this.deleteLink)
+                    if(index >=0){
+                        this.tableData.splice(index,1)
+                    }
+                }
             },
-            saveLink(){
-            
+             saveLink(){
                 const self = this;
                 self.$refs['editLink'].validate((valid) => {
                     if (valid) {
@@ -158,26 +157,45 @@ import {getUserLinks,updateFriendLinks} from '../../store/service'
                        if(isNaN(sort)){
                            sort = 0
                        }
-                       let link = {
-                           link_name:self.editLink.link_name,
-                           link_url:self.editLink.link_url,
-                           link_logo:self.editLink.link_logo,
-                           show_order:sort
-                       }
-                        updateFriendLinks(link).then(res=>{
+                       self.editLink.show_order = sort
+                       console.log(self.editLink)
+                       updateFriendLinks(self.editLink).then(res=>{
+                           toast(self,res.ChineseMsg)
                             if(res.code == 0){
-                                self.tableData.push(link)
+                                let newLink = clone(self.editLink)
+                                if(newLink.link_id == 0){
+                                    newLink.link_id = res.data.id
+                                    self.tableData.push(newLink)
+                                }
+                                else{
+                                    let existLink = self.tableData.findIndex(s=>{
+                                        s.link_id == newLink.id
+                                    })
+                                    self.tableData.splice(existLink,1,newLink)
+                                }
+                            
+                                self.editLink = {
+                                        link_name:'',
+                                        link_url:'',
+                                        link_logo:'',
+                                        show_order:0,
+                                        link_id:0
+                                }
                             }
-                            else{
-                                toast(self,res.ChineseMsg)
-                            }
-                        }).catch(err=>{
-                            toast(self,err.ChineseMsg)
-                        })
+                       }).catch(err=>{
+                           toast(self,err.ChineseMsg)
+                       })
+                   
+                       
+                            
+                    
                       
                     }
                 });
             
+            },
+            gotoLink(link){
+                window.location.href = link.link_url
             }
         }
     }
