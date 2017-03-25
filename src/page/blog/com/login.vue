@@ -1,17 +1,21 @@
 <template>
-    <div class="login-wrap">
-        <div class="ms-title">后台管理系统</div>
+    <div class="login-wrap" @click.stop="close">
+       
           <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username"></el-input>
+                    <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" 
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
+                <el-form-item  style="margin-bottom: 10px;height: 50px;">
+                    <a class="loginAction" >注册</a>
+                    <a  style="float: right" class="loginAction">忘记密码</a>
+                </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')" >登录</el-button>
                 </div>
             </el-form>
         </div>
@@ -19,7 +23,7 @@
 </template>
 
 <script>
-import {manageLogin} from '../../store/service'
+import {login} from '../../../store/service'
     export default {
         data: function(){
             return {
@@ -37,21 +41,15 @@ import {manageLogin} from '../../store/service'
                 }
             }
         },
-        methods: {
-            submitForm(formName){
+        methods:{
+             submitForm(formName){
                 const self = this;
-                //  self.$refs[formName].validate((valid) => {
-                //      console.log('123123')
-                //  })
-                //  return
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
-                        manageLogin(self.ruleForm.username,self.ruleForm.password).then(function(data){
+                        login(self.ruleForm.username,self.ruleForm.password).then(function(data){
                             if(data.code == 0){
-                                self.$router.push('/manage/');
-                                setStore('token',data.data)
-                                let s = getStore('token')
-                                console.log('token = ' + s.token + 'u serid' + s.user_id)
+                                setStore('token',data.data)    
+                                self.$emit('loginAction','login')                
                             }
                             else{
                                 self.$vux.toast.show({
@@ -71,19 +69,24 @@ import {manageLogin} from '../../store/service'
                     }
                 });
                
+            },
+            close(e){
                 
+                if(e.target!=e.currentTarget) return;
+                this.$emit('loginAction','close')
             }
-        },
+        }
 
     }
 </script>
 
 <style scoped>
     .login-wrap{
-        position: relative;
+        position: absolute;
         width:100%;
         height:100vh;
-        background: #324157
+        top:0;
+        background: rgba(1, 1, 1, 0.5)
     }
     .ms-title{
         position: absolute;
@@ -100,11 +103,12 @@ import {manageLogin} from '../../store/service'
         left:50%;
         top:35%;
         width:360px;
-        height:250px;
+        height:300px;
         margin: -10px 0px 0px -180px;
         padding:40px;
         border-radius: 5px;
         background: #fff;
+        font-size: 20px;
     }
     .login-btn{
         text-align: center;
@@ -113,5 +117,12 @@ import {manageLogin} from '../../store/service'
         width:100%;
         height:36px;
     }
-  
+  .loginAction{
+      cursor: pointer;
+      
+
+  }
+   .loginAction:hover{
+       color: #20a0ff !important;
+   }
 </style>

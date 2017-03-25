@@ -9,7 +9,7 @@ const index = r => require.ensure([], () => r(require('../page/blog/index')), 'i
 
 
 
-const manageLogin = r => require.ensure([], () => r(require('../page/backstage/login')), 'manageLogin')
+
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
 
@@ -39,11 +39,7 @@ export default [
 
 
     
-    {
-        path: '/manage/login',
-        component: manageLogin,
-        name:'manageLogin'
-    },
+   
      {
         path: '/manage',
         component: manage,

@@ -100,6 +100,10 @@ global.removeStore = name => {
 	if (!name) return;
 	window.localStorage.removeItem(name);
 }
+
+global.userId = getStore('token') == null ?  1 : getStore('token').user_id
+
+
 global.getStyle = (element, attr, NumberMode = 'int') => {
     let target;
     // scrollTop 获取方式不同，没有它不属于style，而且只有document.body才能用

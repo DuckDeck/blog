@@ -62,8 +62,6 @@ import 'element-ui/lib/theme-default/index.css';
 const store = new Vuex.Store({
   state: {
     webViewUrl:'',
-
-
   },
   mutations: {
    setWebUrl(state,url){

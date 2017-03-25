@@ -2,7 +2,28 @@
   <div class="mainBgDivClass">
       <div class="main-body">
            <div class="container">
-            <div class="row">               
+            <div class="row"> 
+                <div class="headMenu">
+                   <div class="rightMenu">
+                       <el-input  class="searchInput" placeholder="搜索" icon="search" :on-icon-click="handleIconClick"> </el-input>
+                        <div   class="rightMenuLogin" v-show="!isLogin" >
+                            <span @click="login" >登录</span>
+                            <span @click="register">注册</span>
+                        </div>
+                        <div class="userInfoDiv" v-show="isLogin">
+                          <el-dropdown trigger="click" @command="handleCommand">
+                            <span class="userInfoSpan el-dropdown-link" >
+                                <img  :src="userInfo.user_image_url">
+                                {{userInfo.user_real_name}}
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="backPage">切换后台</el-dropdown-item>
+                                <el-dropdown-item command="loginout">退出</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                        </div>
+                   </div>
+                </div>              
                 <div class="main-page">
                     <aside class="main-navigation">
                         <div class="main-menu">
@@ -121,21 +142,32 @@
       
         </div> 
       </div>
+      <login v-show = "showLogin" @loginAction="loginAction"></login>
   </div>
 </template>
 
 <script>
-import {inxexArticle} from '../../store/service'
+import {indexArticle,getUserInfo} from '../../store/service'
+import login from './com/login.vue'
   export default {
     data() {
       return {
             top:'',
-            articles:[]
+            articles:[],
+            userInfo:{},
+            showLogin:false,
+            isLogin:false,
       }
     },
     mounted(){
         let self= this
-        inxexArticle().then(res=>{
+        if(getStore('userInfo')){
+            console.log('logined')
+            this.isLogin = true
+            this.userInfo = getStore('userInfo')
+        }
+
+        indexArticle().then(res=>{
             if(res.code == 0){
                 this.top = res.data.top
                 this.articles = res.data.artilces
@@ -147,9 +179,60 @@ import {inxexArticle} from '../../store/service'
             toast(self,err.ChineseMsg)
         })
     },
+    components:{
+        login
+    },
+    methods:{
+        login(){
+      
+            this.showLogin = true
+        },
+        handleIconClick(){
 
+        },
+        register(){
+
+        },
+        loginAction(action){
+            this.showLogin = false
+            if(action == 'login'){
+                this.isLogin = true;
+                this.getUserInfo()
+            }
+            else if(action == 'register'){
+                this.register()
+            }   
+            else if(action == 'forgivePassword'){
+                // do this feature later
+            }
+        },
+        handleCommand(command) {
+            if(command == 'loginout'){
+                removeStore('userInfo')
+                removeStore('token')
+                this.isLogin = false;
+            }
+            else if(command == 'backPage'){
+                this.$router.replace('/manage')
+            }
+        },
+        async getUserInfo(){
+           let res = await getUserInfo()
+           if(res.code == 0){
+               this.isLogin = true
+               setStore('userInfo',res.data)
+               this.userInfo = res.data
+               console.log(res.data)
+           }
+           else{
+               toast(this,res.ChineseMsg)
+           }
+        }
+ 
+   }
 
   }
+
 </script>
 <style >
   .mainBgDivClass{
@@ -174,32 +257,67 @@ import {inxexArticle} from '../../store/service'
     margin-left: -15px;
     margin-right: -15px;
   }
-  .main-page{
-      position: relative;
-      margin-top: 80px;
-  }
-  .main-navigation{
-      padding: 0px;
-      width: 310px;
-      position: absolute;
-      top:0;
-      left: 0;
-  }
-  .main-menu{
-      float: left;
+  .headMenu{
+      color: white;
       width: 100%;
+      font-size: 20px;
+      margin-top: 40px;
   }
-  .menu-container{
-      overflow: auto;
-      margin-bottom: 10px;
-      padding-left: 0
+.searchInput{
+    width: 200px;
+    display: inline-block;
+}
+  .rightMenu{
+      float: right;
+      width: 360px;
+      display: flex;
+      justify-content: space-around
   }
-  .home{
-      background-color: rgba(16, 165, 105, 0.8);
-      background-image: url('/static/img/menu-bg-home.png');
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-  }
+  
+  
+.rightMenuLogin span{
+    margin-left: 10px;
+    cursor: pointer;
+}
+.userInfoDiv span{
+   color: white
+}
+.userInfoSpan img{
+    width: 35px;
+    height: 35px;
+    border-radius: 15px;
+    margin-right: 10px;
+}
+.el-dropdown-menu__item{
+        text-align: center;
+        font-size: 16px;
+    }
+.main-page{
+    position: relative;
+    margin-top: 40px;
+}
+.main-navigation{
+    padding: 0px;
+    width: 310px;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.main-menu{
+    float: left;
+    width: 100%;
+}
+.menu-container{
+    overflow: auto;
+    margin-bottom: 10px;
+    padding-left: 0
+}
+.home{
+    background-color: rgba(16, 165, 105, 0.8);
+    background-image: url('/static/img/menu-bg-home.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
   .block-keep-ratio {	position: relative; }
 	
 .block-keep-ratio__content {
