@@ -27,9 +27,12 @@ export function validate(type,value){
 }
 
 
-// Object.prototype.isEmpty = function(){
-//     console.log(this)
-// }
+global.isEpmty = function(obj){
+    for (var key in obj) {
+        return false;
+    }
+    return true;
+}
 
 
 global.formatTime = function(date,format){

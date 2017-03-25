@@ -28,20 +28,74 @@
     export default {
         data() {
             return{
-                blogInfo:{}
+              
             }
         },
-        props:{
-          
+        props:{  
+          userInfo:{
+              type:Object
+          }
         },
         methods:{
-          
-        }
+            login(){
+                this.$emit('headAction','login')
+            },
+            handleIconClick(){
+
+            },
+            register(){
+                this.$emit('headAction','register')
+            },
+            handleCommand(command) {
+            if(command == 'loginout'){
+                removeStore('userInfo')
+                removeStore('token')
+                this.$emit('headAction','logout')
+            }
+            else if(command == 'backPage'){
+                this.$router.replace('/manage')
+            }
+        },
+      },
+      computed:{
+          isLogin(){
+              return !isEmpty(this.userInfo)
+          }
+      }
     }
 </script>
 <style scoped>
  .blogheader{
-     height: 50px;
-     background: rgba(0, 0, 0, 0.5)
+      color: white;
+      width: 100%;
+      font-size: 20px;
+      margin-top: 40px;
  }
+ .searchInput{
+    width: 200px;
+    display: inline-block;
+}
+  .rightMenu{
+      float: right;
+      width: 360px;
+      display: flex;
+      justify-content: space-around
+  }
+.rightMenuLogin span{
+    margin-left: 10px;
+    cursor: pointer;
+}
+.userInfoDiv span{
+   color: white
+}
+.userInfoSpan img{
+    width: 35px;
+    height: 35px;
+    border-radius: 15px;
+    margin-right: 10px;
+}
+.el-dropdown-menu__item{
+        text-align: center;
+        font-size: 16px;
+    }
 </style>

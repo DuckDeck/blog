@@ -107,9 +107,13 @@ class Tool{
        if(id == undefined || token == undefined){
             return setPromise(Result.create(9),false)
        }
+       if(!isNaN(token)){
+           return setPromise(Result.create(9),false)
+       }
+       return setPromise(Result.create(0),true) 
        let t = Tool.decrypt(key,iv,token)
        let para = t.split('=')
-       return setPromise(Result.create(0),true)  
+        
         if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
             return new Promise(function(resolve,reject){
                 db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){

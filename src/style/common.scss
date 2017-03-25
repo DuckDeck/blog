@@ -30,12 +30,12 @@ input[type="button"], input[type="submit"], input[type="search"], input[type="re
 textarea { -webkit-appearance: none;}   
 
 html,body{
-    height: 100%;
-    width: 100%;
-    background-color: #f2f2f2;
-    margin: 0px;
+     margin: 0;
+    padding: 0;
+    background-color: #161E2C;
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
 }
-
 
 .clear:after{
     content: '';

@@ -1,93 +1,13 @@
 <template>
-  <div class="mainBgDivClass">
-      <div class="main-body">
+
+
            <div class="container">
             <div class="row"> 
-                <div class="headMenu">
-                   <div class="rightMenu">
-                       <el-input  class="searchInput" placeholder="搜索" icon="search" :on-icon-click="handleIconClick"> </el-input>
-                        <div   class="rightMenuLogin" v-show="!isLogin" >
-                            <span @click="login" >登录</span>
-                            <span @click="register">注册</span>
-                        </div>
-                        <div class="userInfoDiv" v-show="isLogin">
-                          <el-dropdown trigger="click" @command="handleCommand">
-                            <span class="userInfoSpan el-dropdown-link" >
-                                <img  :src="userInfo.user_image_url">
-                                {{userInfo.user_real_name}}
-                            </span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item command="backPage">切换后台</el-dropdown-item>
-                                <el-dropdown-item command="loginout">退出</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                        </div>
-                   </div>
-                </div>              
+                <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>
                 <div class="main-page">
-                    <aside class="main-navigation">
-                        <div class="main-menu">
-                            <div class="menu-container">
-                                <div class="block-keep-ratio block-keep-ratio-2-1 block-width-full home">                                    
-                                    <a href="index.html" class="block-keep-ratio__content  main-menu-link">
-                                        <span class="main-menu-link-text">
-                                            HOME    
-                                        </span>                                        
-                                    </a> 
-                                </div>                    
-                            </div>
+                   
 
-                            <div class="menu-container">                                
-                                <div class="block-keep-ratio  block-keep-ratio-1-1  block-width-half  pull-left  about-main">                                    
-                                    <a href="about.html" class="main-menu-link about block-keep-ratio__content flexbox-center">
-                                        <i class="fa fa-user fa-4x main-menu-link-icon"></i>
-                                        ABOUT
-                                    </a>                                    
-                                </div>
-
-                                <div class="block-keep-ratio  block-keep-ratio-1-1  block-width-half  pull-right  contact-main">
-                                    <a href="contact.html" class="main-menu-link contact block-keep-ratio__content flexbox-center">
-                                        <i class="fa fa-envelope-o fa-4x main-menu-link-icon"></i>
-                                        CONTACT
-                                    </a>                                
-                                </div>    
-                            </div>  
-
-                            <div class="menu-container">
-                               <div class="block-keep-ratio  block-keep-ratio-1-1  block-width-third  pull-left  about-main" style="margin-right: 5.5px;">                                    
-                                    <a href="about.html" class="main-menu-link about block-keep-ratio__content flexbox-center">
-                                        <i class="fa fa-user fa-4x main-menu-link-icon"></i>
-                                        ABOUT
-                                    </a>                                    
-                                </div>
-                                <div class="block-keep-ratio  block-keep-ratio-1-1  block-width-third  pull-left  about-main" >                                    
-                                    <a href="about.html" class="main-menu-link about block-keep-ratio__content flexbox-center">
-                                        <i class="fa fa-user fa-4x main-menu-link-icon"></i>
-                                        ABOUT
-                                    </a>                                    
-                                </div>
-                                <div class="block-keep-ratio  block-keep-ratio-1-1  block-width-third  pull-right  contact-main">
-                                    <a href="contact.html" class="main-menu-link contact block-keep-ratio__content flexbox-center">
-                                        <i class="fa fa-envelope-o fa-4x main-menu-link-icon"></i>
-                                        CONTACT
-                                    </a>                                
-                                </div>                             
-                            </div>
-
-                            <div class="menu-container">
-                                <div class="block-keep-ratio block-keep-ratio-1-1  block-width-full gallery">                                    
-                                    <a href="gallery.html" class="main-menu-link  block-keep-ratio__content">
-                                        <span class="main-menu-link-text">
-                                            GALLERY    
-                                        </span>                                            
-                                    </a>                                    
-                                </div>                                
-                            </div>
-
-                        </div>
-                    </aside>
-
-
+                    <blogSide ></blogSide>
 
                     <div class="content-main">
                         <div class="row margin-b-30">
@@ -99,7 +19,7 @@
                                         </div>
                                         <div class="desc">
                                             <p>{{top.article_brief}}</p>
-                                            <button type="button" style="cursor: pointer">查看详情</button>
+                                            <button type="button" style="cursor: pointer" @click="checkArticle(top)" >查看详情</button>
                                         </div>
                                     </div>
                                     <img :src="top.article_main_img" alt="Image" class="img-responsive">
@@ -140,23 +60,21 @@
                 </div> 
             </div>          
       
-        </div> 
-      </div>
-      <login v-show = "showLogin" @loginAction="loginAction"></login>
+
   </div>
 </template>
 
 <script>
 import {indexArticle,getUserInfo} from '../../store/service'
-import login from './com/login.vue'
+import blogHeader from './com/blogHead.vue'
+import blogSide from './com/blogSide.vue'
   export default {
     data() {
       return {
             top:'',
             articles:[],
             userInfo:{},
-            showLogin:false,
-            isLogin:false,
+
       }
     },
     mounted(){
@@ -166,7 +84,11 @@ import login from './com/login.vue'
             this.isLogin = true
             this.userInfo = getStore('userInfo')
         }
-
+        else{
+            if(getStore('token')){ //this mean login is-success
+                this.getUserInfo()
+            }
+        }
         indexArticle().then(res=>{
             if(res.code == 0){
                 this.top = res.data.top
@@ -180,42 +102,19 @@ import login from './com/login.vue'
         })
     },
     components:{
-        login
+        blogHeader,blogSide
     },
     methods:{
-        login(){
-      
-            this.showLogin = true
-        },
-        handleIconClick(){
-
-        },
-        register(){
-
-        },
-        loginAction(action){
-            this.showLogin = false
+        headAction(action){
             if(action == 'login'){
-                this.isLogin = true;
-                this.getUserInfo()
+                this.$router.push('/login')
             }
-            else if(action == 'register'){
-                this.register()
-            }   
-            else if(action == 'forgivePassword'){
-                // do this feature later
+            else if(action == 'logout'){
+                this.userInfo =  {}
             }
         },
-        handleCommand(command) {
-            if(command == 'loginout'){
-                removeStore('userInfo')
-                removeStore('token')
-                this.isLogin = false;
-            }
-            else if(command == 'backPage'){
-                this.$router.replace('/manage')
-            }
-        },
+        
+      
         async getUserInfo(){
            let res = await getUserInfo()
            if(res.code == 0){
@@ -227,6 +126,9 @@ import login from './com/login.vue'
            else{
                toast(this,res.ChineseMsg)
            }
+        },
+        checkArticle(article){
+            this.$router.push('/article/'+article.article_id)
         }
  
    }
@@ -235,18 +137,8 @@ import login from './com/login.vue'
 
 </script>
 <style >
-  .mainBgDivClass{
-      background: #161E2C;
-      width: 100%;
-      height: 100%;
-  }
-  .main-body{
 
-     width: 100%;
-      background: url(/static/img/page-bg.jpg) no-repeat top center;
-      background-size: 100% auto;
-      background-attachment: fixed;
-  }
+
   .container{
      padding-left: 15px;
      padding-right: 15px;
@@ -257,127 +149,11 @@ import login from './com/login.vue'
     margin-left: -15px;
     margin-right: -15px;
   }
-  .headMenu{
-      color: white;
-      width: 100%;
-      font-size: 20px;
-      margin-top: 40px;
-  }
-.searchInput{
-    width: 200px;
-    display: inline-block;
-}
-  .rightMenu{
-      float: right;
-      width: 360px;
-      display: flex;
-      justify-content: space-around
-  }
-  
-  
-.rightMenuLogin span{
-    margin-left: 10px;
-    cursor: pointer;
-}
-.userInfoDiv span{
-   color: white
-}
-.userInfoSpan img{
-    width: 35px;
-    height: 35px;
-    border-radius: 15px;
-    margin-right: 10px;
-}
-.el-dropdown-menu__item{
-        text-align: center;
-        font-size: 16px;
-    }
+
+
 .main-page{
     position: relative;
     margin-top: 40px;
-}
-.main-navigation{
-    padding: 0px;
-    width: 310px;
-    position: absolute;
-    top:0;
-    left: 0;
-}
-.main-menu{
-    float: left;
-    width: 100%;
-}
-.menu-container{
-    overflow: auto;
-    margin-bottom: 10px;
-    padding-left: 0
-}
-.home{
-    background-color: rgba(16, 165, 105, 0.8);
-    background-image: url('/static/img/menu-bg-home.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-  .block-keep-ratio {	position: relative; }
-	
-.block-keep-ratio__content {
-    position: absolute;
-    top: 0; bottom: 0; right: 0; left: 0;
-}
-.block-keep-ratio:after {
-	display: block;
-	content: '';
-}
-.block-keep-ratio-2-1:after{  padding-top: 50%;}
-.block-keep-ratio-1-1:after {	padding-top: 100%; }
-.main-menu-link{
-    color: #fff;
-    display: block;
-    font-weight: 300;
-    font-size: 15px;
-}
-.main-menu-link-text{
-    margin-bottom: 0;
-	position: absolute;
-	left: 20px;
-	bottom: 15px;
-}
-.about-main { padding-left: 0; }
-.about { background-color: rgba(193,61,18,0.8);	}
-.contact { background-color: rgba(107,181,34,0.8);	}
-.block-width-full {	width: 100%; }
-.block-width-half { width: 150px; }
-.block-width-third { width: 100px;  }
-.flexbox-center{
-    display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    text-align: center;
-}
-.main-menu-link:hover {	color: #66FFFF; text-decoration: none }
-.main-menu-link:focus {	color: #fff; }
-.about i, .contact i {
-	float: left;
-	width: 100%;
-	text-align: center;
-	margin-bottom: 10px;
-}
-
-
-.gallery {
-	background-image: url(/static/img/menu-bg-gallery.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
 }
 
 
@@ -518,24 +294,7 @@ import login from './com/login.vue'
 }
 
 @media (max-width:991px) {
-
-	.main-body { background-size: auto; }
-
 	.box {	margin-bottom: 30px; }
-
-	.block-keep-ratio-md-2-1:after { padding-top: 50%; }
-
-	.contact-page .main-navigation,
-	.gallery-page .main-navigation,
-	.main-navigation {
-		float: none;
-		position: static;
-		overflow: auto;
-    	margin: 0 auto 80px;   
-    	padding-right: 0;
-    	width: 310px;
-    	max-width: 100%;
-	}
 
 	.content-main { padding-left: 0; }
 	.content-main.gallery_main { padding: 30px; }

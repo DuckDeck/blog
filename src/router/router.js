@@ -7,8 +7,9 @@ const menu = r => require.ensure([], () => r(require('../page/menu')), 'menu')
 
 const index = r => require.ensure([], () => r(require('../page/blog/index')), 'index')
 
+const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
-
+const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
@@ -33,6 +34,16 @@ export default [
     {
         path: '/',
         component: index, //顶层路由，对应index.html
+      
+    },
+    {
+        path: '/login',
+        component: login, //顶层路由，对应index.html
+      
+    },
+    {
+        path: '/article/:articleId',
+        component: atricleInfo, 
       
     },
 

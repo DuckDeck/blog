@@ -1,7 +1,10 @@
 <template>
-    <div class="login-wrap" @click.stop="close">
-       
+
+      <div class="login-body">
           <div class="ms-login">
+              <div class="blog-login-title">
+                  ZOE
+              </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
@@ -12,18 +15,19 @@
                 </el-form-item>
                 <el-form-item  style="margin-bottom: 10px;height: 50px;">
                     <a class="loginAction" >注册</a>
-                    <a  style="float: right" class="loginAction">忘记密码</a>
+                    <a  style="float: right" class="loginAction">忘记密码？</a>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')" >登录</el-button>
                 </div>
             </el-form>
         </div>
-    </div>
+      </div>
+
 </template>
 
 <script>
-import {login} from '../../../store/service'
+import {login} from '../../store/service'
     export default {
         data: function(){
             return {
@@ -49,7 +53,7 @@ import {login} from '../../../store/service'
                         login(self.ruleForm.username,self.ruleForm.password).then(function(data){
                             if(data.code == 0){
                                 setStore('token',data.data)    
-                                self.$emit('loginAction','login')                
+                                self.$router.back()       
                             }
                             else{
                                 self.$vux.toast.show({
@@ -73,7 +77,7 @@ import {login} from '../../../store/service'
             close(e){
                 
                 if(e.target!=e.currentTarget) return;
-                this.$emit('loginAction','close')
+               
             }
         }
 
@@ -81,48 +85,51 @@ import {login} from '../../../store/service'
 </script>
 
 <style scoped>
-    .login-wrap{
-        position: absolute;
-        width:100%;
-        height:100vh;
-        top:0;
-        background: rgba(1, 1, 1, 0.5)
-    }
-    .ms-title{
-        position: absolute;
-        top:32%;
-        width:100%;
-        margin-top: -100px;
-        text-align: center;
-        font-size:30px;
-        color: #fff;
+.login-body{
 
-    }
-    .ms-login{
-        position: absolute;
-        left:50%;
-        top:35%;
-        width:360px;
-        height:300px;
-        margin: -10px 0px 0px -180px;
-        padding:40px;
-        border-radius: 5px;
-        background: #fff;
-        font-size: 20px;
-    }
-    .login-btn{
-        text-align: center;
-    }
-    .login-btn button{
-        width:100%;
-        height:36px;
-    }
-  .loginAction{
-      cursor: pointer;
-      
+    width:100%;
+    height:100vh;
+    top:0;
+    background: rgba(1, 1, 1, 0.5)
+}
+.ms-title{
+    position: absolute;
+    top:32%;
+    width:100%;
+    margin-top: -100px;
+    text-align: center;
+    font-size:30px;
+    color: #fff;
 
-  }
-   .loginAction:hover{
-       color: #20a0ff !important;
-   }
+}
+.ms-login{
+    position: absolute;
+    left:50%;
+    top:35%;
+    width:360px;
+    height:360px;
+    margin: -10px 0px 0px -180px;
+    padding:40px;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 20px;
+}
+.blog-login-title{
+    text-align: center;
+    height: 60px;
+    font-size: 30px;
+}
+.login-btn{
+    text-align: center;
+}
+.login-btn button{
+    width:100%;
+    height:36px;
+}
+.loginAction{
+    cursor: pointer;
+}
+.loginAction:hover{
+    color: #20a0ff !important;
+}
 </style>
