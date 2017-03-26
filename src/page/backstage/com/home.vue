@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <v-head :username="userInfo.user_name"></v-head>
+        <v-head :username="userInfo.user_name" :userImage="userInfo.user_image_url"></v-head>
         <v-sidebar ></v-sidebar>
         <div class="backStagecontent">
             <transition name="move" mode="out-in"><router-view></router-view></transition>

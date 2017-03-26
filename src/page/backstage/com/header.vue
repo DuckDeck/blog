@@ -5,7 +5,7 @@
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
-                    <img class="user-logo" src="static/img/main/LOGO.jpg">
+                    <img class="user-logo" :src="userImage">
                     {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -28,7 +28,10 @@
                type: String,
                default:''
             },
-           
+           userImage:{
+               type: String,
+               default:''
+           }
         },
         computed:{
           
