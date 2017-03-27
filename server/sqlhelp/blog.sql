@@ -304,16 +304,16 @@ CREATE TABLE  IF NOT EXISTS article (
 user_comment 用户评论表
 --------------------------
 CREATE TABLE  IF NOT EXISTS user_comment (
- c_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
- user_id mediumint(8) NOT NULL COMMENT '收到评论的用户ID',
- type_id tinyint(3) DEFAULT 0 NOT NULL COMMENT '评论栏目ID',
- commit_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
- commit_content varchar(255) NOT NULL COMMENT '评论内容',
- commit_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
- commit_time int(13) NOT NULL COMMENT '评论时间',
- commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ comment_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
+ comment_target_user_id mediumint(8) NOT NULL COMMENT '收到评论的用户ID，目前好像没什么用', 
+ comment_type_id tinyint(3) DEFAULT 0 NOT NULL COMMENT '评论栏目ID',
+ comment_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
+ comment_content varchar(255) NOT NULL COMMENT '评论内容',
+ commenter_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
+ comment_time int(13) NOT NULL COMMENT '评论时间',
+ commenter_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
  delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
- PRIMARY KEY (c_id)
+ PRIMARY KEY (comment_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 
@@ -322,15 +322,15 @@ CREATE TABLE  IF NOT EXISTS user_comment (
 user_comment 用户子评论表
 --------------------------
 CREATE TABLE  IF NOT EXISTS user_sub_comment (
- c_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
- user_id mediumint(8) NOT NULL COMMENT '回复评论的用户ID',
- commit_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
- commit_content varchar(255) NOT NULL COMMENT '评论内容',
- commit_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
- commit_time int(13) NOT NULL COMMENT '评论时间',
- commit_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ comment_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '评论自增ID号',
+ comment_target_user_id mediumint(8) NOT NULL COMMENT '回复评论的用户ID，目前好像没什么用',
+ comment_target_id mediumint(8) NOT NULL COMMENT '评论内容的ID',
+ comment_content varchar(255) NOT NULL COMMENT '评论内容',
+ commenter_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
+ comment_time int(13) NOT NULL COMMENT '评论时间',
+ commenter_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
  delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
- PRIMARY KEY (c_id)
+ PRIMARY KEY (comment_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 

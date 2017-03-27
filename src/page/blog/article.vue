@@ -20,7 +20,12 @@
                             </header>
                             <div class="articleSeperateLine"></div>
                             <article class="articleContentClass" v-html = "article.article_content"></article>
+                             <comment  @submitComment="submitComment"></comment>
+                              
                          </div>
+
+
+                        
                   </div>
                 </div>
              </div>
@@ -28,14 +33,15 @@
 </template>
 
 <script>
-import {articleById} from '../../store/service'
+import {articleById,submitComment} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import blogSide from './com/blogSide.vue'
+import comment from './com/comment.vue'
   export default {
     data() {
       return {
           userInfo:{},
-            article:{},
+          article:{},
       }
     },
     async mounted(){
@@ -63,9 +69,31 @@ import blogSide from './com/blogSide.vue'
                 this.userInfo =  {}
             }
         },
+        async submitComment(com){
+           if(com == ''){
+               toast(this,'评论内容不能为空')
+           }
+           if(com.trim() = ''){
+               toast(this,'评论内容不能为空字符')
+           }
+           let com = {
+               commentContent:com,
+               commentTargetId:this.article.article_id
+           }
+           let res = await submitComment(com)
+           toast(this,res.ChineseMsg)
+           if(res.code == 0){
+                
+           }
+           
+
+           
+           
+
+        }
     },
     components:{
-        blogHeader,blogSide
+        blogHeader,blogSide,comment
     },
     computed:{
         releaseDate(){
@@ -127,9 +155,8 @@ import blogSide from './com/blogSide.vue'
     font-size: 20px;
     padding-bottom: 50px;
 }
-.articleContentClass img{
-    
-}
+
+
 @media (max-width:991px) {
 .content-main{
     padding-left: 0px;    

@@ -189,3 +189,11 @@ export const deleteLink = function(link_id){
     const url = HostName +  'link/'+ link_id +'/' + userId + '/' + createToken()
     return setpromiseDelete(url)
 }
+
+export const submitComment = (comment)=>{
+    let url = HostName +  'comment'
+    if(setStore('token')){
+        url = HostName +  'comment/'+ link_id +'/' + userId + '/' + createToken()
+    }
+    return setpromisePost(url,comment)
+}
