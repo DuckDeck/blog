@@ -20,8 +20,15 @@
                             </header>
                             <div class="articleSeperateLine"></div>
                             <article class="articleContentClass" v-html = "article.article_content"></article>
-                             <comment  @submitComment="submitComment"></comment>
+                             <writeComment  @submitComment="submitComment"></writeComment>
                               
+                            <div class="articleComments">
+                                <div class="articleCommentsCount">
+                                    {{article.comments.length}}条评论  
+                                </div>
+                                <userComment v-for="com in article.comments" :comment="com" ></userComment>
+                            </div>
+
                          </div>
 
 
@@ -36,7 +43,9 @@
 import {articleById,submitComment} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import blogSide from './com/blogSide.vue'
-import comment from './com/comment.vue'
+import writeComment from './com/writeComment.vue'
+import userComment from './com/userComment.vue'
+//todo comment sort feature
   export default {
     data() {
       return {
@@ -93,12 +102,12 @@ import comment from './com/comment.vue'
         }
     },
     components:{
-        blogHeader,blogSide,comment
+        blogHeader,blogSide,writeComment,userComment
     },
     computed:{
         releaseDate(){
             return  formatTime(new Date(this.article.article_create_time))
-        }
+        },
     }
 
   }
@@ -156,7 +165,16 @@ import comment from './com/comment.vue'
     padding-bottom: 50px;
 }
 
-
+.articleComments{
+    padding:25px;
+}
+.articleCommentsCount{
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #777;
+}
 @media (max-width:991px) {
 .content-main{
     padding-left: 0px;    

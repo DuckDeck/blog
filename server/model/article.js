@@ -13,9 +13,9 @@ const sqls = {
     updateArticle:`UPDATE article SET article_name = ?,article_create_time = ?,article_release_time = ?,article_ip = ?,article_click = ?, article_sort__id = ?, 
     user_id = ?, article_type_id = ?, article_type = ?, article_content = ?,article_brief=?, article_main_img=?,article_up = ?, article_recommend = ?,
      article_status = ? WHERE article_id = ?`,
-    selectArticleCommentById:`SELECT  comment_id,comment_target_id,comment_content,commenter_user_id,comment_time,
+    selectArticleCommentById:`SELECT  comment_id,comment_target_id,comment_target_user_id,comment_content,commenter_user_id,comment_time,
         commenter_ip, 0 as type  FROM blog.user_comment where delete_flag = 0 and comment_target_id = ? union 
-        SELECT comment_id,comment_target_id,comment_content,commenter_user_id,comment_time,
+        SELECT comment_id,comment_target_id,comment_target_user_id,comment_content,commenter_user_id,comment_time,
         commenter_ip, 1 as type  FROM blog.user_sub_comment where delete_flag = 0 and comment_target_id = ?`
 }
 class Article{

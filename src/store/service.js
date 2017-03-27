@@ -193,7 +193,7 @@ export const deleteLink = function(link_id){
 export const submitComment = (comment)=>{
     let url = HostName +  'comment'
     if(getStore('token')){
-        url = HostName +  'comment/'+ link_id +'/' + userId + '/' + createToken()
+        url = HostName +  'comment/'+ userId + '/' + createToken()
     }
     return setpromisePost(url,comment)
 }

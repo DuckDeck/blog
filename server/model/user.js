@@ -4,7 +4,9 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
-    userInfoById:`select * from user where user_id = ?`
+    userInfoById:`select * from user where user_id = ?`,
+    userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user where user_id in (?)'
+    
 }
 class User{
     constructor(userName,password){
@@ -52,5 +54,13 @@ class User{
     static userInfoById(user_id){
         return db.exec(sqls.userInfoById,[user_id])
     }
+
+    static userInfoByIds(ids){
+        if(Tool.getType(ids == "Array")){
+            ids = ids.join(',')
+        }
+        return db.exec(sqls.userInfoByIds,[ids])
+    }
+    
 }
 module.exports = User

@@ -1,6 +1,7 @@
 const APIError = require('../rest').APIError;
 const Article = require('../model/article')
 const Tag = require('../model/tag')
+const User = require('../model/user')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const fs = require('fs')
@@ -50,6 +51,7 @@ module.exports = {
             s['tag'] =  t==undefined ? [] : t.data
             return s
         })
+        
         ctx.rest(Result.create(0,a))
     },
 
@@ -81,10 +83,32 @@ module.exports = {
        let SubCom = resCom.data.filter(s=>{
            return s.type == 1
        })
+       let ids = new Set()
+       for(let com of resCom.data){
+           ids.add(com.commenter_user_id)
+           if(com.comment_target_user_id != 0){
+               ids.add(com.comment_target_user_id)
+           }
+       }
+       let userInfos =await User.userInfoByIds(Array.from(ids))
+       if(userInfos.code != 0){
+           ctx.rest(userInfos)
+       }
+       //hk暂时不需要加上几楼功能
+       //赞功能也不加上
        for(let m of mainCom){
            m.sub_comments = []
-           for(n of SubCom){
+           m.userInfo = userInfos.data.find(s=>{
+                return s.user_id == m.commenter_user_id
+           })
+           for(let n of SubCom){
                if(n.comment_target_id == m.comment_id){
+                   n.userInfo = userInfos.data.find(s=>{
+                        return s.user_id == n.commenter_user_id
+                   })
+                   n.targetUserInfo = userInfos.data.find(s=>{
+                        return s.user_id == n.comment_target_user_id
+                   })
                    m.sub_comments.push(n)
                }
            }

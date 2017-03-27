@@ -5,7 +5,9 @@
         placeholder="写下你的评论..."
         v-model="comment">
         </el-input>
+        
         <el-button class="buttonSubmitArticle" type="primary" @click="submitComment">提交</el-button>
+        <el-button class="buttoncancelComment" v-show="needCancel" @click="cancel">取消</el-button>
         <div style="clear: both"></div>
     </div>
 </template>
@@ -17,14 +19,17 @@
         }
     },
     props:{
-        // comment:{
-        //     type:String,
-        //     default:''
-        // }
+        needCancel:{
+            type:Boolean,
+            default:false
+        }
     },
     methods:{
         submitComment(){
             this.$emit('submitComment',this.comment)
+        },
+        cancel(){
+            this.$emit('cancelComment')
         }
     }
 
@@ -39,5 +44,10 @@
 .buttonSubmitArticle{
     margin-top: 10px;
     float: right;
+}
+.buttoncancelComment{
+   margin-top: 10px;
+    float: right;
+    margin-right: 10px;
 }
 </style>
