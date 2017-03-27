@@ -73,14 +73,14 @@ import comment from './com/comment.vue'
            if(com == ''){
                toast(this,'评论内容不能为空')
            }
-           if(com.trim() = ''){
+           if(com.trim() == ''){
                toast(this,'评论内容不能为空字符')
            }
-           let com = {
+           let comment = {
                commentContent:com,
                commentTargetId:this.article.article_id
            }
-           let res = await submitComment(com)
+           let res = await submitComment(comment)
            toast(this,res.ChineseMsg)
            if(res.code == 0){
                 

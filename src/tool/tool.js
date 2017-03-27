@@ -97,7 +97,15 @@ global.setStore = (name, content) => {
 global.getStore = name => {
 	if (!name) return;
     let content = window.localStorage.getItem(name);
-	return JSON.parse(content) || content
+    if(content){
+        try {
+            return JSON.parse(content)
+        } catch (error) {
+            return content
+        }
+          
+    }
+	return null
 }
 global.removeStore = name => {
 	if (!name) return;

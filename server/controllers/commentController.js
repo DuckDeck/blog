@@ -25,9 +25,29 @@ module.exports = {
             ctx.rest(Result.create(9,{msg:'wrong commentTargetId format'})) 
             return
         }
-        let com = Comment(t.commentTargetId,id,t.commentContent)
+        let com =new Comment(t.commentTargetId,id,t.commentContent)
         com.comment_time = new Date().getTime()
-        let res = await(Comment.insertMainComment(com))
+        let res = await Comment.insertMainComment(com)
+        ctx.rest(res)
+    },
+
+    'POST /api/comment': async (ctx, next) => {
+        var t = ctx.request.body;
+        if(!t.commentContent || !t.commentContent.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss commentContent'})) 
+            return
+        }
+        if(!t.commentTargetId || !t.commentTargetId.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss commentTargetId'})) 
+            return
+        }
+        if(isNaN(t.commentTargetId)){
+            ctx.rest(Result.create(9,{msg:'wrong commentTargetId format'})) 
+            return
+        }
+        let com =new Comment(t.commentTargetId,0,t.commentContent)
+        com.comment_time = new Date().getTime()
+        let res = await Comment.insertMainComment(com)
         ctx.rest(res)
     },
 }

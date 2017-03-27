@@ -107,9 +107,10 @@ class Tool{
        if(id == undefined || token == undefined){
             return setPromise(Result.create(9),false)
        }
-       if(!isNaN(token)){
-           return setPromise(Result.create(9),false)
-       }
+    //    if(!isNaN(token)){
+    //        return setPromise(Result.create(9),false)
+    //    }
+    // for now do not care what is token is
        return setPromise(Result.create(0),true) 
        let t = Tool.decrypt(key,iv,token)
        let para = t.split('=')

@@ -21,13 +21,13 @@ class Comment{
     }
     
     static insertMainComment(comment){
-        db.exec(sqls.insertMainComment,[comment.comment_id,comment.comment_target_userId,comment.comment_type_id,
+       return db.exec(sqls.insertMainComment,[comment.comment_id,comment.comment_target_userId,comment.comment_type_id,
         comment.comment_target_id,comment.commentContent,comment.commenter_id,
         comment.comment_time,comment.commenter_ip,comment.delete_flag,])
     }
 
     static insertSubComment(comment){
-        db.exec(sqls.insertSubComment,[comment.comment_id,comment.comment_target_userId,
+       return db.exec(sqls.insertSubComment,[comment.comment_id,comment.comment_target_userId,
         comment.comment_target_id,comment.commentContent,comment.commenter_id,
         comment.comment_time,comment.commenter_ip,comment.delete_flag,])
     }

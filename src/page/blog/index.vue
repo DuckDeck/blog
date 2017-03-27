@@ -45,7 +45,7 @@
                                             <div class="pull-right user-icons">
                                                
                                                 <a href="#"><i class="fa fa-eye fa-1.2x"></i>{{art.article_click}}</a>
-                                                <a href="#"><i class="fa fa-comment fa-1.2x"></i>{{art.article_click}}</a>
+                                                <a href="#"><i class="fa fa-comment fa-1.2x"></i>{{art.comment_count}}</a>
                                             </div>
                                         </div>
                                     </div>

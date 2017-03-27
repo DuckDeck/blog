@@ -18,6 +18,7 @@ function handlePromiseResult(result){
 
 }
 module.exports = {
+    
     'GET /api/article/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
@@ -59,19 +60,38 @@ module.exports = {
             return
         }
        let id = ctx.params.articleId
-       await Promise.all([Article.articalById(id),Tag.articleTagByArticleId(id)]).then(res=>{
-            if(res[0].data.length <= 0){
-                ctx.rest(Result.create(8))
-                return
-            }
-            let article = res[0].data[0]
-            article['tags'] = res[1].data
-            let result = Result.create(0,article)
-            console.log(result.data.tags)
-            ctx.rest(result)
-       }).catch(err=>{
-           ctx.rest(err)
+       let resArticle = await Article.articalById(id)
+       if(resArticle.code != 0){
+            ctx.rest(resArticle)
+       }
+       let resTags =await Tag.articleTagByArticleId(id)
+       if(resTags.code != 0){
+            ctx.rest(resTags)
+       }
+       let resCom = await Article.getArticleCommentById(id)
+       if(resCom.code == 0){
+           ctx.rest(resCom)
+       }
+       
+       let article = resArticle.data[0]
+       article.tags = resTags.data
+       let mainCom = resCom.data.filter(s=>{
+          return s.type == 0
        })
+       let SubCom = resCom.data.filter(s=>{
+           return s.type == 1
+       })
+       for(let m of mainCom){
+           m.sub_comments = []
+           for(n of SubCom){
+               if(n.comment_target_id == m.comment_id){
+                   m.sub_comments.push(n)
+               }
+           }
+       }
+       article.comments = mainCom
+       ctx.rest(Result.create(0,article))
+    
        
     },
 

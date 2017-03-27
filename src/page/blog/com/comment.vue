@@ -34,6 +34,7 @@
  .commentArticle{
     font-size: 20px;
     padding: 0px 20px;
+    padding-bottom: 20px;
 }
 .buttonSubmitArticle{
     margin-top: 10px;
