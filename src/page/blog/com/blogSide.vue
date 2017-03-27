@@ -1,6 +1,6 @@
 
 <template>
-    <div class="blogSide">
+
        
         <aside class="main-navigation">
             <div class="main-menu">
@@ -63,7 +63,7 @@
 
             </div>
         </aside>
-    </div>
+
 </template>
 
 <script>

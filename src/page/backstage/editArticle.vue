@@ -130,7 +130,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                     if(this.mainImage == ''){
                         this.mainImage = result.data
                     }
-                    this.content = this.content +  "<img src="+ result.data +" ></img>"
+                    this.content = this.content +  "<div style='text-align:center'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></div>"
                 }
                 else{
                     toast(this,result.ChineseMsg)

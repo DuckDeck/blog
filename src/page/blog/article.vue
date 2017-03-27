@@ -6,9 +6,9 @@
             <div class="main-page">          
                 <blogSide ></blogSide>
                     <div class="content-main"> 
-                         <div class="row article-content">
+                         <div class=" article-content">
                              <header>
-                                <div  style="font-size: 30px">
+                                <div  class="articleHeader" >
                                     {{article.article_name}}
                                 </div>
                                 <div class="articleInfoClass">
@@ -100,5 +100,39 @@ import blogSide from './com/blogSide.vue'
 }
 .article-content{
     background: white;
+    border-top: 7px solid #10a5cd;
+}
+.articleHeader{
+    font-size: 35px;
+    text-align: center;
+    margin-top: 30px;
+    font-weight: bold;
+}
+.articleInfoClass{
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.articleTagClass{
+
+    font-size: 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.articleTagClass span{
+    margin-right: 10px;
+}
+.articleContentClass{
+    margin:20px;
+    font-size: 20px;
+    padding-bottom: 50px;
+}
+.articleContentClass img{
+    
+}
+@media (max-width:991px) {
+.content-main{
+    padding-left: 0px;    
+}
 }
 </style>

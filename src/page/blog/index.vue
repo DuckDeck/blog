@@ -29,8 +29,8 @@
 
 
 
-                        <div class="row margin-b-30">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" v-for='art in articles'>
+                        <div class="row margin-b-30" >
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" v-for='art in articles' @click="checkArticle(art)">
                                 <div class="box">
                                     <div class="box-icon">
                                         <img :src="art.article_main_img" alt="Image" class="img-responsive">
@@ -43,9 +43,9 @@
                                         <hr class="box-separate" />
                                         <div class="col-sm-12 location-main"> 
                                             <div class="pull-right user-icons">
-                                                <a href="#"><i class="fa fa-star fa-2x"></i></a>
-                                                <a href="#"><i class="fa fa-user fa-2x"></i></a>
-                                                <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+                                               
+                                                <a href="#"><i class="fa fa-eye fa-1.2x"></i>{{art.article_click}}</a>
+                                                <a href="#"><i class="fa fa-comment fa-1.2x"></i>{{art.article_click}}</a>
                                             </div>
                                         </div>
                                     </div>
