@@ -66,5 +66,10 @@ module.exports = {
             ctx.rest(res)
         }
     },
+
+    'GET /api/comment/:commentId': async (ctx, next) => {
+       
+    },
+
 }
 
