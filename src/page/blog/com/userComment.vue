@@ -79,30 +79,36 @@ import {submitComment} from '../../../store/service'
 }
 </script>
 <style >
+.commentBigCell{
+    margin-bottom: 15px;
+}
 .commentUserInfo{
     vertical-align: middle;
     font-size: 20px;
     
 }
  .commentUserInfo img{
-     width: 50px;
-     height: 50px;
-     border-radius: 25px;
+     width: 40px;
+     height: 40px;
+     border-radius: 20px;
+     border: 1px solid #888;
      display: inline-block;
      vertical-align: middle;
  }
  .userNameDiv{
-     font-size: 20px;
+     font-size: 15px;
  }
  .userCommentTimeDiv{
-    font-size: 18px;
+    font-size: 12px;
  }
  .commentContent{
-     font-size: 25px;
+     font-size: 16px;
+     margin-top: 5px;
  }
  .iconComment{
      font-size: 15px;
      margin-top: 5px;
+     float: right;
  }
   .iconComment a:hover{
       cursor: pointer;

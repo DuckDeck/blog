@@ -65,14 +65,17 @@ module.exports = {
        let resArticle = await Article.articalById(id)
        if(resArticle.code != 0){
             ctx.rest(resArticle)
+            return
        }
        let resTags =await Tag.articleTagByArticleId(id)
        if(resTags.code != 0){
             ctx.rest(resTags)
+            return
        }
        let resCom = await Article.getArticleCommentById(id)
-       if(resCom.code == 0){
+       if(resCom.code != 0){
            ctx.rest(resCom)
+           return
        }
        
        let article = resArticle.data[0]
@@ -83,6 +86,7 @@ module.exports = {
        let SubCom = resCom.data.filter(s=>{
            return s.type == 1
        })
+       //找出所有评论者的id
        let ids = new Set()
        for(let com of resCom.data){
            ids.add(com.commenter_user_id)
@@ -90,22 +94,39 @@ module.exports = {
                ids.add(com.comment_target_user_id)
            }
        }
+       //获取所有评论者有信息
        let userInfos =await User.userInfoByIds(Array.from(ids))
        if(userInfos.code != 0){
            ctx.rest(userInfos)
+           return
        }
        //hk暂时不需要加上几楼功能
        //赞功能也不加上
+       let tra = {
+            user_id:0,
+            user_name:'游客',
+            user_image_url:'http://localhost:3000/static/system/tra.png'
+       }
        for(let m of mainCom){
            m.sub_comments = []
-           m.userInfo = userInfos.data.find(s=>{
-                return s.user_id == m.commenter_user_id
-           })
+           if(m.commenter_user_id == 0){
+                m.userInfo = tra
+           }
+           else{
+                m.userInfo = userInfos.data.find(s=>{
+                    return s.user_id == m.commenter_user_id
+                })
+           }
            for(let n of SubCom){
                if(n.comment_target_id == m.comment_id){
-                   n.userInfo = userInfos.data.find(s=>{
+                   if(n.commenter_user_id == 0){
+                       n.userInfo = tra
+                   }
+                   else{
+                      n.userInfo = userInfos.data.find(s=>{
                         return s.user_id == n.commenter_user_id
-                   })
+                      })
+                   }
                    n.targetUserInfo = userInfos.data.find(s=>{
                         return s.user_id == n.comment_target_user_id
                    })
