@@ -72,7 +72,7 @@ import {submitComment} from '../../../store/service'
            }
            let comment = {}
            //判断是哪种评论
-           if(isEpmty(this.currentCom)){
+           if(isEmpty(this.currentCom)){
              comment = {
                 commentContent:com,
                 commentTargetId:this.comment.comment_id,
@@ -94,7 +94,8 @@ import {submitComment} from '../../../store/service'
            let res = await submitComment(comment)
            toast(this,res.ChineseMsg)
            if(res.code == 0){
-                
+                this.$emit('refreshComment',this.comment.comment_id)
+                this.isShowWriteComment = false
            }
        },
        writeSubComment(com){

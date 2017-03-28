@@ -20,7 +20,7 @@
                             </header>
                             <div class="articleSeperateLine"></div>
                             <article class="articleContentClass" v-html = "article.article_content"></article>
-                             <writeComment  @submitComment="submitComment"></writeComment>
+                             <writeComment  @submitComment="submitComment" @refreshComment = "refreshComment"></writeComment>
                               
                             <div class="articleComments">
                                 <div class="articleCommentsCount">
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {articleById,submitComment} from '../../store/service'
+import {articleById,submitComment,getComment} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import blogSide from './com/blogSide.vue'
 import writeComment from './com/writeComment.vue'
@@ -89,13 +89,24 @@ import userComment from './com/userComment.vue'
            let res = await submitComment(comment)
            toast(this,res.ChineseMsg)
            if(res.code == 0){
-                
+                let id = res.data.id  
+               res = await getComment(id)
+               if(res.code == 0){
+                 this.article.comments.push(res.data)
+               }
+              
            }
-           
-
-           
-           
-
+        },
+        async refreshComment(comment_id){
+             res = await getComment(comment_id)
+             if(res.code == 0){
+                let index = this.article.comments.findIndex(s=>{
+                    s.comment_id == comment_id
+                })
+                if(index >=0){
+                    this.article.comments.splice(index,1,res.data)
+                }
+            }   
         }
     },
     components:{

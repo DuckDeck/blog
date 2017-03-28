@@ -80,94 +80,97 @@ module.exports = {
        let article = resArticle.data[0]
        article.tags = resTags.data
        let mainCom = resMainCom.data
-       mainCom.sort((a,b)=>{
-           if(a.comment_time == b.comment_time){
-               return 0
-           }
-           if(a.comment_time < b.comment_time){
-               return 1
-           }
-           else{
-               return -1
-           }
-       })
-       let subIds = mainCom.map(s=>{
-           return s.comment_id
-       })
-       let resSubCom = await Article.getArticleSubCommentById(subIds)
-       if(resSubCom.code != 0){
-           ctx.rest(resSubCom)
-           return
-       }
-       let subCom = resSubCom.data
-       subCom.sort((a,b)=>{
-           if(a.comment_time == b.comment_time){
-               return 0
-           }
-           if(a.comment_time < b.comment_time){
-               return 1
-           }
-           else{
-               return -1
-           }
-       })
+       if(mainCom.length > 0){
+            mainCom.sort((a,b)=>{
+                if(a.comment_time == b.comment_time){
+                    return 0
+                }
+                if(a.comment_time < b.comment_time){
+                    return 1
+                }
+                else{
+                    return -1
+                }
+            })
+
+            let subIds = mainCom.map(s=>{
+                return s.comment_id
+            })
+            let resSubCom = await Article.getArticleSubCommentById(subIds)
+            if(resSubCom.code != 0){
+                ctx.rest(resSubCom)
+                return
+            }
+            let subCom = resSubCom.data
+            subCom.sort((a,b)=>{
+                if(a.comment_time == b.comment_time){
+                    return 0
+                }
+                if(a.comment_time < b.comment_time){
+                    return 1
+                }
+                else{
+                    return -1
+                }
+            })
 
 
-       //找出所有评论者的id
-       let ids = new Set()
-       for(let com of mainCom){
-           ids.add(com.commenter_user_id)
-       }
-       for(let com of subCom){
-           ids.add(com.commenter_user_id)
-           ids.add(com.comment_target_user_id)
-       }
-       ids.delete(0)
-       //获取所有评论者有信息
-       let userInfos =await User.userInfoByIds(Array.from(ids))
-       if(userInfos.code != 0){
-           ctx.rest(userInfos)
-           return
-       }
-       //hk暂时不需要加上几楼功能
-       //赞功能也不加上
-       let tra = {
-            user_id:0,
-            user_name:'游客',
-            user_image_url:'http://localhost:3000/static/system/tra.png'
-       }
-       for(let m of mainCom){
-           m.sub_comments = []
-           if(m.commenter_user_id == 0){
-                m.userInfo = tra
-           }
-           else{
-                m.userInfo = userInfos.data.find(s=>{
-                    return s.user_id == m.commenter_user_id
-                })
-           }
-           for(let n of subCom){
-               if(n.comment_target_id == m.comment_id){
-                   if(n.commenter_user_id == 0){
-                       n.userInfo = tra
-                   }
-                   else{
-                      n.userInfo = userInfos.data.find(s=>{
-                        return s.user_id == n.commenter_user_id
-                      })
-                   }
-                   if(n.comment_target_user_id == 0){
-                       n.targetUserInfo = tra
-                   }
-                   else{
-                     n.targetUserInfo = userInfos.data.find(s=>{
-                        return s.user_id == n.comment_target_user_id
-                     })
-                   }
-                   
-                   m.sub_comments.push(n)
-               }
-           }
+            //找出所有评论者的id
+            let ids = new Set()
+            for(let com of mainCom){
+                ids.add(com.commenter_user_id)
+            }
+            for(let com of subCom){
+                ids.add(com.commenter_user_id)
+                ids.add(com.comment_target_user_id)
+            }
+            ids.delete(0)
+            //获取所有评论者有信息
+            let userInfos =await User.userInfoByIds(Array.from(ids))
+            if(userInfos.code != 0){
+                ctx.rest(userInfos)
+                return
+            }
+            //hk暂时不需要加上几楼功能
+            //赞功能也不加上
+            let tra = {
+                    user_id:0,
+                    user_name:'游客',
+                    user_image_url:'http://localhost:3000/static/system/tra.png'
+            }
+            for(let m of mainCom){
+                m.sub_comments = []
+                if(m.commenter_user_id == 0){
+                        m.userInfo = tra
+                }
+                else{
+                        m.userInfo = userInfos.data.find(s=>{
+                            return s.user_id == m.commenter_user_id
+                        })
+                }
+                for(let n of subCom){
+                    if(n.comment_target_id == m.comment_id){
+                        if(n.commenter_user_id == 0){
+                            n.userInfo = tra
+                        }
+                        else{
+                            n.userInfo = userInfos.data.find(s=>{
+                                return s.user_id == n.commenter_user_id
+                            })
+                        }
+                        if(n.comment_target_user_id == 0){
+                            n.targetUserInfo = tra
+                        }
+                        else{
+                            n.targetUserInfo = userInfos.data.find(s=>{
+                                return s.user_id == n.comment_target_user_id
+                            })
+                        }
+                        
+                        m.sub_comments.push(n)
+                    }
+                }
+            }
        }
        article.comments = mainCom
        ctx.rest(Result.create(0,article))
@@ -240,6 +243,7 @@ module.exports = {
        //使用正则来取出里面的图片也不是好办法
        //大一点点的图片都无法直接保存在数据库了
         let m =new Article(t.articalTitle,t.articalContent)
+        m.ip = ctx.request.ip
         m.category = t.articalSort
         m.userId = id
         m.articleBrief = t.articleBrief || ''

@@ -71,6 +71,7 @@ class Article{
             subIds.sort()
             subIds = subIds.join(',')
         }
+        console.log(subIds)
         return db.exec(sqls.selectArticleSubCommentById + '('+subIds + ')')
     }
 }

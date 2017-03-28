@@ -1,39 +1,5 @@
 
-const realNameRegex = /\S+/
-const phoneRegex = /(13|14|15|17|18)\d{9}$/
 let globalVue = {}
-export function validate(type,value){
-    switch (type) {
-        case 'realName':
-           if(!realNameRegex.test(value)){
-               return "姓名不能为空或者空白"
-           }
-           else{
-               return null;
-           }
-            break;
-       case 'phone':
-           if(!phoneRegex.test(value)){
-               return "手机号为空或者格式错误"
-           }
-           else{
-               return null;
-           }
-            break;
-        default:
-        return null;
-            break;
-    }
-}
-
-
-global.isEpmty = function(obj){
-    for (var key in obj) {
-        return false;
-    }
-    return true;
-}
-
 
 global.formatTime = function(date,format){
         if(!(date instanceof Date)){
@@ -112,7 +78,7 @@ global.removeStore = name => {
 	window.localStorage.removeItem(name);
 }
 
-global.userId = getStore('token') == null ?  1 : getStore('token').user_id
+global.userId = getStore('token') == null ?  0 : getStore('token').user_id
 
 
 global.getStyle = (element, attr, NumberMode = 'int') => {

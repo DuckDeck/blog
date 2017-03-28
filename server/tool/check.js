@@ -18,3 +18,4 @@ class Check{
         return null
     }
 }
+module.exports = Check
