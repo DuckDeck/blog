@@ -27,8 +27,12 @@
                             </div>    
                         </div>
 
-
-
+                        <div class="checkMore" @click="checkMore">
+                            查看更多
+                        </div>
+                        <div style="clear: both">
+                            
+                        </div>
                         <div class="row margin-b-30" >
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" v-for='art in articles' @click="checkArticle(art)">
                                 <div class="box">
@@ -114,7 +118,9 @@ import blogSide from './com/blogSide.vue'
             }
         },
         
-      
+        checkMore(){
+
+        },
         async getUserInfo(){
            let res = await getUserInfo()
            if(res.code == 0){
@@ -253,6 +259,15 @@ import blogSide from './com/blogSide.vue'
 	padding: 10px 15px 30px;
 	line-height: 2;
 	text-transform: uppercase;
+}
+.checkMore{
+    font-size: 20px;
+    color: white;
+    margin-bottom: 20px;
+    float: right;
+}
+.checkMore:hover{
+    cursor: pointer;
 }
 .box {
 	float: left;

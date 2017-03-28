@@ -6,7 +6,7 @@
             <div class="main-menu">
                 <div class="menu-container">
                     <div class="block-keep-ratio block-keep-ratio-2-1 block-width-full home">                                    
-                        <a href="index.html" class="block-keep-ratio__content  main-menu-link">
+                        <a href="#/" class="block-keep-ratio__content  main-menu-link">
                             <span class="main-menu-link-text">
                                 HOME    
                             </span>                                        
