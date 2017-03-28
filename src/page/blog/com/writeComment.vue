@@ -2,7 +2,7 @@
     <div class="commentArticle">
         <el-input type="textarea"
         :rows="2"
-        placeholder="写下你的评论..."
+        :placeholder=placeHolder
         v-model="comment">
         </el-input>
         
@@ -22,6 +22,10 @@
         needCancel:{
             type:Boolean,
             default:false
+        },
+        placeHolder:{
+            type:String,
+            default:'写下你的评论...'
         }
     },
     methods:{

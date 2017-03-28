@@ -21,17 +21,18 @@
        <div class="subComments" v-show = "subCommentCount > 0">
            <div v-for = "subCom in comment.sub_comments">
                <div>
-                   <span>{{subCom.userInfo.user_name}}</span> 回复 <span>{{subCom.targetUserInfo.user_name}} </span> {{subCom.comment_content}}
-               </div>
+                   <span style="color: darkorange">{{subCom.userInfo.user_name}}</span> 回复 
+                   <span style="color: dodgerblue">@{{subCom.targetUserInfo.user_name}} </span>: {{subCom.comment_content}}
+               </div> 
                <div>
-                   <span>{{formatData(subCom.comment_time)}}</span>
-                   <a @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i>{{subCommentCount}}回复</a>
+                   <span class="subCommentTime">{{formatData(subCom.comment_time)}}</span>
+                   <a class="subCommentReplay" @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i>回复</a>
                </div>
 
            </div>
        </div>
-       <writeComment style="margin-top: 5px;" :needCancel="true"  @cancelComment="cancelComment"  v-show = "isShowWriteComment" 
-       @submitComment = "submitComment"></writeComment>
+       <writeComment style="margin-top: 10px;" :needCancel="true"  @cancelComment="cancelComment"  v-show = "isShowWriteComment" 
+       @submitComment = "submitComment" :placeHolder="placeHolder"></writeComment>
     </div>
 </template>
 <script>
@@ -41,7 +42,8 @@ import {submitComment} from '../../../store/service'
     data() {
         return{
            isShowWriteComment:false,
-           currentCom:{}
+           currentCom:{},
+           placeHolder:'写下你的评论...'
         }
     },
     props:{
@@ -54,6 +56,8 @@ import {submitComment} from '../../../store/service'
     },
     methods:{
        writeComment(){
+           this.currentCom = {}
+           this.placeHolder = '写下你的评论...'
            this.isShowWriteComment = true
        },
        cancelComment(){
@@ -73,7 +77,7 @@ import {submitComment} from '../../../store/service'
                 commentContent:com,
                 commentTargetId:this.comment.comment_id,
                 commentTargetUserId:this.comment.userInfo.user_id,
-                commentScope:comment.comment_id,
+                commentScope:this.comment.comment_id,
                 commentType:0
               }
            }
@@ -82,7 +86,7 @@ import {submitComment} from '../../../store/service'
                 commentContent:com,
                 commentTargetId:this.currentCom.comment_id,
                 commentTargetUserId:this.currentCom.userInfo.user_id,
-                commentScope:comment.comment_id,
+                commentScope:this.comment.comment_id,
                 commentType:1
               }
            }
@@ -94,6 +98,8 @@ import {submitComment} from '../../../store/service'
            }
        },
        writeSubComment(com){
+           this.isShowWriteComment = true
+           this.placeHolder = "@" + com.userInfo.user_name
            this.currentSub = com
        },
        formatData(time){
@@ -164,5 +170,13 @@ import {submitComment} from '../../../store/service'
       margin-bottom: 5px;
       font-size: 16px;
 
+  }
+  .subCommentTime{
+      font-size: 12px;
+      color: #777;
+  }
+  .subCommentReplay{
+      margin-left: 8px;
+      font-size: 13px;
   }
 </style>

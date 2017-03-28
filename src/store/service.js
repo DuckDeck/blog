@@ -197,3 +197,11 @@ export const submitComment = (comment)=>{
     }
     return setpromisePost(url,comment)
 }
+
+export const getComment =(commentId)=>{
+    let url = HostName +  'comment/'+ commentId 
+    if(getStore('token')){
+        url = HostName +  'comment/'+ commentId  +'/'+ userId + '/' + createToken()
+    }
+    return setpromiseGet(url)
+}

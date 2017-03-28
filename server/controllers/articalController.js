@@ -129,7 +129,6 @@ module.exports = {
            ctx.rest(userInfos)
            return
        }
-       console.log(userInfos)
        //hk暂时不需要加上几楼功能
        //赞功能也不加上
        let tra = {

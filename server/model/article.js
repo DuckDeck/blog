@@ -17,7 +17,8 @@ const sqls = {
     selectArticleMainCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time FROM user_comment where  comment_target_id = ?`,
     selectArticleSubCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time FROM user_sub_comment where  comment_target_id in (?)`
+comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `
+// fck when you use in  to select  ? is a trouble
 }
 class Article{
     constructor(title,content){
@@ -70,7 +71,7 @@ class Article{
             subIds.sort()
             subIds = subIds.join(',')
         }
-        return db.exec(sqls.selectArticleSubCommentById,[subIds])
+        return db.exec(sqls.selectArticleSubCommentById + '('+subIds + ')')
     }
 }
 module.exports = Article

@@ -3,8 +3,9 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 const sqls = {
    insertMainComment:`insert into user_comment values(?,?,?,?,?,?,?,?,?)`,
-   insertSubComment:`insert into user_sub_comment values(?,?,?,?,?,?,?,?)`
-
+   insertSubComment:`insert into user_sub_comment values(?,?,?,?,?,?,?,?,?,?)`,
+   commentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
+comment_content,commenter_user_id,comment_time FROM user_comment where  comment_id = ? and delete_flag = 0`
 }
 class Comment{
     constructor(comment_target_id,commenter_userId,commentContent){

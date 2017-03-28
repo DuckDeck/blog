@@ -2,7 +2,7 @@ const APIError = require('../rest').APIError;
 const Comment = require('../model/comment')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
-
+const Check = require('../tool/check')
 module.exports = {
     'POST /api/comment/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
@@ -60,7 +60,17 @@ module.exports = {
         com.comment_time = new Date().getTime()
         if(t.commentTargetUserId){
             com.comment_target_userId = t.commentTargetUserId
+            let type = Check.checkNum(t,'commentType')
+            if(type){
+                ctx.rest(type)
+                return
+            }
             com.comment_type = t.commentType
+            let scope = Check.checkNum(t,'commentScope')
+            if(scope){
+                ctx.rest(scope)
+                return
+            }
             com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
             ctx.rest(res)
