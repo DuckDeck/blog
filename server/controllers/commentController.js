@@ -30,7 +30,17 @@ module.exports = {
         com.comment_time = new Date().getTime()
         if(t.commentTargetUserId){
             com.comment_target_userId = t.commentTargetUserId
+            let type = Check.checkNum(t,'commentType')
+            if(type){
+                ctx.rest(type)
+                return
+            }
             com.comment_type = t.commentType
+            let scope = Check.checkNum(t,'commentScope')
+            if(scope){
+                ctx.rest(scope)
+                return
+            }
             com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
             ctx.rest(res)
@@ -81,9 +91,38 @@ module.exports = {
         }
     },
 
-    'GET /api/comment/:commentId': async (ctx, next) => {
-       
+   'GET /api/comment/:commentId': async (ctx, next) => {
+       var  id = ctx.params.commentId
+       let mainCom = await Comment.commentById(id)
+       if(mainCom.code!=0){
+           ctx(mainCom)
+       }
+       let subCom = await Comment.subCommentById(id)
+       if(subCom.code!=0){
+           ctx(subCom)
+       }
+       mainCom.data  = mainCom.data[0]
+       mainCom.data.subCommends = subCom.data
+       ctx.rest(mainCom)
     },
-
+    'GET /api/comment/:commentId/:userId/:token': async (ctx, next) => {
+        let tokenResult = await Tool.checkToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+       var  id = ctx.params.commentId
+       let mainCom = await Comment.commentById(id)
+       if(mainCom.code!=0){
+           ctx(mainCom)
+       }
+       let subCom = await Comment.subCommentById(id)
+       if(subCom.code!=0){
+           ctx(subCom)
+       }
+       mainCom.data  = mainCom.data[0]
+       mainCom.data.subCommends = subCom.data
+       ctx.rest(mainCom)
+    },
 }
 
