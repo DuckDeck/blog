@@ -18,10 +18,20 @@
             <a @click="writeComment"><i class="fa fa-comment-o"></i>{{subCommentCount}}回复</a>
        </div>
 
-       <!--<div class="subComments">
-           
-       </div>-->
-       <writeComment style="margin-top: 5px;" :needCancel="true"  @cancelComment="cancelComment"  v-show = "isShowWriteComment" @submitComment = "submitComment"></writeComment>
+       <div class="subComments" v-show = "subCommentCount > 0">
+           <div v-for = "subCom in comment.sub_comments">
+               <div>
+                   <span>{{subCom.userInfo.user_name}}</span> 回复 <span>{{subCom.targetUserInfo.user_name}} </span> {{subCom.comment_content}}
+               </div>
+               <div>
+                   <span>{{formatData(subCom.comment_time)}}</span>
+                   <a @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i>{{subCommentCount}}回复</a>
+               </div>
+
+           </div>
+       </div>
+       <writeComment style="margin-top: 5px;" :needCancel="true"  @cancelComment="cancelComment"  v-show = "isShowWriteComment" 
+       @submitComment = "submitComment"></writeComment>
     </div>
 </template>
 <script>
@@ -30,7 +40,8 @@ import {submitComment} from '../../../store/service'
     export default {
     data() {
         return{
-           isShowWriteComment:false
+           isShowWriteComment:false,
+           currentCom:{}
         }
     },
     props:{
@@ -43,7 +54,7 @@ import {submitComment} from '../../../store/service'
     },
     methods:{
        writeComment(){
-            this.isShowWriteComment = true
+           this.isShowWriteComment = true
        },
        cancelComment(){
            this.isShowWriteComment = false
@@ -55,16 +66,38 @@ import {submitComment} from '../../../store/service'
            if(com.trim() == ''){
                toast(this,'评论内容不能为空字符')
            }
-           let comment = {
-               commentContent:com,
-               commentTargetId:this.comment.comment_id,
-               commentTargetUserId:this.comment.userInfo.user_id
+           let comment = {}
+           //判断是哪种评论
+           if(isEpmty(this.currentCom)){
+             comment = {
+                commentContent:com,
+                commentTargetId:this.comment.comment_id,
+                commentTargetUserId:this.comment.userInfo.user_id,
+                commentScope:comment.comment_id,
+                commentType:0
+              }
            }
+           else{
+             comment = {
+                commentContent:com,
+                commentTargetId:this.currentCom.comment_id,
+                commentTargetUserId:this.currentCom.userInfo.user_id,
+                commentScope:comment.comment_id,
+                commentType:1
+              }
+           }
+           
            let res = await submitComment(comment)
            toast(this,res.ChineseMsg)
            if(res.code == 0){
                 
            }
+       },
+       writeSubComment(com){
+           this.currentSub = com
+       },
+       formatData(time){
+            return formatTime(new Date(time))
        }
     },
     computed:{
@@ -73,14 +106,15 @@ import {submitComment} from '../../../store/service'
         },
         subCommentCount(){
             return this.comment.sub_comments.length == 0 ? '' : this.comment.sub_comments.length
-        }
+        },
+       
     }
 
 }
 </script>
 <style >
 .commentBigCell{
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 .commentUserInfo{
     vertical-align: middle;
@@ -88,32 +122,47 @@ import {submitComment} from '../../../store/service'
     
 }
  .commentUserInfo img{
-     width: 40px;
-     height: 40px;
+     width: 38px;
+     height: 38px;
      border-radius: 20px;
      border: 1px solid #888;
      display: inline-block;
      vertical-align: middle;
  }
  .userNameDiv{
-     font-size: 15px;
+     font-size: 13px;
+     color: #666;
  }
  .userCommentTimeDiv{
-    font-size: 12px;
+    font-size: 11px;
+    color: #aaa;
  }
  .commentContent{
      font-size: 16px;
-     margin-top: 5px;
+     margin-top: 10px;
+     color: #555;
  }
  .iconComment{
-     font-size: 15px;
+     font-size: 13px;
      margin-top: 5px;
      float: right;
+      margin-top: -5px;
  }
   .iconComment a:hover{
       cursor: pointer;
   }
   .iconComment a i{
     color: #777;
+    margin-right: 3px;
+   
+  }
+  .subComments{
+     color: #555;
+      border-left: 1px solid #aaa;
+      padding-left: 15px;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      font-size: 16px;
+
   }
 </style>

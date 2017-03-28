@@ -129,15 +129,16 @@ global.getStyle = (element, attr, NumberMode = 'int') => {
     return  NumberMode == 'float'? parseFloat(target) : parseInt(target);
 } 
 
+ global.getType = (data)=>{
+        return Object.prototype.toString.call(data).slice(8, -1);
+    }
 
 
 const crypto = require('crypto')
 const key = '751f621ea5c8f930'
 const iv = '2624750004598718'
 class Tool{
-    static getType(data){
-        return Object.prototype.toString.call(data).slice(8, -1);
-    }
+   
 
     static md5(str){
         var md5sum = crypto.createHash('md5');

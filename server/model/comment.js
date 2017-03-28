@@ -18,6 +18,8 @@ class Comment{
        this.comment_time = 0
        this.comment_type_id = 0
        this.delete_flag = 0
+       this.comment_type = 0
+       this.comment_scope = 0
     }
     
     static insertMainComment(comment){
@@ -29,7 +31,7 @@ class Comment{
     static insertSubComment(comment){
        return db.exec(sqls.insertSubComment,[comment.comment_id,comment.comment_target_userId,
         comment.comment_target_id,comment.commentContent,comment.commenter_id,
-        comment.comment_time,comment.commenter_ip,comment.delete_flag,])
+        comment.comment_time,comment.commenter_ip,comment.comment_type,comment.comment_scope,comment.delete_flag,])
     }
 
 }

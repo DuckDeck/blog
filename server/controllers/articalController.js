@@ -72,34 +72,64 @@ module.exports = {
             ctx.rest(resTags)
             return
        }
-       let resCom = await Article.getArticleCommentById(id)
-       if(resCom.code != 0){
-           ctx.rest(resCom)
+       let resMainCom = await Article.getArticleCommentById(id)
+       if(resMainCom.code != 0){
+           ctx.rest(resMainCom)
            return
        }
-       
        let article = resArticle.data[0]
        article.tags = resTags.data
-       let mainCom = resCom.data.filter(s=>{
-          return s.type == 0
+       let mainCom = resMainCom.data
+       mainCom.sort((a,b)=>{
+           if(a.comment_time == b.comment_time){
+               return 0
+           }
+           if(a.comment_time < b.comment_time){
+               return 1
+           }
+           else{
+               return -1
+           }
        })
-       let SubCom = resCom.data.filter(s=>{
-           return s.type == 1
+       let subIds = mainCom.map(s=>{
+           return s.comment_id
        })
+       let resSubCom = await Article.getArticleSubCommentById(subIds)
+       if(resSubCom.code != 0){
+           ctx.rest(resSubCom)
+           return
+       }
+       let subCom = resSubCom.data
+       subCom.sort((a,b)=>{
+           if(a.comment_time == b.comment_time){
+               return 0
+           }
+           if(a.comment_time < b.comment_time){
+               return 1
+           }
+           else{
+               return -1
+           }
+       })
+
+
        //找出所有评论者的id
        let ids = new Set()
-       for(let com of resCom.data){
+       for(let com of mainCom){
            ids.add(com.commenter_user_id)
-           if(com.comment_target_user_id != 0){
-               ids.add(com.comment_target_user_id)
-           }
        }
+       for(let com of subCom){
+           ids.add(com.commenter_user_id)
+           ids.add(com.comment_target_user_id)
+       }
+       ids.delete(0)
        //获取所有评论者有信息
        let userInfos =await User.userInfoByIds(Array.from(ids))
        if(userInfos.code != 0){
            ctx.rest(userInfos)
            return
        }
+       console.log(userInfos)
        //hk暂时不需要加上几楼功能
        //赞功能也不加上
        let tra = {
@@ -117,7 +147,7 @@ module.exports = {
                     return s.user_id == m.commenter_user_id
                 })
            }
-           for(let n of SubCom){
+           for(let n of subCom){
                if(n.comment_target_id == m.comment_id){
                    if(n.commenter_user_id == 0){
                        n.userInfo = tra
@@ -127,9 +157,15 @@ module.exports = {
                         return s.user_id == n.commenter_user_id
                       })
                    }
-                   n.targetUserInfo = userInfos.data.find(s=>{
+                   if(n.comment_target_user_id == 0){
+                       n.targetUserInfo = tra
+                   }
+                   else{
+                     n.targetUserInfo = userInfos.data.find(s=>{
                         return s.user_id == n.comment_target_user_id
-                   })
+                     })
+                   }
+                   
                    m.sub_comments.push(n)
                }
            }

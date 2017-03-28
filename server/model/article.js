@@ -1,5 +1,6 @@
 
 const db = require('../sqlhelp/mysql') 
+const Tool = require('../tool/tool')
 const sqls = {
     articals:`select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
     user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
@@ -13,10 +14,10 @@ const sqls = {
     updateArticle:`UPDATE article SET article_name = ?,article_create_time = ?,article_release_time = ?,article_ip = ?,article_click = ?, article_sort__id = ?, 
     user_id = ?, article_type_id = ?, article_type = ?, article_content = ?,article_brief=?, article_main_img=?,article_up = ?, article_recommend = ?,
      article_status = ? WHERE article_id = ?`,
-    selectArticleCommentById:`SELECT  comment_id,comment_target_id,comment_target_user_id,comment_content,commenter_user_id,comment_time,
-        commenter_ip, 0 as type  FROM blog.user_comment where delete_flag = 0 and comment_target_id = ? union 
-        SELECT comment_id,comment_target_id,comment_target_user_id,comment_content,commenter_user_id,comment_time,
-        commenter_ip, 1 as type  FROM blog.user_sub_comment where delete_flag = 0 and comment_target_id = ?`
+    selectArticleMainCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
+comment_content,commenter_user_id,comment_time FROM user_comment where  comment_target_id = ?`,
+    selectArticleSubCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
+comment_content,commenter_user_id,comment_time FROM user_sub_comment where  comment_target_id in (?)`
 }
 class Article{
     constructor(title,content){
@@ -61,7 +62,15 @@ class Article{
     }
 
     static getArticleCommentById(article_id){
-        return db.exec(sqls.selectArticleCommentById,[article_id,article_id])
+        return db.exec(sqls.selectArticleMainCommentById,[article_id])
+    }
+
+    static getArticleSubCommentById(subIds){
+         if(Tool.getType(subIds) == "Array"){
+            subIds.sort()
+            subIds = subIds.join(',')
+        }
+        return db.exec(sqls.selectArticleSubCommentById,[subIds])
     }
 }
 module.exports = Article

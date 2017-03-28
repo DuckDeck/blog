@@ -24,15 +24,12 @@
                               
                             <div class="articleComments">
                                 <div class="articleCommentsCount">
-                                    {{article.comments.length}}条评论  
+                                    {{commentCount}}条评论  
                                 </div>
                                 <userComment v-for="com in article.comments" :comment="com" ></userComment>
                             </div>
 
                          </div>
-
-
-                        
                   </div>
                 </div>
              </div>
@@ -108,6 +105,13 @@ import userComment from './com/userComment.vue'
         releaseDate(){
             return  formatTime(new Date(this.article.article_create_time))
         },
+        commentCount(){
+            if(this.article.comments != undefined){
+                return this.article.comments.length
+            }
+            return 0
+
+        }
     }
 
   }

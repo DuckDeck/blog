@@ -56,7 +56,8 @@ class User{
     }
 
     static userInfoByIds(ids){
-        if(Tool.getType(ids == "Array")){
+        if(Tool.getType(ids) == "Array"){
+            ids.sort()
             ids = ids.join(',')
         }
         return db.exec(sqls.userInfoByIds,[ids])

@@ -329,6 +329,8 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
  commenter_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
  comment_time BIGINT(15) NOT NULL COMMENT '评论时间',
  commenter_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ comment_type tinyint(3) DEFAULT 0 NOT NULL COMMENT '评论类型，如果是0 ，就是对parent评论，如果是1 ，就是评论子评论',
+ comment_scope mediumint(8) DEFAULT 0 NOT NULL COMMENT '评论的scope，就是是共同的父评论',
  delete_flag bit NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (comment_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
@@ -373,4 +375,5 @@ CREATE TABLE  IF NOT EXISTS user_token_auth (
 ------------------------------
 -- create view
 ------------------------------
-create view article_tag_map_view as  select tag.* , map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id
+create view article_tag_map_view as  select tag.* , 
+map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id

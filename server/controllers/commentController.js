@@ -30,6 +30,8 @@ module.exports = {
         com.comment_time = new Date().getTime()
         if(t.commentTargetUserId){
             com.comment_target_userId = t.commentTargetUserId
+            com.comment_type = t.commentType
+            com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
             ctx.rest(res)
         }
@@ -58,6 +60,8 @@ module.exports = {
         com.comment_time = new Date().getTime()
         if(t.commentTargetUserId){
             com.comment_target_userId = t.commentTargetUserId
+            com.comment_type = t.commentType
+            com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
             ctx.rest(res)
         }
