@@ -6,7 +6,7 @@
             <div class="main-page">          
                 <blogSide ></blogSide>
                     <div class="content-main"> 
-                         <div class=" article-content">
+                         <div class=" article-list">
                              
                          </div>
                   </div>
@@ -16,11 +16,9 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment} from '../../store/service'
+import {articleById} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import blogSide from './com/blogSide.vue'
-import writeComment from './com/writeComment.vue'
-import userComment from './com/userComment.vue'
 //todo comment sort feature
   export default {
     data() {

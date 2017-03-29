@@ -1,7 +1,7 @@
 <template>
     <div class="table">
          <div class="featureTitle">
-          管理链接
+          管理文章
         </div>
 
         <el-table :data="tableData" border style="width: 100%">
