@@ -119,7 +119,7 @@ import blogSide from './com/blogSide.vue'
         },
         
         checkMore(){
-
+            this.$router.push('/articleList')
         },
         async getUserInfo(){
            let res = await getUserInfo()

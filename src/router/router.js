@@ -11,6 +11,8 @@ const login = r => require.ensure([], () => r(require('../page/blog/login')), 'l
 
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 
+const articleList = r => require.ensure([], () => r(require('../page/blog/articleList')), 'articleList')
+
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
 
@@ -46,7 +48,11 @@ export default [
         component: atricleInfo, 
       
     },
-
+    {
+        path: '/articleList',
+        component: articleList, 
+      
+    },
 
 
     
