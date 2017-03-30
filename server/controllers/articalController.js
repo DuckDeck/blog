@@ -4,6 +4,7 @@ const Tag = require('../model/tag')
 const User = require('../model/user')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
+const Comment = require('../model/comment')
 const fs = require('fs')
 const path = require('path')
 let articles = [] //需要一个中间变量来保存，用promiss来传递参数很不方便，只有用中间变量来保存了 但是这样也明显不合理，现在要全部修改
@@ -44,11 +45,27 @@ module.exports = {
         tagsResult = tagsResult.filter((s)=>{
                return s.data.length > 0
         })
+        let resNewestComments = await Comment.newestComment(article_ids)
+        if(resNewestComments.code != 0){
+            ctx.rest(resNewestComments)
+            return
+        }
         let a = articles.map((s)=>{
             let t = tagsResult.find((k)=>{
                 return k.data[0].article_id == s.article_id
             })
             s['tag'] =  t==undefined ? [] : t.data
+
+            let c = resNewestComments.data.find(g=>{
+                return g.comment_target_id == s.article_id
+            })
+            console.log(c)
+            if(c){
+                s.newestComment = c.comment_content
+            }
+            else{
+                s.newestComment = ""
+            }
             return s
         })
         

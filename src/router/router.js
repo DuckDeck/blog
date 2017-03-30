@@ -26,6 +26,7 @@ const manageTag =  r => require.ensure([], () => r(require('../page/backstage/ma
 
 
 const manageComment =  r => require.ensure([], () => r(require('../page/backstage/manageComment')), 'manageComment')
+const manageCommentInfo =  r => require.ensure([], () => r(require('../page/backstage/manageCommentInfo')), 'manageCommentInfo')
 
 const manageLink =  r => require.ensure([], () => r(require('../page/backstage/manageLink')), 'manageLink')
 const userSetting =  r => require.ensure([], () => r(require('../page/backstage/userSetting')), 'userSetting')
@@ -85,6 +86,11 @@ export default [
                 path:'manageComment',
                 component:manageComment
             },
+            {
+                path:'manageCommentInfo/:articleId',
+                component:manageCommentInfo
+            },
+            
             {
                 path:'tag',
                 component:manageTag

@@ -10,7 +10,7 @@ comment_content,commenter_user_id,comment_time FROM user_comment where  comment_
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM 
 user_sub_comment where  comment_scope = ? and delete_flag = 0`,
    newestComment:`select comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time from user_comment where comment_id in (select max(comment_id) from user_comment group by comment_target_id)`
+comment_content,commenter_user_id,comment_time from user_comment where comment_id in (select max(comment_id) from user_comment group by comment_target_id) and comment_target_id in `
 }
 class Comment{
     constructor(comment_target_id,commenter_userId,commentContent){
@@ -48,8 +48,12 @@ class Comment{
         return db.exec(sqls.subCommentById,[commendId])
     }
 
-    static newestComment(){
-        return db.exec(sqls.newestComment)
+    static newestComment(article_ids){
+        if(Tool.getType(article_ids) == "Array"){
+            article_ids.sort()
+            article_ids = article_ids.join(',')
+         }
+        return db.exec(sqls.newestComment + '('+ article_ids +')')
     }
 }
 module.exports = Comment

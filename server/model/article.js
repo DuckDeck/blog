@@ -70,8 +70,7 @@ class Article{
          if(Tool.getType(subIds) == "Array"){
             subIds.sort()
             subIds = subIds.join(',')
-        }
-        console.log(subIds)
+         }
         return db.exec(sqls.selectArticleSubCommentById + '('+subIds + ')')
     }
 }

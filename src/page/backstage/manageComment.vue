@@ -16,7 +16,7 @@
             </el-table-column>
             <el-table-column prop="comment_count"  width="100" label="评论个数" >
             </el-table-column>
-             <el-table-column prop="newestComment" width="100" label="最新评论">
+             <el-table-column prop="newestComment"  label="最新评论">
             </el-table-column>
             <el-table-column label="操作" width="100">
                 <template scope="scope">
@@ -49,33 +49,14 @@ import {articleList,deleteAticle,getNewestComment} from '../../store/service'
         },
          async mounted(){
             let self = this
-            let tmp = []
             let resArticle = await  articleList()
             if(resArticle.code == 0){
-                tmp = resArticle.data
+                this.tableData = resArticle.data
             }
             else{
                 toast(self,resArticle.ChineseMsg)
             }
-           let resCom  = await getNewestComment()
-           if(resCom.code == 0){
-                for(let a of tmp){
-                    let com = resCom.data.find(c=>{
-                        c.comment_target_id = a.article_id
-                    })
-                    if(com){
-                        a.newestComment = com.comment_content
-                    }
-                    else{
-                        a.newestComment = "暂无评论"
-                    }
-                } 
-                this.tableData = tmp
-           }
-            else{
-                toast(self,resCom.ChineseMsg)
-                this.tableData = tmp
-           }
+         
         },
         methods: {
            formatter(row, column) {
@@ -92,7 +73,7 @@ import {articleList,deleteAticle,getNewestComment} from '../../store/service'
                 this.$router.push('/manage/article/' + article.article_id);
             },
             checkComment(article){
-
+                this.$router.push('/manage/manageCommentInfo/' + article.article_id);
             }
         }
     }

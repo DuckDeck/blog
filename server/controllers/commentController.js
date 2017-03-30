@@ -104,15 +104,7 @@ module.exports = {
         }
         await getComment(ctx) 
     },
-    'GET /api/newestcomment/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
-        let resCom = await Comment.newestComment()
-        ctx.rest(resCom)
-    },
+    
 
 }
 
