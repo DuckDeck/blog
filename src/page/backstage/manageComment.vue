@@ -73,6 +73,7 @@ import {articleList,deleteAticle,getNewestComment} from '../../store/service'
                 this.$router.push('/manage/article/' + article.article_id);
             },
             checkComment(article){
+                setStore('currentCommentArticleTitle',article.article_name)
                 this.$router.push('/manage/manageCommentInfo/' + article.article_id);
             }
         }
