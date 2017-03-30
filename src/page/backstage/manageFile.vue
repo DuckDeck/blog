@@ -12,17 +12,19 @@
                 </el-upload>
           </div>
 
-          <div>
-              <div class="uploadedContent">
-                  <img src="" alt="">
-                  <span></span>
-                   <el-button size="small" @click = "checkComment(scope.row)">删除</el-button>
+          <div class="uploadedContainer">
+              <div v-for="f in files" class="uploadedContent">
+                  <img :src="f.file_url" alt="">
+                  <span class="uploadedFileName">{{f.file_name}}</span>
+                   <el-button size="small" @click = "deleteFile(f)">删除</el-button>
               </div>
           </div>
       </div>
     </div>
 </template>
+
 <script>
+import {getStoredFiles}  from '../../store/service'
     export default {
         data: function(){
             return {
@@ -30,10 +32,46 @@
             }
         },
         mounted(){
-
-        },
-        computed:{
             
+           getStoredFiles().then(res=>{
+                if(res.code == 0){
+                    this.files = res.data
+                }
+                else{
+                     toast(this,err.ChineseMsg)
+                }
+           }).catch(err=>{
+               toast(this,err.ChineseMsg)
+           })
+        
+        },
+        methods:{
+            deleteFile(file){
+                
+            }
         }
     }
 </script>
+<style>
+.uploadedContainer{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+    .uploadedContent{
+       width: 200px;
+       font-size: 16px;
+       text-align: center;
+       padding-bottom: 10px;
+    }
+    .uploadedContent img{
+        width: 160px;
+        height:160px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .uploadedFileName{
+        
+        display: block;
+    }
+</style>

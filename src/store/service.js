@@ -206,3 +206,12 @@ export const getComment =(commentId)=>{
     return setpromiseGet(url)
 }
 
+
+
+export const getStoredFiles = ()=>{
+    let url = HostName +  'file' 
+    if(getStore('token')){
+        url = HostName +  'file/'+ userId + '/' + createToken()
+    }
+    return setpromiseGet(url)
+}
