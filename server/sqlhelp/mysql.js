@@ -26,7 +26,7 @@ db.exec = function(sql,data){
               console.log(err);  
               console.log(sql);
               console.log(data)
-              reject(result.create(-60))
+              reject(result.create(-50))
               return;    
             }
             let res = result.create(0,rows)

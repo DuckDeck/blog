@@ -205,3 +205,11 @@ export const getComment =(commentId)=>{
     }
     return setpromiseGet(url)
 }
+
+export const getNewestComment =(commentId)=>{
+    let url = HostName +  'newestcomment/' 
+    if(getStore('token')){
+        url = HostName +  'newestcomment/'+ userId + '/' + createToken()
+    }
+    return setpromiseGet(url)
+}
