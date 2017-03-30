@@ -1,8 +1,9 @@
 const APIError = require('../rest').APIError;
- const user = require('../model/user')
+const user = require('../model/user')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
-
+const path = require('path')
+const fs = require('fs')
 module.exports = {
     'POST /api/login': async (ctx, next) => {
        var
@@ -46,6 +47,33 @@ module.exports = {
          ctx.rest(result)     
       })
     },
+    'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
+       let result0 = await Tool.checkToken(ctx)
+        if(result0.code != 0){
+            ctx.rest(result0)
+            return
+        }
+       let id = ctx.params.userId
+       let token = ctx.params.token
+       let  t = ctx.request.body.files.file
+       let oldPath = t.path
+       if (!fs.existsSync(oldPath)){
+           ctx.rest(Result.create(9))
+       }
+       let fileType = t.type
+       let extension = fileType.split('/')[1]
+       let newFileName = id + '-' + new Date().getTime()+ '.' + extension
+       let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
+       fs.renameSync(oldPath,newPath)
+       let urlPath = "http://localhost:3000/static/myimg/" + newFileName
+       let userInsert = {
+           user_id:id,
+           user_image_url:urlPath
+       }
+       let res = await user.updateUserHead(userInsert)
+       res.data = {url:urlPath}
+       ctx.rest(res)
+    },
     'GET /api/user/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
@@ -69,5 +97,33 @@ module.exports = {
             ctx.rest(err)  
        })   
     },
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

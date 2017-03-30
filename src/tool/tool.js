@@ -77,7 +77,9 @@ global.removeStore = name => {
 	if (!name) return;
 	window.localStorage.removeItem(name);
 }
-
+global.clearStore = ()=>{
+    removeStore('userInfo')
+}
 global.userId = getStore('token') == null ?  0 : getStore('token').user_id
 
 

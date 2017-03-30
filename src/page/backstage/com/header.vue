@@ -11,6 +11,7 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="mainPage">切换首页</el-dropdown-item>
                     <el-dropdown-item command="userSetting">个人设置</el-dropdown-item>
+                    <el-dropdown-item command="clearCache">清空缓存</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -48,6 +49,10 @@
                 }
                 else if(command == 'mainPage'){
                     this.$router.replace('/')
+                }
+                else if(command == 'clearCache'){
+                    clearStore()
+                    toast(this,'缓存清除成功')
                 }
             }
         }

@@ -35,28 +35,19 @@
                             placeholder="选择日期"  >
                             </el-date-picker>
                     </el-form-item>
-
-          
-
                   </el-form>
                 </div>
             </div>
-
-
              <div class="basicInfoManageClass" >
-                <div class="headinfoManageTitleClass">
-                    用户头像
-                </div>
+                <div class="headinfoManageTitleClass">   用户头像  </div>
                 <div class="basicInfoEditManageClass">
-                         <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+                         <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                 <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
                 </div>
             </div>
-           
-
-              <div class="basicInfoManageClass" >
+            <div class="basicInfoManageClass" >
                 <div class="selfIntroManageTitleClass">
                     自我描述
                      <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
@@ -79,11 +70,7 @@
                                 placeholder="请输入内容">
                                 </el-input>
                             </el-form-item>
-                     </el-form>
-
-                    
-
-
+                     </el-form>   
                 </div>
             </div>
 
@@ -105,13 +92,14 @@
                 },
                 rules: {
                     
-                }
+                },
+
             }
         },
         mounted(){
             if(getStore('userInfo')){
-                
                 this.userInfo = getStore('userInfo')
+
                 console.log(this.userInfo)
             }
             else{
@@ -119,6 +107,7 @@
                  getUserInfo().then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
+
                         setStore('userInfo',data.data)
                     }
                     else{
@@ -131,7 +120,8 @@
         },
         methods:{
             handleAvatarScucess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+                this.userInfo.user_image_url = res.data.url;
+                clearStore()
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -146,6 +136,11 @@
                 return isJPG && isLt2M;
             }
             
+        },
+        computed:{
+            uploadHeadUrl(){
+                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+            }
         }
         
     }
