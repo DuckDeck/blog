@@ -215,3 +215,11 @@ export const getStoredFiles = ()=>{
     }
     return setpromiseGet(url)
 }
+
+export const getMeter = ()=>{
+    let url = HostName +  'file' 
+    if(getStore('token')){
+        url = HostName +  'meter/'+ userId + '/' + createToken()
+    }
+    return setpromiseGet(url)
+}

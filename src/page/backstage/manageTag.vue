@@ -193,6 +193,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
     line-height: 28px;
     cursor: pointer;
     margin-bottom: 10px;
+   
 }
 
 .tagssManageClass{

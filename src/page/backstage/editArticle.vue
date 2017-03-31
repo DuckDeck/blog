@@ -217,7 +217,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
  .tagClass{
     cursor: pointer;
     margin-right: 0.15rem;
-
+    margin-top: 10px;
  }
  .selectedTag{
     background: #20a0ff;

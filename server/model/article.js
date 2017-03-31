@@ -19,8 +19,8 @@ comment_content,commenter_user_id,comment_time FROM user_comment where  comment_
     selectArticleSubCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `,
 // fck when you use in  to select  ? is a trouble
-    myNewArcitleCount:`select count (article_id) from article where user_id = ？`,
-    myNewArcitle:`select * from article where user_id = ？ limit 7`
+    myNewArcitleCount:`select count (article_id) as articleCount from article where user_id = ?`,
+    myNewArcitle:`select article_id,article_name from article where user_id = ? limit 7`
     
 }
 class Article{

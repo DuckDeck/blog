@@ -17,10 +17,29 @@ module.exports = {
         let token = ctx.params.token
         
         let resAll = await Promise.all([Article.myArticleCount(id),Comment.mynewestComment(id),Article.myNewArticle(id),File.allFile()])
-        console.log(resAll)
-  
+        if(Tool.getType(resAll) == "Array"){
+            console.log(resAll[0])
+            let articleCount = resAll[0].data[0].articleCount
+            let myComment = resAll[1].data.sort((a,b)=>{
+                return a.comment_time < b.comment_time
+            })
+            let myNewArticle = resAll[2].data
+            let fileCount = resAll[3].length
+            let commentCount = myComment.length
+            let data = {
+                articleCount:articleCount,
+                commentCount:commentCount,
+                myNewArticle:myNewArticle,
+                myNewComment:myComment.splice(0,7),
+                fileCount:fileCount
+            }
+            ctx.rest(Result.create(0,data))
+        }
+        else{
+             ctx.rest(Result.create(-1))
+        }
 
-        ctx.rest(Result.create(0,resAll))
+       
     },
 }
 

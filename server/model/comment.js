@@ -12,8 +12,10 @@ user_sub_comment where  comment_scope = ? and delete_flag = 0`,
    newestComment:`select comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time from user_comment where comment_id in 
 (select max(comment_id) from user_comment group by comment_target_id) and comment_target_id in `,
- mynewestComment:`select SELECT comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
- comment_time,comment_type,comment_scope from user_sub_comment where comment_target_user_id = ? order by comment_time desc`
+ mynewestComment:`select comment_id,comment_content, comment_time,(select user_name from user where user_id = user_comment.commenter_user_id) as commenter
+  from user_comment where comment_target_user_id = ? union 
+select comment_id,comment_content, comment_time,(select user_name from user where user_id = user_sub_comment.commenter_user_id) as commenter 
+ from user_sub_comment where comment_target_user_id = ?`
 }
 class Comment{
     constructor(comment_target_id,commenter_userId,commentContent){
@@ -37,6 +39,7 @@ class Comment{
         comment.comment_time,comment.commenter_ip,comment.delete_flag,])
     }
 
+    
     static insertSubComment(comment){
        return db.exec(sqls.insertSubComment,[comment.comment_id,comment.comment_target_userId,
         comment.comment_target_id,comment.commentContent,comment.commenter_id,
@@ -60,7 +63,7 @@ class Comment{
     }
 
     static mynewestComment(user_id){
-        return db.exec(sqls.mynewestComment,[user_id])
+        return db.exec(sqls.mynewestComment,[user_id,user_id])
     }
 }
 module.exports = Comment
