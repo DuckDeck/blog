@@ -17,8 +17,11 @@ const sqls = {
     selectArticleMainCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time FROM user_comment where  comment_target_id = ?`,
     selectArticleSubCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `
+comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `,
 // fck when you use in  to select  ? is a trouble
+    myNewArcitleCount:`select count (article_id) from article where user_id = ？`,
+    myNewArcitle:`select * from article where user_id = ？ limit 7`
+    
 }
 class Article{
     constructor(title,content){
@@ -73,5 +76,14 @@ class Article{
          }
         return db.exec(sqls.selectArticleSubCommentById + '('+subIds + ')')
     }
+
+    static myArticleCount(user_id){
+        return db.exec(sqls.myNewArcitleCount,[user_id])
+    }
+
+    static myNewArticle(user_id){
+        return db.exec(sqls.myNewArcitle,[user_id])
+    }
+    
 }
 module.exports = Article

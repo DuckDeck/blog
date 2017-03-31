@@ -7,18 +7,7 @@ const Tool = require('../tool/tool')
 const Comment = require('../model/comment')
 const fs = require('fs')
 const path = require('path')
-let articles = [] //需要一个中间变量来保存，用promiss来传递参数很不方便，只有用中间变量来保存了 但是这样也明显不合理，现在要全部修改
-//同时也要一个中间函数来桥接才行，这个是promise的坑
-function handlePromiseResult(result){
-    return new Promise((resolve,reject)=>{
-        articles = result[1].data
-        let article_ids = result[1].data.map((s)=>{
-            return s.article_id
-        })
-        article_ids == undefined ?  reject(Result.create(0)) : resolve(article_ids)
-    })
 
-}
 module.exports = {
     
     'GET /api/article/:userId/:token': async (ctx, next) => {
@@ -358,38 +347,3 @@ module.exports = {
     },
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
