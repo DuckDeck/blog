@@ -7,21 +7,27 @@
            <div class="meterMenu">
                <div class="articleStatus">
                    <img  src="/static/img/pen.jpeg" alt="">
-                   <span>发表了</span>
-                   <span>{{meter.articleCount}}</span>
-                   <span>篇文章</span>
+                   <div >
+                        <span>发表了</span>
+                        <span class="meterMenuCount">{{meter.articleCount}}</span>
+                        <span>篇文章</span>
+                   </div>    
                </div>
                <div class="articleStatus">
                    <img src="/static/img/text.jpeg" alt="">
-                   <span>收到了</span>
-                   <span>{{meter.commentCount}}</span>
-                   <span>条留言</span>
+                   <div>
+                        <span>收到了</span>
+                        <span class="meterMenuCount">{{meter.commentCount}}</span>
+                        <span>条留言</span>
+                   </div>
                </div>
                <div class="articleStatus">
                    <img src="/static/img/file.jpeg" alt="">
-                   <span>上传了</span>
-                   <span>{{meter.fileCount}}</span>
-                   <span>个文件</span>
+                   <div>
+                       <span>上传了</span>
+                       <span class="meterMenuCount">{{meter.fileCount}}</span>
+                       <span>个文件</span>
+                   </div>
                </div>
            </div>
           <div class="newestList" > 
@@ -43,7 +49,7 @@
                 </div>
                 <div  class="newestArticleTitle">
                      <div v-for="comment in meter.myNewComment">
-                     <a>{{comment.commenter}}</a> 于 <a>{{formatData(comment.comment_time)}}</a> 说:<a>{{comment.comment_content}}</a>
+                     <a>{{comment.commenter}}</a>  <a style="color: #222">于{{formatData(comment.comment_time)}}</a> 说:<a>{{comment.comment_content}}</a>
                   </div>
                 </div>
             </div>
@@ -55,6 +61,7 @@
 
 <script>
 import {getMeter} from '../../store/service'
+
     export default {
         data: function(){
             return {
@@ -80,7 +87,8 @@ import {getMeter} from '../../store/service'
             formatData(time){
                  return formatTime(new Date(time))
             }
-        }
+        },
+        
     }
 </script>
 
@@ -92,16 +100,30 @@ import {getMeter} from '../../store/service'
      background: deepskyblue;
      padding: 20px;
      color: white;
+     display: flex;
+     min-width: 200px;
+     margin-right: 20px;
  }
-
+.articleStatus div{
+    width: 40%;
+    margin-left: 40px;
+}
+.articleStatus div span{
+    display:  block;
+    text-align: right
+}
+.meterMenuCount{
+    font-size: 18px;
+    color: wheat
+}
  .meterMenu{
      display: flex;
-     font-size: 20px;
-     justify-content: space-around;
+     font-size: 12px;
+     justify-content: flex-start;
  }
  .meterMenu div img{
-     width: 80px;
-     height: 80px;
+     width: 60px;
+     height: 60px;
      margin-right: 10px;
  }
  .newestList{

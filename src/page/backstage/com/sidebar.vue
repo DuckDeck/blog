@@ -5,30 +5,32 @@
                 <i class="el-icon-setting"></i>仪表盘
             </el-menu-item>
            <el-menu-item index="editArticle">
-               <i class="el-icon-menu"> </i>发布文章
+               <i class="el-icon-edit"> </i>发布文章
            </el-menu-item>   
            <el-menu-item index="manageArticle">
-                <i class="el-icon-menu"> </i>管理文章
+                <i class="el-icon-document"> </i>管理文章
             </el-menu-item>
             <el-menu-item index="manageComment">
-                <i class="el-icon-menu"> </i>留言管理
+                <i class="el-icon-message"> </i>留言管理
             </el-menu-item>
             <el-menu-item index="tag">
-                <i class="el-icon-menu"> </i>分类/标签
+                <i class="el-icon-more"> </i>分类/标签
             </el-menu-item>
             <el-menu-item index="manageFile">
-                <i class="el-icon-menu"> </i>文件管理
+                <i class="el-icon-picture"> </i>文件管理
             </el-menu-item>
             <el-menu-item index="manageLink">
-                <i class="el-icon-menu"> </i>友情链接
+                <i class="el-icon-share"> </i>友情链接
             </el-menu-item>
             <el-menu-item index="systemSetting">
-                <i class="el-icon-menu"> </i>系统设计
+                <i class="el-icon-setting"> </i>系统设计
             </el-menu-item>
         </el-menu>
+        <copyRight></copyRight>
     </div>
 </template>
 <script>
+import copyRight from './copyRight'
     export default {
         computed:{
             onRoutes(){
@@ -46,6 +48,9 @@
                 }
                
             }
+        },
+        components:{
+            copyRight
         }
     }
 </script>
@@ -60,6 +65,6 @@
         background: #2E363F;
     }
     .sidebar > ul {
-        height:100%;
+        height:95%;
     }
 </style>

@@ -45,7 +45,7 @@
 </script>
 <style>
     .backStagecontent{
-    background: none repeat scroll 0 0 #fff;
+    background: none repeat scroll 0 0 #f4f4f4;
     position: absolute;
     left: 250px;
     right: 0;

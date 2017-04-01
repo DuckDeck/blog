@@ -62,6 +62,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 },
                 mainImage:'',
                 articleId:0,
+                isEdit:true
             }
         },
         mounted(){
@@ -200,10 +201,38 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
             },
             cancle(){
                 this.$router.replace('/manage/manageArticle');
+            },
+            autoSave(){
+                let self = this
+                let articleId = getStore('tempArticleId')
+                if(articleId){
+                    
+                }
+                else{
+                    let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
+                    let article = {
+                        articalTitle:self.article.title,
+                        articalSort:self.selectedSortId,
+                        articalTags:self.selectedTags.map((s=>{
+                                        return s.tag_id
+                                    })),
+                        articalContent:self.content,
+                        articleStatus:5, //5 表示自动 保存的，只一时间只能存在一个
+                        articleId:self.articleId,
+                        articelImage:self.mainImage,
+                        articleBrief:filterContent,
+                    }
+                    console.log(article)
+                }
             }
         },
+        beforeDestroy(){
+           this.autoSave()
+        },
         computed:{
-            
+            editStatus(){
+                return this.isEdit?'发布文章':'预览文章'
+            }
         },
         components:{
             

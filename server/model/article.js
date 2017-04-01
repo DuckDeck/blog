@@ -7,7 +7,8 @@ const sqls = {
     (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
     as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
     article.article_id) as comment_count from article where user_id = ?`,  
-    articalById:'SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) as sort_name FROM article where article_id = ?',
+    articalById:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
+    as sort_name FROM article where article_id = ?`,
     insertArticle:'insert into article values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     deleteArticle:`delete from article where article_id = ? `,
     deleteArticleTagMap:`delete from article_tag_map where article_id = ? `,
@@ -20,7 +21,9 @@ comment_content,commenter_user_id,comment_time FROM user_comment where  comment_
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `,
 // fck when you use in  to select  ? is a trouble
     myNewArcitleCount:`select count (article_id) as articleCount from article where user_id = ?`,
-    myNewArcitle:`select article_id,article_name from article where user_id = ? limit 7`
+    myNewArcitle:`select article_id,article_name from article where user_id = ? limit 7`,
+    tempArticle:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
+    as sort_name FROM article where user_id = ? and article_status = 5`,
     
 }
 class Article{
@@ -83,6 +86,10 @@ class Article{
 
     static myNewArticle(user_id){
         return db.exec(sqls.myNewArcitle,[user_id])
+    }
+
+    static getTempAarticle(user_id){
+        return db.exec(sqls.getTempAarticle,[user_id])
     }
     
 }

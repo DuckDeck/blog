@@ -266,6 +266,41 @@ module.exports = {
         ctx.rest(Result.create(0,{id:articleId}))
     },
 
+
+    'POST /api/autosavearticle/:userId/:token': async (ctx, next) => {
+        let result0 = await Tool.checkToken(ctx)
+        if(result0.code != 0){
+            ctx.rest(result0)
+            return
+        }
+        let id = ctx.params.userId
+        let token = ctx.params.token
+        let  t = ctx.request.body
+        //如果有id，就是自动更新
+        if(!t.articleId || !t.articleId.trim()) {
+           
+        }
+        else{
+            let m =new Article(t.articalTitle,t.articalContent)
+            m.ip = ctx.request.ip
+            m.category = t.articalSort
+            m.userId = id
+            m.articalStatus = t.articleStatus
+            m.articleBrief = t.articleBrief || ''
+            m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
+            let result2 = await Article.save(m)
+            if(result2.code != 0)
+            {
+                ctx.rest(result1)
+                return 
+            }
+            let articleId = result2.data.id
+            let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+            ctx.rest(Result.create(0,{id:articleId}))
+        }
+       
+    },
+
     //对于更新，是有很多优化的空间的，可以专业来记录更新了哪些东西，史把更新的数据更新到数据库里面
     'PUT /api/article/:articleId/:userId/:token': async (ctx, next) => {
         let result0 = await Tool.checkToken(ctx)
@@ -346,4 +381,32 @@ module.exports = {
        ctx.rest(Result.create(0,urlPath))
     },
 
+
+     'GET /api/temparticle/:userId/:token': async (ctx, next) => {
+        let tokenResult = await Tool.checkToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+       let id = ctx.params.userId
+       let resArticle = await Article.getTempAarticle(id)
+       if(resArticle.code != 0){
+            ctx.rest(resArticle)
+            return
+       }
+       if(resArticle.data.length <= 0){
+           ctx.rest(Result.create(8))
+            return
+       }
+       resArticle.data = resArticle.data[0]
+       let resTags =await Tag.articleTagByArticleId(resArticle.data.article_id)
+       if(resTags.code != 0){
+            ctx.rest(resTags)
+            return
+       }
+       resArticle.data.tags = resTags.data
+       ctx.rest(resArticle)
+    
+       
+    },
 }
