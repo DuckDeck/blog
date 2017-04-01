@@ -168,8 +168,11 @@ export const indexArticle = function(){
     return setpromiseGet(url)
 }
 
-
-
+// 
+export const releaseArticle = function(status,ids){
+    const url = HostName +  'releaseArticle/' +  userId + '/' + createToken()
+    return setpromisePost(url,{releaseIds:ids,setType:status})
+}
 
 export const getSysytemInfo = function(){
     const url = HostName +  'system/' + userId + '/' + createToken()

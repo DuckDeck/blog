@@ -24,7 +24,7 @@ comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM u
     myNewArcitle:`select article_id,article_name from article where user_id = ? limit 7`,
     getTempAarticle:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
     as sort_name FROM article where user_id = ? and article_status = 5`,
-    
+    setReleaseArticle:`update article set article_status = ? where article_id in `
 }
 class Article{
     constructor(title,content){
@@ -90,6 +90,14 @@ class Article{
 
     static getTempAarticle(user_id){
         return db.exec(sqls.getTempAarticle,[user_id])
+    }
+
+    static setReleaseArticle(status,ids){
+        if(Tool.getType(ids) == "Array"){
+            ids.sort()
+            ids = ids.join(',')
+        }
+        return db.exec(sqls.setReleaseArticle + '(' + ids + ')',[status])
     }
     
 }

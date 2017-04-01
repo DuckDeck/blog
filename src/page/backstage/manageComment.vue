@@ -12,8 +12,6 @@
             </el-table-column>
             <el-table-column prop="article_create_time" label="日期" sortable width="160" :formatter="formatter">
             </el-table-column>
-            <el-table-column prop="article_click" label="浏览量" sortable width="100">
-            </el-table-column>
             <el-table-column prop="comment_count"  width="100" label="评论个数" >
             </el-table-column>
              <el-table-column prop="newestComment"  label="最新评论">

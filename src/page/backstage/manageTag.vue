@@ -170,14 +170,14 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
 }
 .sortManageTitleClass{
     color: white;
-    background: red;
+    background: palevioletred;
     height: 60px;
     padding: 5px 10px;
     line-height: 50px;
 }
 .tagManageTitleClass{
      color: white;
-    background: green;
+    background: lightseagreen;
     height: 60px;
     padding: 5px 10px;
     line-height: 50px;

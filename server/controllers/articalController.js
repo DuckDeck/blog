@@ -405,7 +405,7 @@ module.exports = {
     },
 
 
-     'GET /api/temparticle/:userId/:token': async (ctx, next) => {
+    'GET /api/temparticle/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -430,4 +430,29 @@ module.exports = {
        resArticle.data.tags = resTags.data
        ctx.rest(resArticle)
     },
+
+    'POST /api/releaseArticle/:userId/:token': async (ctx, next) => {
+        let result0 = await Tool.checkToken(ctx)
+        if(result0.code != 0){
+            ctx.rest(result0)
+            return
+        }
+       let id = ctx.params.userId
+       let token = ctx.params.token
+       let  t = ctx.request.body
+       if(!t.releaseIds && Tool.getType(t.releaseIds) != "Array"){
+           ctx.rest(Result.create(10,{msg:'miss releaseIds'})) 
+            return
+       }
+       if(!t.setType && !isNaN(t.setType) ){
+           ctx.rest(Result.create(10,{msg:'miss setType'})) 
+            return
+       }
+       let ids = t.releaseIds
+       let status = t.setType
+       let res = await Article.setReleaseArticle(status,ids)
+       ctx.rest(res)
+    },
+
+
 }

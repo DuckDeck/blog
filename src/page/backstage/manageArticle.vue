@@ -3,8 +3,16 @@
          <div class="featureTitle">
           管理文章
         </div>
-
-        <el-table :data="tableData" border style="width: 100%">
+        <div class="itchManageArticle">
+            <el-button type="primary" @click="releaseArticle(1)">发布文章</el-button>
+            <el-button type="primary" @click="releaseArticle(0)">不发布文章</el-button>
+        </div>
+        <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
+            <el-table-column width="100"   type="selection" >
+                <template scope="scope">
+                   <el-checkbox v-model="scope.row.isSelect" @click="releaseArticle" ></el-checkbox>
+                </template>
+            </el-table-column>
             <el-table-column  label="标题" >
                 <template scope="scope">
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.article_name}}</a>
@@ -53,7 +61,7 @@
 </template>
 
 <script>
-import {articleList,deleteAticle} from '../../store/service'
+import {articleList,deleteAticle,releaseArticle} from '../../store/service'
     export default {
         data() {
             return {
@@ -64,20 +72,27 @@ import {articleList,deleteAticle} from '../../store/service'
             }
         },
         mounted(){
-            let self = this
-            articleList().then((res)=>{
-                if(res.code == 0){
-                    self.tableData = res.data
-                }
-                 else{
-                    toast(self,res.ChineseMsg)
-                }
-            }).catch(err=>{
-                toast(self,err.ChineseMsg)
-            })
+            this.loadData()
             
         },
         methods: {
+           loadData(){
+                let self = this
+                articleList().then((res)=>{
+                    if(res.code == 0){
+                        self.tableData = res.data.map(s=>{
+                            s.isSelect = false
+                            return s
+                        })
+
+                    }
+                    else{
+                        toast(self,res.ChineseMsg)
+                    }
+                }).catch(err=>{
+                    toast(self,err.ChineseMsg)
+                })
+           },
            formatter(row, column) {
                 if(column.label == "日期"){
                     return formatTime(new Date(row.article_create_time))
@@ -100,6 +115,9 @@ import {articleList,deleteAticle} from '../../store/service'
                 this.deleteArticle = article
                 this.dialogVisible = true
             },
+            handleSelectionChange(val){
+
+            },
             async deleteArticleConfirm(){
                 this.dialogVisible = false
                 if(!this.deleteArticle){
@@ -112,6 +130,21 @@ import {articleList,deleteAticle} from '../../store/service'
                     if(index >=0){
                         this.tableData.splice(index,1)
                     }
+                }
+            },
+            async releaseArticle(status){
+                let ids = this.tableData.filter(s=>{
+                    return s.isSelect == true
+                }).map(d=>{
+                    return d.article_id
+                })
+                let res = await releaseArticle(status,ids)
+                console.log(res)
+                if(res.code == 0){
+                    this.loadData()
+                }
+                else{
+                    toast(this,res.ChineseMsg)
                 }
             }
         }

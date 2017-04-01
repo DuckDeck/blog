@@ -1,6 +1,6 @@
 <template>
     <div class="copyRight">
-        {{year}}©<a>Zoe</a>
+        {{year}} © <a>Zoe</a>
     </div>
 </template>
 <script>
