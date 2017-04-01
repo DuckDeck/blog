@@ -43,7 +43,7 @@ module.exports = {
             let t = tagsResult.find((k)=>{
                 return k.data[0].article_id == s.article_id
             })
-            s['tag'] =  t==undefined ? [] : t.data
+            s['tags'] =  t==undefined ? [] : t.data
 
             let c = resNewestComments.data.find(g=>{
                 return g.comment_target_id == s.article_id
@@ -276,30 +276,50 @@ module.exports = {
         let id = ctx.params.userId
         let token = ctx.params.token
         let  t = ctx.request.body
+        console.log(t)
         //如果有id，就是自动更新
-        if(!t.articleId || !t.articleId.trim()) {
-           
-        }
-        else{
+        if(t.articleId && ! isNaN(t.articleId)) {
             let m =new Article(t.articalTitle,t.articalContent)
-            m.ip = ctx.request.ip
             m.category = t.articalSort
             m.userId = id
             m.articalStatus = t.articleStatus
-            m.articleBrief = t.articleBrief || ''
-            m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
-            let result2 = await Article.save(m)
+            m.article_id = t.articleId
+            let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
             {
                 ctx.rest(result1)
                 return 
             }
-            console.log(t.articalTags)
-            let articleId = result2.data.id
+            
+            await Tag.deleteTagByArticleId(m.article_id)
             if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
-                let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+                console.log(t.articalTags)
+                let result3 = await Tag.saveArticalMap(m.article_id,t.articalTags)
             }
-            ctx.rest(Result.create(0,{id:articleId}))
+           
+            ctx.rest(Result.create(0,{id:m.article_id}))
+        }
+        else{
+            // let m =new Article(t.articalTitle,t.articalContent)
+            // m.ip = ctx.request.ip
+            // m.category = t.articalSort
+            // m.userId = id
+            // m.articalStatus = t.articleStatus
+            // m.articleBrief = t.articleBrief || ''
+            // m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
+            // let result2 = await Article.save(m)
+            // if(result2.code != 0)
+            // {
+            //     ctx.rest(result1)
+            //     return 
+            // }
+            // console.log(t.articalTags)
+            // let articleId = result2.data.id
+            // if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
+            //     let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+            // }
+            // ctx.rest(Result.create(0,{id:articleId}))
+            ctx.rest(Result.create(0))
         }
        
     },

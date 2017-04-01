@@ -20,7 +20,7 @@
             </el-table-column>
             <el-table-column  label="标签" >
                  <template scope="scope">
-                      <el-tag class="tagSpanClass" v-for="tag in scope.row.tag"  type="primary"  >
+                      <el-tag class="tagSpanClass" v-for="tag in scope.row.tags"  type="primary"  >
                     {{tag.tag_name}}
                     </el-tag>
                 </template>

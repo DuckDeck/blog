@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '../../store/service'
+import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleById} from '../../store/service'
 //wait to do auto save feature
 
     export default {
@@ -62,7 +62,8 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '.
                 },
                 mainImage:'',
                 articleId:0,
-                isEdit:true
+                isEdit:true,
+                needAutoSave:false,
             }
         },
         mounted(){
@@ -79,32 +80,37 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '.
                 }
             })
             if(this.articleId > 0){
-                let articleDetail = getStore('article' + this.articleId)
-                if(!articleDetail){
-                    self.$vux.toast.show({
-                        text: "文章信息错误",
-                        position:"bottom",
-                        type:'text'
-                    })
-                    return
-                }
-                this.article.title = articleDetail.article_name
-                this.selectedTags = articleDetail.tag.map(s=>{
-                    return {value:s.tag_name,id:s.tag_id}
+                
+                articleById(this.articleId).then(res=>{
+                    if(res.code == 0){
+                        let articleDetail = res.data
+                        self.article.title = articleDetail.article_name
+                        self.selectedTags = articleDetail.tags
+                        self.selectedSortId = articleDetail.article_sort__id
+                        self.content = articleDetail.article_content
+                    }
+                }).catch(err=>{
+                    toast(self,err.ChineseMsg)
                 })
-                this.selectedSortId = articleDetail.article_sort__id
-                this.content = articleDetail.article_content
+                
+               
             }
             else{
                 tempArticle().then(res=>{
                     if(res.code == 0){
+                        self.needAutoSave = true
                         let articleDetail = res.data
                         self.article.title = articleDetail.article_name
                         setStore('tempArticleId',articleDetail.article_id)
                         self.selectedSortId = articleDetail.article_sort__id
                         self.content = articleDetail.article_content
+                        console.log(articleDetail.tags)
+                        self.selectedTags = articleDetail.tags
+                        console.log(self.selectedTags)
                     }
-               })
+               }).catch(err=>[
+
+               ])
             }
             setGlobalVue(this)
         },
@@ -119,7 +125,6 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '.
                 else{
                     this.selectedTags.splice(index,1)
                 }
-                console.log(this.selectedTags)
             },
             isTagContain(tag){
                 let index = this.selectedTags.findIndex(s=>{
@@ -165,7 +170,6 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '.
                     })
                     return
                 }
-                console.log(this.content)
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
@@ -219,27 +223,32 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '.
                 if(self.article.title.length <= 0){
                     return
                 }
+                if(!self.needAutoSave){
+                    return
+                }
                 let articleId = getStore('tempArticleId')
-                if(articleId){
+                let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
+                console.log(self.selectedTags)
+                let article = {
+                    articalTitle:self.article.title,
+                    articalSort:self.selectedSortId,
+                    articalTags:self.selectedTags.map((s=>{
+                                    return s.tag_id
+                                }))|| [],
+                    articalContent:self.content,
+                    articleStatus:5, //5 表示自动 保存的，只一时间只能存在一个
+                    articleId:self.articleId,
+                    articelImage:self.mainImage,
+                    articleBrief:filterContent,
                     
                 }
-                else{
-                    let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
-                    let article = {
-                        articalTitle:self.article.title,
-                        articalSort:self.selectedSortId,
-                        articalTags:self.selectedTags.map((s=>{
-                                        return s.tag_id
-                                    }))|| [],
-                        articalContent:self.content,
-                        articleStatus:5, //5 表示自动 保存的，只一时间只能存在一个
-                        articleId:self.articleId,
-                        articelImage:self.mainImage,
-                        articleBrief:filterContent,
-                    }
-
-                    saveTempArticle(article)
+                if(articleId){
+                    article.articleId = articleId
                 }
+                saveTempArticle(article)
+            },
+            findImg(){
+                //find the main Img. when the main img is null ,remove the main image
             }
         },
         beforeDestroy(){
