@@ -22,7 +22,7 @@ comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM u
 // fck when you use in  to select  ? is a trouble
     myNewArcitleCount:`select count (article_id) as articleCount from article where user_id = ?`,
     myNewArcitle:`select article_id,article_name from article where user_id = ? limit 7`,
-    tempArticle:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
+    getTempAarticle:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
     as sort_name FROM article where user_id = ? and article_status = 5`,
     
 }

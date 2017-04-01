@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
+import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle} from '../../store/service'
 //wait to do auto save feature
 
     export default {
@@ -74,7 +74,6 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 }
             })
             getSorts().then(function(result){
-                console.log(result)
                 if(result.code == 0){
                     self.articleSort = result.data
                 }
@@ -95,6 +94,17 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 })
                 this.selectedSortId = articleDetail.article_sort__id
                 this.content = articleDetail.article_content
+            }
+            else{
+                tempArticle().then(res=>{
+                    if(res.code == 0){
+                        let articleDetail = res.data
+                        self.article.title = articleDetail.article_name
+                        setStore('tempArticleId',articleDetail.article_id)
+                        self.selectedSortId = articleDetail.article_sort__id
+                        self.content = articleDetail.article_content
+                    }
+               })
             }
             setGlobalVue(this)
         },
@@ -173,6 +183,7 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                         }
                         saveArticle(article).then(function(data){
                             if(data.code == 0){
+                               removeStore('tempArticleId')
                                self.$vux.toast.show({
                                     text: "保存成功",
                                     position:"bottom",
@@ -203,7 +214,11 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                 this.$router.replace('/manage/manageArticle');
             },
             autoSave(){
+                //自动保存至少要标题
                 let self = this
+                if(self.article.title.length <= 0){
+                    return
+                }
                 let articleId = getStore('tempArticleId')
                 if(articleId){
                     
@@ -215,14 +230,15 @@ import {addTag,getTags,getSorts,saveArticle} from '../../store/service'
                         articalSort:self.selectedSortId,
                         articalTags:self.selectedTags.map((s=>{
                                         return s.tag_id
-                                    })),
+                                    }))|| [],
                         articalContent:self.content,
                         articleStatus:5, //5 表示自动 保存的，只一时间只能存在一个
                         articleId:self.articleId,
                         articelImage:self.mainImage,
                         articleBrief:filterContent,
                     }
-                    console.log(article)
+
+                    saveTempArticle(article)
                 }
             }
         },

@@ -294,8 +294,11 @@ module.exports = {
                 ctx.rest(result1)
                 return 
             }
+            console.log(t.articalTags)
             let articleId = result2.data.id
-            let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+            if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
+                let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+            }
             ctx.rest(Result.create(0,{id:articleId}))
         }
        
@@ -406,7 +409,5 @@ module.exports = {
        }
        resArticle.data.tags = resTags.data
        ctx.rest(resArticle)
-    
-       
     },
 }

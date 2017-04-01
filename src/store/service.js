@@ -154,6 +154,15 @@ export const articleById = function(article_id){
     return setpromiseGet(url)
 }
 
+export const saveTempArticle = function(article){
+    const url = HostName +  'autosavearticle/' + userId + '/' + createToken()
+    return setpromisePost(url,article)
+ }
+export const tempArticle = function(){
+    const url = HostName +  'temparticle/' +  userId + '/' + createToken()
+    return setpromiseGet(url)
+}
+
 export const indexArticle = function(){
     const url = HostName +  'article/'  + userId
     return setpromiseGet(url)

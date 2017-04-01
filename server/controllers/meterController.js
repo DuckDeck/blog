@@ -18,7 +18,6 @@ module.exports = {
         
         let resAll = await Promise.all([Article.myArticleCount(id),Comment.mynewestComment(id),Article.myNewArticle(id),File.allFile()])
         if(Tool.getType(resAll) == "Array"){
-            console.log(resAll[0])
             let articleCount = resAll[0].data[0].articleCount
             let myComment = resAll[1].data.sort((a,b)=>{
                 return a.comment_time < b.comment_time
