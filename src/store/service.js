@@ -2,7 +2,8 @@ import axios from 'axios'
 import {getUrl} from  '../tool/urlTool'
 import qs from 'qs'
 import {tool} from '../tool/tool'
-const HostName = 'http://localhost:3000/api/'
+//const HostName = 'http://localhost:3000/api/'
+const HostName = 'http://45.32.23.77:3000/api/'
 
 
 
