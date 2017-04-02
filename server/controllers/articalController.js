@@ -10,7 +10,7 @@ const path = require('path')
 const Check = require('../tool/check')
 module.exports = {
     //获取该用户所有文章
-    'GET /api/article/:userId/:token/:pageIndex/:pageSize': async (ctx, next) => {
+    'GET /api/article/:m_id/:token/:indexndex/:size': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)

@@ -36,10 +36,13 @@ const actions = {
         createPool()
  
         pool.query(sqls.createArticleTb)
+        pool.query(sqls.createMapArticleTagView)
+
         pool.query(sqls.createUserTb)
         pool.query(sqls.createUserInfoTb)
         pool.query(sqls.createUserGroupTb)
-        pool.query(sqls.createFeatureAuthTb)
+
+        pool.query(sqls.createFeatureAuthTb) // ??
         pool.query(sqls.createFriendListTb)
         pool.query(sqls.createUserConcernListTb)
         pool.query(sqls.createUserPrivateLetterTb)
@@ -62,9 +65,9 @@ const actions = {
         pool.query(sqls.createSMSTb)
 
 
-        pool.query(sqls.createUserLoginAuthTb)
+        
 
-        pool.query(sqls.createMapArticleTagView)
+        
         pool.query(sqls.createSiteManagerTb)
         //all 21 
     },

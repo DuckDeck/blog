@@ -248,14 +248,10 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
  m_group tinyint(3) NOT NULL COMMENT '管理员组',
  m_last_login_time int(13) NOT NULL COMMENT '上次登录时间',
  m_login_times int(6) DEFAULT 0 COMMENT '登录次数',
+ m_head varchar(100) NOT NULL COMMENT '头像',
  PRIMARY KEY (m_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
-    createUserLoginAuthTb:`CREATE TABLE  IF NOT EXISTS user_token_auth (
- user_id mediumint(8) NOT NULL COMMENT '用户Id',
- user_token varchar(50) NOT NULL COMMENT 'token',
- PRIMARY KEY (user_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
-
+ 
 
 
 

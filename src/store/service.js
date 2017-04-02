@@ -2,79 +2,14 @@ import axios from 'axios'
 import {getUrl} from  '../tool/urlTool'
 import qs from 'qs'
 import {tool} from '../tool/tool'
-const HostName = 'http://localhost:3000/api/'
-//const HostName = 'http://45.32.23.77:3000/api/'
+import {baseUrl} from '../config/env'
+import {setpromisePost,setpromiseGet,setpromiseDelete,setpromisePut} from './conf'
+const HostName = baseUrl
 
 
 
-const setpromiseGet = (url,para) => {
-    console.log(url)
-	return new Promise((resolve, reject) => {
-            axios.get(url).then(response=>{
-            var res = response.data;
-            if(res.code == 0) {
-                resolve(res)
-            }
-            else{
-                reject(res)
-            }
-        }).catch(function(err){
-            reject(err)
-        })
-	})
-}
 
 
-const setpromiseDelete = (url,para) => {
-    console.log(url)
-	return new Promise((resolve, reject) => {
-            axios.delete(url).then(response=>{
-            var res = response.data;
-            if(res.code == 0) {
-                resolve(res)
-            }
-            else{
-                reject(res)
-            }
-        }).catch(function(err){
-            reject(err)
-        })
-	})
-}
-
-const setpromisePost = (url,para) => {
-    console.log(url)
-	return new Promise((resolve, reject) => {
-            axios.post(url,qs.stringify(para)).then(response=>{
-            var res = response.data;
-            if(res.code == 0) {
-                resolve(res)
-            }
-            else{
-                reject(res)
-            }
-        }).catch(function(err){
-            reject(err)
-        })
-	})
-}
-
-const setpromisePut = (url,para) => {
-    console.log(url)
-	return new Promise((resolve, reject) => {
-            axios.put(url,qs.stringify(para)).then(response=>{
-            var res = response.data;
-            if(res.code == 0) {
-                resolve(res)
-            }
-            else{
-                reject(res)
-            }
-        }).catch(function(err){
-            reject(err)
-        })
-	})
-}
 
 
  export const uploadImgUrl =  function(){

@@ -372,6 +372,7 @@ CREATE TABLE  IF NOT EXISTS blog_manager (
  m_group tinyint(3) NOT NULL COMMENT '管理员组',
  m_last_login_time int(13) NOT NULL COMMENT '上次登录时间',
  m_login_times int(6) DEFAULT 0 COMMENT '登录次数',
+ m_head varchar(100) NOT NULL COMMENT '头像',
  PRIMARY KEY (m_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 

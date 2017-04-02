@@ -8,13 +8,13 @@
  */
 let baseUrl; 
 let routerMode;
-const imgBaseUrl = 'https://fuss10.elemecdn.com';
+const imgBaseUrl = 'http://45.32.23.77:3000/static/';
 
 if (process.env.NODE_ENV == 'development') {
-	baseUrl = '';
+	baseUrl = 'http://localhost:3000/api/';
 	routerMode = 'hash'
 }else{
-	baseUrl = 'https://mainsite-restapi.ele.me';
+	baseUrl = 'http://45.32.23.77:3000/api/';
 	routerMode = 'hash'
 }
 

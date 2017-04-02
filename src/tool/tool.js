@@ -81,7 +81,27 @@ global.clearStore = ()=>{
     removeStore('userInfo')
 }
 global.userId = getStore('token') == null ?  0 : getStore('token').user_id
-
+global.manageId = getStore('m_token') == null ?  0 : getStore('m_token').umanage_id
+global.createToken = function(){
+    let date = Date.parse(new Date())
+    if(getStore('token') == null){
+        return '0'
+    }
+    let to = getStore('token').token
+    let criptDa = Tool.encrypt(key,iv,to + '=' + date)
+    criptDa = encodeURIComponent(criptDa)
+    return criptDa
+}
+global.createMtoken = function(){
+    let date = Date.parse(new Date())
+    if(getStore('m_token') == null){
+        return '0'
+    }
+    let to = getStore('m_token').token
+    let criptDa = Tool.encrypt(key,iv,to + '=' + date)
+    criptDa = encodeURIComponent(criptDa)
+    return criptDa
+}
 
 global.getStyle = (element, attr, NumberMode = 'int') => {
     let target;
@@ -106,8 +126,7 @@ const crypto = require('crypto')
 const key = '751f621ea5c8f930'
 const iv = '2624750004598718'
 class Tool{
-   
-
+ 
     static md5(str){
         var md5sum = crypto.createHash('md5');
         md5sum.update(str);
@@ -149,16 +168,7 @@ class Tool{
 
 }
 
-global.createToken = function(){
-    let date = Date.parse(new Date())
-    if(getStore('token') == null){
-        return '0'
-    }
-    let to = getStore('token').token
-    let criptDa = Tool.encrypt(key,iv,to + '=' + date)
-    criptDa = encodeURIComponent(criptDa)
-    return criptDa
-}
+
 
 global.toast = function(vue,message){
     if(globalVue != vue){
