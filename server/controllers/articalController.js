@@ -8,24 +8,29 @@ const Comment = require('../model/comment')
 const fs = require('fs')
 const path = require('path')
 const Check = require('../tool/check')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
-    //获取该用户所有文章
-    'GET /api/article/:m_id/:token/:indexndex/:size': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+    //管理员获取所有文章
+    'GET /api/manage/article/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
         }
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
-            ctx.rest(tokenResult)
+            ctx.rest(pageResult)
             return
         }
-        let id = ctx.params.userId
-        let token = ctx.params.token
-        let pageIndex = ctx.params.pageIndex
-        let pageSize = ctx.params.pageSize
-        let articleResult = await Article.articles(id,pageIndex,pageSize)
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
+                    user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
+                    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
+                    as article_sort_name ,(select user_name from user where user.user_id = article.user_id) as user_name, 
+                    (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                    article.article_id) as comment_count from article limit ? , ?`
+        let articleResult = await DB.exec(sql,[index * size,size])
         if(articleResult.code != 0){
             ctx.rest(articleResult)
             return
@@ -41,31 +46,40 @@ module.exports = {
         tagsResult = tagsResult.filter((s)=>{
                return s.data.length > 0
         })
-        let resNewestComments = await Comment.newestComment(article_ids)
-        if(resNewestComments.code != 0){
-            ctx.rest(resNewestComments)
-            return
-        }
-        let a = articles.map((s)=>{
+        articles = articles.map(s=>{
             let t = tagsResult.find((k)=>{
                 return k.data[0].article_id == s.article_id
             })
             s['tags'] =  t==undefined ? [] : t.data
-
-            let c = resNewestComments.data.find(g=>{
-                return g.comment_target_id == s.article_id
-            })
-            console.log(c)
-            if(c){
-                s.newestComment = c.comment_content
-            }
-            else{
-                s.newestComment = ""
-            }
             return s
         })
-        
-        ctx.rest(Result.create(0,a))
+        let sqlArticleCount = `select count(article_id) as articleCount from article`
+        let actArticleCount = await DB.exec(sqlArticleCount)
+        let result = Result.create(0,articles)
+        result.count = actArticleCount.data[0].articleCount
+        ctx.rest(result)
+    },
+
+
+    'POST /api/manage/releaseArticle/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let  t = ctx.request.body
+        if(!t.releaseIds && Tool.getType(t.releaseIds) != "Array"){
+            ctx.rest(Result.create(10,{msg:'miss releaseIds'})) 
+             return
+        }
+        if(!t.setType && !isNaN(t.setType) ){
+            ctx.rest(Result.create(10,{msg:'miss setType'})) 
+             return
+        }
+        let ids = t.releaseIds
+        let status = t.setType
+        let res = await Article.setReleaseArticle(status,ids)
+        ctx.rest(res)
     },
 
     'GET /api/article/:articleId/:userId/:token': async (ctx, next) => {
@@ -438,28 +452,7 @@ module.exports = {
        ctx.rest(resArticle)
     },
 
-    'POST /api/releaseArticle/:userId/:token': async (ctx, next) => {
-        let result0 = await Tool.checkToken(ctx)
-        if(result0.code != 0){
-            ctx.rest(result0)
-            return
-        }
-       let id = ctx.params.userId
-       let token = ctx.params.token
-       let  t = ctx.request.body
-       if(!t.releaseIds && Tool.getType(t.releaseIds) != "Array"){
-           ctx.rest(Result.create(10,{msg:'miss releaseIds'})) 
-            return
-       }
-       if(!t.setType && !isNaN(t.setType) ){
-           ctx.rest(Result.create(10,{msg:'miss setType'})) 
-            return
-       }
-       let ids = t.releaseIds
-       let status = t.setType
-       let res = await Article.setReleaseArticle(status,ids)
-       ctx.rest(res)
-    },
+  
 
 
 }

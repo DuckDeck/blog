@@ -4,6 +4,8 @@ const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const path = require('path')
 const fs = require('fs')
+const Check = require('../tool/check')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
     'POST /api/login': async (ctx, next) => {
        var
@@ -97,7 +99,27 @@ module.exports = {
             ctx.rest(err)  
        })   
     },
-    
+    //管理用户
+    'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        console.log(pageResult)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+       let index = parseInt(ctx.params.index)
+       let size = parseInt(ctx.params.size)
+       let sqlUser = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
+       let res = await DB.exec(sqlUser,[index * size,size])
+       console.log(res)
+       ctx.rest(res)
+    },
+
 }
 
 

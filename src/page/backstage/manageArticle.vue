@@ -8,10 +8,7 @@
             <el-button type="primary" @click="releaseArticle(0)">不发布文章</el-button>
         </div>
         <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
-            <el-table-column width="100"   type="selection" >
-                <template scope="scope">
-                   <el-checkbox v-model="scope.row.isSelect" @click="releaseArticle" ></el-checkbox>
-                </template>
+            <el-table-column width="80"   type="selection" >
             </el-table-column>
             <el-table-column  label="标题" >
                 <template scope="scope">
@@ -20,7 +17,7 @@
             </el-table-column>
             <el-table-column prop="article_create_time" label="日期" sortable width="160" :formatter="formatter">
             </el-table-column>
-            <el-table-column prop="article_click" label="浏览量" sortable width="100">
+            <el-table-column prop="user_name" label="作者"  width="120">
             </el-table-column>
             <el-table-column prop="article_sort_name"  width="100" label="所属类型" >
             </el-table-column>
@@ -44,9 +41,12 @@
         </el-table>
         <div class="pagination">
             <el-pagination
-                    layout="prev, pager, next"
-                    :total="tableData.length">
-            </el-pagination>
+                @current-change="handleCurrentChange"
+                :current-page="pageIndex"
+                :page-size="10"
+                layout="total, prev, pager, next"
+                :total="count">
+                </el-pagination>
         </div>
 
         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
@@ -61,36 +61,38 @@
 </template>
 
 <script>
-import {articleList,deleteAticle,releaseArticle} from '../../store/service'
+import {articleList,deleteAticle} from '../../store/service'
+import {allArticle,releaseArticle} from  '../../store/manageService'
     export default {
         data() {
             return {
                 tableData: [],
                 dialogVisible:false,
                 deleteMessage:'',
-                deleteArticle:{}
+                deleteArticle:{},
+                count:0,
+                selectedData:[],
+                pageIndex:1
             }
         },
         mounted(){
             this.loadData() 
         },
         methods: {
-           loadData(index = 0,size = 10){
+           async loadData(index = 0,size = 10){
                 let self = this
-                articleList(index,size).then((res)=>{
-                    if(res.code == 0){
-                        self.tableData = res.data.map(s=>{
-                            s.isSelect = false
-                            return s
-                        })
-
-                    }
-                    else{
-                        toast(self,res.ChineseMsg)
-                    }
-                }).catch(err=>{
-                    toast(self,err.ChineseMsg)
-                })
+                let res = await  allArticle(index,size)
+                if(res.code == 0){
+                    self.tableData = res.data.map(s=>{
+                        s.isSelect = false
+                        return s
+                    })
+                    self.count = res.count
+                    this.selectedData = []
+                }
+                else{
+                    toast(this,res.cMsg)
+                }
            },
            formatter(row, column) {
                 if(column.label == "日期"){
@@ -115,7 +117,7 @@ import {articleList,deleteAticle,releaseArticle} from '../../store/service'
                 this.dialogVisible = true
             },
             handleSelectionChange(val){
-
+               this.selectedData = val
             },
             async deleteArticleConfirm(){
                 this.dialogVisible = false
@@ -132,19 +134,25 @@ import {articleList,deleteAticle,releaseArticle} from '../../store/service'
                 }
             },
             async releaseArticle(status){
-                let ids = this.tableData.filter(s=>{
-                    return s.isSelect == true
-                }).map(d=>{
+                let ids = this.selectedData.map(d=>{
                     return d.article_id
                 })
+                if(ids.length <= 0){
+                    return
+                }
                 let res = await releaseArticle(status,ids)
                 console.log(res)
                 if(res.code == 0){
-                    this.loadData()
+                    this.loadData(this.pageIndex - 1,10)
                 }
                 else{
                     toast(this,res.ChineseMsg)
                 }
+            },
+             async handleCurrentChange(val){
+                this.pageIndex = val
+                this.loadData(this.pageIndex - 1,10)
+                
             }
         }
     }
@@ -173,5 +181,8 @@ display:  none;
 }
 .cell{
     text-align: center;
+}
+.el-checkbox{
+    margin-bottom: 0px;
 }
 </style>

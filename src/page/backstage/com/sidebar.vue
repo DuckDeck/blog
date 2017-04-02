@@ -4,8 +4,8 @@
             <el-menu-item  index = "summary" >
                 <i class="el-icon-setting"></i>仪表盘
             </el-menu-item>
-           <el-menu-item index="editArticle">
-               <i class="el-icon-edit"> </i>发布文章
+           <el-menu-item index="manageUser">
+               <i class="el-icon-edit"> </i>管理用户
            </el-menu-item>   
            <el-menu-item index="manageArticle">
                 <i class="el-icon-document"> </i>管理文章

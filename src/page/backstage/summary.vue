@@ -8,7 +8,7 @@
                <div class="articleStatus">
                    <img  src="/static/img/pen.jpeg" alt="">
                    <div >
-                        <span>发表了</span>
+                        <span>用户发表了</span>
                         <span class="meterMenuCount">{{meter.articleCount}}</span>
                         <span>篇文章</span>
                    </div>    
@@ -16,7 +16,7 @@
                <div class="articleStatus">
                    <img src="/static/img/text.jpeg" alt="">
                    <div>
-                        <span>收到了</span>
+                        <span>一共收到了</span>
                         <span class="meterMenuCount">{{meter.commentCount}}</span>
                         <span>条留言</span>
                    </div>
@@ -24,7 +24,7 @@
                <div class="articleStatus">
                    <img src="/static/img/file.jpeg" alt="">
                    <div>
-                       <span>上传了</span>
+                       <span>用户上传了</span>
                        <span class="meterMenuCount">{{meter.fileCount}}</span>
                        <span>个文件</span>
                    </div>
@@ -100,8 +100,8 @@ import {getMeter} from '../../store/manageService'
      margin-right: 20px;
  }
 .articleStatus div{
-    width: 40%;
-    margin-left: 40px;
+    width: 50%;
+    margin-left: 30px;
 }
 .articleStatus div span{
     display:  block;

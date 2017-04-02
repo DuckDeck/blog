@@ -16,3 +16,18 @@ export const getMeter = ()=>{
     let url = HostName +   'manage/meter/'+ manageId + '/' + createMtoken()
     return setpromiseGet(url)
 }
+
+export const allUser = (index,size)=>{
+    let url = HostName +   'manage/user/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
+export const allArticle = (index,size)=>{
+    let url = HostName +   'manage/article/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
+export const releaseArticle = function(status,ids){
+    const url = HostName +  'manage/releaseArticle/' +   manageId + '/' + createMtoken()
+    return setpromisePost(url,{releaseIds:ids,setType:status})
+}
