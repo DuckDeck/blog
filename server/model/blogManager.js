@@ -4,6 +4,7 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user blog_manager(0,?,?,?,?,?,?,?)',
     checkLogin:'select * from blog_manager where m_username = ?',
+    saveToken:`update blog_manager set m_token = ? where m_id = ?`
 }
 class BlogManager{
     constructor(userName,password){
@@ -36,6 +37,9 @@ class BlogManager{
         return db.exec(sqls.checkLogin,[userName])
     }
 
+    static saveToken(token,m_id){
+        return db.exec(sqls.saveToken,[token,m_id])
+    }
   
     
 }

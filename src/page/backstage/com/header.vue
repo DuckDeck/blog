@@ -40,9 +40,8 @@
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    removeStore('userInfo')
-                    removeStore('token')
-                    this.$router.replace('/manage/login');
+                    clearStore()
+                    this.$router.replace('/managelogin');
                 }
                 else if(command == 'userSetting'){
                     this.$router.replace('/manage/userSetting');
@@ -51,7 +50,7 @@
                     this.$router.replace('/')
                 }
                 else if(command == 'clearCache'){
-                    clearStore()
+                    clearStoreExcept('m_token')
                     toast(this,'缓存清除成功')
                 }
             }

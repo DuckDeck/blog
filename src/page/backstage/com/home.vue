@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <v-head :username="userInfo.user_name" :userImage="userInfo.user_image_url"></v-head>
+        <v-head :username="userInfo.m_username" :userImage="userInfo.m_head"></v-head>
         <v-sidebar ></v-sidebar>
         <div class="backStagecontent">
             <transition name="move" mode="out-in"><router-view></router-view></transition>
@@ -11,7 +11,6 @@
 <script>
     import vHead from './header.vue';
     import vSidebar from './sidebar.vue';
-    import {getUserInfo} from '../../../store/service'
     export default {
         data(){
             return{
@@ -22,24 +21,11 @@
             vHead, vSidebar
         },
         mounted(){
-            if(getStore('userInfo')){
-                this.userInfo = getStore('userInfo')
+            if(!getStore('m_token')){
+                this.$router.replace('/managelogin')
             }
-            else{
-                let self = this
-                 getUserInfo().then(function(data){
-                    if(data.code == 0){
-                        self.userInfo = data.data
-                        setStore('userInfo',data.data)
-                    }
-                    else{
-                        toast(self,data.ChineseMsg)
-                    }
-                },function(err){
-                   toast(self,err.ChineseMsg)
-                })
-            }
-          
+            let info = getStore('m_token')
+            this.userInfo = info
         }
     }
 </script>

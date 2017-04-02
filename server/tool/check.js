@@ -39,8 +39,51 @@ class Check{
            return Result.create(9)
        }
        return null
-    }
-    
+    } 
+
+    static  async checkManageToken(req){
+      if(req == undefined){
+            return Tool.setPromise(Result.create(9),false)
+        }
+       let id = req.params.mId
+       let token = req.params.token
+       if(id == undefined || token == undefined){
+            return Tool.setPromise(Result.create(9),false)
+       }
+    //    if(!isNaN(token)){
+    //        return setPromise(Result.create(9),false)
+    //    }
+    // for now do not care what is token is
+       return Tool.setPromise(Result.create(0),true) 
+       let t = Tool.decrypt(key,iv,token)
+       let para = t.split('=')
+        
+        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
+            return new Promise(function(resolve,reject){
+                //check this later
+                // db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){
+                //     if(data.data.length == 1){
+                //         if( data.data[0].user_token == para[0]){
+                //             console.log('validateToken completed')
+                //             resolve(Result.create(0))
+                //         }
+                //         else{
+                //             reject(Result.create(100))
+                //         }
+                //     }
+                //     else{
+                //         reject(Result.create(100))
+                //     }
+                // },function(err){
+                //     reject(err)
+                // })
+            })
+        }else{
+            return new Promise(function(resolve,reject){
+                reject(Result.create(9))
+            })
+        }
+  }
 
   static async checkToken(req){
         if(req == undefined){

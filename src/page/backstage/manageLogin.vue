@@ -3,7 +3,7 @@
       <div class="login-body">
           <div class="ms-login">
               <div class="blog-login-title">
-                  ZOE BLog后台
+                  ZOE Blog后台
               </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 <el-form-item prop="username">
@@ -51,6 +51,7 @@ import {login} from '../../store/manageService'
                     if (valid) {
                         login(self.ruleForm.username,self.ruleForm.password).then(function(data){
                             if(data.code == 0){
+                                clearStore()
                                 setStore('m_token',data.data)    
                                 self.$router.push('/manage')     
                             }
@@ -74,7 +75,6 @@ import {login} from '../../store/manageService'
                
             },
             close(e){
-                
                 if(e.target!=e.currentTarget) return;
                
             }

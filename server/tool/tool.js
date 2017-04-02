@@ -56,10 +56,6 @@ class Tool{
     };
 
 
-    static saveToken(user_id,token){
-       return db.exec('replace into user_token_auth (user_id, user_token) values (?,?)',[user_id,token])
-    }
-
     static setPromise(result,ok){
         return new Promise((resolve,reject)=>{
             ok?resolve(result):reject(result)

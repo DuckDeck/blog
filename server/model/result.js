@@ -2,7 +2,7 @@ class Result{
     constructor(code,msg,ChineseMsg,data){
         this.code = code
         this.msg = msg
-        this.ChineseMsg = ChineseMsg
+        this.cMsg = ChineseMsg
         this.data = data
     }
 

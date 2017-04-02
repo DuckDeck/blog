@@ -78,10 +78,17 @@ global.removeStore = name => {
 	window.localStorage.removeItem(name);
 }
 global.clearStore = ()=>{
-    removeStore('userInfo')
+    window.localStorage.clear()
+}
+global.clearStoreExcept = (except)=>{
+    for(let i = 0;i<window.localStorage.length;i++){
+        if(window.localStorage.key(i) != except){
+            window.localStorage.removeItem(window.localStorage.key(i))
+        }
+    }
 }
 global.userId = getStore('token') == null ?  0 : getStore('token').user_id
-global.manageId = getStore('m_token') == null ?  0 : getStore('m_token').umanage_id
+global.manageId = getStore('m_token') == null ?  0 : getStore('m_token').m_id
 global.createToken = function(){
     let date = Date.parse(new Date())
     if(getStore('token') == null){
@@ -97,7 +104,7 @@ global.createMtoken = function(){
     if(getStore('m_token') == null){
         return '0'
     }
-    let to = getStore('m_token').token
+    let to = getStore('m_token').m_token
     let criptDa = Tool.encrypt(key,iv,to + '=' + date)
     criptDa = encodeURIComponent(criptDa)
     return criptDa

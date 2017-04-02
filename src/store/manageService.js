@@ -11,3 +11,8 @@ export const login = function(userName,password){
     const url =  HostName + 'manage/login'
     return setpromisePost(url,{userName:userName,password:password})
 }
+
+export const getMeter = ()=>{
+    let url = HostName +   'manage/meter/'+ manageId + '/' + createMtoken()
+    return setpromiseGet(url)
+}

@@ -36,7 +36,7 @@
                     最新文章
                 </div>
                 <div class="newestArticleTitle">
-                  <div v-for="artilce in meter.myNewArticle">
+                  <div v-for="artilce in meter.newArticle">
                       <a @click="toArticle(artilce)">{{artilce.article_name}}</a>
                   </div>
                    
@@ -48,7 +48,7 @@
                     最新留言(评论)
                 </div>
                 <div  class="newestArticleTitle">
-                     <div v-for="comment in meter.myNewComment">
+                     <div v-for="comment in meter.newComment">
                      <a>{{comment.commenter}}</a>  <a style="color: #222">于{{formatData(comment.comment_time)}}</a> 说:<a>{{comment.comment_content}}</a>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import {getMeter} from '../../store/service'
+import {getMeter} from '../../store/manageService'
 
     export default {
         data: function(){
@@ -68,17 +68,12 @@ import {getMeter} from '../../store/service'
                 meter:{}
             }
         },
-        mounted(){
-            getMeter().then(res=>{
-                if(res.code == 0){
-                    this.meter = res.data
-                }
-                else{
-                    toast(this,res.ChineseMsh)
-                }
-            }).catch(err=>{
-                toast(this,err.ChineseMsg)
-            })
+        async mounted(){
+            let res = await getMeter()
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+            this.meter = res.data
         },
         methods:{
             toArticle(article){
