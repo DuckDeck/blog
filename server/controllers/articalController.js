@@ -82,6 +82,38 @@ module.exports = {
         ctx.rest(res)
     },
 
+
+    'GET /api/manage/articleinfo/:articleId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'articleId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let id = ctx.params.articleId
+        let resArticle = await Article.articalById(id)
+        if(resArticle.code != 0){
+            ctx.rest(resArticle)
+            return
+        }
+        if(resArticle.data.length == 0){
+             ctx.rest(Result.create(8))
+            return
+        }
+        let resTags =await Tag.articleTagByArticleId(id)
+        if(resTags.code != 0){
+            ctx.rest(resTags)
+            return
+        }
+        let article = resArticle.data[0]
+        article.tags = resTags.data
+        ctx.rest(Result.create(0,article))
+    },
+
     'GET /api/article/:articleId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){

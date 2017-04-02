@@ -11,7 +11,7 @@ class Check{
            
         }
         if(isNaN(body[name])){
-            return Result.create(10,{msg:'miwrongss' + name + 'format'})
+            return Result.create(10,{msg: name + 'wrong format'})
         }
         return null
     }

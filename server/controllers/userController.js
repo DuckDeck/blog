@@ -7,6 +7,51 @@ const fs = require('fs')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
+    //管理用户
+    'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+       let index = parseInt(ctx.params.index)
+       let size = parseInt(ctx.params.size)
+       let sqlUser = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
+       let res = await DB.exec(sqlUser,[index * size,size])
+       ctx.rest(res)
+    },
+
+    'GET /api/manage/userinfo/:userId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = parseInt(ctx.params.userId)
+        
+        let sqlUser = 'select a.* ,b.* from  user a join user_info b on a.user_id = b.user_id where a.user_id = ?'
+        let res = await DB.exec(sqlUser,[userId])
+        if(res.code == 0){
+            if(res.data.length > 0){
+                res.data = res.data[0]
+            }
+            else{
+                res = Result.create(8)
+            }
+        }
+        ctx.rest(res)
+    },
+
     'POST /api/login': async (ctx, next) => {
        var
             t = ctx.request.body,
@@ -99,26 +144,7 @@ module.exports = {
             ctx.rest(err)  
        })   
     },
-    //管理用户
-    'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
-        let tokenResult = await Check.checkManageToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
-        let pageResult = Check.checkPage(ctx)
-        console.log(pageResult)
-        if(pageResult){
-            ctx.rest(pageResult)
-            return
-        }
-       let index = parseInt(ctx.params.index)
-       let size = parseInt(ctx.params.size)
-       let sqlUser = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
-       let res = await DB.exec(sqlUser,[index * size,size])
-       console.log(res)
-       ctx.rest(res)
-    },
+    
 
 }
 

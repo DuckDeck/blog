@@ -22,6 +22,12 @@ export const allUser = (index,size)=>{
     return setpromiseGet(url)
 }
 
+
+export const userInfoById = (id)=>{
+    let url = HostName +   'manage/userinfo/'+ id + '/' + manageId + '/' + createMtoken() 
+    return setpromiseGet(url)
+}
+
 export const allArticle = (index,size)=>{
     let url = HostName +   'manage/article/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size
     return setpromiseGet(url)
@@ -30,4 +36,14 @@ export const allArticle = (index,size)=>{
 export const releaseArticle = function(status,ids){
     const url = HostName +  'manage/releaseArticle/' +   manageId + '/' + createMtoken()
     return setpromisePost(url,{releaseIds:ids,setType:status})
+}
+
+export const articleById = (id)=>{
+    let url = HostName +   'manage/articleinfo/'+ id + '/' + manageId + '/' + createMtoken() 
+    return setpromiseGet(url)
+}
+
+export const commentsByArticleId = (id)=>{
+    let url = HostName +   'manage/articleComment/'+ id + '/' + manageId + '/' + createMtoken() 
+    return setpromiseGet(url)
 }

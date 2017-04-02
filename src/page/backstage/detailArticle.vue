@@ -1,49 +1,90 @@
 <template>
     <div>
-       <header>
-           <div style="font-size: 30px">
-               {{articleDetail.article_name}}
-           </div>
-           <div class="articleInfoClass">
-               发布于<span>{{releaseDate}}</span>  <span>  {{articleDetail.sort_name}}</span> <span>  {{articleDetail.article_click}}</span>浏览
-           </div>
-           <div  class="articleTagClass">
-                <el-tag  v-for="t in articleDetail.tags"   type="primary"  >{{t.tag_name}}</el-tag>
-           </div>
-       </header>
-       <div class="articleSeperateLine"></div>
-       <article class="articleContentClass" v-html = "articleDetail.article_content"></article>
+         <div class="featureTitle">
+            文章信息
+          </div>
+          
+          <div style="font-size: 40px;text-align: center;margin-top: 20px;">
+                    {{articleDetail.article_name}}
+         </div>
+
+         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="文章详情" name="articleDetail">
+                <header>
+ 
+                <div class="articleInfoClass">
+                    发布于<span>{{releaseDate}}</span>  <span>  {{articleDetail.sort_name}}</span> <span>  {{articleDetail.article_click}}</span>浏览
+                </div>
+                <div  class="articleTagClass">
+                        <el-tag  v-for="t in articleDetail.tags"   type="primary"  >{{t.tag_name}}</el-tag>
+                </div>
+            </header>
+            <div class="articleSeperateLine"></div>
+            <article class="articleContentClass" v-html = "articleDetail.article_content"></article>
+       </el-tab-pane>
+            <el-tab-pane label="作者信息" name="authorInfo">
+                <userInfoShow :userInfo ="userInfo" ></userInfoShow>
+            </el-tab-pane>
+            <el-tab-pane label="文章评论" name="third">
+               <comment v-for="comment in comments" :comment = "comment"></comment>
+            </el-tab-pane>
+            
+        </el-tabs>
+
+       
     </div>
 </template>
 
 <script>
-import {articleById} from '../../store/service'
+import {articleById,userInfoById,commentsByArticleId} from '../../store/manageService'
+import userInfoShow from './com/userInfoShow.vue'
+import comment from './com/comment.vue'
     export default {
         data: function(){
             return {
-                articleDetail:{}
+                activeName:'articleDetail',
+                articleDetail:{},
+                userInfo:{},
+                comments:[]
             }
         },
-        mounted(){
-             let id = this.$route.params.id
+        async mounted(){
+            let id = this.$route.params.id
+            let res =  await articleById(id)
+            if(res.code == 0){
+                  this.articleDetail = res.data
+            }
+            else{
+                toast(self,res.cMsg)
+            }
+            res = await userInfoById(this.articleDetail.user_id)
+            if(res.code == 0){
+                  this.userInfo = res.data
+            }
+            else{
+                toast(self,res.cMsg)
+            } 
+            res = await commentsByArticleId(this.articleDetail.article_id)
+            if(res.code == 0){
+                  this.comments = res.data
+            }
+            else{
+                toast(self,res.cMsg)
+            } 
 
-            let self = this
-            articleById(id).then(res=>{
-                if(res.code == 0){
-                    self.articleDetail = res.data
-                }else{
-                    toast(self,err.ChineseMsg)
-                }
-            }).catch(err=>{
-                toast(self,err.ChineseMsg)
-            })
-             
-            
+        },
+        methods:{
+            handleClick(tab,event){
+                
+            }
         },
         computed:{
             releaseDate(){
                 return  formatTime(new Date(this.articleDetail.article_create_time))
             }
+        },
+        components:{
+            userInfoShow,comment
         }
     }
 </script>

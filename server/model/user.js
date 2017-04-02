@@ -5,7 +5,7 @@ const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
     userInfoById:`select * from user where user_id = ?`,
-    userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user where user_id in (?)',
+    userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user_detail where user_id in',
     updateUserHead:'update user set user_image_url = ? where user_id = ?'
 }
 class User{
@@ -60,7 +60,7 @@ class User{
             ids.sort()
             ids = ids.join(',')
         }
-        return db.exec(sqls.userInfoByIds,[ids])
+        return db.exec(sqls.userInfoByIds + '(' + ids + ')')
     }
 
     static updateUserHead(user){

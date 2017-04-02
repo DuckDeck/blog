@@ -35,7 +35,6 @@ CREATE TABLE   IF NOT EXISTS   user_info (
         user_address varchar(255) NOT NULL DEFAULT '' COMMENT '用户地址',
         user_mark mediumint(9) NOT NULL DEFAULT 0 COMMENT '用户积分',
         user_rank_id tinyint(3) NOT NULL DEFAULT 0 COMMENT '用户等级',
-        user_last_login_ip varchar(15) NOT NULL DEFAULT '' COMMENT '用户上一次登录IP地址',
         user_birthday int(13) NOT NULL DEFAULT 0  COMMENT '用户生日',
         user_description varchar(255) NOT NULL DEFAULT ''  COMMENT '自我描述',
         user_image_url varchar(255) NOT NULL DEFAULT ''  COMMENT '用户头像',
@@ -384,3 +383,24 @@ CREATE TABLE  IF NOT EXISTS blog_manager (
 ------------------------------
 create view article_tag_map_view as  select tag.* , 
 map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id
+
+------------------------------
+-- create view
+------------------------------
+
+CREATE VIEW user_detail AS
+select 
+ a.user_group_id ,
+ a.user_name ,
+ a.user_password ,
+ a.user_token ,
+ a.user_isSendEmail ,
+ a.user_isValidate ,
+ a.user_register_time ,
+ a.user_register_ip ,
+ a.user_login_times ,
+ a.user_last_login_ip ,
+ a.user_lock ,
+ a.user_freeze ,
+ a.user_auth ,b.*
+ from user a join user_info b on a.user_id = b.user_id

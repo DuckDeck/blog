@@ -4,7 +4,89 @@ const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const User = require('../model/user')
 const Check = require('../tool/check')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
+
+    'GET /api/manage/articleComment/:articleId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'articleId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let articleId = ctx.params.articleId
+        let sqlMainComment = `select comment_id from user_comment where comment_target_id = ?`
+        let resMainComment = await DB.exec(sqlMainComment,[articleId])
+        if(resMainComment.code != 0){
+            ctx.rest(resMainComment)
+            return
+        }
+        if(resMainComment.data.length > 0){
+            let actions = resMainComment.data.map(s=>{
+                return getCommentById(s.comment_id)
+            })
+            let resCom = await Promise.all(actions)
+            if(resCom.code != 0){
+                ctx.rest(resCom)
+            }
+            let userIds = new Set()
+            resCom.forEach(s=>{
+                userIds.add(s.commenter_user_id)
+                s.sub_comments.forEach(t=>{
+                    userIds.add(t.commenter_user_id)
+                    userIds.add(t.comment_target_user_id)
+                })
+            })
+            let userInfos = await User.userInfoByIds(Array.from(userIds))
+            let tra = {
+                user_id:0,
+                user_name:'游客',
+                user_image_url:'http://localhost:3000/static/system/tra.png'
+            }
+            resCom.forEach(s=>{
+                if(s.commenter_user_id == 0){
+                    s.userInfo = tra
+                }
+                else{
+                    s.userInfo = userInfos.data.find(n=>{
+                        return n.user_id == s.commenter_user_id
+                    })
+                }
+                s.sub_comments.forEach(t=>{
+                    if(t.commenter_user_id == 0){
+                        t.userInfo = tra
+                    }
+                    else{
+                        t.userInfo = userInfos.data.find(n=>{
+                            return n.user_id == t.commenter_user_id
+                        })
+                    }
+                    
+                    if(t.comment_target_user_id == 0){
+                        t.targetUserInfo = tra
+                    }
+                    else{
+                         t.targetUserInfo = userInfos.data.find(n=>{
+                            return n.user_id == t.comment_target_user_id
+                        })
+                    }
+                })
+            })
+            ctx.rest(Result.create(0,resCom))
+        }
+        else{
+             ctx.rest(resMainComment)
+            return
+        }
+        
+
+    },
+
+
     'POST /api/comment/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
@@ -96,7 +178,9 @@ module.exports = {
    'GET /api/comment/:commentId': async (ctx, next) => {
       await getComment(ctx)
     },
-    'GET /api/comment/:commentId/:userId/:token': async (ctx, next) => {
+
+  
+   'GET /api/comment/:commentId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -175,10 +259,28 @@ async function getComment(ctx){
             mainCom.sub_comments.push(n)
         }
     }
-    
 
-
-
-    
     ctx.rest(Result.create(0,mainCom))
 }
+
+
+async function getCommentById(id){
+    let resMainCom = await Comment.commentById(id)
+    if(resMainCom.code!=0){
+        return resMainCom
+    }
+    let resSubCom = await Comment.subCommentById(id)
+    if(resSubCom.code!=0){
+        return resSubCom
+    }
+    let mainCom = resMainCom.data[0]
+    let subCom = resSubCom.data
+    mainCom.sub_comments = []
+    for(let n of subCom){
+        if(n.comment_scope == mainCom.comment_id){
+            mainCom.sub_comments.push(n)
+        }
+    }
+    return mainCom
+}
+
