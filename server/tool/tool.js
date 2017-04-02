@@ -64,41 +64,7 @@ class Tool{
         return Tool.decrypt(key,iv,token)
     }
 
-    static validateToken(promise_data){
-        let t = Tool.decrypt(key,iv,promise_data.token)
-        let para = t.split('=')
-        return new Promise(function(resolve,reject){
-            resolve(promise_data)
-        })
-        return
-        console.log('thic code will not run')
-        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
-            return new Promise(function(resolve,reject){
-                db.exec('select * from user_token_auth where user_id = ?',[promise_data.user_id]).then(function(data){
-                    if(data.data.length == 1){
-                        if( data.data[0].user_token == para[0]){
-                            console.log('validateToken completed')
-                            resolve(promise_data)
-                        }
-                        else{
-                            reject(Result.create(100))
-                        }
-                    }
-                    else{
-                        reject(Result.create(100))
-                    }
-                },function(err){
-                    reject(err)
-                })
-            })
-        }else{
-            return new Promise(function(resolve,reject){
-                reject(Result.create(9))
-            })
-        }
-    }
-
-    static checkToken(req){
+     static checkToken(req){
         if(req == undefined){
             return setPromise(Result.create(9),false)
         }

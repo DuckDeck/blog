@@ -7,18 +7,25 @@ const Tool = require('../tool/tool')
 const Comment = require('../model/comment')
 const fs = require('fs')
 const path = require('path')
-
+const Check = require('../tool/check')
 module.exports = {
-    
-    'GET /api/article/:userId/:token': async (ctx, next) => {
+    //获取该用户所有文章
+    'GET /api/article/:userId/:token/:pageIndex/:pageSize': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
         }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(tokenResult)
+            return
+        }
         let id = ctx.params.userId
         let token = ctx.params.token
-        let articleResult = await Article.articles(id)
+        let pageIndex = ctx.params.pageIndex
+        let pageSize = ctx.params.pageSize
+        let articleResult = await Article.articles(id,pageIndex,pageSize)
         if(articleResult.code != 0){
             ctx.rest(articleResult)
             return

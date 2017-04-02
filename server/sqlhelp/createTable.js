@@ -37,7 +37,7 @@ const actions = {
  
         pool.query(sqls.createArticleTb)
         pool.query(sqls.createUserTb)
-        pool.query(sqls.createUserAuthTb)
+        pool.query(sqls.createUserInfoTb)
         pool.query(sqls.createUserGroupTb)
         pool.query(sqls.createFeatureAuthTb)
         pool.query(sqls.createFriendListTb)
@@ -65,7 +65,7 @@ const actions = {
         pool.query(sqls.createUserLoginAuthTb)
 
         pool.query(sqls.createMapArticleTagView)
-        // pool.query(sqls.createSiteManagerTb)
+        pool.query(sqls.createSiteManagerTb)
         //all 21 
     },
 }

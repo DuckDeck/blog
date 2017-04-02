@@ -72,13 +72,12 @@ import {articleList,deleteAticle,releaseArticle} from '../../store/service'
             }
         },
         mounted(){
-            this.loadData()
-            
+            this.loadData() 
         },
         methods: {
-           loadData(){
+           loadData(index = 0,size = 10){
                 let self = this
-                articleList().then((res)=>{
+                articleList(index,size).then((res)=>{
                     if(res.code == 0){
                         self.tableData = res.data.map(s=>{
                             s.isSelect = false

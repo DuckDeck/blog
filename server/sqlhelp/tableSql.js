@@ -20,12 +20,28 @@ const sqls = {
  PRIMARY KEY (article_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
     createUserTb:`
-            CREATE TABLE   IF NOT EXISTS   user (
+           CREATE TABLE   IF NOT EXISTS   user (
         user_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
         user_group_id mediumint(8) NOT NULL COMMENT '用户组ID 10为管理员',  
         user_name varchar(32) NOT NULL COMMENT '用户名',
-        user_real_name varchar(32) NOT NULL COMMENT '用户真名',
         user_password varchar(32) NOT NULL COMMENT '用户密码',
+        user_token varchar(50) NOT NULL COMMENT 'token',
+        user_isSendEmail int(2) NOT NULL DEFAULT 0 COMMENT '用户有没有发送验证邮件',
+        user_isValidate int(2) NOT NULL DEFAULT 0 COMMENT '用户有没有验证',
+        user_register_time int(13) NOT NULL DEFAULT 0  COMMENT '用户注册时间',
+        user_register_ip varchar(15) NOT NULL DEFAULT ''  COMMENT '用户注册时IP地址',
+        user_login_times int(5) NOT NULL DEFAULT 0  COMMENT '用户登录次数',
+        user_last_login_ip varchar(15) NOT NULL DEFAULT '' COMMENT '用户上一次登录IP地址',
+        user_lock tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否锁定，0为不锁定，1为锁定',
+        user_freeze tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否冻结，0为不冻结，1为冻结',
+        user_auth varchar(255) NOT NULL DEFAULT '' COMMENT '拥有权限',
+        PRIMARY KEY (user_id)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+        `,
+    createUserInfoTb:`
+    CREATE TABLE   IF NOT EXISTS   user_info (
+        user_id mediumint(8) NOT NULL  COMMENT '用户ID 对于用户信息表，主键要和user表一要，所以不要让自己增',
+        user_real_name varchar(32) NOT NULL COMMENT '用户真名',
         user_phone int(12) NOT NULL DEFAULT 0 COMMENT '用户手机号码',
         user_gender varchar(6) NOT NULL DEFAULT '' COMMENT '用户性别',
         user_qq mediumint(9) NOT NULL DEFAULT 0 COMMENT '用户QQ号码',
@@ -36,24 +52,12 @@ const sqls = {
         user_last_login_ip varchar(15) NOT NULL DEFAULT '' COMMENT '用户上一次登录IP地址',
         user_birthday int(13) NOT NULL DEFAULT 0  COMMENT '用户生日',
         user_description varchar(255) NOT NULL DEFAULT ''  COMMENT '自我描述',
-        user_image_url varchar(255) NOT NULL DEFAULT ''  COMMENT '用户头像存储路径',
-        user_register_time int(13) NOT NULL DEFAULT 0  COMMENT '用户注册时间',
-        user_register_ip varchar(15) NOT NULL DEFAULT ''  COMMENT '用户注册时IP地址',
+        user_image_url varchar(255) NOT NULL DEFAULT ''  COMMENT '用户头像',
         user_last_update_time int(13) NOT NULL DEFAULT 0  COMMENT '用户上次更新博客时间',
         user_says varchar(255) NOT NULL DEFAULT ''  COMMENT '用户语录',
-        user_lock tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否锁定，0为不锁定，1为锁定',
-        user_freeze tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否冻结，0为不冻结，1为冻结',
-        user_auth varchar(255) NOT NULL DEFAULT '' COMMENT '拥有权限',
         PRIMARY KEY (user_id)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
-        `,
-    createUserAuthTb:`CREATE TABLE  IF NOT EXISTS user_rank (
- rank_id mediumint(5) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
- user_rank_id smallint(5) NOT NULL COMMENT '等级ID',
- rank_mark mediumint(6) NOT NULL COMMENT '等级积分',
- rank_name varchar(32) NOT NULL COMMENT '等级名称',
- PRIMARY KEY (rank_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
+   
     createUserGroupTb:`CREATE TABLE  IF NOT EXISTS user_group (
  g_id tinyint(3) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
  group_id tinyint(3) NOT NULL COMMENT '用户组ID',
@@ -236,10 +240,14 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
  PRIMARY KEY (phone_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
-    createSiteManagerTb:`CREATE TABLE  IF NOT EXISTS manager (
+    createSiteManagerTb:`CREATE TABLE  IF NOT EXISTS blog_manager (
  m_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
  m_username varchar(100) NOT NULL COMMENT '账号',
  m_password varchar(255) NOT NULL COMMENT '密码',
+ m_token varchar(255) NOT NULL COMMENT '登录token',
+ m_group tinyint(3) NOT NULL COMMENT '管理员组',
+ m_last_login_time int(13) NOT NULL COMMENT '上次登录时间',
+ m_login_times int(6) DEFAULT 0 COMMENT '登录次数',
  PRIMARY KEY (m_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
     createUserLoginAuthTb:`CREATE TABLE  IF NOT EXISTS user_token_auth (

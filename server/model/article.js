@@ -6,7 +6,7 @@ const sqls = {
     user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
     (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
     as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-    article.article_id) as comment_count from article where user_id = ?`,  
+    article.article_id) as comment_count from article where user_id = ? limit ? , ?`,  
     articalById:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
     as sort_name FROM article where article_id = ?`,
     insertArticle:'insert into article values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -50,8 +50,8 @@ class Article{
        article.userId,article.typeId,article.articalType,article.content,article.articleBrief,article.articleMainImage,
        article.articalUp,article.articalSupport,article.articalStatus])
     }
-   static articles(user_id){
-        return db.exec(sqls.articals,[user_id])
+    static articles(user_id,pageIndex,pageSize){
+        return db.exec(sqls.articals,[user_id,pageSize * pageSize,pageSize])
     }
     static articalById(article_id){
         return db.exec(sqls.articalById,[article_id])
