@@ -72,7 +72,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
             handleSortClose(sort) {
                 let self = this
                 deleteSort(sort).then(res=>{
-                    toast(self,res.ChineseMsg)
+                    toast(self,res.cMsg)
                     if(res.code == 0){
                        let index = self.sorts.indexOf(sort)
                        if(index >=0){
@@ -80,7 +80,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
                        } 
                     }
                 }).catch(err=>{
-                    toast(self,err.ChineseMsg)
+                    toast(self,err.cMsg)
                 })
 
 
@@ -89,7 +89,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
             handleTagClose(tag) {
                 let self = this
                 deleteTag(tag).then(res=>{
-                    toast(self,res.ChineseMsg)
+                    toast(self,res.cMsg)
                     if(res.code == 0){
                        let index = self.tags.indexOf(tag)
                        if(index >=0){
@@ -97,7 +97,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
                        } 
                     }
                 }).catch(err=>{
-                    toast(self,err.ChineseMsg)
+                    toast(self,err.cMsg)
                 })
             },
             showSortInput() {
@@ -121,12 +121,12 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
                 }
                 let self = this
                 addSort(inputValue).then(result=>{
-                     toast(self,result.ChineseMsg)   
+                     toast(self,result.cMsg)   
                      let id = result.data.id
                      let sort = {sort_id:id,sort_article_name:inputValue}
                      self.sorts.push(sort)
                 }).catch(err=>{
-                    toast(self,err.ChineseMsg)
+                    toast(self,err.cMsg)
                 })
             },
             handleTagInputConfirm(){
@@ -138,12 +138,12 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag} from '../../store/
                 }
                 let self = this
                 addTag(inputValue).then(result=>{
-                     toast(self,result.ChineseMsg)   
+                     toast(self,result.cMsg)   
                      let id = result.data.id
                      let tag = {tag_id:id,tag_name:inputValue}
                      self.tags.push(tag)
                 }).catch(err=>{
-                    toast(self,err.ChineseMsg)
+                    toast(self,err.cMsg)
                 })
             }
         }

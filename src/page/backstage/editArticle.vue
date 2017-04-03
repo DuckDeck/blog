@@ -36,7 +36,8 @@
     </div>
 </template>
 <script>
-import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleById} from '../../store/service'
+import {getTags,getSorts,saveArticle} from '../../store/service'
+import {articleById} from '../../store/manageService'
 //wait to do auto save feature
 
     export default {
@@ -66,52 +67,30 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleB
                 needAutoSave:false,
             }
         },
-        mounted(){
+        async mounted(){
             this.articleId = this.$route.params.id
             let self = this
-            getTags().then(function(result){
-                if(result.code == 0){
-                    self.tags = result.data
-                }
-            })
-            getSorts().then(function(result){
-                if(result.code == 0){
-                    self.articleSort = result.data
-                }
-            })
-            if(this.articleId > 0){
-                
-                articleById(this.articleId).then(res=>{
-                    if(res.code == 0){
-                        let articleDetail = res.data
-                        self.article.title = articleDetail.article_name
-                        self.selectedTags = articleDetail.tags
-                        self.selectedSortId = articleDetail.article_sort__id
-                        self.content = articleDetail.article_content
-                    }
-                }).catch(err=>{
-                    toast(self,err.ChineseMsg)
-                })
-                
-               
+            let res = await articleById(this.articleId)
+            if(res.code == 0){
+                 let articleDetail = res.data
+                 this.article.title = articleDetail.article_name
+                 this.selectedTags = articleDetail.tags
+                 this.selectedSortId = articleDetail.article_sort__id
+                 this.content = articleDetail.article_content
+                 let userId = articleDetail.user_id
+                 res = await getTags(userId)
+                 if(res.code == 0){
+                      this.tags = res.data
+                 }
+                 res = await getSorts(userId)
+                 if(res.code == 0){
+                    this.articleSort = res.data
+                 }
             }
             else{
-                tempArticle().then(res=>{
-                    if(res.code == 0){
-                        self.needAutoSave = true
-                        let articleDetail = res.data
-                        self.article.title = articleDetail.article_name
-                        setStore('tempArticleId',articleDetail.article_id)
-                        self.selectedSortId = articleDetail.article_sort__id
-                        self.content = articleDetail.article_content
-                        console.log(articleDetail.tags)
-                        self.selectedTags = articleDetail.tags
-                        console.log(self.selectedTags)
-                    }
-               }).catch(err=>[
-
-               ])
+                toast(this,res.cMsg)
             }
+            
             setGlobalVue(this)
         },
         methods:{
@@ -149,7 +128,7 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleB
                     this.content = this.content +  "<div style='text-align:center'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></div>"
                 }
                 else{
-                    toast(this,result.ChineseMsg)
+                    toast(this,result.cMsg)
                 }
             },
             save(formName,mode){
@@ -198,7 +177,7 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleB
                             }
                             else{
                                 self.$vux.toast.show({
-                                    text: err.ChineseMsg,
+                                    text: err.cMsg,
                                     position:"bottom",
                                     type:'text'
                                 })
@@ -206,7 +185,7 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleB
                         },function(err){
                             console.log()
                             self.$vux.toast.show({
-                                text: err.ChineseMsg,
+                                text: err.cMsg,
                                 position:"bottom",
                                 type:'text'
                             })
@@ -217,43 +196,9 @@ import {addTag,getTags,getSorts,saveArticle,tempArticle,saveTempArticle,articleB
             cancle(){
                 this.$router.replace('/manage/manageArticle');
             },
-            autoSave(){
-                //自动保存至少要标题
-                let self = this
-                if(self.article.title.length <= 0){
-                    return
-                }
-                if(!self.needAutoSave){
-                    return
-                }
-                let articleId = getStore('tempArticleId')
-                let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
-                console.log(self.selectedTags)
-                let article = {
-                    articalTitle:self.article.title,
-                    articalSort:self.selectedSortId,
-                    articalTags:self.selectedTags.map((s=>{
-                                    return s.tag_id
-                                }))|| [],
-                    articalContent:self.content,
-                    articleStatus:5, //5 表示自动 保存的，只一时间只能存在一个
-                    articleId:self.articleId,
-                    articelImage:self.mainImage,
-                    articleBrief:filterContent,
-                    
-                }
-                if(articleId){
-                    article.articleId = articleId
-                }
-                saveTempArticle(article)
-            },
-            findImg(){
-                //find the main Img. when the main img is null ,remove the main image
-            }
+          
         },
-        beforeDestroy(){
-           this.autoSave()
-        },
+
         computed:{
             editStatus(){
                 return this.isEdit?'发布文章':'预览文章'

@@ -2,7 +2,7 @@ const APIError = require('../rest').APIError;
  const Sort = require('../model/articleSort')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
-
+const Check = require('../tool/check')
 module.exports = {
     'POST /api/sort/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
@@ -22,16 +22,15 @@ module.exports = {
         let sortResult =await Sort.save(m)
         ctx.rest(sortResult)
     },
-    'GET /api/sort/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
+    'GET /api/sort/userid/:userId': async (ctx, next) => {
+       let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
             return
-        }
+        } 
        let id = ctx.params.userId
-       let token = ctx.params.token
        let sortsResult = await Sort.sorts(id)
-        ctx.rest(sortsResult)
+       ctx.rest(sortsResult)
     },
     'DELETE /api/sort/:id/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)

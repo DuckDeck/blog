@@ -52,7 +52,7 @@ import {articleList,deleteAticle,getNewestComment} from '../../store/service'
                 this.tableData = resArticle.data
             }
             else{
-                toast(self,resArticle.ChineseMsg)
+                toast(self,resArticle.cMsg)
             }
          
         },

@@ -111,10 +111,10 @@
                         setStore('userInfo',data.data)
                     }
                     else{
-                        toast(self,data.ChineseMsg)
+                        toast(self,data.cMsg)
                     }
                 },function(err){
-                   toast(self,err.ChineseMsg)
+                   toast(self,err.cMsg)
                 })
             }
         },

@@ -63,7 +63,7 @@ import userComment from './com/userComment.vue'
             this.article = res.data
         }
         else{
-            toast(this,res.ChineseMsg)
+            toast(this,res.cMsg)
         }
     },
     methods:{
@@ -87,7 +87,7 @@ import userComment from './com/userComment.vue'
                commentTargetId:this.article.article_id
            }
            let res = await submitComment(comment)
-           toast(this,res.ChineseMsg)
+           toast(this,res.cMsg)
            if(res.code == 0){
                 let id = res.data.id  
                res = await getComment(id)

@@ -38,10 +38,10 @@ import {getStoredFiles}  from '../../store/service'
                     this.files = res.data
                 }
                 else{
-                     toast(this,err.ChineseMsg)
+                     toast(this,err.cMsg)
                 }
            }).catch(err=>{
-               toast(this,err.ChineseMsg)
+               toast(this,err.cMsg)
            })
         
         },

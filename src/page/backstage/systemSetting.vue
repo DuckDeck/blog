@@ -109,10 +109,10 @@
                     self.systemInfo = res.data
                 }
                 else{
-                    toast(self,res.ChineseMsg)
+                    toast(self,res.cMsg)
                 }
             }).catch(err=>{
-                toast(self,err.ChineseMsg)
+                toast(self,err.cMsg)
             })
             getUserLinks().then(res=>{
                 if(res.code == 0){
@@ -133,10 +133,10 @@
                     }
                 }
                 else{
-                    toast(self,res.ChineseMsg)
+                    toast(self,res.cMsg)
                 }
             }).catch(err=>{
-                toast(self,err.ChineseMsg)
+                toast(self,err.cMsg)
             })
         },
         methods:{
@@ -150,9 +150,9 @@
                             blog_keyword:self.systemInfo.blog_keyword
                         }
                        uploadSysytemInfo(system).then(res=>{
-                          toast(self,res.ChineseMsg)               
+                          toast(self,res.cMsg)               
                        }).catch(err=>{
-                           toast(self,err.ChineseMsg)
+                           toast(self,err.cMsg)
                        })
                     }
                 });
@@ -181,9 +181,9 @@
                             link_id:self.myLinkId.githubId
                         }]
                        updateUserLinks(links).then(res=>{
-                          toast(self,res.ChineseMsg)               
+                          toast(self,res.cMsg)               
                        }).catch(err=>{
-                           toast(self,err.ChineseMsg)
+                           toast(self,err.cMsg)
                        })
                     }
                 });

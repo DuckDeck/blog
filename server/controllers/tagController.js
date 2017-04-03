@@ -2,7 +2,7 @@ const APIError = require('../rest').APIError;
  const Tag = require('../model/tag')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
-
+const Check = require('../tool/check')
 module.exports = {
     'POST /api/tag/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
@@ -22,14 +22,13 @@ module.exports = {
         ctx.rest(saveTagResult) 
      
     },
-    'GET /api/tag/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
+    'GET /api/tag/userid/:userId': async (ctx, next) => {
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
             return
         }
        let id = ctx.params.userId
-       let token = ctx.params.token
        let tagResult =await Tag.tags(id)
        ctx.rest(tagResult)  
     },

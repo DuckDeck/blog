@@ -99,10 +99,10 @@ import blogSide from './com/blogSide.vue'
                 this.articles = res.data.artilces
             }
             else{
-                toast(self,err.ChineseMsg)
+                toast(self,err.cMsg)
             }
         }).catch(err=>{
-            toast(self,err.ChineseMsg)
+            toast(self,err.cMsg)
         })
     },
     components:{
@@ -130,7 +130,7 @@ import blogSide from './com/blogSide.vue'
                console.log(res.data)
            }
            else{
-               toast(this,res.ChineseMsg)
+               toast(this,res.cMsg)
            }
         },
         checkArticle(article){

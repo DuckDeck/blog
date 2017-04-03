@@ -92,7 +92,7 @@ import {submitComment} from '../../../store/service'
            }
            
            let res = await submitComment(comment)
-           toast(this,res.ChineseMsg)
+           toast(this,res.cMsg)
            if(res.code == 0){
                 this.$emit('refreshComment',this.comment.comment_id)
                 this.isShowWriteComment = false

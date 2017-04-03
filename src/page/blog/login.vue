@@ -57,7 +57,7 @@ import {login} from '../../store/service'
                             }
                             else{
                                 self.$vux.toast.show({
-                                    text: err.ChineseMsg,
+                                    text: err.cMsg,
                                     position:"bottom",
                                     type:'text'
                             })
@@ -65,7 +65,7 @@ import {login} from '../../store/service'
                         },function(err){
                             console.log()
                             self.$vux.toast.show({
-                                text: err.ChineseMsg,
+                                text: err.cMsg,
                                 position:"bottom",
                                 type:'text'
                             })

@@ -118,10 +118,10 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                     })
                 }
                 else{
-                    toast(self,res.ChineseMsg)
+                    toast(self,res.cMsg)
                 }
             }).catch(err=>{
-                toast(self,err.ChineseMsg)
+                toast(self,err.cMsg)
             })
         },
         methods: {
@@ -141,7 +141,7 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                 }
                 console.log(this.deleteLink)
                 let result = await deleteLink(this.deleteLink.link_id)
-                toast(this,result.ChineseMsg)
+                toast(this,result.cMsg)
                 if(result.code == 0){
                     let index = this.tableData.indexOf(this.deleteLink)
                     if(index >=0){
@@ -160,7 +160,7 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                        self.editLink.show_order = sort
                        console.log(self.editLink)
                        updateFriendLinks(self.editLink).then(res=>{
-                           toast(self,res.ChineseMsg)
+                           toast(self,res.cMsg)
                             if(res.code == 0){
                                 let newLink = clone(self.editLink)
                                 if(newLink.link_id == 0){
@@ -183,7 +183,7 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                                 }
                             }
                        }).catch(err=>{
-                           toast(self,err.ChineseMsg)
+                           toast(self,err.cMsg)
                        })
                    
                        

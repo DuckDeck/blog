@@ -125,7 +125,7 @@ import {allArticle,releaseArticle} from  '../../store/manageService'
                     return
                 }
                 let result = await deleteAticle(this.deleteArticle)
-                toast(this,result.ChineseMsg)
+                toast(this,result.cMsg)
                 if(result.code == 0){
                     let index = this.tableData.indexOf(this.deleteArticle)
                     if(index >=0){
@@ -146,7 +146,7 @@ import {allArticle,releaseArticle} from  '../../store/manageService'
                     this.loadData(this.pageIndex - 1,10)
                 }
                 else{
-                    toast(this,res.ChineseMsg)
+                    toast(this,res.cMsg)
                 }
             },
              async handleCurrentChange(val){

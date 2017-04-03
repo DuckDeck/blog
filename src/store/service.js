@@ -30,8 +30,8 @@ export const getUserInfo = function(){
     return setpromiseGet(url)
 }
 
-export const getTags = function(){
-    const url = HostName +  'tag/' + userId + '/' + createToken()
+export const getTags = function(user_id){
+    const url = HostName +  'tag/userid/' + user_id 
     return setpromiseGet(url)
 }
 
@@ -45,8 +45,8 @@ export const deleteTag = function(tag){
     return setpromiseDelete(url)
 }
 
-export const getSorts = function(){
-    const url = HostName + 'sort/' + userId + '/' + createToken()
+export const getSorts = function(user_id){
+    const url = HostName + 'sort/userid/' + user_id 
     return setpromiseGet(url)
 }
 

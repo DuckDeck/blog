@@ -1,8 +1,8 @@
 class Result{
-    constructor(code,msg,ChineseMsg,data){
+    constructor(code,msg,cMsg,data){
         this.code = code
         this.msg = msg
-        this.cMsg = ChineseMsg
+        this.cMsg = cMsg
         this.data = data
     }
 
