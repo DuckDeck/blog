@@ -56,6 +56,9 @@
              formatData(time){
                return formatTime(new Date(time))
              },
+             checkComment(com){
+                 this.$emit('deleteComment',com)
+             }
         },
         computed:{
             subCommentCount(){

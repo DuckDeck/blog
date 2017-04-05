@@ -6,7 +6,7 @@
         </div>
 
         <div>
-              <comment v-for="comment in comments" :comment = "comment"></comment>
+              <comment v-for="comment in comments" :comment = "comment" :editMode="true" @deleteComment="deleteComment"></comment>
        </div>
           <el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>{{deleteMessage}}</span>
@@ -46,7 +46,7 @@ import comment from './com/comment.vue'
              formatData(time){
                return formatTime(new Date(time))
              },
-             checkComment(comment){
+             deleteComment(comment){
                 this.dialogVisible = true
                 this.currentDeleteComment = comment
                 this.deleteMessage = '你要删除 ' + comment.comment_content +' 评论吗'
