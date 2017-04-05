@@ -1,7 +1,7 @@
 <template>
     <div class="table">
          <div class="featureTitle">
-          管理文章
+          管理留言
         </div>
 
         <el-table :data="tableData" border style="width: 100%">
@@ -14,7 +14,7 @@
             </el-table-column>
             <el-table-column prop="comment_count"  width="100" label="评论个数" >
             </el-table-column>
-             <el-table-column prop="newestComment"  label="最新评论">
+            <el-table-column prop="newComment.comment_content"  label="最新评论">
             </el-table-column>
             <el-table-column label="操作" width="100">
                 <template scope="scope">
@@ -24,10 +24,13 @@
             </el-table-column>
         </el-table>
         <div class="pagination">
-            <el-pagination
-                    layout="prev, pager, next"
-                    :total="tableData.length">
-            </el-pagination>
+             <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="pageIndex"
+                :page-size="10"
+                layout="total, prev, pager, next"
+                :total="count">
+                </el-pagination>
         </div>
 
      
@@ -36,27 +39,32 @@
 </template>
 
 <script>
-import {articleList,deleteAticle,getNewestComment} from '../../store/service'
+import {articlesNewComment} from '../../store/manageService'
     export default {
         data() {
             return {
                 tableData: [],
-                dialogVisible:false,
-                deleteMessage:'',
+                count:0,
+                selectedData:[],
+                pageIndex:1
             }
         },
          async mounted(){
-            let self = this
-            let resArticle = await  articleList()
-            if(resArticle.code == 0){
-                this.tableData = resArticle.data
-            }
-            else{
-                toast(self,resArticle.cMsg)
-            }
+            this.loadData()
          
         },
         methods: {
+            async loadData(index,size){
+                let self = this
+                let resArticle = await  articlesNewComment(index,size)
+                if(resArticle.code == 0){
+                    this.tableData = resArticle.data
+                    self.count = resArticle.count
+                }
+                else{
+                    toast(self,resArticle.cMsg)
+                }
+            },
            formatter(row, column) {
                 if(column.label == "日期"){
                     return formatTime(new Date(row.article_create_time))
@@ -73,6 +81,10 @@ import {articleList,deleteAticle,getNewestComment} from '../../store/service'
             checkComment(article){
                 setStore('currentCommentArticleTitle',article.article_name)
                 this.$router.push('/manage/manageCommentInfo/' + article.article_id);
+            },
+             async handleCurrentChange(val){
+                this.pageIndex = val
+                this.loadData(this.pageIndex - 1,10)   
             }
         }
     }

@@ -5,35 +5,8 @@
             <span style="color: yellowgreen">{{articleName}}</span> 的评论
         </div>
 
-         <div class="commentUserInfo">
-           <img :src="comment.userInfo.user_image_url" alt="">
-            <div style="display: inline-block;vertical-align: middle">
-                <div class="userNameDiv">
-                    {{comment.userInfo.user_name}}
-                </div>
-                <div class="userCommentTimeDiv">
-                    {{formatData(comment.comment_time)}}
-                </div>
-            </div>
-            <el-button class="deleteMainComment" size="small" @click = "checkComment(comment)">删除</el-button>
-       </div>
-       <div class="commentContent">
-           {{comment.comment_content}}
-       </div>
- 
-
-       <div class="subComments" v-show = "subCommentCount > 0">
-           <div v-for = "subCom in comment.sub_comments">
-               <div>
-                   <span style="color: darkorange">{{subCom.userInfo.user_name}}</span> 回复 
-                   <span style="color: dodgerblue">@{{subCom.targetUserInfo.user_name}} </span>: {{subCom.comment_content}}
-               </div> 
-               <div>
-                   <span class="subCommentTime">{{formatData(subCom.comment_time)}}</span>
-                   <a class="subCommentReplay" @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i>回复</a>
-               </div>
-
-           </div>
+        <div>
+              <comment v-for="comment in comments" :comment = "comment"></comment>
        </div>
           <el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>{{deleteMessage}}</span>
@@ -45,12 +18,13 @@
     </div>
 </template>
 <script>
-import {getComment} from '../../store/service'
+import {commentsByArticleId} from '../../store/service'
+import comment from './com/comment.vue'
     export default {
         data() {
             return {
                 articleName:'',
-                comment:{},
+                comments:[],
                 dialogVisible:false,
                 currentDeleteComment:{},
                 deleteMessage:''
@@ -61,9 +35,9 @@ import {getComment} from '../../store/service'
           let id = this.$route.params.articleId
           this.articleName = getStore('currentCommentArticleTitle')
           let that = this
-           getComment(id).then(resCom=>{
+           commentsByArticleId(id).then(resCom=>{
                if(resCom.code == 0){
-                   that.comment = resCom.data
+                   that.comments = resCom.data
                }
            })
          
@@ -82,10 +56,8 @@ import {getComment} from '../../store/service'
                 //delete comment is unavaileble
              }
         },
-        computed:{
-            subCommentCount(){
-              return this.comment.sub_comments.length == 0 ? '' : this.comment.sub_comments.length
-            },
+        components:{
+            comment
         }
     }
 </script>

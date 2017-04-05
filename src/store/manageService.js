@@ -43,7 +43,10 @@ export const articleById = (id)=>{
     return setpromiseGet(url)
 }
 
-export const commentsByArticleId = (id)=>{
-    let url = HostName +   'manage/articleComment/'+ id + '/' + manageId + '/' + createMtoken() 
+
+
+
+export const articlesNewComment = (index = 0,size = 10)=>{
+     let url = HostName +   'manage/articleslastcomment/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size
     return setpromiseGet(url)
 }

@@ -159,3 +159,8 @@ export const getStoredFiles = ()=>{
     return setpromiseGet(url)
 }
 
+
+export const commentsByArticleId = (id)=>{
+    let url = HostName +   'articleComment/'+ id 
+    return setpromiseGet(url)
+}

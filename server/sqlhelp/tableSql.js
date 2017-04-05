@@ -273,8 +273,30 @@ select
  a.user_freeze ,
  a.user_auth ,b.*
  from user a join user_info b on a.user_id = b.user_id
-   `
+   `,
+    createTagMapViewL:`create view article_tag_map_view as  select tag.* , 
+map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id`,
+    createUserDetailView:`CREATE VIEW user_detail AS
+select 
+ a.user_group_id ,
+ a.user_name ,
+ a.user_password ,
+ a.user_token ,
+ a.user_isSendEmail ,
+ a.user_isValidate ,
+ a.user_register_time ,
+ a.user_register_ip ,
+ a.user_login_times ,
+ a.user_last_login_ip ,
+ a.user_lock ,
+ a.user_freeze ,
+ a.user_auth ,b.*
+ from user a join user_info b on a.user_id = b.user_id`
+
 }
+
+
+
 
 module.exports = sqls
 

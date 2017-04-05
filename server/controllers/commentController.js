@@ -7,12 +7,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
 
-    'GET /api/manage/articleComment/:articleId/:mId/:token': async (ctx, next) => {
-        let tokenResult = await Check.checkManageToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
+    'GET /api/articleComment/:articleId': async (ctx, next) => {
         let paraCheckResult = Check.checkNum(ctx.params,'articleId')
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
@@ -83,6 +78,68 @@ module.exports = {
             return
         }
         
+
+    },
+
+    'GET /api/manage/articleslastcomment/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        console.log(index)
+        console.log(size)
+        let sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
+                    user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
+                    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
+                    as article_sort_name ,(select user_name from user where user.user_id = article.user_id) as user_name, 
+                    (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                    article.article_id) as comment_count from article limit ` + size * index + `,` + size
+        let articleResult = await DB.exec(sql)
+        if(articleResult.code != 0){
+            ctx.rest(articleResult)
+            return
+        }
+        let articles = articleResult.data
+        let article_ids = articles.map((s)=>{
+            return s.article_id
+        })
+        if(article_ids==undefined){
+            article_ids = [0]
+        }
+        console.log(article_ids)
+        let sqlLastComments = ` select comment_id,comment_target_user_id,comment_target_id,
+                                comment_content,commenter_user_id,comment_time from user_comment where comment_id in 
+                                (select max(comment_id) from user_comment group by comment_target_id) and comment_target_id in ` + `(` + article_ids.join(',') + `)`
+
+        let resLastComments = await DB.exec(sqlLastComments)
+        if(resLastComments.code != 0){
+            ctx.rest(resLastComments)
+            return
+        }
+        for(let s of articles){
+            let mainCom = resLastComments.data.find(k=>{
+                return k.comment_target_id == s.article_id
+            })
+            if(mainCom){
+                s.newComment = mainCom
+            }
+            else{
+                s.newComment = {}
+            }
+        }
+        let sqlArticleCount = `select count(article_id) as articleCount from article`
+        let actArticleCount = await DB.exec(sqlArticleCount)
+        let result = Result.create(0,articles)
+        result.count = actArticleCount.data[0].articleCount
+        ctx.rest(result)
 
     },
 

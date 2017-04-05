@@ -69,6 +69,13 @@ const actions = {
 
         
         pool.query(sqls.createSiteManagerTb)
+
+
+
+        //create createview
+
+        pool.query(sqls.createTagMapViewL)
+        pool.query(sqls.createUserDetailView)
         //all 21 
     },
 }

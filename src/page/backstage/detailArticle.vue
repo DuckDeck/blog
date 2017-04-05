@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import {articleById,userInfoById,commentsByArticleId} from '../../store/manageService'
+import {commentsByArticleId} from '../../store/service'
+import {articleById,userInfoById} from '../../store/manageService'
 import userInfoShow from './com/userInfoShow.vue'
 import comment from './com/comment.vue'
     export default {
