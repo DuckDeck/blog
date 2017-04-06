@@ -7,7 +7,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     //管理用户
-    'GET /api/managelist/:mId/:token': async (ctx, next) => {
+    'GET /api/manage/list/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -18,7 +18,7 @@ module.exports = {
        ctx.rest(res)
     },
 
-    'GET /api/manageinfo/:manageId/:mId/:token': async (ctx, next) => {
+    'GET /api/manage/info/:manageId/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -34,7 +34,7 @@ module.exports = {
        ctx.rest(Tool.convertResultData(res))
     },
 
-    'Post /api/manageupdate/:mId/:token': async (ctx, next) => {
+    'Post /api/manage/update/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -53,7 +53,7 @@ module.exports = {
     },
 
  
-    'POST /api/managehead/:mId/:token': async (ctx, next) => {
+    'POST /api/manage/head/:mId/:token': async (ctx, next) => {
        let tokenResult = await Check.checkManageToken(ctx)
        if(tokenResult.code != 0){
             ctx.rest(tokenResult)

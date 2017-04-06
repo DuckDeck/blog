@@ -15,7 +15,7 @@
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.m_username}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="m_last_login_time" label="上一次登录日期" sortable width="160" :formatter="formatter">
+            <el-table-column prop="m_last_login_time" label="上一次登录日期" sortable width="200" :formatter="formatter">
             </el-table-column>
             <el-table-column prop="m_login_times" label="登录次数"  width="140">
             </el-table-column>
@@ -54,8 +54,8 @@ import {managerList} from '../../store/manageService'
             
             
             formatter(row, column) {
-                if(column.label == "注册日期"){
-                    return formatTime(new Date(row.article_create_time))
+                if(column.label == "上一次登录日期"){
+                    return formatTime(new Date(row.m_last_login_time))
                 }
             },
             handleSelectionChange(val){

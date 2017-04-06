@@ -4,6 +4,7 @@ const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const path = require('path')
 const fs = require('fs')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
     'POST /api/manage/login': async (ctx, next) => {
        var
@@ -40,6 +41,9 @@ module.exports = {
         let token = Tool.md5(Math.random().toString())
         await BlogManager.saveToken(token,manage.m_id)
         manage.m_token = token
+        let time = Date.parse(new Date())
+        let sql = 'update blog_manager set m_last_login_time = ? ,m_login_times = m_login_times + 1  where m_id = ?'
+        await DB.exec(sql,[time,manage.m_id])
         ctx.rest(Result.create(0,manage))
     },
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {

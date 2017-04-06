@@ -10,7 +10,7 @@
                 <div class="basicInfoEditManageClass">
                          <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
-                                <img v-if="manageInfo.m_head.length > 10" :src="userInfo.user_image_url" class="avatar"> 
+                                <img v-if="manageInfo.m_head.length > 10" :src="manageInfo.m_head" class="avatar"> 
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
                 </div>
             </div>
@@ -20,25 +20,25 @@
                      <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
                 </div>
                 <div class="basicInfoEditManageClass">
-                     <el-form> 
-                          <el-form-item >                 
+                     <el-form :model="pass" :rules="rules" ref="pass"> 
+                          <el-form-item prop="old" >                 
                              <span class="infoTitleClass">旧密码</span> 
                              <el-input
-                              type = 'password'
+                              type = 'password' v-model="pass.old" 
                                 placeholder="请输入原密码">
                                 </el-input>
                             </el-form-item>
-                              <el-form-item >     
+                              <el-form-item prop="new"  >     
                             <span class="infoTitleClass">新密码</span>
-                              <el-input
-                             type = 'password'
+                              <el-input 
+                             type = 'password' v-model="pass.new" 
                                 placeholder="请输入新密码">
                                 </el-input>
                             </el-form-item>
-                              <el-form-item >     
+                              <el-form-item prop="again"  >     
                             <span class="infoTitleClass">确认</span>
                               <el-input
-                             type = 'password'
+                             type = 'password' v-model="pass.again" 
                                 placeholder="请输入新密码">
                                 </el-input>
                             </el-form-item>
@@ -57,6 +57,22 @@
         data: function(){
             return {
                 manageInfo:{},
+                pass:{
+                    old:'',
+                    new:'',
+                    again:''
+                },
+                rules:{
+                    old: [
+                        { required: true, message: '原密码不能为空', trigger: 'blur' }
+                    ],
+                    new: [
+                        { required: true, message: '请输入密码', trigger: 'blur' }
+                    ],
+                    again: [
+                        { required: true, message: '请确认新密码', trigger: 'blur' }
+                    ]
+                }
             }
         },
         async mounted(){
@@ -91,7 +107,7 @@
         },
         computed:{
             uploadHeadUrl(){
-                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+                return 'http://localhost:3000/api/manage/head/' + manageId + '/' + createMtoken()
             }
         }
         

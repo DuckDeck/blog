@@ -70,13 +70,15 @@ export const uploadSysytemInfo = function(system){
 }
 
 export const managerList = function(){
-    const url = HostName +  'managelist/' + manageId + '/' + createMtoken()
+    const url = HostName +  'manage/list/' + manageId + '/' + createMtoken()
     return setpromiseGet(url)
 }
 
 export const managerInfoById = function(id){
-    const url = HostName +  'manageinfo/' + id + '/' + manageId + '/' + createMtoken()
+    const url = HostName +  'manage/info/' + id + '/' + manageId + '/' + createMtoken()
     return setpromiseGet(url)
 }
+
+
 
 
