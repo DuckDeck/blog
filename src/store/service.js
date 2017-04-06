@@ -105,17 +105,9 @@ export const indexArticle = function(){
 }
 
 
-export const getSysytemInfo = function(){
-    const url = HostName +  'system/' + userId + '/' + createToken()
-    return setpromiseGet(url)
-}
-export const uploadSysytemInfo = function(system){
-    const url = HostName +  'system/' + userId + '/' + createToken()
-    return setpromisePost(url,system)
-}
 
-export const getUserLinks = function(){
-    const url = HostName +  'link/' + userId + '/' + createToken()
+export const getUserLinks = function(id){
+    const url = HostName +  'link/' + id
     return setpromiseGet(url)
 }
 
@@ -151,13 +143,6 @@ export const getComment =(commentId)=>{
 
 
 
-export const getStoredFiles = ()=>{
-    let url = HostName +  'file' 
-    if(getStore('token')){
-        url = HostName +  'file/'+ userId + '/' + createToken()
-    }
-    return setpromiseGet(url)
-}
 
 
 export const commentsByArticleId = (id)=>{

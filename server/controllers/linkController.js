@@ -1,8 +1,9 @@
 const APIError = require('../rest').APIError;
- const Link = require('../model/link')
+const Link = require('../model/link')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
-
+const Check = require('../tool/check')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
     'POST /api/link/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
@@ -44,14 +45,8 @@ module.exports = {
         
      
     },
-    'GET /api/link/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
+    'GET /api/link/:userId/': async (ctx, next) => {
        let id = ctx.params.userId
-       let token = ctx.params.token
        let result =await Link.userLinks(id)
        ctx.rest(result)  
     },

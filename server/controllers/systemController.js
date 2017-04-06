@@ -1,11 +1,11 @@
 const APIError = require('../rest').APIError;
- const System = require('../model/system')
+const System = require('../model/system')
 const Result = require('../model/result.js')
+const Check = require('../tool/check')
 const Tool = require('../tool/tool')
-
 module.exports = {
-    'POST /api/system/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+    'POST /api/system/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -30,15 +30,15 @@ module.exports = {
         ctx.rest(result) 
      
     },
-    'GET /api/system/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
+    'GET /api/manage/system/:mId/:token': async (ctx, next) => {
+       let tokenResult = await Check.checkManageToken(ctx)
+       if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
-        }
-       let id = ctx.params.userId
+       }
+       let id = ctx.params.mId
        let token = ctx.params.token
-       let result =await System.systemInfo()
+       let result = await System.systemInfo()
        
        ctx.rest(Tool.convertResultData(result))  
     },

@@ -119,6 +119,30 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <el-tab-pane label="友情链接" name="link">
+                      <div class="table">
+                        <el-table :data="tableData" border style="width: 100%">
+                            <el-table-column prop="link_name" label="链接名称" sortable width="160" >
+                            </el-table-column>
+                            <el-table-column  label="链接地址" >
+                                <template scope="scope">
+                                    <a class="articleTitleClass" @click="gotoLink(scope.row)" >{{scope.row.link_url}}</a>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
+                            </el-table-column>
+                            <el-table-column prop="show_order"  label="链接排序,默认为0" >
+                            </el-table-column>
+                        </el-table>
+                        <div class="pagination">
+                            <el-pagination
+                                    layout="prev, pager, next"
+                                    :total="tableData.length">
+                            </el-pagination>
+                        </div>
+                        <div style="clear: both">  </div>
+                    </div>
+                </el-tab-pane>
         </el-tabs>
 
        
@@ -126,7 +150,7 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo} from '../../store/service'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
 import {userInfoById} from '../../store/manageService'
 
     export default {
@@ -149,6 +173,7 @@ import {userInfoById} from '../../store/manageService'
                 rules: {
                     
                 },
+                tableData: [],
             }
         },
         async mounted(){
@@ -168,6 +193,11 @@ import {userInfoById} from '../../store/manageService'
             getUserInfo(id).then(res=>{
                 if(res.code == 0){
                     self.userInfo = res.data
+                }
+            })
+            getUserLinks(id).then(res=>{
+                if(res.code == 0){
+                    self.tableData = res.data
                 }
             })
         },

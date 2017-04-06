@@ -7,7 +7,7 @@
         <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
             <el-table-column width="100"   type="selection" >
                 <template scope="scope">
-                   <el-checkbox v-model="scope.row.isSelect" @click="releaseArticle" ></el-checkbox>
+                   <el-checkbox v-model="scope.row.isSelect" ></el-checkbox>
                 </template>
             </el-table-column>
             <el-table-column  label="用户名" >
@@ -32,14 +32,6 @@
                     :total="tableData.length">
             </el-pagination>
         </div>
-
-        <el-dialog title="提示" v-model="dialogVisible" size="tiny">
-            <span>{{deleteMessage}}</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteArticleConfirm">确 定</el-button>
-            </span>
-        </el-dialog>
 
     </div>
 </template>
@@ -70,9 +62,15 @@ import {allUser} from '../../store/manageService'
             editUserInfo(userInfo){
                 this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
             },
-            handleSelectionChang(val){
+            handleSelectionChange(val){
 
-            }
+            },
+            formatter(row, column) {
+                if(column.label == "注册日期"){
+                    return formatTime(new Date(row.article_create_time))
+                }
+               
+            },
         }
       
     }

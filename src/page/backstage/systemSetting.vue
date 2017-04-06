@@ -22,7 +22,7 @@
                   </el-form>
                 </div>
             </div>
-             <div class="basicInfoManageClass" >
+             <!--<div class="basicInfoManageClass" >
                 <div class="basicInfoManageTitleClass" style="background: coral">
                     个性化设置 <el-button class="saveInfoButton" type="primary" @click="saveUserLinkInfo()">保存</el-button>
                 </div>
@@ -39,14 +39,14 @@
                     </el-form-item>
                     </el-form>
                 </div>
-            </div>
+            </div>-->
         </div>
 
     </div>
 </template>
 
 <script>
-    import {getSysytemInfo,uploadSysytemInfo,getUserLinks,updateUserLinks} from '../../store/service'
+    import {getSysytemInfo,uploadSysytemInfo} from '../../store/manageService'
     export default {
         data: function(){
             var validateUrl = (rule, value, callback) => {
@@ -114,30 +114,30 @@
             }).catch(err=>{
                 toast(self,err.cMsg)
             })
-            getUserLinks().then(res=>{
-                if(res.code == 0){
-                    for(var link of res.data){
-                        if(link.link_name == 'weibo'){
-                            self.myLink.weibo = link.link_url
-                            self.myLinkId.weiboId = link.link_id
-                        }
-                        if(link.link_name == 'github'){
-                            self.myLink.github = link.link_url
-                            self.myLinkId.githubId = link.link_id
+            // getUserLinks().then(res=>{
+            //     if(res.code == 0){
+            //         for(var link of res.data){
+            //             if(link.link_name == 'weibo'){
+            //                 self.myLink.weibo = link.link_url
+            //                 self.myLinkId.weiboId = link.link_id
+            //             }
+            //             if(link.link_name == 'github'){
+            //                 self.myLink.github = link.link_url
+            //                 self.myLinkId.githubId = link.link_id
                            
-                        }
-                        if(link.link_name == 'zhihu'){
-                            self.myLink.zhihu = link.link_url
-                            self.myLinkId.zhihuId = link.link_id
-                        }
-                    }
-                }
-                else{
-                    toast(self,res.cMsg)
-                }
-            }).catch(err=>{
-                toast(self,err.cMsg)
-            })
+            //             }
+            //             if(link.link_name == 'zhihu'){
+            //                 self.myLink.zhihu = link.link_url
+            //                 self.myLinkId.zhihuId = link.link_id
+            //             }
+            //         }
+            //     }
+            //     else{
+            //         toast(self,res.cMsg)
+            //     }
+            // }).catch(err=>{
+            //     toast(self,err.cMsg)
+            // })
         },
         methods:{
           saveSystemInfo(){

@@ -24,15 +24,14 @@
 </template>
 
 <script>
-import {getStoredFiles}  from '../../store/service'
+import {getStoredFiles}  from '../../store/manageService'
     export default {
         data: function(){
             return {
                 files:[]
             }
         },
-        mounted(){
-            
+        mounted(){          
            getStoredFiles().then(res=>{
                 if(res.code == 0){
                     this.files = res.data

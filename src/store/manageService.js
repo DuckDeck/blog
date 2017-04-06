@@ -50,3 +50,21 @@ export const articlesNewComment = (index = 0,size = 10)=>{
      let url = HostName +   'manage/articleslastcomment/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size
     return setpromiseGet(url)
 }
+
+
+
+export const getStoredFiles = ()=>{
+    let   url = HostName +  'manage/file/' +  manageId + '/' + createMtoken() 
+    return setpromiseGet(url)
+}
+
+
+
+export const getSysytemInfo = function(){
+    const url = HostName +  'manage/system/' + manageId + '/' + createMtoken()
+    return setpromiseGet(url)
+}
+export const uploadSysytemInfo = function(system){
+    const url = HostName +  'manage/system/' + manageId + '/' + createMtoken()
+    return setpromisePost(url,system)
+}
