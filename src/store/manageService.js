@@ -68,3 +68,10 @@ export const uploadSysytemInfo = function(system){
     const url = HostName +  'manage/system/' + manageId + '/' + createMtoken()
     return setpromisePost(url,system)
 }
+
+export const managerList = function(){
+    const url = HostName +  'managelist/' + manageId + '/' + createMtoken()
+    return setpromisePost(url,system)
+}
+
+

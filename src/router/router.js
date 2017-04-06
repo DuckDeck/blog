@@ -24,17 +24,15 @@ const manageArticle =  r => require.ensure([], () => r(require('../page/backstag
 
 const manageArticleDetail =  r => require.ensure([], () => r(require('../page/backstage/detailArticle')), 'manageArticleDetail')
 
-const manageTag =  r => require.ensure([], () => r(require('../page/backstage/manageTag')), 'manageTag')
 
 
 const manageComment =  r => require.ensure([], () => r(require('../page/backstage/manageComment')), 'manageComment')
 const manageCommentInfo =  r => require.ensure([], () => r(require('../page/backstage/manageCommentInfo')), 'manageCommentInfo')
 const manageFile =  r => require.ensure([], () => r(require('../page/backstage/manageFile')), 'manageFile')
-const manageLink =  r => require.ensure([], () => r(require('../page/backstage/manageLink')), 'manageLink')
-const userSetting =  r => require.ensure([], () => r(require('../page/backstage/userSetting')), 'userSetting')
+
 const systemSetting =  r => require.ensure([], () => r(require('../page/backstage/systemSetting')), 'systemSetting')
 
-
+const managerSetting =  r => require.ensure([], () => r(require('../page/backstage/managerSetting')), 'managerSetting')
 export default [
     {
         path: '/',
@@ -108,21 +106,13 @@ export default [
                 component:manageFile
             },
             {
-                path:'tag',
-                component:manageTag
-            },
-            {
-                path:'userSetting',
-                component:userSetting
-            },
-            {
                 path:'systemSetting',
                 component:systemSetting
             },
             {
-                path:'manageLink',
-                component:manageLink
-            }
+                path:'managerSetting',
+                component:managerSetting
+            },
         ]
     },
 

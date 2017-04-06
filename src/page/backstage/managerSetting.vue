@@ -1,231 +1,105 @@
 <template>
-    <div>
+    <div class="table">
          <div class="featureTitle">
-          个人信息管理
+          管理用户
         </div>
-        <div class="userInfoManageClass"> 
-            <div class="basicInfoManageClass" >
-                <div class="basicInfoManageTitleClass">
-                    基本信息  <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
-                </div>
-                <div class="basicInfoEditManageClass">
-                    <el-form :model="userInfo" :rules="rules" ref="userInfo" label-width="0px" >
-                    <el-form-item >
-                       <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="true"></el-input>
-                    </el-form-item>
-                     <el-form-item prop="user_real_name" >
-                        <span class="infoTitleClass">用户姓名</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">邮箱</span>  <el-input v-model="userInfo.user_email" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
-                    </el-form-item>
-                     <el-form-item >
-                        <span class="infoTitleClass">生日</span>  <el-date-picker
-                            v-model="userInfo.user_birthday"
-                            type="date"
-                            placeholder="选择日期"  >
-                            </el-date-picker>
-                    </el-form-item>
-                  </el-form>
-                </div>
-            </div>
-             <div class="basicInfoManageClass" >
-                <div class="headinfoManageTitleClass">   用户头像  </div>
-                <div class="basicInfoEditManageClass">
-                         <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
-                                :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
-                                <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
-                </div>
-            </div>
-            <div class="basicInfoManageClass" >
-                <div class="selfIntroManageTitleClass">
-                    修改密码
-                     <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
-                </div>
-                <div class="basicInfoEditManageClass">
-                     <el-form> 
-                          <el-form-item >                 
-                             <span class="infoTitleClass">自我描述</span> 
-                             <el-input
-                              
-                                :rows="2" v-model="userInfo.user_description"
-                                placeholder="请输入内容">
-                                </el-input>
-                            </el-form-item>
-                              <el-form-item >     
-                            <span class="infoTitleClass">个人语录</span>
-                              <el-input
-                                 v-model = "userInfo.user_says"
-                                :rows="2"
-                                placeholder="请输入内容">
-                                </el-input>
-                            </el-form-item>
-                     </el-form>   
-                </div>
-            </div>
-
+        
+        <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
+            <el-table-column width="100"   type="selection" >
+                <template scope="scope">
+                   <el-checkbox v-model="scope.row.isSelect" ></el-checkbox>
+                </template>
+            </el-table-column>
+            <el-table-column  label="管理员用户名" >
+                <template scope="scope">
+                    <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.m_username}}</a>
+                </template>
+            </el-table-column>
+            <el-table-column prop="m_last_login_time" label="上一次登录日期" sortable width="160" :formatter="formatter">
+            </el-table-column>
+            <el-table-column prop="m_login_times" label="登录次数"  width="140">
+            </el-table-column>
+            <el-table-column label="操作" width="150">
+                <template scope="scope">
+                    <el-button size="small" @click = "editUserInfo(scope.row)">管理</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="pagination">
+            <el-pagination
+                    layout="prev, pager, next"
+                    :total="tableData.length">
+            </el-pagination>
         </div>
 
     </div>
 </template>
 
 <script>
-    import {getUserInfo} from '../../store/service'
+import {managerList} from '../../store/manageService'
     export default {
-        data: function(){
+        data() {
             return {
-                manageInfo:{},
-
-
+                tableData: [],
+                dialogVisible:false,
+                deleteMessage:'',
             }
         },
         mounted(){
-            
-            
-            let self = this
-                getUserInfo().then(function(data){
-                if(data.code == 0){
-                    self.userInfo = data.data
-
-                    setStore('userInfo',data.data)
-                }
-                else{
-                    toast(self,data.cMsg)
-                }
-            },function(err){
-                toast(self,err.cMsg)
-            })
-            
+            this.loadData()
         },
         methods:{
-            handleAvatarScucess(res, file) {
-                this.userInfo.user_image_url = res.data.url;
-                clearStore()
+            async managerList(){
+                let res = await allUser(index,size)
+                if(res.code == 0){
+                    this.tableData = res.data
+                }
+                else{
+                    toast(this,res.cMsg)
+                }
             },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
+            editUserInfo(userInfo){
+                this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
+            },
+            handleSelectionChange(val){
 
-                if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+            },
+            formatter(row, column) {
+                if(column.label == "注册日期"){
+                    return formatTime(new Date(row.article_create_time))
                 }
-                if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            }
-            
-        },
-        computed:{
-            uploadHeadUrl(){
-                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
-            }
+               
+            },
         }
-        
+      
     }
 </script>
-
-<style scoped>
-.userInfoManageClass{
-    display: flex;
-    font-size: 20px;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-top: 20px;
+<style >
+.articleTitleClass{
+    cursor: pointer;
+    color:#20a0ff
 }
-.basicInfoManageClass{
-    border: 1px solid #bbb;
-    width: 90%;
-    min-height: 180px;
-    margin-bottom: 20px;
-}
-
-.basicInfoManageTitleClass{
-    color: white;
-    background: palevioletred;
-    height: 60px;
-    padding: 5px 10px;
-    line-height: 50px;
-}
-
-.basicInfoEditManageClass{
-    padding: 15px;
-
-}
-.basicInfoEditManageClass form{
-    display:  flex;
-    flex-wrap: wrap
-}
-.basicInfoEditManageClass form div{
-    width: 45%;
-
-}
-.basicInfoEditManageClass form div div{
-    width: 70%
-}
-.saveInfoButton{
-    width: 100px;
-    float: right;
-    margin-top: 8px;
-    margin-right: 10px;
-}
-.infoTitleClass{
-    width: 60px;
+.tagSpanClass{
+    margin: 0px 5px;
     display: inline-block
 }
-.avatar-uploader{
-display: inline-block;
+.el-dialog__headerbtn{
+display:  none;
 }
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #20a0ff;
-    
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 128px;
-    height: 128px;
-    line-height: 128px;
+.table td, .table th{
+    padding: 0rem;
+}
+.table thead th{
+    vertical-align: middle;
     text-align: center;
-    border: 1px dotted #20a0ff;
-  }
-  .avatar {
-    width: 128px;
-    height: 128px;
-    display: block;
-  }
-  .headinfoManageTitleClass{
-       color: white;
-   
-        height: 60px;
-        padding: 5px 10px;
-        line-height: 50px;
-      background: limegreen
-  }
-  .selfIntroManageTitleClass{
-        color: white;
-   
-        height: 60px;
-        padding: 5px 10px;
-        line-height: 50px;
-      background: orchid
-  }
+}
+.el-table--border td, .el-table--border th{
+    border-right:0px;
+}
+.cell{
+    text-align: center;
+}
+.el-checkbox{
+    margin-bottom: 0px;
+}
 </style>

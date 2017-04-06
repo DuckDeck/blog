@@ -19,7 +19,7 @@
             <el-menu-item index="systemSetting">
                 <i class="el-icon-setting"> </i>系统设计
             </el-menu-item>
-            <el-menu-item index="manageManager">
+            <el-menu-item index="managerSetting">
                 <i class="el-icon-setting"> </i>管理员管理
             </el-menu-item>
         </el-menu>
