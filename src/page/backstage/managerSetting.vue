@@ -21,17 +21,10 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click = "editUserInfo(scope.row)">管理</el-button>
+                    <el-button size="small" @click = "editManageInfo(scope.row)">管理</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pagination">
-            <el-pagination
-                    layout="prev, pager, next"
-                    :total="tableData.length">
-            </el-pagination>
-        </div>
-
     </div>
 </template>
 
@@ -49,8 +42,8 @@ import {managerList} from '../../store/manageService'
             this.loadData()
         },
         methods:{
-            async managerList(){
-                let res = await allUser(index,size)
+            async loadData(){
+               let res = await managerList()
                 if(res.code == 0){
                     this.tableData = res.data
                 }
@@ -58,18 +51,19 @@ import {managerList} from '../../store/manageService'
                     toast(this,res.cMsg)
                 }
             },
-            editUserInfo(userInfo){
-                this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
-            },
-            handleSelectionChange(val){
-
-            },
+            
+            
             formatter(row, column) {
                 if(column.label == "注册日期"){
                     return formatTime(new Date(row.article_create_time))
                 }
-               
             },
+            handleSelectionChange(val){
+
+            },
+            editManageInfo(manageInfo){
+                this.$router.push('/manage/managerSettingInfo/' + manageInfo.m_id)
+            }
         }
       
     }

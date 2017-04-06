@@ -7,7 +7,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     //管理用户
-    'GET /api/managelist/:mId/:token/': async (ctx, next) => {
+    'GET /api/managelist/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -18,13 +18,29 @@ module.exports = {
        ctx.rest(res)
     },
 
+    'GET /api/manageinfo/:manageId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'manageId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+       let sql = 'select m_id,m_username,m_group,m_last_login_time,m_login_times,m_head from blog_manager where m_id = ' + ctx.params.manageId
+       let res = await DB.exec(sql)
+       ctx.rest(Tool.convertResultData(res))
+    },
+
     'Post /api/manageupdate/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
         }
-        let paraCheckResult = Check.checkNum(ctx.request.body,'password')
+        let paraCheckResult = Check.checkString(ctx.request.body,'password')
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
             return

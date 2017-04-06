@@ -33,6 +33,7 @@ const manageFile =  r => require.ensure([], () => r(require('../page/backstage/m
 const systemSetting =  r => require.ensure([], () => r(require('../page/backstage/systemSetting')), 'systemSetting')
 
 const managerSetting =  r => require.ensure([], () => r(require('../page/backstage/managerSetting')), 'managerSetting')
+const managerSettingInfo =  r => require.ensure([], () => r(require('../page/backstage/managerSettingInfo')), 'managerSettingInfo')
 export default [
     {
         path: '/',
@@ -112,6 +113,10 @@ export default [
             {
                 path:'managerSetting',
                 component:managerSetting
+            },
+            {
+                path:'managerSettingInfo/:id',
+                component:managerSettingInfo
             },
         ]
     },
