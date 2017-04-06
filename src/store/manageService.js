@@ -79,6 +79,11 @@ export const managerInfoById = function(id){
     return setpromiseGet(url)
 }
 
+export const updateManagerPass = function(oldPass,newPass){
+    const url = HostName +  'manage/update/' + manageId + '/' + createMtoken()
+    return setpromisePost(url,{oldPassword:oldPass,newPassword:newPass})
+}
+
 
 
 

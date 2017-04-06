@@ -17,7 +17,7 @@
             <div class="basicInfoManageClass" >
                 <div class="selfIntroManageTitleClass">
                     修改密码
-                     <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
+                     <el-button class="saveInfoButton" type="primary" @click="savePass">保存</el-button>
                 </div>
                 <div class="basicInfoEditManageClass">
                      <el-form :model="pass" :rules="rules" ref="pass"> 
@@ -52,9 +52,31 @@
 </template>
 
 <script>
-    import {managerInfoById} from '../../store/manageService'
+    import {managerInfoById,updateManagerPass} from '../../store/manageService'
     export default {
         data: function(){
+             var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请输入密码'));
+                } 
+                else {
+                    if (this.pass.again !== '') {
+                        this.$refs.pass.validateField('again');
+                    }
+                     callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请再次输入密码'));
+                } 
+                else if (value !== this.pass.new) {
+                    callback(new Error('两次输入密码不一致!'));
+                } 
+                else {
+                 callback();
+                }
+            };
             return {
                 manageInfo:{},
                 pass:{
@@ -67,10 +89,12 @@
                         { required: true, message: '原密码不能为空', trigger: 'blur' }
                     ],
                     new: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                         { validator: validatePass, trigger: 'blur' },
+                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ],
                     again: [
-                        { required: true, message: '请确认新密码', trigger: 'blur' }
+                        { validator: validatePass2, trigger: 'blur' },
+                        { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
                 }
             }
@@ -102,6 +126,27 @@
                 this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            async savePass(){
+                const self = this;
+                self.$refs['pass'].validate((valid) => {
+                    if (valid) {
+                       updateManagerPass(this.pass.old,this.pass.new).then(res=>{
+                             if(res.code == 0){
+                                clearStore()
+                                self.$router.replace('/managelogin');   
+                            }
+                            else{
+                                toast(self,res.cMsg)
+                            }
+                       }).catch(err=>{
+                           toast(self,err.cMsg)
+                       })
+                      
+                    }
+                });
+               
+            
             }
             
         },

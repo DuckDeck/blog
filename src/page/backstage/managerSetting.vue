@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click = "editManageInfo(scope.row)">管理</el-button>
+                    <el-button size="small" @click = "editManageInfo(scope.row)" v-show = "canManage(scope.row)" >管理</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -51,8 +51,9 @@ import {managerList} from '../../store/manageService'
                     toast(this,res.cMsg)
                 }
             },
-            
-            
+            canManage(manage){
+                return manage.m_id == manageId
+            },            
             formatter(row, column) {
                 if(column.label == "上一次登录日期"){
                     return formatTime(new Date(row.m_last_login_time))

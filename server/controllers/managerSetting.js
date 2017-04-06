@@ -40,15 +40,33 @@ module.exports = {
             ctx.rest(tokenResult)
             return
         }
-        let paraCheckResult = Check.checkString(ctx.request.body,'password')
+        let paraCheckResult = Check.checkString(ctx.request.body,'oldPassword')
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
             return
         }
-        let pass = ctx.request.body.password
-        let md5Pass = Tool.md5(pass)
-        let sqlUser = 'update blog_manager set m_password = ? where m_id = ?'
-        let res = await DB.exec(sqlUser,[md5Pass,userId])
+        let paraCheckResult = Check.checkString(ctx.request.body,'newPassword')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let oldPass = ctx.request.body.oldPassword
+        let newPass = ctx.request.body.newPassword
+        let m_id = ctx.params.mId
+        let md5OldPass = Tool.md5(oldPass)
+        let sql = 'select m_id from blog_manager where m_id = ? and m_password = ?'
+        let res = await DB.exec(sql,[m_id,md5OldPass])
+        if(res.code != 0){
+             ctx.rest(res)
+             return
+        }
+        if(res.data.length == 0){
+            ctx.rest(Result.create(501))
+            return
+        }
+        sql = 'update blog_manager set m_password = ? where m_id = ?'
+        
+        res = await DB.exec(sqlUser,[Tool.md5(newPass),m_id])
         ctx.rest(res)
     },
 
