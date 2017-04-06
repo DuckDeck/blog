@@ -19,6 +19,7 @@ const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/
 
 const editArticle  = r => require.ensure([], () => r(require('../page/backstage/editArticle')), 'editArticle')
 const manageUser =  r => require.ensure([], () => r(require('../page/backstage/manageUser')), 'manageUser')
+const manageUserInfo =  r => require.ensure([], () => r(require('../page/backstage/manageUserInfo')), 'manageUserInfo')
 const manageArticle =  r => require.ensure([], () => r(require('../page/backstage/manageArticle')), 'manageArticle')
 
 const manageArticleDetail =  r => require.ensure([], () => r(require('../page/backstage/detailArticle')), 'manageArticleDetail')
@@ -82,6 +83,10 @@ export default [
                 path:'manageUser',
                 component:manageUser
             },
+            {
+                path:'manageUserInfo/:id',
+                component:manageUserInfo
+            }, 
             {
                 path:'manageArticle',
                 component:manageArticle

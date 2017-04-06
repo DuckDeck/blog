@@ -4,7 +4,7 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
-    userInfoById:`select * from user where user_id = ?`,
+    userInfoById:`select * from user_detail where user_id = ?`,
     userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user_detail where user_id in',
     updateUserHead:'update user set user_image_url = ? where user_id = ?'
 }

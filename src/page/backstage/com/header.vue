@@ -9,8 +9,7 @@
                     {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="mainPage">切换首页</el-dropdown-item>
-                    <el-dropdown-item command="userSetting">个人设置</el-dropdown-item>
+                    <el-dropdown-item command="userSetting">管理员设置</el-dropdown-item>
                     <el-dropdown-item command="clearCache">清空缓存</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
                 </el-dropdown-menu>
@@ -45,9 +44,6 @@
                 }
                 else if(command == 'userSetting'){
                     this.$router.replace('/manage/userSetting');
-                }
-                else if(command == 'mainPage'){
-                    this.$router.replace('/')
                 }
                 else if(command == 'clearCache'){
                     clearStoreExcept('m_token')

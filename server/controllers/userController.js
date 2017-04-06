@@ -121,12 +121,8 @@ module.exports = {
        res.data = {url:urlPath}
        ctx.rest(res)
     },
-    'GET /api/user/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
+    
+    'GET /api/user/:userId': async (ctx, next) => {
        let id = ctx.params.userId
        let token = ctx.params.token
        //只测试这一下，不然后太麻烦

@@ -21,10 +21,8 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
-                    <el-button size="small" @click = "editArtilcle(scope.row)"
-                            >编辑</el-button>
-                    <el-button size="small" type="danger" @click = "deleteArtilcle(scope.row)"
-                            >删除</el-button>
+                    <el-button size="small" @click = "editUserInfo(scope.row)">管理</el-button>
+                    
                 </template>
             </el-table-column>
         </el-table>
@@ -68,6 +66,9 @@ import {allUser} from '../../store/manageService'
                 else{
                     toast(this,res.cMsg)
                 }
+            },
+            editUserInfo(userInfo){
+                this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
             },
             handleSelectionChang(val){
 

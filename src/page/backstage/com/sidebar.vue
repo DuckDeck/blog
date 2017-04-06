@@ -13,9 +13,6 @@
             <el-menu-item index="manageComment">
                 <i class="el-icon-message"> </i>留言管理
             </el-menu-item>
-            <el-menu-item index="tag">
-                <i class="el-icon-more"> </i>分类/标签
-            </el-menu-item>
             <el-menu-item index="manageFile">
                 <i class="el-icon-picture"> </i>文件管理
             </el-menu-item>
