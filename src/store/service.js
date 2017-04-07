@@ -99,12 +99,6 @@ export const tempArticle = function(){
     return setpromiseGet(url)
 }
 
-export const indexArticle = function(){
-    const url = HostName +  'article/'  + userId
-    return setpromiseGet(url)
-}
-
-
 
 export const getUserLinks = function(id){
     const url = HostName +  'link/' + id

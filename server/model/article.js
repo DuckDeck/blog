@@ -30,16 +30,16 @@ class Article{
     constructor(title,content){
         this.title = title
         this.create_time = Date.parse(new Date())
-        this.release_time = 0
+        this.release_time = Date.parse(new Date())
         this.content = content
         this.ip = '192.123.111.111'
-        this.readerCount = 111
+        this.readerCount = 0
         this.category = 1
-        this.userId = 1
-        this.typeId = 1
-        this.articalType = 1
-        this.articalUp = 1
-        this.articalSupport = 1
+        this.userId = 0
+        this.typeId = 0
+        this.articalType = 0
+        this.articalUp = 0
+        this.articalSupport = 0
         this.articalStatus = 0
         this.articleBrief = ''
         this.articleMainImage = ''

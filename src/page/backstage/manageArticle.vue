@@ -109,7 +109,7 @@ import {allArticle,releaseArticle} from  '../../store/manageService'
             },
             editArtilcle(article){
                 setStore('article' + article.article_id ,article)
-                this.$router.replace('/manage/editArticle/' + article.article_id);
+                this.$router.push('/manage/editArticle/' + article.article_id);
             },
             deleteArtilcle(article){
                 this.deleteMessage = "你确定要删除文章 " + article.article_name +" 吗？"

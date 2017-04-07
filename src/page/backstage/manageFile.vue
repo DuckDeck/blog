@@ -57,6 +57,9 @@ import {getStoredFiles}  from '../../store/manageService'
     flex-wrap: wrap;
     margin-top: 50px;
 }
+.uploadFile{
+    font-size: 20px;
+}
     .uploadedContent{
        width: 200px;
        font-size: 16px;
@@ -70,7 +73,6 @@ import {getStoredFiles}  from '../../store/manageService'
         margin-bottom: 10px;
     }
     .uploadedFileName{
-        
         display: block;
     }
 </style>

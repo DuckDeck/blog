@@ -11,20 +11,25 @@
 
                     <div class="content-main">
                         <div class="row margin-b-30">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="banner-main-home">                                
-                                    <div class="banner-main-home-text">
-                                        <div class="heading">
-                                            <h1>{{top.article_name}}</h1>
-                                        </div>
-                                        <div class="desc">
-                                            <p>{{top.article_brief}}</p>
-                                            <button type="button" style="cursor: pointer" @click="checkArticle(top)" >查看详情</button>
-                                        </div>
-                                    </div>
-                                    <img :src="top.article_main_img" alt="Image" class="img-responsive">
-                                </div>                        
-                            </div>    
+                             <swiper :options="swiperOption" class="swiper-box">
+                                <swiper-slide class="swiper-item" >
+                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="banner-main-home">                                
+                                            <div class="banner-main-home-text">
+                                                <div class="heading">
+                                                    <h1>{{top.article_name}}</h1>
+                                                </div>
+                                                <div class="desc">
+                                                    <p>{{top.article_brief}}</p>
+                                                    <button type="button" style="cursor: pointer" @click="checkArticle(top)" >查看详情</button>
+                                                </div>
+                                            </div>
+                                            <img :src="top.article_main_img" alt="Image" class="img-responsive">
+                                        </div>                        
+                                    </div>  
+                                </swiper-slide>
+                                <div class="swiper-pagination" style="line-height: 0.7rem;bottom: 1px;height: 1rem;background: #383f49" slot="pagination"></div>
+                            </swiper> 
                         </div>
 
                         <div class="checkMore" @click="checkMore">
@@ -69,8 +74,9 @@
 </template>
 
 <script>
-import {indexArticle,getUserInfo} from '../../store/service'
+import {getUserInfo} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import blogSide from './com/blogSide.vue'
   export default {
     data() {
@@ -78,7 +84,13 @@ import blogSide from './com/blogSide.vue'
             top:'',
             articles:[],
             userInfo:{},
-
+            swiperOption: {
+                pagination: '.swiper-pagination',
+                slidesPerView: 1,
+                paginationClickable: true,
+                spaceBetween: 30,
+                mousewheelControl: true
+            },
       }
     },
     mounted(){
@@ -93,20 +105,10 @@ import blogSide from './com/blogSide.vue'
                 this.getUserInfo()
             }
         }
-        indexArticle().then(res=>{
-            if(res.code == 0){
-                this.top = res.data.top
-                this.articles = res.data.artilces
-            }
-            else{
-                toast(self,err.cMsg)
-            }
-        }).catch(err=>{
-            toast(self,err.cMsg)
-        })
+        
     },
     components:{
-        blogHeader,blogSide
+        blogHeader,blogSide, swiper, swiperSlide,
     },
     methods:{
         headAction(action){
