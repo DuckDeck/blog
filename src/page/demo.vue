@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 300px;">
    <swiper v-model="index" class="productItem" :show-dots="false" >
         <!--<swiper-item :key="0" v-for="s in demoData">
             {{s}}

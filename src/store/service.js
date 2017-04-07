@@ -12,7 +12,7 @@ const HostName = baseUrl
 
 
 
- export const uploadImgUrl =  function(){
+export const uploadImgUrl =  function(){
      let userId = 0
      if (getStore('token')){
          userId =  userId
@@ -86,7 +86,7 @@ export const articleList = function(index,size){
 }
 
 export const articleById = function(article_id){
-    const url = HostName +  'article/' + article_id + '/' + userId + '/' + createToken()
+    const url = HostName +  'article/' + article_id
     return setpromiseGet(url)
 }
 

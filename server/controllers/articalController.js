@@ -114,12 +114,7 @@ module.exports = {
         ctx.rest(Result.create(0,article))
     },
 
-    'GET /api/article/:articleId/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
-        if(tokenResult.code != 0){
-            ctx.rest(tokenResult)
-            return
-        }
+    'GET /api/article/:articleId': async (ctx, next) => {
        let id = ctx.params.articleId
        let resArticle = await Article.articalById(id)
        if(resArticle.code != 0){

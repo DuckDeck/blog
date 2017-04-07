@@ -1,35 +1,30 @@
 <template>
-
-
-           <div class="container">
+      <div class="container">
             <div class="row"> 
                 <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>
                 <div class="main-page">
-                   
-
                     <blogSide ></blogSide>
-
                     <div class="content-main">
                         <div class="row margin-b-30">
-                             <swiper :options="swiperOption" class="swiper-box">
-                                <swiper-slide class="swiper-item" >
-                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="banner-main-home">                                
-                                            <div class="banner-main-home-text">
-                                                <div class="heading">
-                                                    <h1>{{top.article_name}}</h1>
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <swiper :options="swiperOption" class="swiper-box">
+                                        <swiper-slide class="swiper-item" v-for = "t in top" >
+                                             <div class="banner-main-home">                                
+                                                <div class="banner-main-home-text">
+                                                    <div class="heading">
+                                                        <h1>{{t.article_name}}</h1>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <p>{{t.article_brief}}</p>
+                                                        <button type="button" style="cursor: pointer" @click="checkArticle(top)" >查看详情</button>
+                                                    </div>
                                                 </div>
-                                                <div class="desc">
-                                                    <p>{{top.article_brief}}</p>
-                                                    <button type="button" style="cursor: pointer" @click="checkArticle(top)" >查看详情</button>
-                                                </div>
-                                            </div>
-                                            <img :src="top.article_main_img" alt="Image" class="img-responsive">
-                                        </div>                        
-                                    </div>  
-                                </swiper-slide>
-                                <div class="swiper-pagination" style="line-height: 0.7rem;bottom: 1px;height: 1rem;background: #383f49" slot="pagination"></div>
-                            </swiper> 
+                                                <img :src="t.article_main_img" alt="Image" class="img-responsive">
+                                            </div>  
+                                        </swiper-slide>
+                                        <div class="swiper-pagination" style="line-height: 20px;bottom: 0px;height: 20px;background: #383f49" slot="pagination"></div>
+                                    </swiper> 
+                              </div>
                         </div>
 
                         <div class="checkMore" @click="checkMore">
@@ -75,13 +70,14 @@
 
 <script>
 import {getUserInfo} from '../../store/service'
+import {index} from '../../store/index'
 import blogHeader from './com/blogHead.vue'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import blogSide from './com/blogSide.vue'
   export default {
     data() {
       return {
-            top:'',
+            top:[],
             articles:[],
             userInfo:{},
             swiperOption: {
@@ -105,6 +101,17 @@ import blogSide from './com/blogSide.vue'
                 this.getUserInfo()
             }
         }
+        index().then(res=>{
+            if(res.code == 0){
+                self.top = res.data.top
+                self.articles = res.data.articles
+            }
+            else{
+                toast(self,res.cMsg)
+            }
+        }).catch(err=>{
+            toast(self,err.cMsg)
+        })
         
     },
     components:{
@@ -217,7 +224,7 @@ import blogSide from './com/blogSide.vue'
 .heading h1, .heading2 h1 {
 	margin: 0 10px;
 	font-weight: 600;
-	font-size: 72px;
+	font-size: 30px;
 }
 .heading p, .heading2 p {
 	margin: 0 10px;
@@ -305,6 +312,35 @@ import blogSide from './com/blogSide.vue'
 }
 .article-title h5{ 
     font-size: 20px;
+}
+.swiper-box {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .swiper-item {
+    height: 100%;
+    text-align: center;
+    font-size: 18px ;
+    background: #fff;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+div.swiper-pagination{
+    opacity: 0.7;
+}
+div.swiper-pagination span{
+    background: white;
 }
 @media (min-width: 1230px) {
 	.container { width: 1200px;	}

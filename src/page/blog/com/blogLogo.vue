@@ -1,7 +1,9 @@
 
 <template>
-    <div class="atticle-block">
-       <img src="" alt="">
+    <div class="blogLogo">
+       
+        
+
     </div>
 </template>
 
@@ -13,16 +15,14 @@
             }
         },
         props:{  
-          article:{
-              type:Object
-          }
+          
         },
         methods:{
            
         },
-      
-    
     }
 </script>
 <style scoped>
+
+
 </style>
