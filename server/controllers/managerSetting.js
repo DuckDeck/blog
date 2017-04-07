@@ -34,7 +34,7 @@ module.exports = {
        ctx.rest(Tool.convertResultData(res))
     },
 
-    'Post /api/manage/update/:mId/:token': async (ctx, next) => {
+    'POST /api/manage/update/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
@@ -45,7 +45,7 @@ module.exports = {
             ctx.rest(paraCheckResult)
             return
         }
-        let paraCheckResult = Check.checkString(ctx.request.body,'newPassword')
+        paraCheckResult = Check.checkString(ctx.request.body,'newPassword')
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
             return
@@ -66,11 +66,15 @@ module.exports = {
         }
         sql = 'update blog_manager set m_password = ? where m_id = ?'
         
-        res = await DB.exec(sqlUser,[Tool.md5(newPass),m_id])
+        res = await DB.exec(sql,[Tool.md5(newPass),m_id])
+        if(res.code != 0){
+             ctx.rest(res)
+             return
+        }
+        res.data = {}
         ctx.rest(res)
     },
 
- 
     'POST /api/manage/head/:mId/:token': async (ctx, next) => {
        let tokenResult = await Check.checkManageToken(ctx)
        if(tokenResult.code != 0){

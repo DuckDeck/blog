@@ -67,7 +67,7 @@ import {allUser} from '../../store/manageService'
             },
             formatter(row, column) {
                 if(column.label == "注册日期"){
-                    return formatTime(new Date(row.article_create_time))
+                    return formatTime(new Date(row.user_register_time))
                 }
                
             },

@@ -18,7 +18,7 @@ class Check{
 
     static checkString(body,name){
         if(!body[name] || !body[name].trim()){
-             return Result.create(10,{msg:'miss' + name})
+             return Result.create(10,{msg:'miss ' + name})
         }
         return null
     }

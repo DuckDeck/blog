@@ -294,6 +294,9 @@ import {userInfoById} from '../../store/manageService'
                 this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            gotoLink(link){
+                window.location.href = link.link_url
             }
             
         },
