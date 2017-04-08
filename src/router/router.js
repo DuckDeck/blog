@@ -1,7 +1,6 @@
 
 
 const demo = r => require.ensure([], () => r(require('../page/demo')), 'demo')
-const menu = r => require.ensure([], () => r(require('../page/menu')), 'menu')
 
 
 
@@ -128,10 +127,6 @@ export default [
         component: demo,
         name:'demo'
     },
-    {
-        path: '/menu',
-        component: menu,
-        name:'menu'
-    },
+
 
 ]

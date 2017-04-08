@@ -2,7 +2,7 @@
   <div class="container">      
        <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>
        <blogLogo ></blogLogo>
-       <blogMenu></blogMenu>
+
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import {getUserInfo} from '../../store/service'
 import {index} from '../../store/index'
 import blogHeader from './com/blogHead.vue'
 import blogLogo from './com/blogLogo.vue'
-import blogMenu from './com/blogMenu.vue'
+
   export default {
     data() {
       return {
@@ -53,7 +53,7 @@ import blogMenu from './com/blogMenu.vue'
         
     },
     components:{
-        blogHeader,blogLogo,blogMenu
+        blogHeader,blogLogo
     },
     methods:{
         headAction(action){

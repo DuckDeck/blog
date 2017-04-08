@@ -181,11 +181,7 @@ global.toast = function(vue,message){
     if(globalVue != vue){
         globalVue = vue
     }
-    vue.$vux.toast.show({
-        text: message,
-        position:"bottom",
-        type:'text'
-    })
+     vue.$message(message);
 }
 
 global.callBack = function(result){

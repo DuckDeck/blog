@@ -11,7 +11,7 @@ var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 
-const webpackConfig = {
+module.exports  = {
     entry: {
         app: './src/main.js'
     },
@@ -75,12 +75,3 @@ const webpackConfig = {
     }
 }
 
-const vuxLoader = require('vux-loader')
-module.exports = vuxLoader.merge(webpackConfig, {
-  options: {},
-  plugins: [
-    {
-      name: 'vux-ui'
-    }
-    ]
-})
