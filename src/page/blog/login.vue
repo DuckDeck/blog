@@ -56,19 +56,10 @@ import {login} from '../../store/service'
                                 self.$router.back()       
                             }
                             else{
-                                self.$vux.toast.show({
-                                    text: err.cMsg,
-                                    position:"bottom",
-                                    type:'text'
-                            })
+                                toast(self,data.cMsg)
                             }
                         },function(err){
-                            console.log()
-                            self.$vux.toast.show({
-                                text: err.cMsg,
-                                position:"bottom",
-                                type:'text'
-                            })
+                            toast(self,err.cMsg)
                         })
                     }
                 });

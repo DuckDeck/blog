@@ -134,19 +134,11 @@ import {articleById} from '../../store/manageService'
             save(formName,mode){
                 let self = this;
                 if(self.selectedTags.length <= 0){
-                    self.$vux.toast.show({
-                        text: '你没有选择文章标签',
-                        position:"bottom",
-                        type:'text'
-                    })
+                    toast(self,'你没有选择文章标签')
                     return
                 }
                 if(self.selectedSortId <= 0){
-                    self.$vux.toast.show({
-                        text: '你没有选择文章类型',
-                        position:"bottom",
-                        type:'text'
-                    })
+                    toast(self,'你没有选择文章类型')
                     return
                 }
                 self.$refs[formName].validate((valid) => {
@@ -167,28 +159,15 @@ import {articleById} from '../../store/manageService'
                         saveArticle(article).then(function(data){
                             if(data.code == 0){
                                removeStore('tempArticleId')
-                               self.$vux.toast.show({
-                                    text: "保存成功",
-                                    position:"bottom",
-                                    type:'text'
-                                })
-                                
+
+                                toast(self,'保存成功')
                                 self.$router.push('/manage/article/' + data.data.id);
                             }
                             else{
-                                self.$vux.toast.show({
-                                    text: err.cMsg,
-                                    position:"bottom",
-                                    type:'text'
-                                })
+                                toast(self,err.cMsg)
                             }
                         },function(err){
-                            console.log()
-                            self.$vux.toast.show({
-                                text: err.cMsg,
-                                position:"bottom",
-                                type:'text'
-                            })
+                            toast(self,err.cMsg)   
                         })
                     }
                 });

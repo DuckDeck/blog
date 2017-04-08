@@ -59,6 +59,11 @@ import ElementUI from 'element-ui';
 Vue.use(ElementUI);
 import 'element-ui/lib/theme-default/index.css'; 
 
+
+
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
+
 const store = new Vuex.Store({
   state: {
     webViewUrl:'',
