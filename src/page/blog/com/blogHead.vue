@@ -21,6 +21,9 @@
             </el-dropdown>
             </div>
         </div>
+        <div style="clear: both">
+            
+        </div>
     </div>
 </template>
 
@@ -69,7 +72,7 @@
       color: white;
       width: 100%;
       font-size: 20px;
-      margin-top: 40px;
+      margin-top: 30px;
  }
  .searchInput{
     width: 200px;
