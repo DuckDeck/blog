@@ -177,6 +177,7 @@ import blogSwiper from './com/blogSwiper.vue'
 }
 .articleAuthor{
     font-size: 15px;
+    margin-top: 5px;
 }
 .articleContent{
     margin:20px 70px;
