@@ -7,7 +7,7 @@ const sqls = {
  article_release_time BIGINT(15) NOT NULL COMMENT '发布时间',
  article_ip varchar(15) NOT NULL COMMENT '发布IP',
  article_click int(10) NOT NULL COMMENT '查看人数',
- article_sort__id mediumint(8) NOT NULL COMMENT '所属分类',
+ article_sort_id mediumint(8) NOT NULL COMMENT '所属分类',
  user_id mediumint(8) NOT NULL COMMENT '所属用户ID',
  article_type_id tinyint(3) NOT NULL DEFAULT 1 COMMENT '栏目ID',
  article_type int(13) NOT NULL DEFAULT 1 COMMENT '文章的模式:0为私有，1为公开，2为仅好友查看',

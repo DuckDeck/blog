@@ -38,7 +38,34 @@
                </div>
            </div>
            <div class="articlesNews">
-               
+               <div class="articleSort">
+                   <div class="articleRightTitle">
+                       <span>文章分类</span>
+                       
+                   </div>
+                   <div class="articleRightContent">
+                       <div v-for = "sort in sorts" >{{sort.sort_name}}</div>
+                   </div>
+               </div>
+
+               <div>
+                   <div class="articleRightTitle">
+                       <span>最新评论</span>
+                   </div>
+                    <div class="articleRightContent">
+                        <div v-for="com in newComment">
+                            <img src="" alt="">
+                        </div>
+                   </div>
+               </div>
+               <div>
+                   <div class="articleRightTitle">
+                       <span>推荐作者</span>
+                   </div>
+                    <div class="articleRightContent">
+                      
+                   </div>
+               </div>
            </div>
        </div>
   </div>
@@ -56,6 +83,8 @@ import blogSwiper from './com/blogSwiper.vue'
             top:[],
             articles:[],
             userInfo:{},
+            sorts:[],
+            newComment:[],
             swiperOption: {
                 pagination: '.swiper-pagination',
                 slidesPerView: 1,
@@ -81,6 +110,7 @@ import blogSwiper from './com/blogSwiper.vue'
             if(res.code == 0){
                 self.top = res.data.top
                 self.articles = res.data.articles
+                self.sorts = res.data.sorts
             }
             else{
                 toast(self,res.cMsg)
@@ -152,6 +182,7 @@ import blogSwiper from './com/blogSwiper.vue'
 .articlesNews{
     background: #fff;
     width: 30%;
+    padding: 20px;
 }
 .releaseDate{
     display: inline-block;
@@ -166,7 +197,7 @@ import blogSwiper from './com/blogSwiper.vue'
 }
 .articleTitleInfo{
     display: inline-block;
-    margin-left: 90px;
+    margin-left: 70px;
 }
 .articleTitle{
     color: deepskyblue;
@@ -196,5 +227,22 @@ import blogSwiper from './com/blogSwiper.vue'
 }
 .articleTags span{
     margin-right: 10px;
+}
+.articleRightTitle{
+    border-left: 5px solid deepskyblue;
+    padding-left: 10px;
+}
+.articleRightContent{
+    margin-left: 18px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+.articleRightContent div{
+     color: #888;
+     margin-bottom: 3px;
+}
+.articleRightContent div:hover{
+    cursor: pointer;
 }
 </style>

@@ -2,9 +2,9 @@
 const db = require('../sqlhelp/mysql') 
 const Tool = require('../tool/tool')
 const sqls = {
-    articals:`select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
+    articals:`select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
     user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
-    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
+    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
     as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
     article.article_id) as comment_count from article where user_id = ? limit ? , ?`,  
     articalById:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
@@ -12,7 +12,7 @@ const sqls = {
     insertArticle:'insert into article values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     deleteArticle:`delete from article where article_id = ? `,
     deleteArticleTagMap:`delete from article_tag_map where article_id = ? `,
-    updateArticle:`UPDATE article SET article_name = ?,article_create_time = ?,article_release_time = ?,article_ip = ?,article_click = ?, article_sort__id = ?, 
+    updateArticle:`UPDATE article SET article_name = ?,article_create_time = ?,article_release_time = ?,article_ip = ?,article_click = ?, article_sort_id = ?, 
     user_id = ?, article_type_id = ?, article_type = ?, article_content = ?,article_brief=?, article_main_img=?,article_up = ?, article_recommend = ?,
      article_status = ? WHERE article_id = ?`,
     selectArticleMainCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,

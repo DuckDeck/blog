@@ -18,9 +18,9 @@ module.exports = {
             return
         }
         result.data.top  = res.data
-        sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
+        sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
-                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
                 article.article_id) as comment_count from article where article_up = 0 order by article_release_time desc limit 15`
         res = await DB.exec(sql)
@@ -54,16 +54,39 @@ module.exports = {
             ctx.rest(res)
             return
         }
+        let sortArr = []
          for(let k of result.data.articles){
-             k.tags = []
+            k.tags = []
+            let index = sortArr.findIndex(m=>{
+                return m.sort_id == k.article_sort_id
+            })
+            if(index < 0){
+                sortArr.push({sort_id:k.article_sort_id,sort_name:k.article_sort_name})
+            }
             for(let l of res.data){
                 if(k.article_id == l.article_id)
                 k.tags.push(l)
             }
             
         }
-
-
+        
+        result.data.sorts = sortArr
+        sql = `select a.comment_id,a.comment_content,a.comment_time,b.user_id, b.user_real_name,b.user_image_url 
+               from user_comment a left join user_info b on a.commenter_user_id = b.user_id order by comment_time desc limit 10`
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        result.data.newComment = res.data
+        sql = `select user_id,user_real_name,user_image_url,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id
+               group by user_id) as article_count from user_detail  ` 
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        result.data.authors = res.data
         ctx.rest(result)
      
     },
