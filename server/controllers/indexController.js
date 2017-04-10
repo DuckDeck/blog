@@ -78,7 +78,20 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        result.data.newComment = res.data
+
+        result.data.newComment = res.data.map(s=>{
+            if(!s.user_id){
+                s.user_id = 0
+                s.user_real_name = '游客'
+            }
+            if(!s.user_real_name){
+                s.user_real_name = ''
+            }
+            if(!s.user_image_url){
+                s.user_image_url = ''
+            }
+            return s
+        })
         sql = `select user_id,user_real_name,user_image_url,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id
                group by user_id) as article_count from user_detail  ` 
         res = await DB.exec(sql)

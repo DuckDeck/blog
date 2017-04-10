@@ -1,8 +1,11 @@
 
 <template>
     <div class="blogheader">
-       
+        <div class="bloglogo">
+                 <img src="/static/img/zoe_logo.jpg" alt="">
+         </div>
          <div class="rightMenu">
+             
             <el-input  class="searchInput" placeholder="搜索" icon="search" :on-icon-click="handleIconClick"> </el-input>
             <div   class="rightMenuLogin" v-show="!isLogin" >
                 <span @click="login" >登录</span>
@@ -15,15 +18,12 @@
                     {{userInfo.user_real_name}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="backPage">切换后台</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             </div>
         </div>
-        <div style="clear: both">
-            
-        </div>
+    
     </div>
 </template>
 
@@ -55,9 +55,6 @@
                 removeStore('token')
                 this.$emit('headAction','logout')
             }
-            else if(command == 'backPage'){
-                this.$router.replace('/manage')
-            }
         },
       },
       computed:{
@@ -73,20 +70,39 @@
       width: 100%;
       font-size: 20px;
       margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+ }
+
+ .bloglogo img {
+    width: 80px;
+    padding-left: 10px;
  }
  .searchInput{
-    width: 200px;
+    width: 50%;
+    max-width: 200px;
     display: inline-block;
 }
   .rightMenu{
       float: right;
       width: 360px;
+    
       display: flex;
       justify-content: space-around
   }
+
+ @media (max-width:480px){
+     .bloglogo img {
+         display: none;
+     }
+ } 
+.rightMenuLogin{
+    line-height: 35px;
+}
 .rightMenuLogin span{
     margin-left: 10px;
     cursor: pointer;
+    
 }
 .userInfoDiv span{
    color: white

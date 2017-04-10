@@ -54,7 +54,15 @@
                    </div>
                     <div class="articleRightContent">
                         <div v-for="com in newComment">
-                            <img src="" alt="">
+                            <img :src="com.user_image_url" alt="">
+                            <div>
+                                <div>
+                                    {{com.user_real_name}}
+                                </div>
+                                <div>
+                                    {{com.comment_content.slice(0,10)}}
+                                </div>
+                            </div>
                         </div>
                    </div>
                </div>
@@ -63,7 +71,17 @@
                        <span>推荐作者</span>
                    </div>
                     <div class="articleRightContent">
-                      
+                      <div v-for="author in authors">
+                            <img :src="author.user_image_url" alt="">
+                            <div>
+                                <div>
+                                    {{author.user_real_name}}
+                                </div>
+                                <div>
+                                    发布了{{author.article_count}}文章
+                                </div>
+                            </div>
+                        </div>
                    </div>
                </div>
            </div>
@@ -85,6 +103,7 @@ import blogSwiper from './com/blogSwiper.vue'
             userInfo:{},
             sorts:[],
             newComment:[],
+            authors:[],
             swiperOption: {
                 pagination: '.swiper-pagination',
                 slidesPerView: 1,
@@ -111,6 +130,8 @@ import blogSwiper from './com/blogSwiper.vue'
                 self.top = res.data.top
                 self.articles = res.data.articles
                 self.sorts = res.data.sorts
+                self.newComment = res.data.newComment
+                self.authors = res.data.authors
             }
             else{
                 toast(self,res.cMsg)
@@ -245,4 +266,13 @@ import blogSwiper from './com/blogSwiper.vue'
 .articleRightContent div:hover{
     cursor: pointer;
 }
+ @media (max-width:900px){
+     .articlesList{
+        width: 100%;
+    }
+    .articlesNews{
+        width: 0%;
+        display: none;
+    }
+ } 
 </style>
