@@ -1,7 +1,7 @@
 
 <template>
     <div class="blogheader">
-        <div class="bloglogo">
+        <div class="bloglogo" @click="toMain">
                  <img src="/static/img/zoe_logo.jpg" alt="">
          </div>
          <div class="rightMenu">
@@ -50,12 +50,15 @@
                 this.$emit('headAction','register')
             },
             handleCommand(command) {
-            if(command == 'loginout'){
-                removeStore('userInfo')
-                removeStore('token')
-                this.$emit('headAction','logout')
-            }
-        },
+                if(command == 'loginout'){
+                    removeStore('userInfo')
+                    removeStore('token')
+                    this.$emit('headAction','logout')
+                }
+           },
+           toMain(){
+               this.$router.push('/')
+           }
       },
       computed:{
           isLogin(){

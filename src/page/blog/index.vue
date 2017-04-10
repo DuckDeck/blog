@@ -16,7 +16,7 @@
               
                    </div>
                    <div class="articleTitleInfo">
-                       <div class="articleTitle">
+                       <div class="articleTitle" @click="checkArticle(art)">
                            {{art.article_name}}
                        </div>
                        <div class="articleAuthor">

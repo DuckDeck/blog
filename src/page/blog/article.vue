@@ -1,11 +1,8 @@
 <template>
 
      <div class="container">
-        <div class="row">         
-            <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>      
+          <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>      
             <div class="main-page">          
-                <blogSide ></blogSide>
-                    <div class="content-main"> 
                          <div class=" article-content">
                              <header>
                                 <div  class="articleHeader" >
@@ -28,11 +25,10 @@
                                 </div>
                                 <userComment v-for="com in article.comments" :comment="com" ></userComment>
                             </div>
-
                          </div>
-                  </div>
+            
                 </div>
-             </div>
+          
         </div> 
 </template>
 

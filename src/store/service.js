@@ -129,9 +129,6 @@ export const submitComment = (comment)=>{
 
 export const getComment =(commentId)=>{
     let url = HostName +  'comment/'+ commentId 
-    if(getStore('token')){
-        url = HostName +  'comment/'+ commentId  +'/'+ userId + '/' + createToken()
-    }
     return setpromiseGet(url)
 }
 
