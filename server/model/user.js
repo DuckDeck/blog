@@ -66,6 +66,10 @@ class User{
     static updateUserHead(user){
         return db.exec(sqls.updateUserHead,[user.user_image_url,user.user_id])
     }
+
+    static saveToken(token,user_id){
+        return db.exec('update user set user_token = ? where user_id = ?',[token,user_id])
+    }
     
 }
 module.exports = User

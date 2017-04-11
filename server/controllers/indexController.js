@@ -87,8 +87,8 @@ module.exports = {
             if(!s.user_real_name){
                 s.user_real_name = ''
             }
-            if(!s.user_image_url){
-                s.user_image_url = ''
+            if(!s.user_image_url || s.user_image_url.length == 0){
+                s.user_image_url = 'http://localhost:3000/static/imgDefault/head.png'
             }
             return s
         })

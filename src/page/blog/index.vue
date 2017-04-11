@@ -48,33 +48,33 @@
                    </div>
                </div>
 
-               <div>
+               <div style="margin-top: 25px;">
                    <div class="articleRightTitle">
                        <span>最新评论</span>
                    </div>
                     <div class="articleRightContent">
-                        <div v-for="com in newComment">
-                            <img :src="com.user_image_url" alt="">
+                        <div style="display: flex;margin-bottom: 5px;" v-for="com in newComment">
+                            <img class="userHead" :src="com.user_image_url" alt="">
                             <div>
-                                <div>
+                                <div class="userRealName">
                                     {{com.user_real_name}}
                                 </div>
-                                <div>
-                                    {{com.comment_content.slice(0,10)}}
+                                <div class="userComment">
+                                    {{com.comment_content.slice(0,12)}}
                                 </div>
                             </div>
                         </div>
                    </div>
                </div>
-               <div>
+               <div style="margin-top: 25px;">
                    <div class="articleRightTitle">
                        <span>推荐作者</span>
                    </div>
                     <div class="articleRightContent">
-                      <div v-for="author in authors">
-                            <img :src="author.user_image_url" alt="">
+                      <div  style="display: flex" v-for="author in authors">
+                            <img class="userHead" :src="author.user_image_url" alt="">
                             <div>
-                                <div>
+                                <div class="userRealName">
                                     {{author.user_real_name}}
                                 </div>
                                 <div>
@@ -86,6 +86,7 @@
                </div>
            </div>
        </div>
+       <upToTop></upToTop>
   </div>
 </template>
 
@@ -95,6 +96,7 @@ import {index} from '../../store/index'
 import blogHeader from './com/blogHead.vue'
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
+import upToTop from './com/upToTop.vue'
   export default {
     data() {
       return {
@@ -142,7 +144,7 @@ import blogSwiper from './com/blogSwiper.vue'
         
     },
     components:{
-        blogHeader,blogLogo,blogSwiper
+        blogHeader,blogLogo,blogSwiper,upToTop
     },
     methods:{
         headAction(action){
@@ -265,6 +267,20 @@ import blogSwiper from './com/blogSwiper.vue'
 }
 .articleRightContent div:hover{
     cursor: pointer;
+}
+.userHead{
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    border: 1px solid #aaa;
+    margin-right: 10px;
+    margin-left: -10px;
+}
+.userRealName{
+    font-size: 15px;
+}
+.userComment{
+    font-size: 12px;
 }
  @media (max-width:900px){
      .articlesList{

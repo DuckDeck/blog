@@ -75,14 +75,10 @@ module.exports = {
               let mdPass = Tool.md5(m.password)
               if(pass == mdPass){
                    let token = Tool.md5(Math.random().toString())
-                   Tool.saveToken(user.user_id,token)
-                   result = Result.create(0)
-                   if(user.user_group_id == 10){
-                       result.data = {isManager:true,token:token,user_id:user.user_id}
-                   }
-                   else{
-                        result.data = {isManager:false,token:token,user_id:user.user_id}
-                   }
+                   await user.saveToken(token,user.user_id)
+                   let result = Result.create(0,{token:token,user_id:user.user_id})
+                   ctx.rest(result)
+
               }
               else{
                   result = Result.create(501)
