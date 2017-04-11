@@ -120,21 +120,38 @@ module.exports = {
     
     'GET /api/user/:userId': async (ctx, next) => {
        let id = ctx.params.userId
-       let token = ctx.params.token
+   
        //只测试这一下，不然后太麻烦
        //已经OK了，这下一般没会人去破解
-       await User.userInfoById(id).then(function(result){
-            if(result.data.length > 0){
-                let user = result.data[0]
-                result.data = user
-            }
-            else{
-                result = Result.create(500)
-            }
-            ctx.rest(result)     
-       }).catch(function(err){
-            ctx.rest(err)  
-       })   
+        let articleResult = await Article.articles(id)
+        if(articleResult.code != 0){
+            ctx.rest(articleResult)
+            return
+        }
+        let articles = articleResult.data
+        let article_ids = articles.map((s)=>{
+            return s.article_id
+        })
+        if(article_ids==undefined){
+            article_ids = [0]
+        }
+        let tagsResult = await Tag.articleTags(article_ids)
+        tagsResult = tagsResult.filter((s)=>{
+               return s.data.length > 0
+        })
+        let a = articles.map((s)=>{
+            let t = tagsResult.find((k)=>{
+                return k.data[0].article_id == s.article_id
+            })
+            s['tag'] =  t==undefined ? [] : t.data
+            return s
+        })
+        a = a.sort((a,b)=>{
+            a.article_up > b.article_up
+        })
+        let top = a.shift()
+        let res = {top:top,artilces:a}
+        ctx.rest(Result.create(0,res))
     },
     
 

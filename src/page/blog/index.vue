@@ -1,6 +1,5 @@
 <template>
   <div class="container">      
-       <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>
        <blogLogo ></blogLogo>
        <blogSwiper class="blogSwiper" :articles = "top"></blogSwiper>
        <div class="blogContent">
@@ -20,7 +19,7 @@
                            {{art.article_name}}
                        </div>
                        <div class="articleAuthor">
-                            <span class="articleAuthorName">{{art.userInfo.user_real_name}}</span> {{art.article_sort_name}} {{art.comment_count}} 条评论
+                            <span class="articleAuthorName" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> {{art.article_sort_name}} {{art.comment_count}} 条评论
                        </div>
                    </div>
                    <div style="text-align: center;margin-top: 17px;">
@@ -98,7 +97,7 @@
 <script>
 import {getUserInfo} from '../../store/service'
 import {index} from '../../store/index'
-import blogHeader from './com/blogHead.vue'
+
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'
@@ -151,7 +150,7 @@ import blogFoot from './com/blogFoot.vue'
         
     },
     components:{
-        blogHeader,blogLogo,blogSwiper,upToTop,blogFoot
+        blogLogo,blogSwiper,upToTop,blogFoot
     },
     methods:{
         headAction(action){
@@ -189,7 +188,9 @@ import blogFoot from './com/blogFoot.vue'
             return formatTime(new Date(time),'dd')
 
         },
- 
+        clickUser(user){
+            this.$router.push('userInfo/' + user.user_id)
+        }
     },
     computed:{
         loadMoreWord(){

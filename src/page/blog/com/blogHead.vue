@@ -72,9 +72,12 @@
       color: white;
       width: 100%;
       font-size: 20px;
-      margin-top: 30px;
+      
       display: flex;
       justify-content: space-between;
+      position: fixed;
+      background: deepskyblue;
+      z-index: 100;
  }
 
  .bloglogo img {
@@ -87,18 +90,37 @@
     display: inline-block;
 }
   .rightMenu{
-      float: right;
-      width: 360px;
     
+      width: 360px;
       display: flex;
       justify-content: space-around
   }
 
- @media (max-width:480px){
-     .bloglogo img {
-         display: none;
-     }
- } 
+@media (max-width:480px){
+    .bloglogo img {
+        display: none;
+    }
+} 
+@media (min-width:1200px){
+    .blogheader{
+        padding: 0px 100px;
+    }
+} 
+@media (min-width:1400px){
+    .blogheader{
+        padding: 0px 200px;
+    }
+} 
+@media (min-width:1600px){
+    .blogheader{
+        padding: 0px 300px;
+    }
+} 
+@media (min-width:1800px){
+    .blogheader{
+        padding: 0px 400px;
+    }
+} 
 .rightMenuLogin{
     line-height: 35px;
 }

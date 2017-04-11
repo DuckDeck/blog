@@ -242,41 +242,6 @@ module.exports = {
        
     },
 
-    'GET /api/article/:userId': async (ctx, next) => {
-
-        let id = ctx.params.userId
-        let articleResult = await Article.articles(id)
-        if(articleResult.code != 0){
-            ctx.rest(articleResult)
-            return
-        }
-        let articles = articleResult.data
-        let article_ids = articles.map((s)=>{
-            return s.article_id
-        })
-        if(article_ids==undefined){
-            article_ids = [0]
-        }
-        let tagsResult = await Tag.articleTags(article_ids)
-        tagsResult = tagsResult.filter((s)=>{
-               return s.data.length > 0
-        })
-        let a = articles.map((s)=>{
-            let t = tagsResult.find((k)=>{
-                return k.data[0].article_id == s.article_id
-            })
-            s['tag'] =  t==undefined ? [] : t.data
-            return s
-        })
-        a = a.sort((a,b)=>{
-            a.article_up > b.article_up
-        })
-        let top = a.shift()
-        let res = {top:top,artilces:a}
-        ctx.rest(Result.create(0,res))
-    },
-
-
     'POST /api/article/:userId/:token': async (ctx, next) => {
         let result0 = await Tool.checkToken(ctx)
         if(result0.code != 0){

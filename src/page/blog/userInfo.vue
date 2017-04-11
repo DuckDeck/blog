@@ -1,8 +1,17 @@
 <template>
-     <div class="container">
-          <blogHeader  :userInfo = "articleUserInfo"  @headAction="headAction"></blogHeader>      
+     <div class="container">    
             <div class="main-page">          
-                   
+                   <div class="articleUserInfo">
+                        <img :src="userInfo.user_image_url" class="userArticleHead" alt="">
+                        <div class="articleUserDetail">
+                            <div>
+                                <span class="articleAuthorTag">作者</span> <span>{{userInfo.user_real_name}}</span>
+                            </div>
+                            <div class="articleReleaseTime">
+                                <span>发布于:{{articleReleaseTime}}  </span> <span>  文章数{{userInfo.article_count}}</span>
+                            </div>
+                        </div>
+                </div>
             </div>
            <upToTop></upToTop>
            <blogFoot></blogFoot>
@@ -57,5 +66,8 @@ import blogFoot from './com/blogFoot.vue'
   }
 </script>
 <style >
-
+.main-page{
+   margin-top: 60px;
+   background: white;
+}
 </style>

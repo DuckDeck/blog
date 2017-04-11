@@ -1,7 +1,5 @@
 <template>
-
-     <div class="container">
-          <blogHeader  :userInfo = "articleUserInfo"  @headAction="headAction"></blogHeader>      
+     <div class="container">   
             <div class="main-page">          
                     <div class=" article-content">
                        <header>
@@ -46,18 +44,12 @@ import userArtileInfo from './com/userArticleInfo.vue'
   export default {
     data() {
       return {
-          userInfo:{},
           article:{},
           articleUserInfo:{}
       }
     },
     async mounted(){
         let self= this
-        if(getStore('userInfo')){
-            this.isLogin = true
-            this.userInfo = getStore('userInfo')
-        }
-        
         let id = this.$route.params.articleId
         let res = await articleById(id)
         if(res.code == 0){
@@ -144,8 +136,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
   }
 
 .main-page{
-      position: relative;
-    margin-top: 40px;
+   margin-top: 60px;
 }
 .content-main{
     padding-left: 340px;

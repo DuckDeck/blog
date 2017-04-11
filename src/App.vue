@@ -1,11 +1,47 @@
 <template>
-	<div>
+	
 		<transition name="router-fade" mode="out-in">
-    		<router-view></router-view>
+			<div style="overflow: hidden">
+				<blogHeader :userInfo = "userInfo"></blogHeader>
+				<router-view></router-view>
+			</div>
+    		
     	</transition>
-    </div>
+  
 </template>
+<script>
+import blogHeader from './page/blog/com/blogHead.vue'
+  export default {
+    data() {
+      return {
+          userInfo:{},
+         
+      }
+    },
+    async mounted(){
+        let self= this
+        if(getStore('userInfo')){
+            this.isLogin = true
+            this.userInfo = getStore('userInfo')
+        }
+    },
+    methods:{
+        headAction(action){
+            if(action == 'login'){
+                this.$router.push('/login')
+            }
+            else if(action == 'logout'){
+                this.userInfo =  {}
+            }
+        },
+    },
+    components:{
+        blogHeader
+    },
+ 
 
+  }
+</script>
 
 
 <style lang="scss">
