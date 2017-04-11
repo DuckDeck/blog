@@ -4,10 +4,14 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
-    userInfoById:`select  user_id , user_real_name , user_phone , user_gender , user_qq  , user_email, user_address, user_mark,user_birthday,user_description,user_image_url, user_last_update_time , user_says  from user_detail where user_id = ?`,
+    userInfoById:`select  user_id , user_real_name , user_phone , user_gender , 
+    user_qq  , user_email, user_address, user_mark,user_birthday,user_description,user_image_url, 
+    user_last_update_time , user_says ,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id
+               group by user_id) as article_count from user_detail where user_id = ?`,
     userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user_detail where user_id in',
     updateUserHead:'update user set user_image_url = ? where user_id = ?'
 }
+
 class User{
     constructor(userName,password){
         this.user_group_id = 0

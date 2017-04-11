@@ -1,32 +1,32 @@
 <template>
 
      <div class="container">
-          <blogHeader  :userInfo = "userInfo"  @headAction="headAction"></blogHeader>      
+          <blogHeader  :userInfo = "articleUserInfo"  @headAction="headAction"></blogHeader>      
             <div class="main-page">          
-                         <div class=" article-content">
-                             <header>
-                                <div  class="articleHeader" >
-                                    {{article.article_name}}
-                                </div>
-                                <div class="articleInfoClass">
-                                    发布于<span>{{releaseDate}}</span>  <span>  {{article.sort_name}}</span> <span>  {{article.article_click}}</span>浏览
-                                </div>
-                                <div  class="articleTagClass">
-                                        <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
-                                </div>
-                            </header>
-                            <div class="articleSeperateLine"></div>
-                            <article class="articleContentClass" v-html = "article.article_content"></article>
-                             <writeComment  @submitComment="submitComment" @refreshComment = "refreshComment"></writeComment>
-                              
-                            <div class="articleComments">
-                                <div class="articleCommentsCount">
-                                    {{commentCount}}条评论  
-                                </div>
-                                <userComment v-for="com in article.comments" :comment="com" ></userComment>
+                    <div class=" article-content">
+                       <header>
+                            <div  class="articleHeader" >
+                                {{article.article_name}}
                             </div>
-                         </div>
-            
+                            <userArtileInfo class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
+                            <div class="articleInfoClass">
+                                 <span>  {{article.sort_name}}</span> <span>  {{article.article_click}}</span>浏览量
+                            </div>
+                            <div  class="articleTagClass">
+                                    <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
+                            </div>
+                       </header>
+                    <div class="articleSeperateLine"></div>
+                    <article class="articleContentClass" v-html = "article.article_content"></article>
+                        <writeComment  @submitComment="submitComment" @refreshComment = "refreshComment"></writeComment>
+                        
+                    <div class="articleComments">
+                        <div class="articleCommentsCount">
+                            {{commentCount}}条评论  
+                        </div>
+                        <userComment v-for="com in article.comments" :comment="com" ></userComment>
+                    </div>
+                    </div>
                 </div>
            <upToTop></upToTop>
            <blogFoot></blogFoot>
@@ -41,12 +41,14 @@ import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
+import userArtileInfo from './com/userArticleInfo.vue'
 //todo comment sort feature
   export default {
     data() {
       return {
           userInfo:{},
           article:{},
+          articleUserInfo:{}
       }
     },
     async mounted(){
@@ -60,6 +62,8 @@ import blogFoot from './com/blogFoot.vue'
         let res = await articleById(id)
         if(res.code == 0){
             this.article = res.data
+            this.articleUserInfo = res.data.userInfo
+            this.articleUserInfo.article_release_time = res.data.article_release_time
         }
         else{
             toast(this,res.cMsg)
@@ -109,7 +113,7 @@ import blogFoot from './com/blogFoot.vue'
         }
     },
     components:{
-        blogHeader,blogSide,writeComment,userComment,upToTop,blogFoot
+        blogHeader,blogSide,writeComment,userComment,upToTop,blogFoot,userArtileInfo
     },
     computed:{
         releaseDate(){
@@ -149,6 +153,11 @@ import blogFoot from './com/blogFoot.vue'
 	box-sizing: border-box;
 	float: none;
 }
+.userArtileInfo{
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .article-content{
     background: white;
     border-top: 7px solid #10a5cd;
@@ -162,12 +171,12 @@ import blogFoot from './com/blogFoot.vue'
 .articleInfoClass{
     font-size: 20px;
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 50px;
 }
 .articleTagClass{
 
     font-size: 20px;
-    margin-left: 20px;
+    margin-left: 50px;
     margin-top: 10px;
 }
 .articleTagClass span{

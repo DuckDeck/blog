@@ -1,12 +1,12 @@
 <template>
-    <div class="userInfo">
-        <img src="" class="userHead" alt="">
-        <div>
+    <div class="articleUserInfo">
+        <img :src="userInfo.user_image_url" class="userArticleHead" alt="">
+        <div class="articleUserDetail">
             <div>
-                <span>作者</span> <span></span>
+                <span class="articleAuthorTag">作者</span> <span>{{userInfo.user_real_name}}</span>
             </div>
-            <div>
-                <span></span> <span>文章数</span>
+            <div class="articleReleaseTime">
+                <span>发布于:{{articleReleaseTime}}  </span> <span>  文章数{{userInfo.article_count}}</span>
             </div>
         </div>
     </div>
@@ -19,25 +19,39 @@
             }
         },
         props:{  
-          
+          userInfo:{
+            type:Object
+          }
         },
-        methods:{
-           
+        computed:{
+           articleReleaseTime(){
+               return formatTime(new Date(this.userInfo.article_release_time))
+           }
         },
     }
 </script>
 <style scoped>
-.blogLogo{
-    text-align: center;
-    font-size: 20px;
+.articleUserInfo{
+    font-size: 16px;
+    display: flex;
 }
-.blogLogo img{
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
+.userArticleHead{
+ width: 44px;
+ height: 44px;
+ border-radius: 44px;
+ border: 1px solid #bbb;
 }
-.logoDess{
-    margin-top: 20px;
-    color: white;
+.articleUserDetail{
+    margin-left: 15px;
+}
+.articleAuthorTag{
+    color: mediumvioletred;
+    border: 1px solid mediumvioletred;
+    padding: 2px;
+    border-radius: 2px;
+}
+.articleReleaseTime{
+    font-size: 14px;
+    color: #aaa;
 }
 </style>

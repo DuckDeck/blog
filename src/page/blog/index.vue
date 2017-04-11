@@ -20,7 +20,7 @@
                            {{art.article_name}}
                        </div>
                        <div class="articleAuthor">
-                            {{art.userInfo.user_real_name}} {{art.article_sort_name}} {{art.comment_count}} 条评论
+                            <span class="articleAuthorName">{{art.userInfo.user_real_name}}</span> {{art.article_sort_name}} {{art.comment_count}} 条评论
                        </div>
                    </div>
                    <div style="text-align: center;margin-top: 17px;">
@@ -35,6 +35,10 @@
                         </el-tag>
                   </div>
                   
+               </div>
+               <!--这里面以添加加载细节-->
+               <div class="loadMore">
+                   {{loadMoreWord}}
                </div>
            </div>
            <div class="articlesNews">
@@ -108,6 +112,7 @@ import blogFoot from './com/blogFoot.vue'
             sorts:[],
             newComment:[],
             authors:[],
+            isCanLoadMore:true,
             swiperOption: {
                 pagination: '.swiper-pagination',
                 slidesPerView: 1,
@@ -185,8 +190,12 @@ import blogFoot from './com/blogFoot.vue'
 
         },
  
-   }
-
+    },
+    computed:{
+        loadMoreWord(){
+           return  this.isCanLoadMore?'加载更多...':'已经全部加载完'
+        }
+    }
   }
 
 </script>
@@ -235,6 +244,16 @@ import blogFoot from './com/blogFoot.vue'
     font-size: 15px;
     margin-top: 5px;
 }
+.articleAuthorName{
+    color: mediumvioletred;
+    border: 1px solid mediumvioletred;
+    padding: 2px;
+    border-radius: 2px;
+    font-size: 14px;
+}
+.articleAuthorName:hover{
+    cursor: pointer;
+}
 .articleContent{
     margin:20px 70px;
 }
@@ -242,10 +261,17 @@ import blogFoot from './com/blogFoot.vue'
     width: 80%;
    
 }
-.detailButton{
-    position: absolute;
-    right:0px;
-    bottom: 10px;
+.loadMore{
+    background: #aaa;
+    margin: 10px 10px;
+    color: white;
+    font-size: 18px;
+    padding: 4px;
+    text-align: center;
+    border-radius: 5px;
+}
+.loadMore:hover{
+    cursor: pointer;
 }
 .articleTags{
     margin:20px 70px;

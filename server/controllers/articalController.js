@@ -236,7 +236,7 @@ module.exports = {
             ctx.rest(resUser)
             return
        }
-       article.user = resUser.data
+       article.userInfo = resUser.data[0]
        ctx.rest(Result.create(0,article))
     
        
