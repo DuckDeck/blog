@@ -87,6 +87,7 @@
            </div>
        </div>
        <upToTop></upToTop>
+       <blogFoot></blogFoot>
   </div>
 </template>
 
@@ -97,6 +98,7 @@ import blogHeader from './com/blogHead.vue'
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'
+import blogFoot from './com/blogFoot.vue'
   export default {
     data() {
       return {
@@ -144,7 +146,7 @@ import upToTop from './com/upToTop.vue'
         
     },
     components:{
-        blogHeader,blogLogo,blogSwiper,upToTop
+        blogHeader,blogLogo,blogSwiper,upToTop,blogFoot
     },
     methods:{
         headAction(action){

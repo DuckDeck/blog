@@ -25,8 +25,8 @@ export const login = function(userName,password){
     return setpromisePost(url,{userName:userName,password:password})
 }
 
-export const getUserInfo = function(id){
-    const url = HostName +  'user/' + id 
+export const getUserInfo = function(){
+    const url = HostName +  'user/' + userId 
     return setpromiseGet(url)
 }
 

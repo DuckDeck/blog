@@ -17,7 +17,7 @@
 
         methods:{
            uptoTop(){
-				console.log('to top')
+				console.log('to TOP')
 			}
         },
     }

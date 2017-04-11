@@ -121,6 +121,8 @@ module.exports = {
             ctx.rest(resArticle)
             return
        }
+       
+
        let resTags =await Tag.articleTagByArticleId(id)
        if(resTags.code != 0){
             ctx.rest(resTags)
@@ -227,6 +229,14 @@ module.exports = {
             }
        }
        article.comments = mainCom
+     
+       let user_id = article.user_id
+       let resUser = await User.userInfoById(user_id)
+       if(resUser.code != 0){
+            ctx.rest(resUser)
+            return
+       }
+       article.user = resUser.data
        ctx.rest(Result.create(0,article))
     
        

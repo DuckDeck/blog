@@ -28,7 +28,8 @@
                          </div>
             
                 </div>
-          
+           <upToTop></upToTop>
+           <blogFoot></blogFoot>
         </div> 
 </template>
 
@@ -38,6 +39,8 @@ import blogHeader from './com/blogHead.vue'
 import blogSide from './com/blogSide.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
+import upToTop from './com/upToTop.vue'
+import blogFoot from './com/blogFoot.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -106,7 +109,7 @@ import userComment from './com/userComment.vue'
         }
     },
     components:{
-        blogHeader,blogSide,writeComment,userComment
+        blogHeader,blogSide,writeComment,userComment,upToTop,blogFoot
     },
     computed:{
         releaseDate(){

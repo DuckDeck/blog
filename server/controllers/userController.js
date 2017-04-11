@@ -1,5 +1,5 @@
 const APIError = require('../rest').APIError;
-const user = require('../model/user')
+const User = require('../model/user')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const path = require('path')
@@ -67,28 +67,28 @@ module.exports = {
         m = {
             userName: t.userName.trim(),
             password: t.password.trim()
-        };
-      await user.checkLogin(m.userName).then(function(result){
-          if(result.data.length >0){
-              let user = result.data[0]
-              let pass = user.user_password    
-              let mdPass = Tool.md5(m.password)
-              if(pass == mdPass){
-                   let token = Tool.md5(Math.random().toString())
-                   await user.saveToken(token,user.user_id)
-                   let result = Result.create(0,{token:token,user_id:user.user_id})
-                   ctx.rest(result)
-
-              }
-              else{
-                  result = Result.create(501)
-              }
-          }
-          else{
-              result = Result.create(500)
-          }
-         ctx.rest(result)     
-      })
+        }
+    
+       let res =  await User.checkLogin(m.userName)
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
+       if(res.data.length <= 0){
+           ctx.rest(Result.create(500))
+           return
+       }
+       let user = res.data[0]
+       let pass = user.user_password    
+       let mdPass = Tool.md5(m.password)
+       if(pass != mdPass){
+           ctx.rest(Result.create(501))
+           return
+       }
+       let token = Tool.md5(Math.random().toString())
+       await User.saveToken(token,user.user_id)
+       let result = Result.create(0,{token:token,user_id:user.user_id})
+       ctx.rest(result)
     },
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Tool.checkToken(ctx)
@@ -113,7 +113,7 @@ module.exports = {
            user_id:id,
            user_image_url:urlPath
        }
-       let res = await user.updateUserHead(userInsert)
+       let res = await User.updateUserHead(userInsert)
        res.data = {url:urlPath}
        ctx.rest(res)
     },
@@ -123,7 +123,7 @@ module.exports = {
        let token = ctx.params.token
        //只测试这一下，不然后太麻烦
        //已经OK了，这下一般没会人去破解
-       await user.userInfoById(id).then(function(result){
+       await User.userInfoById(id).then(function(result){
             if(result.data.length > 0){
                 let user = result.data[0]
                 result.data = user
