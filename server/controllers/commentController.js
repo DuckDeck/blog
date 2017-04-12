@@ -5,6 +5,7 @@ const Tool = require('../tool/tool')
 const User = require('../model/user')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
+const Dynamic = require('../model/dynamic')
 module.exports = {
 
     'GET /api/articleComment/:articleId': async (ctx, next) => {
@@ -183,11 +184,14 @@ module.exports = {
             }
             com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
-            
+            let dynamic = new Dynamic(id,res.data.id,com.comment_scope,7,0)
+            await Dynamic.save(dynamic)
             ctx.rest(res)
         }
         else{
             let res = await Comment.insertMainComment(com)
+            let dynamic = new Dynamic(id,res.data.id,com.commentTargetId,4,0)
+            await Dynamic.save(dynamic)
             ctx.rest(res)
         }
         

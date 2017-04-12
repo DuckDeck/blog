@@ -6,10 +6,11 @@ const sqls = {
    dynamicByUserId:`select * from user_dynamic where dynamic_user_id = ? order by dynamic_oper_time desc limit ? ,?`
 }
 class Dynamic{
-    constructor(dynamic_user_id,dynamic_target_id,dynamic_type_id,dynamic_oper_type){
+    constructor(dynamic_user_id,dynamic_target_id,dynamic_target_belong_id,dynamic_type_id,dynamic_oper_type){
         this.dynamic_id = 0
         this.dynamic_user_id = dynamic_user_id
         this.dynamic_target_id = dynamic_target_id
+        this.dynamic_target_belong_id = dynamic_target_belong_id
         this.dynamic_type_id = dynamic_type_id
         switch(dynamic_type_id){
             case 1:
@@ -19,14 +20,20 @@ class Dynamic{
             case 3:
             this.dynamic_type_name = '删除了文章'
             case 4:
-            this.dynamic_type_name = '发布了评论'
-            case 5:
-            this.dynamic_type_name = '修改了文章'
+            this.dynamic_type_name = '发布了评论' //大
+            case 5: 
+            this.dynamic_type_name = '修改了评论' //大
             case 6:
-            this.dynamic_type_name = '删除了文章'
+            this.dynamic_type_name = '删除了评论' //大
             case 7:
-            this.dynamic_type_name = '关注了'
+            this.dynamic_type_name = '发布了评论' //小
             case 8:
+            this.dynamic_type_name = '修改了评论' //小
+            case 9:
+            this.dynamic_type_name = '删除了评论' //小
+            case 10:
+            this.dynamic_type_name = '关注了'
+            case 11:
             this.dynamic_type_name = '取消关注了'
             break
         }
@@ -38,7 +45,7 @@ class Dynamic{
     }
 
     static save(dynamic){
-       return db.exec(sqls.insert,[dynamic.dynamic_id,dynamic.dynamic_user_id,dynamic.dynamic_target_id,
+       return db.exec(sqls.insert,[dynamic.dynamic_id,dynamic.dynamic_user_id,dynamic.dynamic_target_id,dynamic.dynamic_target_belong_id,
        dynamic.dynamic_type_id,dynamic.dynamic_type_name,dynamic.dynamic_oper_type,dynamic.dynamic_oper_name,dynamic.dynamic_oper_time])
     }
 

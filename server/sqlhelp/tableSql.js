@@ -255,6 +255,7 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
  dynamic_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
  dynamic_user_id mediumint(8) NOT NULL COMMENT '用户ID',
  dynamic_target_id mediumint(8) NOT NULL COMMENT '目标ID',
+ dynamic_target_belong_id mediumint(8) NOT NULL COMMENT '目标ID的所属ID',
  dynamic_type_id mediumint(8) NOT NULL COMMENT '类型Id',
  dynamic_type_name varchar(255) NOT NULL COMMENT '类型名称',
  dynamic_oper_type mediumint(8) NOT NULL COMMENT '操作类型ID',

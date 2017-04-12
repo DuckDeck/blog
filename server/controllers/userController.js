@@ -8,6 +8,7 @@ const Link = require('../model/link')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
+const Dynamic = require('../model/dynamic')
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -155,35 +156,122 @@ module.exports = {
     
     'GET /api/userdynamic/:userId': async (ctx, next) => {
        let id = ctx.params.userId
-       //获取个人信息
-       let res = await User.userInfoById(id)
+       let res = await Dynamic.userDynamic(id)
        if(res.code != 0){
-          ctx.rest(res)
-          return
+         ctx.rest(res)
+         return
        }
-       let userInfo = res.data[0]
-       res = await Link.userLinks(id)
-       if(res.code != 0){
-          ctx.rest(res)
-          return
+       let dynamics = res.data
+       
+       let sqlSubCommendIds = dynamics.map(s=>{
+           if(s.dynamic_type_id == 7){
+               return s.dynamic_target_id
+           }
+           return 0
+       })
+       let sqlMainCommendIds = dynamics.map(s=>{
+           if(s.dynamic_type_id == 4){
+               return s.dynamic_target_id
+           }
+           if(s.dynamic_type_id == 7){
+               return s.dynamic_target_belong_id
+           }
+           return 0
+       })
+       let sqlArticlesIds =  dynamics.map(s=>{
+           if(s.dynamic_type_id == 4){
+               return s.dynamic_target_belong_id
+           }
+           if(s.dynamic_type_id == 1){
+               return s.dynamic_target_id
+           }
+           return 0
+       })
+       let sql = ``
+       if(sqlSubCommendIds.length > 0){
+            sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
+                   comment_time,comment_type,comment_scope FROM user_sub_comment where comment_id in (` + sqlSubCommendIds.join(',') + `)`
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            for(var day of dynamics){
+                let com = res.data.find(s=>{
+                    return s.commend_id == day.dynamic_target_id && day.dynamic_type_id == 7
+                })
+                if(com){
+                    day.selfObject = com
+                }
+                else{
+                    day.selfObject = {}
+                }
+            }
        }
-       userInfo.links = res.data
-       let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+
+       if(sqlMainCommendIds.length > 0){
+            sql =  `omment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
+                    comment_time FROM user_sub_comment where comment_id in (` + sqlMainCommendIds.join(',') + `)`
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            for(var day of dynamics){
+                let com = res.data.find(s=>{
+                    return s.commend_id == day.dynamic_target_belong_id && day.dynamic_type_id == 7
+                })
+                if(com){
+                    day.targetObject = com
+                }
+                else{
+                    day.targetObject = {}
+                }
+                com =  res.data.find(s=>{
+                    return s.commend_id == day.dynamic_target_id && day.dynamic_type_id == 4
+                })
+                if(com){
+                    day.selfObject = com
+                }
+                else{
+                    day.selfObject = {}
+                }
+            }
+       }
+       
+       if(sqlArticlesIds.length > 0){
+            sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                  as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article where user_id = ?  order by article_create_time desc limit 10`
-       res = await DB.exec(sql,[id])
-       if(res.code != 0){
-          ctx.rest(res)
-          return
+                 article.article_id) as comment_count from article where article_id in (  ` + sqlArticlesIds.join(',') + `)`
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            for(var day of dynamics){
+                let art = res.data.find(s=>{
+                    return s.article_id == day.dynamic_target_belong_id && day.dynamic_type_id == 4
+                })
+                if(com){
+                    day.targetObject = art
+                }
+                else{
+                    day.targetObject = {}
+                }
+                art =  res.data.find(s=>{
+                    return s.article_id == day.dynamic_target_id && day.dynamic_type_id == 1
+                })
+                if(com){
+                    day.selfObject = art
+                }
+                else{
+                    day.selfObject = {}
+                }
+            }
        }
-       userInfo.articles = res.data
-       res = await Sort.sorts(id)
-       if(res.code != 0){
-          ctx.rest(res)
-          return
-       }
-       userInfo.sorts = res.data
-       ctx.rest(Result.create(0,userInfo))
+
+
+       ctx.rest(Result.create(0,dynamics))
     },
 
 
