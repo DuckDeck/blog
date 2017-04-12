@@ -379,6 +379,41 @@ CREATE TABLE  IF NOT EXISTS blog_manager (
 
 
 ------------------------------
+-- user_dynamic 用户动态
+------------------------------
+CREATE TABLE  IF NOT EXISTS user_dynamic (
+ dynamic_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
+ dynamic_user_id mediumint(8) NOT NULL COMMENT '用户ID',
+ dynamic_target_id mediumint(8) NOT NULL COMMENT '目标ID',
+ dynamic_type_id mediumint(8) NOT NULL COMMENT '类型Id',
+ dynamic_type_name varchar(255) NOT NULL COMMENT '类型名称',
+ dynamic_oper_type mediumint(8) NOT NULL COMMENT '操作类型ID',
+ dynamic_oper_name varchar(255) NOT NULL COMMENT '操作类型名称',
+ dynamic_oper_time BIGINT(15) NOT NULL COMMENT '操作时间',
+ PRIMARY KEY (dynamic_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+
+类型Id: 1,2,3,4,5,6,7,8
+1 发表文章
+2 修改文章
+3 删除文章
+4 发表评论
+5 修改评论
+6 删除评论
+7 关注某人
+8 取消关注某人
+//关注专题 
+
+
+操作类型ID
+1 添加（关注）
+2 修改
+3 删除（取消）
+
+
+
+------------------------------
 -- create view
 ------------------------------
 create view article_tag_map_view as  select tag.* , 

@@ -177,6 +177,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
     margin:20px;
     font-size: 20px;
     padding-bottom: 50px;
+    margin-top: 50px;
 }
 
 .articleComments{

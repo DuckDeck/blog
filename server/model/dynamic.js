@@ -1,0 +1,49 @@
+
+const db = require('../sqlhelp/mysql') 
+const Tool = require('../tool/tool')
+const sqls = {
+   insert:`insert into user_dynamic values(0,?,?,?,?,?,?,?)`,
+   dynamicByUserId:`select * from user_dynamic where dynamic_user_id = ? order by dynamic_oper_time desc limit ? ,?`
+}
+class Dynamic{
+    constructor(dynamic_user_id,dynamic_target_id,dynamic_type_id,dynamic_oper_type){
+        this.dynamic_id = 0
+        this.dynamic_user_id = dynamic_user_id
+        this.dynamic_target_id = dynamic_target_id
+        this.dynamic_type_id = dynamic_type_id
+        switch(dynamic_type_id){
+            case 1:
+            this.dynamic_type_name = '发表了文章'
+            case 2:
+            this.dynamic_type_name = '修改了文章'
+            case 3:
+            this.dynamic_type_name = '删除了文章'
+            case 4:
+            this.dynamic_type_name = '发布了评论'
+            case 5:
+            this.dynamic_type_name = '修改了文章'
+            case 6:
+            this.dynamic_type_name = '删除了文章'
+            case 7:
+            this.dynamic_type_name = '关注了'
+            case 8:
+            this.dynamic_type_name = '取消关注了'
+            break
+        }
+        this.dynamic_oper_type = dynamic_oper_type
+        
+        this.dynamic_oper_name = '' //备用
+     
+        this.dynamic_oper_time = new Date().getTime()
+    }
+
+    static save(dynamic){
+       return db.exec(sqls.insert,[dynamic.dynamic_id,dynamic.dynamic_user_id,dynamic.dynamic_target_id,
+       dynamic.dynamic_type_id,dynamic.dynamic_type_name,dynamic.dynamic_oper_type,dynamic.dynamic_oper_name,dynamic.dynamic_oper_time])
+    }
+
+    static userDynamic(id,limit = 0,size = 10){
+        return db.exec(sqls.dynamicByUserId,[id,limit,size])
+    }
+}
+module.exports = Dynamic

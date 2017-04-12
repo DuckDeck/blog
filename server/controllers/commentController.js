@@ -183,6 +183,7 @@ module.exports = {
             }
             com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
+            
             ctx.rest(res)
         }
         else{

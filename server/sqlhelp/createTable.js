@@ -64,7 +64,7 @@ const actions = {
         pool.query(sqls.createUserSubCommentTb)
         pool.query(sqls.createSMSTb)
 
-
+        pool.query(sqls.createUserDynamicTb)
         
 
         
