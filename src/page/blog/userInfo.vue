@@ -18,25 +18,18 @@
                         </div>
                     
                     </div>
-                     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                        <el-tab-pane label="文章详情" name="articleDetail">
-                            <header>
-            
-                            <div class="articleInfoClass">
-                                发布于<span>{{releaseDate}}</span>  <span>  {{articleDetail.sort_name}}</span> <span>  {{articleDetail.article_click}}</span>浏览
-                            </div>
-                            <div  class="articleTagClass">
-                                    <el-tag  v-for="t in articleDetail.tags"   type="primary"  >{{t.tag_name}}</el-tag>
-                            </div>
-                        </header>
-                        <div class="articleSeperateLine"></div>
-                        <article class="articleContentClass" v-html = "articleDetail.article_content"></article>
-                    </el-tab-pane>
-                        <el-tab-pane label="作者信息" name="authorInfo">
-                            <userInfoShow :userInfo ="userInfo" ></userInfoShow>
+                     <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
+                        <el-tab-pane   name="articles">
+                            <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
+                            
+
+                       
+                         </el-tab-pane>
+                        <el-tab-pane  name="dynamic">
+                            <span slot="label"><i class="el-icon-date"></i> 动态 </span>
                         </el-tab-pane>
-                        <el-tab-pane label="文章评论" name="third">
-                        <comment v-for="comment in comments" :comment = "comment"></comment>
+                        <el-tab-pane  name="comment">
+                            <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
                         </el-tab-pane>
                         
                     </el-tabs>
@@ -68,7 +61,7 @@ import blogFoot from './com/blogFoot.vue'
     data() {
       return {
           userInfo:{},
-         
+          activeName:'articles',
       }
     },
     mounted(){
@@ -84,6 +77,9 @@ import blogFoot from './com/blogFoot.vue'
            else{
                toast(this,res.cMsg)
            }
+       },
+       handleClick(tab,event){
+                
        }
         
         
@@ -111,28 +107,34 @@ import blogFoot from './com/blogFoot.vue'
 
 }
 .articleUserInfo{
-
+    padding: 20px;
     display: flex;
     
 }
 .userArticleHead{
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
 }
 .articleUserDetail{
     font-size: 20px;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .userGender{
     font-size: 17px;
     color: lightskyblue;
     margin-left: 5px;
 }
+.userInfoTab{
+    font-size: 20px;
+    background: white;
+    margin-top: 20px;
+}
 .articleUserInfoRight{
     font-size: 15px;
     width: 30%;
     background: white;
+    
 }
 </style>
