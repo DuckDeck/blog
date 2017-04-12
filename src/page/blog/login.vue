@@ -1,5 +1,4 @@
 <template>
-
       <div class="login-body">
           <div class="ms-login">
               <div class="blog-login-title">

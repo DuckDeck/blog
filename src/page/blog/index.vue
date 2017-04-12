@@ -153,15 +153,7 @@ import blogFoot from './com/blogFoot.vue'
         blogLogo,blogSwiper,upToTop,blogFoot
     },
     methods:{
-        headAction(action){
-            if(action == 'login'){
-                this.$router.push('/login')
-            }
-            else if(action == 'logout'){
-                this.userInfo =  {}
-            }
-        },
-        
+       
         checkMore(){
             this.$router.push('/articleList')
         },

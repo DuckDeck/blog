@@ -31,7 +31,7 @@
     export default {
         data() {
             return{
-              
+         
             }
         },
         props:{  
@@ -41,19 +41,20 @@
         },
         methods:{
             login(){
-                this.$emit('headAction','login')
+                this.$router.push('/login')
+                
             },
             handleIconClick(){
 
             },
             register(){
-                this.$emit('headAction','register')
+                console.log('register')
             },
             handleCommand(command) {
                 if(command == 'loginout'){
                     removeStore('userInfo')
                     removeStore('token')
-                    this.$emit('headAction','logout')
+                    this.userInfo = {}
                 }
            },
            toMain(){
@@ -63,7 +64,7 @@
       computed:{
           isLogin(){
               return !isEmpty(this.userInfo)
-          }
+          },
       }
     }
 </script>
@@ -76,7 +77,7 @@
       display: flex;
       justify-content: space-between;
       position: fixed;
-      background: deepskyblue;
+      background: #161E2C;
       z-index: 100;
  }
 

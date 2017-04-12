@@ -41,7 +41,7 @@ export default [
     {
         path: '/login',
         component: login, //顶层路由，对应index.html
-      
+        name:'login'
     },
     {
         path: '/article/:articleId',

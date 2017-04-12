@@ -4,6 +4,7 @@ const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const path = require('path')
 const fs = require('fs')
+const Link = require('../model/link')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
@@ -120,38 +121,29 @@ module.exports = {
     
     'GET /api/user/:userId': async (ctx, next) => {
        let id = ctx.params.userId
-   
-       //只测试这一下，不然后太麻烦
-       //已经OK了，这下一般没会人去破解
-        let articleResult = await Article.articles(id)
-        if(articleResult.code != 0){
-            ctx.rest(articleResult)
-            return
-        }
-        let articles = articleResult.data
-        let article_ids = articles.map((s)=>{
-            return s.article_id
-        })
-        if(article_ids==undefined){
-            article_ids = [0]
-        }
-        let tagsResult = await Tag.articleTags(article_ids)
-        tagsResult = tagsResult.filter((s)=>{
-               return s.data.length > 0
-        })
-        let a = articles.map((s)=>{
-            let t = tagsResult.find((k)=>{
-                return k.data[0].article_id == s.article_id
-            })
-            s['tag'] =  t==undefined ? [] : t.data
-            return s
-        })
-        a = a.sort((a,b)=>{
-            a.article_up > b.article_up
-        })
-        let top = a.shift()
-        let res = {top:top,artilces:a}
-        ctx.rest(Result.create(0,res))
+       //获取个人信息
+       let res = await User.userInfoById(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       let userInfo = res.data[0]
+       res = await Link.userLinks(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.links = res.data
+       let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 article.article_id) as comment_count from article where user_id = ?  order by article_create_time desc limit 10`
+       res = await DB.exec(sql,[id])
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.articles = res.data
+       ctx.rest(Result.create(0,userInfo))
     },
     
 

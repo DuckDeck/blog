@@ -21,7 +21,7 @@
             </header>
             <div class="articleSeperateLine"></div>
             <article class="articleContentClass" v-html = "articleDetail.article_content"></article>
-       </el-tab-pane>
+         </el-tab-pane>
             <el-tab-pane label="作者信息" name="authorInfo">
                 <userInfoShow :userInfo ="userInfo" ></userInfoShow>
             </el-tab-pane>

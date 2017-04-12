@@ -2,7 +2,7 @@
 	
 		<transition name="router-fade" mode="out-in">
 			<div style="overflow: hidden">
-				<blogHeader :userInfo = "userInfo"></blogHeader>
+				<blogHeader v-show="needShow" :userInfo = "userInfo"></blogHeader>
 				<router-view></router-view>
 			</div>
     		
@@ -15,26 +15,27 @@ import blogHeader from './page/blog/com/blogHead.vue'
     data() {
       return {
           userInfo:{},
-         
+          needShow:true
       }
     },
     async mounted(){
-        let self= this
+        
         if(getStore('userInfo')){
             this.isLogin = true
             this.userInfo = getStore('userInfo')
         }
+        this.$router.beforeEach((to, from, next) => {
+           
+           if( to.path == '/login'){
+               this.needShow = false
+           }
+           else{
+               this.needShow = true
+           }
+           next()
+        })
     },
-    methods:{
-        headAction(action){
-            if(action == 'login'){
-                this.$router.push('/login')
-            }
-            else if(action == 'logout'){
-                this.userInfo =  {}
-            }
-        },
-    },
+   
     components:{
         blogHeader
     },
