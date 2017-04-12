@@ -7,6 +7,7 @@ const fs = require('fs')
 const Link = require('../model/link')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
+const Sort = require('../model/articleSort')
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -143,9 +144,48 @@ module.exports = {
           return
        }
        userInfo.articles = res.data
+       res = await Sort.sorts(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.sorts = res.data
        ctx.rest(Result.create(0,userInfo))
     },
     
+    'GET /api/userdynamic/:userId': async (ctx, next) => {
+       let id = ctx.params.userId
+       //获取个人信息
+       let res = await User.userInfoById(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       let userInfo = res.data[0]
+       res = await Link.userLinks(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.links = res.data
+       let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 article.article_id) as comment_count from article where user_id = ?  order by article_create_time desc limit 10`
+       res = await DB.exec(sql,[id])
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.articles = res.data
+       res = await Sort.sorts(id)
+       if(res.code != 0){
+          ctx.rest(res)
+          return
+       }
+       userInfo.sorts = res.data
+       ctx.rest(Result.create(0,userInfo))
+    },
+
 
 }
 

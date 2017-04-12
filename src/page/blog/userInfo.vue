@@ -21,9 +21,7 @@
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
                             <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
-                            
-
-                       
+                            <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
@@ -43,6 +41,17 @@
                             {{userInfo.user_description}}
                         </div>
                     </div>
+                    <div>
+                        <i  class="fa fa-link" v-for="link in userInfo.links" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div>
+                            我的分类
+                        </div>
+                        <div v-for="sort in userInfo.sorts">
+                            {{sort.sort_article_name}}
+                        </div>
+                    </div>
                 </div>
             </div>
            <upToTop></upToTop>
@@ -55,12 +64,13 @@ import {getTargetUserInfo} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
-
+import articleCell from './com/articleCell.vue'
 //todo comment sort feature
   export default {
     data() {
       return {
           userInfo:{},
+          articles:[],
           activeName:'articles',
       }
     },
@@ -73,6 +83,11 @@ import blogFoot from './com/blogFoot.vue'
            let res = await getTargetUserInfo(id)
            if(res.code == 0){
                this.userInfo = res.data
+               this.articles = this.userInfo.articles.map(s=>{
+                    s.user_head = this.userInfo.user_image_url
+                    s.user_name = this.userInfo.user_real_name
+                    return s
+               })
            }
            else{
                toast(this,res.cMsg)
@@ -85,7 +100,7 @@ import blogFoot from './com/blogFoot.vue'
         
     },
     components:{
-        blogHeader,upToTop,blogFoot
+        blogHeader,upToTop,blogFoot,articleCell
     },
     computed:{
         releaseDate(){
