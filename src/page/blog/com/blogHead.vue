@@ -31,18 +31,22 @@
     export default {
         data() {
             return{
-         
+                userInfo:{}
             }
         },
-        props:{  
-          userInfo:{
-              type:Object
-          }
+        mounted(){
+            this.$router.beforeEach((to, from, next) => {
+                if(isEmpty(this.userInfo)){
+                   if(getStore('userInfo')){
+                       this.userInfo = getStore('userInfo')
+                   }
+                }
+                next()
+            })
         },
         methods:{
             login(){
                 this.$router.push('/login')
-                
             },
             handleIconClick(){
 

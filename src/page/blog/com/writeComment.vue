@@ -1,12 +1,10 @@
 <template>
     <div class="commentArticle">
-        <el-input type="textarea"
-        :rows="2"
-        :placeholder=placeHolder
-        v-model="comment">
-        </el-input>
-        
-        <el-button class="buttonSubmitArticle" type="primary" @click="submitComment">提交</el-button>
+        <el-input v-show = "canComment"  class="LoginComment" type="textarea" :rows="2" :placeholder=placeHolder  v-model="comment"> </el-input>
+        <div class="notLoginComment" v-show = "!canComment">
+             <el-button  type="primary" @click="LoginToComment">登录</el-button> <span class="loginToComment">后发表评论</span>
+        </div>
+        <el-button  v-show = "canComment" class="buttonSubmitArticle" type="primary" @click="submitComment">提交</el-button>
         <el-button class="buttoncancelComment" v-show="needCancel" @click="cancel">取消</el-button>
         <div style="clear: both"></div>
     </div>
@@ -30,10 +28,27 @@
     },
     methods:{
         submitComment(){
+            if(this.comment.length == 0){
+                toast(this,'评论内容不能为空')
+                return
+            }
+
+            if(getStore('userInfo') == null){
+                toast(this,'请先登录再评论')
+                return
+            }
             this.$emit('submitComment',this.comment)
         },
         cancel(){
             this.$emit('cancelComment')
+        },
+        LoginToComment(){
+            this.$router.push('/login')
+        }
+    },
+    computed:{
+        canComment(){
+           return getStore('userInfo') != null
         }
     }
 
@@ -53,5 +68,16 @@
    margin-top: 10px;
     float: right;
     margin-right: 10px;
+}
+.notLoginComment{
+    background: #eee;
+    text-align: center;
+    padding:20px;
+    border-radius: 5px;
+}
+.loginToComment{
+    margin-left: 10px;
+    font-size: 16px;
+    color: #555;
 }
 </style>

@@ -87,8 +87,8 @@ global.clearStoreExcept = (except)=>{
         }
     }
 }
-global.userId = getStore('token') == null ?  0 : getStore('token').user_id
-global.manageId = getStore('m_token') == null ?  0 : getStore('m_token').m_id
+global.userId = getStore('token') == null ?  null : getStore('token').user_id
+global.manageId = getStore('m_token') == null ?  null : getStore('m_token').m_id
 global.createToken = function(){
     let date = Date.parse(new Date())
     if(getStore('token') == null){

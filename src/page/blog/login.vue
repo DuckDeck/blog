@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {login} from '../../store/service'
+import {login,getUserInfo} from '../../store/service'
     export default {
         data: function(){
             return {
@@ -51,8 +51,20 @@ import {login} from '../../store/service'
                     if (valid) {
                         login(self.ruleForm.username,self.ruleForm.password).then(function(data){
                             if(data.code == 0){
-                                setStore('token',data.data)    
-                                self.$router.back()       
+                                setStore('token',data.data)
+                                getUserInfo(data.data.user_id).then(res=>{
+                                    if(res.code == 0){
+                                        toast(self,'登录成功')
+                                        setStore('userInfo',res.data)
+                                        self.$router.back() 
+                                    }
+                                    else{
+                                        toast(self,res.cMsg)
+                                    }
+                                }).catch(err=>{
+                                     toast(self,err.cMsg)
+                                })
+                                      
                             }
                             else{
                                 toast(self,data.cMsg)
@@ -65,7 +77,6 @@ import {login} from '../../store/service'
                
             },
             close(e){
-                
                 if(e.target!=e.currentTarget) return;
                
             }
