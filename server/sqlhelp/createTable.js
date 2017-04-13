@@ -74,8 +74,9 @@ const actions = {
 
         //create createview
 
-        pool.query(sqls.createTagMapViewL)
+        pool.query(sqls.createTagMapView)
         pool.query(sqls.createUserDetailView)
+        pool.query(sqls.createUserCommentsView)
         //all 21 
     },
 }

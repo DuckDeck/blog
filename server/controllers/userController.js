@@ -285,6 +285,70 @@ module.exports = {
      },
 
 
+    'GET /api/usercomment/:userId': async (ctx, next) => {
+       let id = ctx.params.userId
+       let sql = 'select * from user_comments where commenter_user_id = ' + id + ' order by comment_time desc limit 10'
+       let res = await DB.exec(sql)
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
+       let comments = res.data
+       let articleIds = comments.map(s=>{
+           if(s.comment_scope == 0){
+               return s.comment_target_id
+           }
+           else{
+               return 0
+           }
+       })
+       if(articleIds.length > 0){
+           sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
+           user_id,article_type_id,article_type,article_brief,article_main_img from article where article_id in (` + articleIds.join(',') + `)`
+           res = await DB.exec(sql)
+           if(res.code != 0){
+               ctx.rest(res)
+               return
+           }
+           for(let com of comments){
+               let art = res.data.find(s=>{
+                   return s.article_id == com.comment_target_id
+               })
+               com.target = art
+           }
+       }
+       let subIds =  comments.map(s=>{
+           if( s.comment_scope > 0)
+                return s.comment_target_id
+            else
+                return 0
+       })
+       for(let com of comments){
+            let bigCom = comments.find(s=>{
+                return s.comment_scope == com.comment_id
+            })
+            if(!com.target){
+                com.target = bigCom
+            }
+       }
+       ctx.rest(Result.create(0,comments))
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

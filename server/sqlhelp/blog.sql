@@ -415,13 +415,13 @@ CREATE TABLE  IF NOT EXISTS user_dynamic (
 
 
 ------------------------------
--- create view
+-- create tag_map view
 ------------------------------
 create view article_tag_map_view as  select tag.* , 
 map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id
 
 ------------------------------
--- create view
+-- create user_detail view
 ------------------------------
 
 CREATE VIEW user_detail AS
@@ -440,3 +440,16 @@ select
  a.user_freeze ,
  a.user_auth ,b.*
  from user a join user_info b on a.user_id = b.user_id
+
+
+
+------------------------------
+-- create user_comments view
+------------------------------
+
+ create view user_comments as 
+ SELECT comment_id,comment_target_user_id,comment_target_id,
+comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comment_scope' FROM user_comment  union
+SELECT comment_id,comment_target_user_id,comment_target_id,
+comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM 
+user_sub_comment 
