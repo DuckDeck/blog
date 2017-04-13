@@ -80,7 +80,7 @@ module.exports = {
         }
         
 
-    },
+     },
 
     'GET /api/manage/articleslastcomment/:mId/:token/:index/:size': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
@@ -142,11 +142,11 @@ module.exports = {
         result.count = actArticleCount.data[0].articleCount
         ctx.rest(result)
 
-    },
+     },
 
 
     'POST /api/comment/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -190,27 +190,28 @@ module.exports = {
         }
         else{
             let res = await Comment.insertMainComment(com)
-            let dynamic = new Dynamic(id,res.data.id,com.commentTargetId,4,0)
+            console.log(com)
+            let dynamic = new Dynamic(id,res.data.id,com.comment_target_id,4,0)
             await Dynamic.save(dynamic)
             ctx.rest(res)
         }
         
-    }, //不能让游客评论
+     }, //不能让游客评论
 
 
-   'GET /api/comment/:commentId': async (ctx, next) => {
+    'GET /api/comment/:commentId': async (ctx, next) => {
       await getComment(ctx)
-    },
+     },
 
   
-   'GET /api/comment/:commentId/:userId/:token': async (ctx, next) => {
+    'GET /api/comment/:commentId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
         }
         await getComment(ctx) 
-    },
+     },
     
 
 }

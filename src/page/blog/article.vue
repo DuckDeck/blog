@@ -89,7 +89,6 @@ import userArtileInfo from './com/userArticleInfo.vue'
                if(res.code == 0){
                  this.article.comments.push(res.data)
                }
-              
            }
         },
         async refreshComment(comment_id){

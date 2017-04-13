@@ -27,7 +27,7 @@ module.exports = {
        let sqlUser = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
        let res = await DB.exec(sqlUser,[index * size,size])
        ctx.rest(res)
-    },
+     },
 
     'GET /api/manage/userinfo/:userId/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
@@ -53,7 +53,7 @@ module.exports = {
             }
         }
         ctx.rest(res)
-    },
+     },
 
     'POST /api/login': async (ctx, next) => {
        var
@@ -92,7 +92,7 @@ module.exports = {
        await User.saveToken(token,user.user_id)
        let result = Result.create(0,{token:token,user_id:user.user_id})
        ctx.rest(result)
-    },
+     },
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Tool.checkToken(ctx)
         if(result0.code != 0){
@@ -119,7 +119,7 @@ module.exports = {
        let res = await User.updateUserHead(userInsert)
        res.data = {url:urlPath}
        ctx.rest(res)
-    },
+     },
     
     'GET /api/user/:userId': async (ctx, next) => {
        let id = ctx.params.userId
@@ -152,7 +152,7 @@ module.exports = {
        }
        userInfo.sorts = res.data
        ctx.rest(Result.create(0,userInfo))
-    },
+     },
     
     'GET /api/userdynamic/:userId': async (ctx, next) => {
        let id = ctx.params.userId
@@ -210,32 +210,37 @@ module.exports = {
        }
 
        if(sqlMainCommendIds.length > 0){
-            sql =  `omment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
-                    comment_time FROM user_sub_comment where comment_id in (` + sqlMainCommendIds.join(',') + `)`
+            sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
+                    comment_time FROM user_comment where comment_id in (` + sqlMainCommendIds.join(',') + `)`
             res = await DB.exec(sql)
             if(res.code != 0){
                 ctx.rest(res)
                 return
             }
             for(var day of dynamics){
-                let com = res.data.find(s=>{
-                    return s.commend_id == day.dynamic_target_belong_id && day.dynamic_type_id == 7
-                })
-                if(com){
-                    day.targetObject = com
+                if(day.dynamic_type_id == 7){
+                    let com = res.data.find(s=>{
+                       return s.comment_id == day.dynamic_target_belong_id
+                    })
+                    if(com){
+                        day.targetObject = com
+                    }
+                    else{
+                        day.targetObject = {}
+                    }
                 }
-                else{
-                    day.targetObject = {}
+                if(day.dynamic_type_id == 4){
+                    let  com  =  res.data.find(s=>{
+                       return s.comment_id == day.dynamic_target_id
+                    })
+                    if(com){
+                        day.selfObject = com
+                    }
+                    else{
+                        day.selfObject = {}
+                    }
                 }
-                com =  res.data.find(s=>{
-                    return s.commend_id == day.dynamic_target_id && day.dynamic_type_id == 4
-                })
-                if(com){
-                    day.selfObject = com
-                }
-                else{
-                    day.selfObject = {}
-                }
+                
             }
        }
        
@@ -249,30 +254,35 @@ module.exports = {
                 return
             }
             for(var day of dynamics){
-                let art = res.data.find(s=>{
-                    return s.article_id == day.dynamic_target_belong_id && day.dynamic_type_id == 4
-                })
-                if(com){
-                    day.targetObject = art
+                if(day.dynamic_type_id == 4){
+                    let art = res.data.find(s=>{
+                        return s.article_id == day.dynamic_target_belong_id && day.dynamic_type_id == 4
+                    })
+                    if(art){
+                        day.targetObject = art
+                    }
+                    else{
+                        day.targetObject = {}
+                    }
                 }
-                else{
-                    day.targetObject = {}
+                if(day.dynamic_type_id == 1){
+                    let art =  res.data.find(s=>{
+                        return s.article_id == day.dynamic_target_id && day.dynamic_type_id == 1
+                    })
+                    if(art){
+                        day.selfObject = art
+                    }
+                    else{
+                        day.selfObject = {}
+                    }
                 }
-                art =  res.data.find(s=>{
-                    return s.article_id == day.dynamic_target_id && day.dynamic_type_id == 1
-                })
-                if(com){
-                    day.selfObject = art
-                }
-                else{
-                    day.selfObject = {}
-                }
+                
             }
        }
 
 
        ctx.rest(Result.create(0,dynamics))
-    },
+     },
 
 
 }

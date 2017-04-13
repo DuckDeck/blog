@@ -6,7 +6,7 @@ const db = require('../sqlhelp/mysql')
 class Tool{
     static getType(data){
         return Object.prototype.toString.call(data).slice(8, -1);
-    }
+     }
 
     static convertResultData(result){
         if(result.data.length > 0){
@@ -16,14 +16,14 @@ class Tool{
            result.data = {}
        }
        return result
-    }
+     }
 
     static md5(str){
         var md5sum = crypto.createHash('md5');
         md5sum.update(str);
         str = md5sum.digest('hex');
         return str;
-    }
+     }
 
      /**
      * 加密方法
@@ -38,7 +38,7 @@ class Tool{
         crypted += cipher.final('binary');
         crypted = new Buffer(crypted, 'binary').toString('base64');
         return crypted;
-    };
+     };
 
     /**
      * 解密方法
@@ -53,18 +53,18 @@ class Tool{
         var decoded = decipher.update(crypted, 'binary', 'utf8');
         decoded += decipher.final('utf8');
         return decoded;
-    };
+     };
 
 
     static setPromise(result,ok){
         return new Promise((resolve,reject)=>{
             ok?resolve(result):reject(result)
         })
-    }
+     }
 
     static decryptToken(token){
         return Tool.decrypt(key,iv,token)
-    }
+     }
 
    
 }
