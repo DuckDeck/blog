@@ -97,9 +97,9 @@ module.exports = {
         let size = parseInt(ctx.params.size)
         console.log(index)
         console.log(size)
-        let sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort__id,
+        let sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                     user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
-                    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort__id) 
+                    (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                     as article_sort_name ,(select user_name from user where user.user_id = article.user_id) as user_name, 
                     (select count(comment_id) from user_comment where user_comment.comment_target_id =
                     article.article_id) as comment_count from article limit ` + size * index + `,` + size

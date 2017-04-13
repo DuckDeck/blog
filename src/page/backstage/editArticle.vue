@@ -75,7 +75,7 @@ import {articleById} from '../../store/manageService'
                  let articleDetail = res.data
                  this.article.title = articleDetail.article_name
                  this.selectedTags = articleDetail.tags
-                 this.selectedSortId = articleDetail.article_sort__id
+                 this.selectedSortId = articleDetail.article_sort_id
                  this.content = articleDetail.article_content
                  let userId = articleDetail.user_id
                  res = await getTags(userId)
