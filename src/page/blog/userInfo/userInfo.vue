@@ -6,7 +6,7 @@
                         <img :src="userInfo.user_image_url" class="userArticleHead" alt="">
                         <div class="articleUserDetail">
                             <div >
-                                <span>{{userInfo.user_real_name}}</span> 
+                                <span style="font-weight: bold">{{userInfo.user_real_name}}</span> 
                                 <i class="fa fa-venus userGender" v-show="userInfo.user_gender == '男'" aria-hidden="true"></i>
                                 <i  class="fa fa-mars userGender" v-show="userInfo.user_gender != '男'" aria-hidden="true"></i>
                             </div>

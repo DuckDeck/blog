@@ -1,16 +1,16 @@
 <template>
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
-            <img src="" alt="">
+            <img :src="articleInfo.user_image_url" alt="">
             <span>{{articleInfo.user_name}}</span>
             <span>{{createTile}}</span>
         </div>
-        <div class="articleContent">
-            <div>
-               <span>{{articleInfo.article_name}}</span>
-               <p>{{articleInfo.article_brief}}</p>
+        <div class="articleCellContent">
+            <div >
+               <span class="articleCellContentTitle">{{articleInfo.article_name}}</span>
+               <p style="margin-bottom: 0rem">{{articleInfo.article_brief.slice(0,100)}}</p>
             </div>
-            <img v-if="articleInfo.article_main_img.length > 0" :src="articleInfo.article_main_img" alt="">
+            <img class="articleCellContenImg" v-if="articleInfo.article_main_img.length > 0" :src="articleInfo.article_main_img" alt="">
         </div>
         <div class="articleTailInfo">
            {{articleInfo.article_sort_name}} <i class="fa fa-eye"  aria-hidden="true"></i>
@@ -41,11 +41,33 @@
 }
 </script>
 <style>
-.articleContent{
+
+.articleCellContent{
+    margin-top: 10px;
     display: flex;
+    font-size: 16px;
+    color: #555;
 }
-.articleContent img{
-    width: 200px;
-    height: 200px;
+.articleCellContentTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 5px;
+}
+.articleCellContenImg{
+    width: 150px;
+    height: 140px;
+    margin-left: 10px;
+}
+.articleCellUserInfo{
+    font-size: 16px;
+}
+.articleCellUserInfo img{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+.articleTailInfo{
+    font-size: 20px;
 }
 </style>
