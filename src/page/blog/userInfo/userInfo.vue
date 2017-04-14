@@ -173,6 +173,5 @@ import userCommentCell from './com/userCommentCell.vue'
     font-size: 15px;
     width: 30%;
     background: white;
-    
 }
 </style>

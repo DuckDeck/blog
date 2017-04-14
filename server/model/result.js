@@ -15,12 +15,7 @@ class Result{
 
         return createResult(code,data)
     }
-
-    
-    
 }
-
-
 //对于返回的数据是对象，如果找不到，就返回
 function createResult(code,data){
     switch (code) {

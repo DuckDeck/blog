@@ -240,7 +240,6 @@ module.exports = {
                         day.selfObject = {}
                     }
                 }
-                
             }
        }
        

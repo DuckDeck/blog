@@ -8,7 +8,7 @@ const Check = require('../tool/check')
 
 module.exports = {
     'GET /api/manage/file/:mId/:token': async (ctx, next) => {
-      let tokenResult = await Check.checkManageToken(ctx)
+       let tokenResult = await Check.checkManageToken(ctx)
        if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -16,10 +16,6 @@ module.exports = {
        let filePath = File.allFile()
        ctx.rest(Result.create(0,filePath))
     },
-
- 
-
-
 }
 
 
