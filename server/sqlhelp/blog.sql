@@ -396,14 +396,39 @@ CREATE TABLE  IF NOT EXISTS user_dynamic (
 
 
 类型Id: 1,2,3,4,5,6,7,8
-1 发表文章
-2 修改文章
-3 删除文章
-4 发表评论
-5 修改评论
-6 删除评论
-7 关注某人
-8 取消关注某人
+ case 1:
+this.dynamic_type_name = '发表了文章'
+
+case 2:
+this.dynamic_type_name = '修改了文章'
+
+case 3:
+this.dynamic_type_name = '删除了文章'
+
+case 4:
+this.dynamic_type_name = '发布了评论' //大
+
+case 5: 
+this.dynamic_type_name = '修改了评论' //大
+
+case 6:
+this.dynamic_type_name = '删除了评论' //大
+
+case 7:
+this.dynamic_type_name = '发布了评论' //小
+
+case 8:
+this.dynamic_type_name = '修改了评论' //小
+
+case 9:
+this.dynamic_type_name = '删除了评论' //小
+
+case 10:
+this.dynamic_type_name = '关注了'
+
+case 11:
+this.dynamic_type_name = '取消关注了'
+
 //关注专题 
 
 

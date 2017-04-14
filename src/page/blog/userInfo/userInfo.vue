@@ -25,6 +25,7 @@
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
+                            <dynamicCell v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
@@ -60,17 +61,19 @@
 </template>
 
 <script>
-import {getTargetUserInfo} from '../../store/service'
-import blogHeader from './com/blogHead.vue'
-import upToTop from './com/upToTop.vue'
-import blogFoot from './com/blogFoot.vue'
+import {getUserInfo,getDynamicInfo} from '../../../store/service'
+import blogHeader from './../com/blogHead.vue'
+import upToTop from './../com/upToTop.vue'
+import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
+import dynamicCell from './com/dynamicCell.vue'
 //todo comment sort feature
   export default {
     data() {
       return {
           userInfo:{},
           articles:[],
+          dynamics:[],
           activeName:'articles',
       }
     },
@@ -80,7 +83,7 @@ import articleCell from './com/articleCell.vue'
     },
     methods:{
        async getTargetUserInfo(id){
-           let res = await getTargetUserInfo(id)
+           let res = await getUserInfo(id)
            if(res.code == 0){
                this.userInfo = res.data
                this.articles = this.userInfo.articles.map(s=>{
@@ -92,6 +95,14 @@ import articleCell from './com/articleCell.vue'
            else{
                toast(this,res.cMsg)
            }
+           res = await getDynamicInfo(id)
+           if(res.code == 0){
+               this.dynamics = res.data.map(s=>{
+                    s.user_head = this.userInfo.user_image_url
+                    s.user_name = this.userInfo.user_real_name
+                    return s
+               })
+           }
        },
        handleClick(tab,event){
                 
@@ -100,7 +111,7 @@ import articleCell from './com/articleCell.vue'
         
     },
     components:{
-        blogHeader,upToTop,blogFoot,articleCell
+        blogHeader,upToTop,blogFoot,articleCell,dynamicCell
     },
     computed:{
         releaseDate(){

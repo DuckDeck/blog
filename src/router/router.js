@@ -9,7 +9,7 @@ const index = r => require.ensure([], () => r(require('../page/blog/index')), 'i
 const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
-const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo')), 'userInfo')
+const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const manageLogin =  r => require.ensure([], () => r(require('../page/backstage/manageLogin')), 'manageLogin')

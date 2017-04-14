@@ -29,10 +29,13 @@ export const getUserInfo = function(user_id){
     const url = HostName +  'user/' + user_id 
     return setpromiseGet(url)
 }
-export const getTargetUserInfo = function(id){
-    const url = HostName +  'user/' + id 
+
+
+export const getDynamicInfo = function(user_id){
+    const url = HostName +  'userdynamic/' + user_id 
     return setpromiseGet(url)
 }
+
 export const getTags = function(user_id){
     const url = HostName +  'tag/userid/' + user_id 
     return setpromiseGet(url)
