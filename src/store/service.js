@@ -31,8 +31,13 @@ export const getUserInfo = function(user_id){
 }
 
 
-export const getDynamicInfo = function(user_id){
+export const getDynamics = function(user_id){
     const url = HostName +  'userdynamic/' + user_id 
+    return setpromiseGet(url)
+}
+
+export const getUserComments = function(user_id){
+    const url = HostName +  'usercomment/' + user_id 
     return setpromiseGet(url)
 }
 

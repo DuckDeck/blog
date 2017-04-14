@@ -29,6 +29,7 @@
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
+                            <userCommentCell v-for="comment in comments" :commentInfo = "comment"></userCommentCell>
                         </el-tab-pane>
                         
                     </el-tabs>
@@ -61,12 +62,13 @@
 </template>
 
 <script>
-import {getUserInfo,getDynamicInfo} from '../../../store/service'
+import {getUserInfo,getDynamics,getUserComments} from '../../../store/service'
 import blogHeader from './../com/blogHead.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
 import dynamicCell from './com/dynamicCell.vue'
+import userCommentCell from './com/userCommentCell.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -74,6 +76,7 @@ import dynamicCell from './com/dynamicCell.vue'
           userInfo:{},
           articles:[],
           dynamics:[],
+          comments:[],
           activeName:'articles',
       }
     },
@@ -95,7 +98,7 @@ import dynamicCell from './com/dynamicCell.vue'
            else{
                toast(this,res.cMsg)
            }
-           res = await getDynamicInfo(id)
+           res = await getDynamics(id)
            if(res.code == 0){
                this.dynamics = res.data.map(s=>{
                     s.user_head = this.userInfo.user_image_url
@@ -103,6 +106,15 @@ import dynamicCell from './com/dynamicCell.vue'
                     return s
                })
            }
+           res = await getUserComments(id)
+           if(res.code == 0){
+               this.comments = res.data.map(s=>{
+                    s.user_head = this.userInfo.user_image_url
+                    s.user_name = this.userInfo.user_real_name
+                    return s
+               })
+           }
+           
        },
        handleClick(tab,event){
                 
@@ -111,7 +123,7 @@ import dynamicCell from './com/dynamicCell.vue'
         
     },
     components:{
-        blogHeader,upToTop,blogFoot,articleCell,dynamicCell
+        blogHeader,upToTop,blogFoot,articleCell,dynamicCell,userCommentCell
     },
     computed:{
         releaseDate(){

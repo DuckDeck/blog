@@ -246,7 +246,7 @@ module.exports = {
        
        if(sqlArticlesIds.length > 0){
             sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
-                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 as article_sort_name ,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
                  article.article_id) as comment_count from article where article_id in (  ` + sqlArticlesIds.join(',') + `)`
             res = await DB.exec(sql)
             if(res.code != 0){
@@ -304,7 +304,8 @@ module.exports = {
        })
        if(articleIds.length > 0){
            sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
-           user_id,article_type_id,article_type,article_brief,article_main_img from article where article_id in (` + articleIds.join(',') + `)`
+           user_id,article_type_id,article_type,article_brief,article_main_img,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 article.article_id) as comment_count from article where article_id in (` + articleIds.join(',') + `)`
            res = await DB.exec(sql)
            if(res.code != 0){
                ctx.rest(res)
