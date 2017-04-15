@@ -174,4 +174,13 @@ import userCommentCell from './com/userCommentCell.vue'
     width: 30%;
     background: white;
 }
+ @media (max-width:900px){
+     .userMainPage{
+        width: 100%;
+    }
+    .articleUserInfoRight{
+        width: 0%;
+        display: none;
+    }
+ } 
 </style>
