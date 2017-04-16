@@ -432,7 +432,7 @@ this.dynamic_type_name = '取消关注了'
 //关注专题 
 
 
-操作类型ID
+操作类型ID this is a alterlate
 1 添加（关注）
 2 修改
 3 删除（取消）
