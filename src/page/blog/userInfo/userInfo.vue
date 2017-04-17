@@ -46,12 +46,14 @@
                     <div class="userLinks">
                         <i  class="fa fa-link userLink" v-for="link in userInfo.links" aria-hidden="true"></i>
                     </div>
-                    <div>
-                        <div>
-                            我的分类
+                    <div class="mySorts">
+                        <div style="color: #888">
+                            他的分类
                         </div>
-                        <div v-for="sort in userInfo.sorts">
-                            {{sort.sort_article_name}}
+                        <div class="mySortsList">
+                            <div v-for="sort in userInfo.sorts">
+                                {{sort.sort_article_name}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,6 +186,15 @@ import userCommentCell from './com/userCommentCell.vue'
 }
 .userLink:hover{
     cursor: pointer;
+}
+.mySorts{
+    border-top: 1px sol
+}
+.mySortsList{
+margin-top: 10px;
+}
+.mySortsList div:hover{
+cursor: pointer;
 }
  @media (max-width:900px){
      .userMainPage{

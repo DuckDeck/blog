@@ -57,7 +57,7 @@
     font-size: 16px;
 }
 .dynamicCommentArticleInfo{
-    padding-left: 40px;
+    padding-left: 30px;
     border-left: 5px solid #999;
     margin-top: 10px;
 }
