@@ -18,6 +18,9 @@
                     {{userInfo.user_real_name}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
+                    <el-dropdown-item command="tag">我的标签</el-dropdown-item>
+                    <el-dropdown-item command="setting">设置</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -64,6 +67,15 @@
                     removeStore('userInfo')
                     removeStore('token')
                     this.userInfo = {}
+                }
+                else if(command == 'mypage'){
+                    this.$router.push('/userInfo/' + this.userInfo.user_id)
+                }
+                else if(command == "tag"){
+
+                }
+                else if(command == "setting"){
+
                 }
            },
            toMain(){
