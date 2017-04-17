@@ -7,7 +7,7 @@
         </div>
         <div class="articleCellContent">
             <div >
-               <span class="articleCellContentTitle">{{articleInfo.article_name}}</span>
+               <span @click="togoArticle" class="articleCellContentTitle">{{articleInfo.article_name}}</span>
                <p style="margin-bottom: 0rem;margin-top: 10px;">{{articleInfo.article_brief.slice(0,100)}}</p>
                <div class="articleTailInfo">
                 <span class="articleTailSortName">{{articleInfo.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
@@ -32,7 +32,9 @@
          }
     },
     methods:{
-        
+        togoArticle(){
+             this.$router.push('/article/'+ this.articleInfo.article_id)
+        }
     },
     computed:{
         createTile(){

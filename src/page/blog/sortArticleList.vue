@@ -11,8 +11,7 @@
                </el-button>
             </div>
             <div class="blogSortArticleList">
-
-                
+                 <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
             </div>
         </div>
        <upToTop></upToTop>
@@ -21,11 +20,12 @@
 </template>
 
 <script>
-import {articleListWithSort,getSorts} from '../../store/service'
+import {articleListWithSort,getSorts,getUserInfo} from '../../store/service'
 import blogLogo from './com/blogLogo.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import userHead from './com/userHeadInfo.vue'
+import articleCell from './userInfo/com/articleCell.vue'
   export default {
     data() {
       return {
@@ -57,7 +57,7 @@ import userHead from './com/userHeadInfo.vue'
         else{
             toast(this,res.sMsg)
         }
-        res = await getUserInfo(id)
+        res = await getUserInfo(this.userId)
         if(res.code == 0){
             this.userInfo = res.data
         }
@@ -67,11 +67,18 @@ import userHead from './com/userHeadInfo.vue'
 
     },
     components:{
-        blogLogo,upToTop,blogFoot,userHead
+        blogLogo,upToTop,blogFoot,userHead,articleCell
     },
     methods:{
-       selectSort(){
-
+       async selectSort(sort){
+           this.selectedSort = sort
+          let  res = await articleListWithSort(this.selectedSort.sort_article_id)
+          if(res.code == 0){
+               this.articles = res.data
+          }
+          else{
+            toast(this,res.sMsg)
+          }
        },
        checkMore(){
             this.$router.push('/articleList')

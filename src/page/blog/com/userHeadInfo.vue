@@ -8,9 +8,8 @@
                     <i  class="fa fa-mars userGender" v-show="userInfo.user_gender != '男'" aria-hidden="true"></i>
                 </div>
             <div>
-                
                 <span>文章:{{userInfo.article_count}}</span>
-                <span>评论:{{userInfo.article_count}}</span>
+                <span>评论:{{userInfo.comment_count}}</span>
             </div>
             </div>
         
@@ -36,6 +35,6 @@
 
 }
 .userHeader{
-    
+
 }
 </style>
