@@ -56,16 +56,15 @@ export const deleteTag = function(tag){
     return setpromiseDelete(url)
 }
 
+
+
+
+
+
 export const getSorts = function(user_id){
     const url = HostName + 'sort/userid/' + user_id 
     return setpromiseGet(url)
 }
-
-export const getAllSorts = function(){
-    const url = HostName + 'allSorts' 
-    return setpromiseGet(url)
-}
-
 
 export const addSort = function(sort){
     const url = HostName +  'sort/' + userId + '/' + createToken()

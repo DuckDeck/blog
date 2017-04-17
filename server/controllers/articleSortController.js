@@ -47,12 +47,5 @@ module.exports = {
  
     },
 
-    'GET /api/allSorts': async (ctx, next) => {
-       let sql = 'SELECT * FROM blog.article_sort'
-       let res = await DB.exec(sql)
-       ctx.rest(res)
-    },
-
-
 }
 

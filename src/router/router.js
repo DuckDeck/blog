@@ -53,10 +53,6 @@ export default [
         component: userInfo, 
     },
     {
-        path: '/sortArticleList/:sortId',
-        component: sortArticleList, 
-    },
-    {
         path: '/sortArticleList/:sortId/:userId',
         component: sortArticleList, 
     },

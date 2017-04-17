@@ -463,8 +463,10 @@ module.exports = {
         let index = parseInt(ctx.params.index)
         let size = parseInt(ctx.params.size)
         let id = ctx.params.sortId
-        let sql = 'select * from article where article_sort_id = ' + id + 'limit ?,?'
-        let res = DB.exec(sql,[index * size,size])
+        let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                 as article_sort_name ,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 article.article_id) as comment_count from article where article_sort_id = ` + id + ` order by article_release_time desc limit ?,?`
+        let res = await DB.exec(sql,[index * size,size])
         ctx.rest(res)
     },
 

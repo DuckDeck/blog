@@ -61,7 +61,7 @@ module.exports = {
                 return m.sort_id == k.article_sort_id
             })
             if(index < 0){
-                sortArr.push({sort_id:k.article_sort_id,sort_name:k.article_sort_name})
+                sortArr.push({user_id:k.user_id,sort_id:k.article_sort_id,sort_name:k.article_sort_name})
             }
             for(let l of res.data){
                 if(k.article_id == l.article_id)
