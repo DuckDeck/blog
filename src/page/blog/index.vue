@@ -47,7 +47,7 @@
                        
                    </div>
                    <div class="articleRightContent">
-                       <div v-for = "sort in sorts" >{{sort.sort_name}}</div>
+                       <div v-for = "sort in sorts" @click="gotoSort(sort)"  >{{sort.sort_name}}</div>
                    </div>
                </div>
 
@@ -97,7 +97,6 @@
 <script>
 import {getUserInfo} from '../../store/service'
 import {index} from '../../store/index'
-
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'
@@ -182,6 +181,9 @@ import blogFoot from './com/blogFoot.vue'
         },
         clickUser(user){
             this.$router.push('userInfo/' + user.user_id)
+        },
+        gotoSort(sort){
+            this.$router.push('sortArticleList/' + sort.sort_id)
         }
     },
     computed:{

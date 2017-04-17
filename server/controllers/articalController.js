@@ -454,7 +454,19 @@ module.exports = {
        ctx.rest(resArticle)
     },
 
-  
+    'GET /api/articleswithsort/:sortId/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let id = ctx.params.sortId
+        let sql = 'select * from article where article_sort_id = ' + id + 'limit ?,?'
+        let res = DB.exec(sql,[index * size,size])
+        ctx.rest(res)
+    },
 
 
 }

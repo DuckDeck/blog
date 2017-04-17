@@ -1,7 +1,7 @@
 <template>
     <div style="margin-top: 20px; display: flex; justify-content: flex-start">
        <div class="leftUserInfo">
-          <div class="userHead">
+          <div class="manageUserHead">
            <img :src="userInfo.user_image_url" alt="">
            <div class="userRealName">
                {{userInfo.user_real_name}}
@@ -88,11 +88,11 @@
   padding: 5px;
 
 }
-.userHead{
+.manageUserHead{
   height: 260px;
   text-align: center;
 }
-.userHead img{
+.manageUserHead img{
   width: 180px;
   height: 180px;
   margin-top: 20px;

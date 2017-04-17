@@ -43,6 +43,11 @@
                 }
                 next()
             })
+            if(isEmpty(this.userInfo)){
+                if(getStore('userInfo')){
+                    this.userInfo = getStore('userInfo')
+                }
+            }
         },
         methods:{
             login(){

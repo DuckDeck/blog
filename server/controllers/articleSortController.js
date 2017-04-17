@@ -1,8 +1,9 @@
 const APIError = require('../rest').APIError;
- const Sort = require('../model/articleSort')
+const Sort = require('../model/articleSort')
 const Result = require('../model/result.js')
 const Tool = require('../tool/tool')
 const Check = require('../tool/check')
+const DB = require('../sqlhelp/mysql')
 module.exports = {
     'POST /api/sort/:userId/:token': async (ctx, next) => {
         let tokenResult = await Tool.checkToken(ctx)
@@ -45,6 +46,13 @@ module.exports = {
        ctx.rest(deleteResult)
  
     },
+
+    'GET /api/allSorts': async (ctx, next) => {
+       let sql = 'SELECT * FROM blog.article_sort'
+       let res = await DB.exec(sql)
+       ctx.rest(res)
+    },
+
 
 }
 
