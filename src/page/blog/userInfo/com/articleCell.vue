@@ -56,7 +56,7 @@
 .articleCellContentTitle{
     font-size: 18px;
     font-weight: bold;
-    color: #444;
+    color: #666;
 
 }
 .articleCellContenImg{
@@ -65,7 +65,7 @@
     margin-left: 10px;
 }
 .articleCellUserInfo{
-    font-size: 15px;
+    font-size: 14px;
 }
 .articleCellUserInfo img{
     width: 40px;
@@ -74,6 +74,10 @@
 }
 .articleCellUserName{
  margin-left: 10px;   
+}
+.articleCellContentTitle:hover{
+    text-decoration: underline;
+    cursor: pointer;
 }
 .articleTailInfo{
     font-size: 12px;
@@ -89,9 +93,7 @@
 }
  @media (max-width:900px){
      .articleCellContenImg{
-        width: 150px;
-        height: 140px;
-        margin-left: 10px;
+        display: none;
     }
  } 
 </style>

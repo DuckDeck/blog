@@ -36,15 +36,15 @@
                 </div>
                 <div class="articleUserInfoRight">
                     <div>
-                        <div>
+                        <div style="color: #888">
                             作者个人介绍
                         </div>
                         <div>
                             {{userInfo.user_description}}
                         </div>
                     </div>
-                    <div>
-                        <i  class="fa fa-link" v-for="link in userInfo.links" aria-hidden="true"></i>
+                    <div class="userLinks">
+                        <i  class="fa fa-link userLink" v-for="link in userInfo.links" aria-hidden="true"></i>
                     </div>
                     <div>
                         <div>
@@ -173,6 +173,17 @@ import userCommentCell from './com/userCommentCell.vue'
     font-size: 15px;
     width: 30%;
     background: white;
+    padding: 10px;
+}
+.userLinks{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.userLink{
+    margin: 0px 3px;
+}
+.userLink:hover{
+    cursor: pointer;
 }
  @media (max-width:900px){
      .userMainPage{

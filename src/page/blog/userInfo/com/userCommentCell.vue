@@ -6,24 +6,23 @@
             发表了评论
             <span>{{createTime}}</span>
         </div>
-        <div>
-            
-        </div>
-        <div v-show = "commentInfo.comment_scope == 0">
-           <div>
+        <div class="commentDetail" v-show = "commentInfo.comment_scope == 0">
+           <div class="dynamicCommentContent">
                {{commentInfo.comment_content}}
            </div>
-           <div>
-               <div>
+
+           <div class="dynamicCommentArticleInfo">
+               <div class="articleCellContentTitle" >
                     {{commentInfo.target.article_name}}
                </div>
-               <div>
-                   {{commentInfo.target.article_brief}}
+                <p style="margin-bottom: 0rem;margin-top: 10px;">{{commentInfo.target.article_brief.slice(0,100)}}</p>  
+               <div class="dynamicCommentArticlelTail">
+                  <span >{{commentInfo.target.user_real_name}}</span>    <i class="fa fa-eye"  aria-hidden="true"></i>
+                            {{commentInfo.target.article_click}} 
+                             <i class="fa fa-comment"  aria-hidden="true"></i> {{commentInfo.target.comment_count}} 
+         
                </div>
-               <div>
-                   <span> {{commentInfo.target.user_real_name}}</span> <span> {{commentInfo.target.article_click}}</span> <span> {{commentInfo.target.comment_count}}</span>
-               </div>
-           </div>
+             </div>
         </div>
     </div>
 </template>
@@ -50,5 +49,8 @@
 }
 </script>
 <style>
-
+.commentDetail{
+    font-size: 16px;
+    margin-top: 20px;
+}
 </style>
