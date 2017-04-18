@@ -32,7 +32,7 @@
 .blogLogo img{
     max-width: 100%;
     height: auto;
-    margin-top: 50px;
+    margin-top: 60px;
 }
 .logoDess{
     margin-top: 20px;

@@ -7,10 +7,10 @@
             </div>
             <div class="comArticleReleaseTime">
                 <span>发布于: {{articleReleaseTime}}  </span> <span>  文章 {{userInfo.article_count}}</span>
-                <span v-show="userInfo.browse" >  浏览 {{userInfo.browse}}</span> <span v-show="userInfo.commentCount">  评论 {{userInfo.commentCount}}</span> 
+                <span v-show="userInfo.browse" >  浏览 {{userInfo.browse}}</span> <span v-show="userInfo.commentCount">  评论 {{userInfo.comment_count}}</span> 
             </div>
         </div>
-        <button class="comEditArticleButton" v-show="canEdit">编辑文章</button>
+        <button class="comEditArticleButton" @click="editArticle" v-show="canEdit">编辑文章</button>
     </div>
 </template>
 <script>
@@ -25,6 +25,14 @@
             type:Object
           }
         },
+        methods:{
+            editArticle(){
+              
+                if(this.userInfo.article_id){
+                    this.$router.push('/writeArticle/' + this.userInfo.article_id)
+                }
+            }
+        },
         computed:{
            articleReleaseTime(){
                return moment(this.userInfo.article_release_time)
@@ -32,9 +40,9 @@
            canEdit(){
                if(getStore('userInfo')){
                   if(getStore('userInfo').user_id == this.userInfo.user_id){
-                         return true
-                      }
+                      return true
                   }
+               }
               return false
            }
         },
@@ -85,4 +93,16 @@
 .comEditArticleButton:hover{
     cursor: pointer;
 }
+ @media (max-width:500px){
+    .comEditArticleButton{
+        display: none;
+    }
+ } 
+ @media (max-width:900px){
+     .comArticleUserDetail{
+        width: 60%;
+    }
+ } 
+
+
 </style>

@@ -313,7 +313,7 @@ import blogFoot from './com/blogFoot.vue'
 .userComment{
     font-size: 12px;
 }
- @media (max-width:900px){
+ @media (max-width:1000px){
      .articlesList{
         width: 100%;
     }
@@ -321,5 +321,20 @@ import blogFoot from './com/blogFoot.vue'
         width: 0%;
         display: none;
     }
+    .articleContent{
+
+    }
  } 
+ @media (max-width:700px){
+
+    .articleContent{
+        margin: 20px 40px;
+    }
+} 
+@media (max-width:500px){
+
+    .articleContent{
+        margin: 20px 20px;
+    }
+} 
 </style>

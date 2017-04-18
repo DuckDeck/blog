@@ -8,6 +8,7 @@ const index = r => require.ensure([], () => r(require('../page/blog/index')), 'i
 
 const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
+const register = r => require.ensure([], () => r(require('../page/blog/register')), 'register')
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
@@ -47,6 +48,10 @@ export default [
         name:'login'
     },
     {
+        path: '/register',
+        component: register, //顶层路由，对应index.html
+    },
+    {
         path: '/article/:articleId',
         component: atricleInfo, 
       
@@ -63,7 +68,10 @@ export default [
         path: '/writeArticle',
         component: writeArticle, 
     },
-
+    {
+        path: '/writeArticle/:articleId',
+        component: writeArticle, 
+    },
 
     {
         path:'/managelogin',

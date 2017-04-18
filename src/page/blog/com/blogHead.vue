@@ -60,7 +60,7 @@
 
             },
             register(){
-                console.log('register')
+                this.$router.push('/register')
             },
             handleCommand(command) {
                 if(command == 'loginout'){
@@ -94,7 +94,7 @@
       color: white;
       width: 100%;
       font-size: 20px;
-      padding: 5px 0px;
+      padding: 7px 0px;
       display: flex;
       justify-content: space-between;
       position: fixed;

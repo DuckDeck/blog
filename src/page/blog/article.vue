@@ -8,7 +8,7 @@
                             </div>
                             <userArtileInfo class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
                             <div  class="articleTagClass">
-                                    <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
+                                  <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
                             </div>
                        </header>
                     <div class="articleSeperateLine"></div>
@@ -53,8 +53,9 @@ import userArtileInfo from './com/userArticleInfo.vue'
             this.article = res.data
             this.articleUserInfo = res.data.userInfo
             this.articleUserInfo.article_release_time = res.data.article_release_time
-            this.articleUserInfo.article_count = res.data.comments.length
+            this.articleUserInfo.comment_count = res.data.comments.length
             this.articleUserInfo.browse = res.data.article_click
+            this.articleUserInfo.article_id = res.data.article_id
         }
         else{
             toast(this,res.cMsg)
@@ -182,8 +183,9 @@ import userArtileInfo from './com/userArticleInfo.vue'
     padding:25px;
 }
 .articleCommentsCount{
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
+    color: #555;
     margin-bottom: 20px;
     padding-bottom: 5px;
     border-bottom: 1px solid #777;
