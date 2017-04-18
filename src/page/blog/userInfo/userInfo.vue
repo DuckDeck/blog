@@ -15,8 +15,9 @@
                                 <span>文章:{{userInfo.article_count}}</span>
                             </span>
                         </div>
+                            
                         </div>
-                    
+                       <button @click="writeArticle" class="writeArticle">写文章</button>
                     </div>
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
@@ -48,7 +49,7 @@
                     </div>
                     <div class="mySorts">
                         <div style="color: #888">
-                            他的分类
+                            {{isMine == true ? '我' : '他'}}的分类
                         </div>
                         <div class="mySortsList">
                             <div v-for="sort in userInfo.sorts">
@@ -118,6 +119,9 @@ import userCommentCell from './com/userCommentCell.vue'
            }
            
        },
+       writeArticle(){
+            
+       },
        handleClick(tab,event){
                 
        }
@@ -131,6 +135,15 @@ import userCommentCell from './com/userCommentCell.vue'
         releaseDate(){
             // return  formatTime(new Date(this.userInfo.article_create_time))
         },
+        isMine(){
+            if(getStore('userInfo')){
+                if(getStore('userInfo').user_id == this.userInfo.user_id){
+                    return true
+                }
+            }
+            return false
+        },
+
     }
 
   }
@@ -144,7 +157,7 @@ import userCommentCell from './com/userCommentCell.vue'
    
    background: white;
    width: 70%;
-
+   
 }
 .articleUserInfo{
     padding: 20px;
@@ -160,6 +173,7 @@ import userCommentCell from './com/userCommentCell.vue'
     font-size: 20px;
     margin-left: 20px;
     margin-top: 15px;
+    width: 70%;
 }
 .userGender{
     font-size: 17px;
@@ -170,6 +184,19 @@ import userCommentCell from './com/userCommentCell.vue'
     font-size: 20px;
     background: white;
     margin-top: 20px;
+}
+.writeArticle{
+    background: orangered;
+    color: white;
+    border: 0px;
+    padding: 8px;
+    font-size: 16px;
+    width: 90px;
+    height: 40px;
+    margin-top: 20px;
+}
+.writeArticle:hover{
+    cursor: pointer;
 }
 .articleUserInfoRight{
     font-size: 15px;

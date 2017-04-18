@@ -183,7 +183,8 @@ import blogFoot from './com/blogFoot.vue'
             this.$router.push('userInfo/' + user.user_id)
         },
         gotoSort(sort){
-            this.$router.push('sortArticleList/' + sort.sort_id + '/' + sort.user_id)
+            localStorage.sortId = sort.sort_id
+            this.$router.push('sortArticleList/' + sort.user_id)
         }
     },
     computed:{

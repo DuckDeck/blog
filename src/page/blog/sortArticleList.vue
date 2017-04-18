@@ -39,10 +39,11 @@ import articleCell from './userInfo/com/articleCell.vue'
     },
    async mounted(){ 
         this.userId = this.$route.params.userId
-        this.sortId = this.$route.params.sortId
+        this.sortId = localStorage.sortId
         let res = await getSorts(this.userId)
         if(res.code == 0){
             this.sorts = res.data
+            this.sorts.unshift({sort_article_id:0,sort_article_name:"全部"})
             this.selectedSort = this.sorts.find(s=>{
                 return s.sort_article_id == this.sortId
             })
@@ -72,6 +73,7 @@ import articleCell from './userInfo/com/articleCell.vue'
     methods:{
        async selectSort(sort){
            this.selectedSort = sort
+           localStorage.sortId = this.selectedSort.sort_article_id
           let  res = await articleListWithSort(this.selectedSort.sort_article_id)
           if(res.code == 0){
                this.articles = res.data
@@ -112,5 +114,10 @@ import articleCell from './userInfo/com/articleCell.vue'
 .selectedSortClass{
      background: #20a0ff;
     color: white;
+}
+
+.blogSortArticleList{
+margin-top: 30px;
+padding: 0px 20px;
 }
 </style>

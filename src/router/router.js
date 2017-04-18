@@ -11,6 +11,9 @@ const login = r => require.ensure([], () => r(require('../page/blog/login')), 'l
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
+
+const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writeArticle')), 'writeArticle')
+
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const manageLogin =  r => require.ensure([], () => r(require('../page/backstage/manageLogin')), 'manageLogin')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
@@ -53,9 +56,15 @@ export default [
         component: userInfo, 
     },
     {
-        path: '/sortArticleList/:sortId/:userId',
+        path: '/sortArticleList/:userId',
         component: sortArticleList, 
     },
+    {
+        path: '/writeArticle',
+        component: writeArticle, 
+    },
+
+
     {
         path:'/managelogin',
         component:manageLogin
