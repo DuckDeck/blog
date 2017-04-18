@@ -21,7 +21,6 @@
 
 <script>
 import {articleListWithSort,getSorts,getUserInfo} from '../../store/service'
-import blogLogo from './com/blogLogo.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import userHead from './com/userHeadInfo.vue'
@@ -68,7 +67,7 @@ import articleCell from './userInfo/com/articleCell.vue'
 
     },
     components:{
-        blogLogo,upToTop,blogFoot,userHead,articleCell
+        upToTop,blogFoot,userHead,articleCell
     },
     methods:{
        async selectSort(sort){

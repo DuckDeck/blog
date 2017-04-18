@@ -17,7 +17,7 @@
                         </div>
                             
                         </div>
-                       <button @click="writeArticle" class="writeArticle">写文章</button>
+                       <button v-show="isMine" @click="writeArticle" class="writeArticle">写文章</button>
                     </div>
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
@@ -120,7 +120,7 @@ import userCommentCell from './com/userCommentCell.vue'
            
        },
        writeArticle(){
-            
+            this.$router.push('/writeArticle')
        },
        handleClick(tab,event){
                 

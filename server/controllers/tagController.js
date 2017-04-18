@@ -1,11 +1,10 @@
 const APIError = require('../rest').APIError;
  const Tag = require('../model/tag')
 const Result = require('../model/result.js')
-const Tool = require('../tool/tool')
 const Check = require('../tool/check')
 module.exports = {
     'POST /api/tag/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return

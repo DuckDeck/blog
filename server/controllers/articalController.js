@@ -243,7 +243,7 @@ module.exports = {
     },
 
     'POST /api/article/:userId/:token': async (ctx, next) => {
-        let result0 = await Tool.checkToken(ctx)
+        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return
@@ -275,6 +275,7 @@ module.exports = {
         m.ip = ctx.request.ip
         m.category = t.articalSort
         m.userId = id
+        m.articalStatus = t.articleStatus
         m.articleBrief = t.articleBrief || ''
         m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
         m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
@@ -291,7 +292,7 @@ module.exports = {
 
 
     'POST /api/autosavearticle/:userId/:token': async (ctx, next) => {
-        let result0 = await Tool.checkToken(ctx)
+        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return
@@ -349,7 +350,7 @@ module.exports = {
 
     //对于更新，是有很多优化的空间的，可以专业来记录更新了哪些东西，史把更新的数据更新到数据库里面
     'PUT /api/article/:articleId/:userId/:token': async (ctx, next) => {
-        let result0 = await Tool.checkToken(ctx)
+        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return
@@ -379,6 +380,7 @@ module.exports = {
         m.category = t.articalSort
         m.userId = id
         m.article_id = articleId
+        m.articalStatus = t.articleStatus
         let result2 = await Article.updateAtricle(m)
         if(result2.code != 0)
         {
@@ -429,7 +431,7 @@ module.exports = {
 
 
     'GET /api/temparticle/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
