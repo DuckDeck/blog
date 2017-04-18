@@ -13,7 +13,7 @@
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <el-form-item  style="margin-bottom: 10px;height: 50px;">
-                    <a class="loginAction" >注册</a>
+                    <a class="loginAction" @click="register" >注册</a>
                     <a  style="float: right" class="loginAction">忘记密码？</a>
                 </el-form-item>
                 <div class="login-btn">
@@ -45,6 +45,9 @@ import {login,getUserInfo} from '../../store/service'
             }
         },
         methods:{
+             register(){
+               self.$router.push('/register') 
+             },
              submitForm(formName){
                 const self = this;
                 self.$refs[formName].validate((valid) => {

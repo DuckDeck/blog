@@ -1,7 +1,7 @@
 <template>
-      <div class="login-body">
-          <div class="ms-login">
-              <div class="blog-login-title">
+      <div class="register-body">
+          <div class="ms-register">
+              <div class="blog-register-title">
                   ZOE
               </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
@@ -20,8 +20,8 @@
                      <el-input  type="password" placeholder="密码" v-model="ruleForm.password" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')" >登录</el-button>
+                <div class="register-btn">
+                    <el-button type="primary" @click="submitForm('ruleForm')" >注册</el-button>
                 </div>
             </el-form>
         </div>
@@ -68,7 +68,8 @@ import {login,getUserInfo} from '../../store/service'
                         { required: true, message: '请输入用户名', trigger: 'blur' }
                     ],
                     email: [
-                        { type: 'email', required: true, message: '请输入邮箱', trigger: 'blur' },
+                        {  required: true, message: '请输入邮箱', trigger: 'blur' },
+                        {  type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
                     ],
                      pass: [
                          { validator: validatePass, trigger: 'blur' },
@@ -123,5 +124,33 @@ import {login,getUserInfo} from '../../store/service'
 </script>
 
 <style scoped>
-
+.register-body{
+    width:100%;
+    height:100vh;
+    top:0;
+    background: rgba(1, 1, 1, 0.5)
+}
+.ms-register{
+      position: absolute;
+    left:50%;
+    top:35%;
+    width:360px;
+    height:400px;
+    margin: -10px 0px 0px -180px;
+    padding:40px;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 20px;
+}
+.blog-register-title{
+    text-align: center;
+    height: 60px;
+    font-size: 30px;
+}
+.register-btn{
+    text-align: center;
+}
+.register-btn button{
+    width: 100px;
+}
 </style>
