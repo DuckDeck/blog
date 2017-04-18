@@ -94,7 +94,7 @@
       color: white;
       width: 100%;
       font-size: 20px;
-      
+      padding: 5px 0px;
       display: flex;
       justify-content: space-between;
       position: fixed;

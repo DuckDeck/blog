@@ -28,6 +28,39 @@ global.formatTime = function(date,format){
        }
        return format;
 }
+global.moment = function(timestamp){
+    if((timestamp instanceof String)){
+        timestamp = parseInt(timestamp)
+    }
+    let time = new Date(timestamp)
+    let nowStamp = (new Date()).getTime()
+    let offset = nowStamp - timestamp
+    let yesterday = new Date()
+    yesterday = new Date(yesterday.getFullYear(),yesterday.getMonth(),yesterday.getDay(),0,0,0)
+    let anteayer = (new Date(yesterday.getTime()-24*60*60*1000)).getTime()
+    yesterday = yesterday.getTime()
+    let yesterdayOffset = nowStamp - yesterday
+    let anteayerOffset = nowStamp - anteayer
+    if(offset <= 60 * 1000){
+        return '刚刚'
+    }
+    else if(offset > 60 * 1000 && offset <=   3600 * 1000){
+        return (offset/60/1000).toFixed(0) + '分钟前'
+    }
+    else if(offset > 3600 * 1000 && offset <=   yesterdayOffset){
+        return (offset/3600/1000).toFixed(0) + '小时前'
+    }
+    else if(offset > yesterdayOffset && offset <= anteayerOffset){
+        return  '昨天 ' + formatTime(time,'hh:mm')
+    }
+    else if(time.getFullYear() == (new Date().getFullYear())){
+        return  formatTime(time,'MM-dd hh:mm')
+    }
+    else{
+        return formatTime(time)
+    }
+    
+}
 global.isEmpty = function(obj){
     for (var key in obj) {
         if(key == 'isEmpty'){

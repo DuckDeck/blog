@@ -38,7 +38,7 @@
     },
     computed:{
         createTile(){
-            return formatTime(new Date(this.articleInfo.article_create_time))
+            return moment(this.articleInfo.article_create_time)
         }
     }
 }

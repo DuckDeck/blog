@@ -7,9 +7,6 @@
                                 {{article.article_name}}
                             </div>
                             <userArtileInfo class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
-                            <div class="articleInfoClass">
-                                 <span>  {{article.sort_name}}</span> <span>  {{article.article_click}}</span>浏览量
-                            </div>
                             <div  class="articleTagClass">
                                     <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
                             </div>
@@ -56,6 +53,8 @@ import userArtileInfo from './com/userArticleInfo.vue'
             this.article = res.data
             this.articleUserInfo = res.data.userInfo
             this.articleUserInfo.article_release_time = res.data.article_release_time
+            this.articleUserInfo.article_count = res.data.comments.length
+            this.articleUserInfo.browse = res.data.article_click
         }
         else{
             toast(this,res.cMsg)
@@ -108,7 +107,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
     },
     computed:{
         releaseDate(){
-            return  formatTime(new Date(this.article.article_create_time))
+            return  moment(this.article.article_create_time)
         },
         commentCount(){
             if(this.article.comments != undefined){

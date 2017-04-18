@@ -19,7 +19,8 @@
                            {{art.article_name}}
                        </div>
                        <div class="articleAuthor">
-                            <span class="articleAuthorName" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> {{art.article_sort_name}} {{art.comment_count}} 条评论
+                            <span class="articleAuthorName" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> 
+                            <span>{{art.article_sort_name}}</span>  <span>{{art.comment_count}} 条评论</span> 
                        </div>
                    </div>
                    <div style="text-align: center;margin-top: 17px;">
@@ -235,10 +236,15 @@ import blogFoot from './com/blogFoot.vue'
 }
 .articleTitle:hover{
     cursor: pointer;
+    text-decoration: underline
 }
 .articleAuthor{
     font-size: 15px;
     margin-top: 5px;
+}
+.articleAuthor span{
+    margin-right: 3px;
+    
 }
 .articleAuthorName{
     color: mediumvioletred;
@@ -252,6 +258,7 @@ import blogFoot from './com/blogFoot.vue'
 }
 .articleContent{
     margin:20px 70px;
+    font-size: 17px;
 }
 .articelImage{
     width: 80%;
