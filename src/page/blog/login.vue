@@ -46,7 +46,7 @@ import {login,getUserInfo} from '../../store/service'
         },
         methods:{
              register(){
-               self.$router.push('/register') 
+               this.$router.push('/register') 
              },
              submitForm(formName){
                 const self = this;

@@ -92,7 +92,35 @@ module.exports = {
        await User.saveToken(token,user.user_id)
        let result = Result.create(0,{token:token,user_id:user.user_id})
        ctx.rest(result)
-     },
+      },
+
+    'POST /api/register': async (ctx, next) => {
+       var
+            t = ctx.request.body,
+            m;
+        if (!t.userName || !t.userName.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss userName'})) 
+            return
+        }
+        if (!t.password || !t.password.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss password'})) 
+            return
+        }
+        if (!t.email || !t.email.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss password'})) 
+            return
+        }
+        m = {
+            userName: t.userName.trim(),
+            password: t.password.trim(),
+            email:t.email.trim()
+        }
+        
+       let res =  await User.checkLogin(m.userName)
+       
+       ctx.rest(result)
+      },
+
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Tool.checkToken(ctx)
         if(result0.code != 0){
@@ -332,7 +360,7 @@ module.exports = {
             }
        }
        ctx.rest(Result.create(0,comments))
-    }
+     }
 }
 
 

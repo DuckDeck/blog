@@ -29,6 +29,13 @@ import blogHeader from './page/blog/com/blogHead.vue'
            }
            next()
         })
+        let index1 = location.href.toString().indexOf('login')
+        let index2 = location.href.toString().indexOf('manage')
+        let index3 = location.href.toString().indexOf('register')
+        if(index1 >=0 || index2 >= 0 || index3 >= 0){
+             this.needShow = false
+        }
+       
     },
    
     components:{
