@@ -3,6 +3,16 @@ const key = '751f621ea5c8f930'
 const iv = '2624750004598718'
 const Result = require('../model/result')
 const db = require('../sqlhelp/mysql')
+const Mailer  = require('nodemailer');
+
+var mailTransport = Mailer.createTransport({
+    host : 'pop.qq.com',
+    secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+    auth : {
+        user : 'stan_hu@qq.com',
+        pass : 'ak6269347'
+    },
+})
 class Tool{
     static getType(data){
         return Object.prototype.toString.call(data).slice(8, -1);
@@ -66,7 +76,30 @@ class Tool{
         return Tool.decrypt(key,iv,token)
      }
 
+     static sendEmail(user_real_name,mail,link){
+        var options = {
+        from           : '"ZOE" <stan_hu@qq.com>',
+        to             : '"' +user_real_name + '" <'+mail+'>',
+        // cc          : ''    //抄送
+        // bcc         : ''    //密送
+        subject        : 'ZOE Blog',
+        text           : 'ZOE Blog',
+        html           : '<h1>你好，你点下面链接激活ZOE Blog</h1><a href="'+link+'"></a>',
+        
+        }
+        return new Promise((resolve,reject)=>{
+            mailTransport.sendMail(options, function(err, msg){
+            if(err){
+                reject(err)
+            }
+            else {
+                resolve(msg)
+            }
+        })
+     
+    }
    
+
 }
 
 

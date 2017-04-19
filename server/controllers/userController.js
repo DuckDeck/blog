@@ -9,6 +9,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
+
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -130,13 +131,14 @@ module.exports = {
         }
         let id = res.data.id
         let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
-        res = DB.exec(sql,[id,m.nickNamem,m.email])
+        res = await DB.exec(sql,[id,m.nickNamem,m.email])
+        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:3000/active/" + activityCode)
         ctx.rest(Result.create(0))
       },
 
 
-      'POST /api/checkemail': async (ctx, next) => {
-        var  t = ctx.request.body,
+    'POST /api/checkemail': async (ctx, next) => {
+        var  t = ctx.request.body
         if (!t.email || !t.email.trim()) {
             ctx.rest(Result.create(10,{msg:'miss email'})) 
             return
@@ -146,8 +148,8 @@ module.exports = {
             ctx.rest(Result.create(11,{msg:'email format wrong'})) 
             return 
         }
-        let sql = 'select user_id from user where user_email =' +  t.email
-        let res =await DB.exec(sql)
+        let sql = 'select user_id from user_info where user_email = ? ' 
+        let res =await DB.exec(sql,[t.email])
         if(res.code != 0){
             ctx.rest(res)
             return

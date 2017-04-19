@@ -9,15 +9,15 @@
                     <el-input v-model="ruleForm.username" placeholder="你的呢称"></el-input>
                 </el-form-item>
                 <el-form-item prop="email">
-                    <el-input  placeholder="你的邮箱" v-model="ruleForm.password" 
+                    <el-input  placeholder="你的邮箱" v-model="ruleForm.email" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
-                <el-form-item  >
-                     <el-input  type="password" placeholder="密码" v-model="ruleForm.password" 
+                <el-form-item prop="pass" >
+                     <el-input  type="password" placeholder="密码" v-model="ruleForm.pass" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
-                <el-form-item  >
-                     <el-input  type="password" placeholder="密码" v-model="ruleForm.password" 
+                <el-form-item prop="passAgain" >
+                     <el-input  type="password" placeholder="密码" v-model="ruleForm.passAgain" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <div class="register-btn">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {login,getUserInfo} from '../../store/service'
+import {checkEmail} from '../../store/service'
     export default {
         data: function(){
             var validatePass = (rule, value, callback) => {
@@ -38,8 +38,8 @@ import {login,getUserInfo} from '../../store/service'
                   callback(new Error('请输入密码'));
                 } 
                 else {
-                    if (this.pass.again !== '') {
-                        this.$refs.pass.validateField('again');
+                    if (this.ruleForm.again !== '') {
+                        this.$refs.ruleForm.validateField('passAgain');
                     }
                      callback();
                 }
@@ -48,12 +48,33 @@ import {login,getUserInfo} from '../../store/service'
                 if (value === '') {
                   callback(new Error('请再次输入密码'));
                 } 
-                else if (value !== this.pass.new) {
+                else if (value !== this.ruleForm.pass) {
                     callback(new Error('两次输入密码不一致!'));
                 } 
                 else {
                  callback();
                 }
+            };
+            var validateEmail =  (rule, value, callback) => {
+                if(!this.isValidating){
+                    this.isValidating = true
+                    checkEmail(value).then(res=>{
+                        console.log(res)
+                        if(res.code == 0){
+                            callback()
+                        }
+                        else{
+                            callback(new Error(res.cMsg))
+                        }
+                        this.isValidating = false
+                    }).catch(err=>{
+                        callback(new Error(err.cMsg))
+                        this.isValidating = false
+                    })
+                    
+                    
+                }
+                
             };
             return {
                ruleForm: {
@@ -70,6 +91,7 @@ import {login,getUserInfo} from '../../store/service'
                     email: [
                         {  required: true, message: '请输入邮箱', trigger: 'blur' },
                         {  type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
+                        { validator: validateEmail, trigger: 'blur' },
                     ],
                      pass: [
                          { validator: validatePass, trigger: 'blur' },
@@ -79,7 +101,8 @@ import {login,getUserInfo} from '../../store/service'
                         { validator: validatePass2, trigger: 'blur' },
                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
-                }
+                },
+                isValidating:false,
             }
         },
         methods:{
@@ -135,7 +158,7 @@ import {login,getUserInfo} from '../../store/service'
     left:50%;
     top:35%;
     width:360px;
-    height:400px;
+    height:420px;
     margin: -10px 0px 0px -180px;
     padding:40px;
     border-radius: 5px;
@@ -151,6 +174,7 @@ import {login,getUserInfo} from '../../store/service'
     text-align: center;
 }
 .register-btn button{
-    width: 100px;
+    width: 270px;
+    margin-top: 15px;
 }
 </style>
