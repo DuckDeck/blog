@@ -12,6 +12,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const actions = require('./sqlhelp/createTable')
 
+
+
 //actions.createDB()
 actions.createTbs()
 // const tool = require('./tool/tool')

@@ -5,14 +5,17 @@ const Result = require('../model/result')
 const db = require('../sqlhelp/mysql')
 const Mailer  = require('nodemailer');
 
-var mailTransport = Mailer.createTransport({
-    host : 'pop.qq.com',
-    secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
-    auth : {
-        user : 'stan_hu@qq.com',
-        pass : 'ak6269347'
-    },
-})
+// var mailTransport = Mailer.createTransport({
+//     host : 'smtp.qq.com',
+//     secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+//     auth : {
+//         user : '3421902@qq.com',
+//         pass : '+ak6269347'
+//     },
+// })
+var mailTransport = Mailer.createTransport('smtps://zoe_blog%40163.com:zoe1234@smtp.163.com');
+
+//smtps://username%40163.com:password@smtp.163.com
 class Tool{
     static getType(data){
         return Object.prototype.toString.call(data).slice(8, -1);
@@ -78,13 +81,13 @@ class Tool{
 
      static sendEmail(user_real_name,mail,link){
         var options = {
-        from           : '"ZOE" <stan_hu@qq.com>',
-        to             : '"' +user_real_name + '" <'+mail+'>',
-        // cc          : ''    //抄送
-        // bcc         : ''    //密送
-        subject        : 'ZOE Blog',
-        text           : 'ZOE Blog',
-        html           : '<h1>你好，你点下面链接激活ZOE Blog</h1><a href="'+link+'"></a>',
+            from           : '"ZOE" <zoe_blog@163.com>',
+            to             : '"' +user_real_name + '" <'+mail+'>',
+            // cc          : ''    //抄送
+            // bcc         : ''    //密送
+            subject        : 'ZOE Blog',
+            text           : 'ZOE Blog',
+            html           : '<h1>你好，你点下面链接激活ZOE Blog</h1>'+link+'',
         
         }
         return new Promise((resolve,reject)=>{
@@ -95,9 +98,9 @@ class Tool{
             else {
                 resolve(msg)
             }
-        })
-     
-    }
+        })})
+     }
+    
    
 
 }
