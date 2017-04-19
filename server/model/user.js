@@ -2,7 +2,7 @@
 const db = require('../sqlhelp/mysql') 
 const Tool = require('../tool/tool')
 const sqls = {
-    insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
     userInfoById:`select  user_id , user_real_name , user_phone , user_gender , 
     user_qq  , user_email, user_address, user_mark,user_birthday,user_description,user_image_url, 
@@ -40,11 +40,7 @@ class User{
 
     static save(user){
        return db.exec(sqls.insert,[user.user_group_id,user.user_name,user.user_password,
-        user.user_phone,user.user_gender,user.user_qq,
-        user.user_email,user.user_address,user.user_mark,
-        user.user_rank_id,user.user_last_login_ip,user.user_birthday,
-        user.user_description,user.user_image_url,user.user_register_time,
-        user.user_register_ip,user.user_last_update_time,user.user_says,
+        user.token,1,0,user.user_register_time, user.user_register_ip,0,user.user_register_ip,
         user.user_lock,user.user_freeze,user.user_auth])
     }
 

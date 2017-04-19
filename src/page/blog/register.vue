@@ -65,7 +65,7 @@ import {login,getUserInfo} from '../../store/service'
                 },
                 rules: {
                     username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                        { required: true, message: '请输入呢称，注册后可随时修改', trigger: 'blur' }
                     ],
                     email: [
                         {  required: true, message: '请输入邮箱', trigger: 'blur' },

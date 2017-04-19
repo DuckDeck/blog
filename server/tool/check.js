@@ -23,6 +23,22 @@ class Check{
         return null
     }
 
+
+    static regexCheck(str,regex){
+        switch(regex){
+            case 'email':
+            if(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test( str)){
+                return null
+            }
+            else{
+                return "邮箱格式不正确"
+            }
+            break
+            default :
+            break
+        }
+    }
+
     static checkPage(req){
        if(req == undefined){
          return Result.create(9),false
@@ -43,12 +59,12 @@ class Check{
 
     static  async checkManageToken(req){
       if(req == undefined){
-            return Tool.setPromise(Result.create(9),false)
-        }
-       let id = req.params.mId
-       let token = req.params.token
-       if(id == undefined || token == undefined){
-            return Tool.setPromise(Result.create(9),false)
+                return Tool.setPromise(Result.create(9),false)
+            }
+        let id = req.params.mId
+        let token = req.params.token
+        if(id == undefined || token == undefined){
+                return Tool.setPromise(Result.create(9),false)
        }
     //    if(!isNaN(token)){
     //        return setPromise(Result.create(9),false)

@@ -98,8 +98,8 @@ module.exports = {
        var
             t = ctx.request.body,
             m;
-        if (!t.userName || !t.userName.trim()) {
-            ctx.rest(Result.create(10,{msg:'miss userName'})) 
+        if (!t.nickName || !t.nickName.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss nickName'})) 
             return
         }
         if (!t.password || !t.password.trim()) {
@@ -107,18 +107,60 @@ module.exports = {
             return
         }
         if (!t.email || !t.email.trim()) {
-            ctx.rest(Result.create(10,{msg:'miss password'})) 
+            ctx.rest(Result.create(10,{msg:'miss email'})) 
             return
         }
+
         m = {
-            userName: t.userName.trim(),
+            nickName: t.nickName.trim(),
             password: t.password.trim(),
             email:t.email.trim()
         }
-        
-       let res =  await User.checkLogin(m.userName)
-       
-       ctx.rest(result)
+        if(Check.regexCheck(m.emailm,'email')){
+            ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+            return 
+        }
+        let activityCode = (Math.random() * 100000000).toFixed(0)
+        let user = new User(m.email,Tool.md5(m.password))
+        user.token = Tool.md5(activityCode)
+        let res = await User.save(user)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let id = res.data.id
+        let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
+        res = DB.exec(sql,[id,m.nickNamem,m.email])
+        ctx.rest(Result.create(0))
+      },
+
+
+      'POST /api/checkemail': async (ctx, next) => {
+        var  t = ctx.request.body,
+        if (!t.email || !t.email.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss email'})) 
+            return
+        }
+
+        if(Check.regexCheck(t.email,'email')){
+            ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+            return 
+        }
+        let sql = 'select user_id from user where user_email =' +  t.email
+        let res =await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data.length == 0){
+            ctx.rest(Result.create(0))
+            return
+        }
+        else{
+            ctx.rest(Result.create(502))
+            return
+        }
+
       },
 
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {

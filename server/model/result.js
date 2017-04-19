@@ -48,6 +48,9 @@ function createResult(code,data){
         case 501:
             return new Result(501,'wrong password','密码错误',data||{})
             break;
+        case 502:
+            return new Result(502,'email already exist','邮箱已经存在',data||{})
+            break;
         case -100:
             return new Result(-100,'sql language error','sql语句错误',data||{})
             break;
