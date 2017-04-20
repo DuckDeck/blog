@@ -135,7 +135,15 @@ module.exports = {
         let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:3000/active/" + activityCode)
         ctx.rest(Result.create(0))
       },
-
+    
+    'GET /active/:code': async (ctx, next) => {
+       
+        let code = ctx.request.params.code
+        let sql = `select user_id from user where user_token = ` + Tool.md5(code)
+        let res = req
+       
+        ctx.rest(Result.create(0))
+      },
 
     'POST /api/checkemail': async (ctx, next) => {
         var  t = ctx.request.body

@@ -25,11 +25,20 @@ export const login = function(userName,password){
     return setpromisePost(url,{userName:userName,password:password})
 }
 
+export const register = function(dict){
+    const url =  HostName + 'register'
+    return setpromisePost(url,dict)
+}
+
 export const checkEmail = function(email){
     const url =  HostName + 'checkemail'
     return setpromisePost(url,{email:email})
 }
 
+export const validateUser = function(code){
+    const url =  HostName + 'activity/' + code
+    return setpromiseGet(url)
+}
 
 export const getUserInfo = function(user_id){
     const url = HostName +  'user/' + user_id 

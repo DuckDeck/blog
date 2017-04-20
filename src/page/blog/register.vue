@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {checkEmail} from '../../store/service'
+import {checkEmail,register} from '../../store/service'
     export default {
         data: function(){
             var validatePass = (rule, value, callback) => {
@@ -110,27 +110,19 @@ import {checkEmail} from '../../store/service'
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
-                        login(self.ruleForm.username,self.ruleForm.password).then(function(data){
-                            if(data.code == 0){
-                                setStore('token',data.data)
-                                getUserInfo(data.data.user_id).then(res=>{
-                                    if(res.code == 0){
-                                        toast(self,'登录成功')
-                                        setStore('userInfo',res.data)
-                                        self.$router.back() 
-                                    }
-                                    else{
-                                        toast(self,res.cMsg)
-                                    }
-                                }).catch(err=>{
-                                     toast(self,err.cMsg)
-                                })
-                                      
+                        let p = {
+                            nickName:self.ruleForm.username,
+                            password:self.ruleForm.password,
+                            email:self.ruleForm.email
+                        }
+                        register(p).then(res=>{
+                            if(res.code == 0){
+                                toast(self,'注册成功，验证邮件已经成功发送到你的邮箱里，请验证后再登录')
                             }
                             else{
-                                toast(self,data.cMsg)
+                                toast(self,res.cMsg)
                             }
-                        },function(err){
+                        }).catch(err=>{
                             toast(self,err.cMsg)
                         })
                     }

@@ -20,7 +20,6 @@ import blogHeader from './page/blog/com/blogHead.vue'
     },
     async mounted(){
         this.$router.beforeEach((to, from, next) => {
-           console.log(to.path)
            if( to.path == '/login' || to.path.indexOf('manage') >= 0 || to.path == '/register'){
                this.needShow = false
            }
