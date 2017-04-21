@@ -54,7 +54,7 @@ export default [
         component: register, //顶层路由，对应index.html
     },
     {
-        path: '/active:/code',
+        path: '/active/:userid/:code',
         component: active, //顶层路由，对应index.html
     },
     

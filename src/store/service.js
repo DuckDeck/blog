@@ -36,7 +36,7 @@ export const checkEmail = function(email){
 }
 
 export const validateUser = function(code){
-    const url =  HostName + 'activity/' + code
+    const url =  HostName + 'active/' + code
     return setpromiseGet(url)
 }
 

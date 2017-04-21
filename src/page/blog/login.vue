@@ -72,7 +72,7 @@ import {login,getUserInfo,ressendemail} from '../../store/service'
                                     if(res.code == 0){
                                         toast(self,'登录成功')
                                         setStore('userInfo',res.data)
-                                        self.$router.back() 
+                                        self.$router.push('/') 
                                     }
                                     else{
                                         toast(self,res.cMsg)

@@ -87,7 +87,7 @@ class Tool{
             // bcc         : ''    //密送
             subject        : 'ZOE Blog',
             text           : 'ZOE Blog',
-            html           : '<h1>你好，你点下面链接激活ZOE Blog</h1>'+link+'',
+            html           : '<h1>你好，' + user_real_name + ',你点下面链接激活ZOE Blog</h1>'+link+'',
         
         }
         return new Promise((resolve,reject)=>{

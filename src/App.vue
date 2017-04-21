@@ -20,7 +20,7 @@ import blogHeader from './page/blog/com/blogHead.vue'
     },
     async mounted(){
         this.$router.beforeEach((to, from, next) => {
-           if( to.path == '/login' || to.path.indexOf('manage') >= 0 || to.path == '/register'){
+           if( to.path == '/login' || to.path.indexOf('manage') >= 0 || to.path == '/register' || to.path.indexOf('active') >= 0){
                this.needShow = false
            }
            else{
@@ -31,7 +31,8 @@ import blogHeader from './page/blog/com/blogHead.vue'
         let index1 = location.href.toString().indexOf('login')
         let index2 = location.href.toString().indexOf('manage')
         let index3 = location.href.toString().indexOf('register')
-        if(index1 >=0 || index2 >= 0 || index3 >= 0){
+        let index4 = location.href.toString().indexOf('active')
+        if(index1 >=0 || index2 >= 0 || index3 >= 0 || index4 >= 0){
              this.needShow = false
         }
        

@@ -138,7 +138,7 @@ module.exports = {
         let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
         res = await DB.exec(sql,[id,m.nickName,m.email])
         //todo. switch the domain
-        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/active" + activityCode)
+        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/"+id+"/active" + activityCode)
         ctx.rest(Result.create(0))
       },
     
@@ -151,7 +151,7 @@ module.exports = {
             return
         }
         if(res.data.length <= 0){
-            ctx.rest(Result.create(111))
+            ctx.rest(Result.create(101))
             return
         }
         //如果没错
@@ -198,8 +198,9 @@ module.exports = {
         sql = 'select user_real_name,user_email from user_detail where user_id = ?'
         res = await DB.exec(sql,[userid])
         let user = res.data[0]
+        //DOTO switch the inner net to outer
 
-        await Tool.sendEmail(user.nickName,user.email,"http://localhost:8088/#/active" + activityCode)
+        await Tool.sendEmail(user.user_real_name,user.user_email,"http://localhost:8088/#/active/"+userid+"/" + activityCode)
         ctx.rest(Result.create(0))
      },
      //上传用户头像
