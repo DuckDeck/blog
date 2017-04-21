@@ -6,7 +6,7 @@
               </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
+                    <el-input v-model="ruleForm.username" placeholder="用户名/邮箱"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input type="password" placeholder="密码" v-model="ruleForm.password" 
@@ -21,12 +21,19 @@
                 </div>
             </el-form>
         </div>
+        <el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span>该用户尚未验证，请验证后登录</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">现在去验证</el-button>
+                <el-button type="primary" @click="reSendMail">重新发邮件</el-button>
+            </span>
+        </el-dialog>
       </div>
 
 </template>
 
 <script>
-import {login,getUserInfo} from '../../store/service'
+import {login,getUserInfo,ressendemail} from '../../store/service'
     export default {
         data: function(){
             return {
@@ -41,12 +48,18 @@ import {login,getUserInfo} from '../../store/service'
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
                     ]
-                }
+                },
+                dialogVisible:false,
+                userId:0
             }
         },
         methods:{
              register(){
                this.$router.push('/register') 
+             },
+             async reSendMail(){
+               let res = await ressendemail(this.userId)
+               toast(this,res.cMsg)
              },
              submitForm(formName){
                 const self = this;
@@ -70,7 +83,13 @@ import {login,getUserInfo} from '../../store/service'
                                       
                             }
                             else{
-                                toast(self,data.cMsg)
+                                 if(data.code == 503){
+                                    self.userId= data.data.user_id
+                                    self.dialogVisible = true
+                                 }
+                                 else{
+                                    toast(self,data.cMsg)
+                                }
                             }
                         },function(err){
                             toast(self,err.cMsg)

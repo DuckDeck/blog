@@ -111,13 +111,14 @@ import {checkEmail,register} from '../../store/service'
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let p = {
-                            nickName:self.ruleForm.username,
-                            password:self.ruleForm.password,
+                            nickname:self.ruleForm.username,
+                            password:self.ruleForm.pass,
                             email:self.ruleForm.email
                         }
                         register(p).then(res=>{
                             if(res.code == 0){
                                 toast(self,'注册成功，验证邮件已经成功发送到你的邮箱里，请验证后再登录')
+                                self.$router.replace('/login');
                             }
                             else{
                                 toast(self,res.cMsg)
@@ -148,7 +149,7 @@ import {checkEmail,register} from '../../store/service'
 .ms-register{
       position: absolute;
     left:50%;
-    top:35%;
+    top:25%;
     width:360px;
     height:420px;
     margin: -10px 0px 0px -180px;

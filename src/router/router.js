@@ -9,6 +9,8 @@ const index = r => require.ensure([], () => r(require('../page/blog/index')), 'i
 const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
 const register = r => require.ensure([], () => r(require('../page/blog/register')), 'register')
+
+const active = r => require.ensure([], () => r(require('../page/blog/active')), 'active')
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
@@ -51,6 +53,11 @@ export default [
         path: '/register',
         component: register, //顶层路由，对应index.html
     },
+    {
+        path: '/active:/code',
+        component: active, //顶层路由，对应index.html
+    },
+    
     {
         path: '/article/:articleId',
         component: atricleInfo, 

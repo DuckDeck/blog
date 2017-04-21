@@ -40,6 +40,11 @@ export const validateUser = function(code){
     return setpromiseGet(url)
 }
 
+export const ressendemail = function(user_id){
+    const url =  HostName + 'resendemail/' + user_id
+    return setpromiseGet(url)
+}
+
 export const getUserInfo = function(user_id){
     const url = HostName +  'user/' + user_id 
     return setpromiseGet(url)

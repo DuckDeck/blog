@@ -83,10 +83,15 @@ module.exports = {
            return
        }
        let user = res.data[0]
+       
        let pass = user.user_password    
        let mdPass = Tool.md5(m.password)
        if(pass != mdPass){
            ctx.rest(Result.create(501))
+           return
+       }
+       if(user.user_isValidate != 1){
+           ctx.rest(Result.create(503,{user_id:user.user_id}))
            return
        }
        let token = Tool.md5(Math.random().toString())
@@ -96,10 +101,8 @@ module.exports = {
       },
 
     'POST /api/register': async (ctx, next) => {
-       var
-            t = ctx.request.body,
-            m;
-        if (!t.nickName || !t.nickName.trim()) {
+        let  t = ctx.request.body
+        if (!t.nickname || !t.nickname.trim()) {
             ctx.rest(Result.create(10,{msg:'miss nickName'})) 
             return
         }
@@ -111,18 +114,20 @@ module.exports = {
             ctx.rest(Result.create(10,{msg:'miss email'})) 
             return
         }
-
-        m = {
-            nickName: t.nickName.trim(),
+        
+       let m = {
+            nickName: t.nickname.trim(),
             password: t.password.trim(),
             email:t.email.trim()
         }
-        if(Check.regexCheck(m.emailm,'email')){
+        if(Check.regexCheck(m.email,'email')){
             ctx.rest(Result.create(11,{msg:'email format wrong'})) 
             return 
         }
         let activityCode = (Math.random() * 100000000).toFixed(0)
         let user = new User(m.email,Tool.md5(m.password))
+        user.user_register_time = (new Date()).getTime()
+        user.user_register_ip = ctx.request.ip
         user.token = Tool.md5(activityCode)
         let res = await User.save(user)
         if(res.code != 0){
@@ -131,17 +136,28 @@ module.exports = {
         }
         let id = res.data.id
         let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
-        res = await DB.exec(sql,[id,m.nickNamem,m.email])
-        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:3000/active/" + activityCode)
+        res = await DB.exec(sql,[id,m.nickName,m.email])
+        //todo. switch the domain
+        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/active" + activityCode)
         ctx.rest(Result.create(0))
       },
     
-    'GET /active/:code': async (ctx, next) => {
-       
-        let code = ctx.request.params.code
-        let sql = `select user_id from user where user_token = ` + Tool.md5(code)
-        let res = req
-       
+    'GET /api/active/:code': async (ctx, next) => {
+        let code = ctx.params.code
+        let sql = `select user_id from user where user_token = ?`
+        let res = await DB.exec(sql,[Tool.md5(code)])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data.length <= 0){
+            ctx.rest(Result.create(111))
+            return
+        }
+        //如果没错
+        let user_id = res.data[0].user_id
+        sql = "update  user set user_isValidate = 1, user_token = '' where user_id = ?"
+        DB.exec(sql,[user_id])
         ctx.rest(Result.create(0))
       },
 
@@ -173,6 +189,20 @@ module.exports = {
 
       },
 
+     //重新发邮件
+    'GET /api/resendemail/:userid': async (ctx, next) => {
+        let userid = ctx.params.userid
+        let activityCode = (Math.random() * 100000000).toFixed(0)
+        let sql = 'update user set user_token = ? where user_id = ?' 
+        let res = await DB.exec(sql,[Tool.md5(activityCode),userid])
+        sql = 'select user_real_name,user_email from user_detail where user_id = ?'
+        res = await DB.exec(sql,[userid])
+        let user = res.data[0]
+
+        await Tool.sendEmail(user.nickName,user.email,"http://localhost:8088/#/active" + activityCode)
+        ctx.rest(Result.create(0))
+     },
+     //上传用户头像
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Tool.checkToken(ctx)
         if(result0.code != 0){

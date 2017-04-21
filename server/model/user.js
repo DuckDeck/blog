@@ -19,23 +19,23 @@ class User{
         this.user_name = userName
         this.user_password = Tool.md5(password)
         this.user_phone = 0
-        this.user_gender = '?'
+        this.user_gender = ' '
         this.user_qq = 0
-        this.user_email = '?'
-        this.user_address = '?'
+        this.user_email = ' '
+        this.user_address = ' '
         this.user_mark = 0
         this.user_rank_id = 0
-        this.user_last_login_ip = '?'
+        this.user_last_login_ip = ' '
         this.user_birthday = 0
-        this.user_description = "?"
-        this.user_image_url = '?'
+        this.user_description = " "
+        this.user_image_url = ' '
         this.user_register_time = 0
-        this.user_register_ip = '?'
+        this.user_register_ip = ' '
         this.user_last_update_time = 0
-        this.user_says = '?' //'用户语录'
+        this.user_says = ' ' //'用户语录'
         this.user_lock = 0
         this.user_freeze = 0
-        this.user_auth = '?'
+        this.user_auth = ' '
     }
 
     static save(user){
