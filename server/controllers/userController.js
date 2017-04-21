@@ -142,6 +142,7 @@ module.exports = {
         ctx.rest(Result.create(0))
       },
     
+   //todo active route need change add the user id to tell the active is need or not
     'GET /api/active/:code': async (ctx, next) => {
         let code = ctx.params.code
         let sql = `select user_id from user where user_token = ?`
