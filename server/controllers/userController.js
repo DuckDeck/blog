@@ -72,7 +72,7 @@ module.exports = {
             userName: t.userName.trim(),
             password: t.password.trim()
         }
-    
+        // this a bug which can make the password is not the same from register
        let res =  await User.checkLogin(m.userName)
        if(res.code != 0){
            ctx.rest(res)
