@@ -1,20 +1,16 @@
 <template>
-	
 		<transition name="router-fade" mode="out-in">
 			<div style="overflow: hidden">
 				<blogHeader v-show="needShow" ></blogHeader>
 				<router-view></router-view>
 			</div>
-    		
     	</transition>
-  
 </template>
 <script>
 import blogHeader from './page/blog/com/blogHead.vue'
   export default {
     data() {
       return {
-         
           needShow:true
       }
     },
