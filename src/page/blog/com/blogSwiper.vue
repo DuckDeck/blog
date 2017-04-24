@@ -1,14 +1,14 @@
 
 <template>
-    <swiper class="swiperArticle" :options="swiperOption">
+    <swiper class="swiperArticle" :options="swiperOption" >
         <swiper-slide v-for="art in articles">
          <div>
                <img :src="art.article_main_img" alt="" class="swiperImg">
                 <div class="swiperArticleInfo">
-                    <div class="swiperArticleTitle">
+                    <div class="swiperArticleTitle" @click="gotoArticle(art)">
                         {{art.article_name}}
                     </div>
-                    <div class="swiperArticleBrief">
+                    <div class="swiperArticleBrief" >
                         {{art.article_brief.slice(0,50)}}...
                     </div>
                 </div>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-
     export default {
         data() {
             return{
@@ -41,7 +40,9 @@
           }
         },
         methods:{
-           
+           gotoArticle(article){
+              this.$router.push('/article/'+article.article_id)
+           }
         },
     }
 </script>
@@ -65,6 +66,9 @@
     font-size: 0.7rem;
     text-align: center;
     margin-top: 2.5rem;
+}
+.swiperArticleTitle:hover{
+    cursor: pointer
 }
 .swiperArticleBrief{
     font-size: 0.35rem;

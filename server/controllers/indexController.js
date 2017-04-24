@@ -104,5 +104,108 @@ module.exports = {
      
     },
 
+    'GET /api/search/:keyword/:type/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let keyword = ctx.params.keyword
+        let type = ctx.params.type
+        switch(type){
+            case 'article':
+                let result = await searchArticle(keyword,index,size)
+                ctx.rest(result)
+                break
+            case 'user':
+                 result = await searchUser(keyword,index,size)
+                ctx.rest(result)
+                break
+            case 'sort':
+                 result = await searchSort(keyword,index,size)
+                ctx.rest(result)
+                break
+            default:
+                 result = await searchArticle(keyword,index,size)
+                ctx.rest(result)
+                break
+        }  
+    },
 
+
+}
+
+async function searchArticle(keyword,index,size){
+    let result = Result.create(0)
+    let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
+    from user_info where user_real_name like ‘%?%’ limit 0,3`
+    let res = await DB.exec(sql,[keyword])
+    result.data.users = res.data
+    sql = `select * from article_sort where sort_article_name like '%?%' limit 0,3`
+    res = await DB.exec(sql,[keyword])
+    result.data.sorts = res.data
+    sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
+                user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                article.article_id) as comment_count from article where article_up = 0 and (article_name like '%?%' or article_brief like '%?%')
+                  order by article_release_time desc limit ?,?`
+    res = await DB.exec(sql,[keyword,keyword,index * size,size])
+    if(res.code != 0){
+        return res
+    }
+    let user_ids = res.data.map(s=>{
+        return s.user_id
+    })
+    result.articles = res.data
+    sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
+    res =  await DB.exec(sql)
+    if(res.code != 0){
+       ctx.rest(res)
+       return
+    }
+    for(let k of result.data.articles){
+        let user = res.data.find(s=>{
+            return s.user_id == k.user_id
+        })
+        k.userInfo = user
+    }
+    return result
+ 
+}
+
+async function searchUser(keyword,index,size){
+    let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
+    from user_info where user_real_name like ‘%?%’ limit ?,?`
+    let res = await DB.exec(sql,[keyword,index*size,size])
+    return res
+}
+
+async function searchSort(keyword,index,size){
+    let sql = `select *,(select count(article_id) from article where article.article_id = article_sort.sort_article_id)  as 
+    article_count from article_sort where sort_article_name like '%?%' limit ?,?`
+    let res = await DB.exec(sql,[keyword,index*size,size])
+    if(res.code != 0){
+        return res
+    }
+    let user_ids = res.data.map(s=>{
+        return s.user_id
+    })
+    let result = Result.create(0)
+    result.data = res.data
+    sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
+    res =  await DB.exec(sql)
+    if(res.code != 0){
+       ctx.rest(res)
+       return
+    }
+    for(let k of result.data){
+        let user = res.data.find(s=>{
+            return s.user_id == k.user_id
+        })
+        k.userInfo = user
+    }
+    return result
 }

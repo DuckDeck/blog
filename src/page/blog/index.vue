@@ -57,10 +57,10 @@
                        <span>最新评论</span>
                    </div>
                     <div class="articleRightContent">
-                        <div style="display: flex;margin-bottom: 5px;" v-for="com in newComment">
+                        <div style="display: flex;margin-bottom: 5px;" v-for="com in newComment" @click="gotoUserInfo(com)">
                             <img class="userHead" :src="com.user_image_url" alt="">
                             <div>
-                                <div class="userRealName">
+                                <div class="userRealName"  >
                                     {{com.user_real_name}}
                                 </div>
                                 <div class="userComment">
@@ -75,7 +75,7 @@
                        <span>推荐作者</span>
                    </div>
                     <div class="articleRightContent">
-                      <div  style="display: flex" v-for="author in authors">
+                      <div  style="display: flex" v-for="author in authors" @click="gotoUserInfo(author)">
                             <img class="userHead" :src="author.user_image_url" alt="">
                             <div>
                                 <div class="userRealName">
@@ -186,6 +186,9 @@ import blogFoot from './com/blogFoot.vue'
         gotoSort(sort){
             localStorage.sortId = sort.sort_id
             this.$router.push('sortArticleList/' + sort.user_id)
+        },
+        gotoUserInfo(com){
+             this.$router.push('userInfo/' + com.user_id)
         }
     },
     computed:{
