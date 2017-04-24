@@ -6,7 +6,8 @@
          </div>
          <div class="rightMenu">
              
-            <el-input  class="searchInput" placeholder="搜索" icon="search" :on-icon-click="handleIconClick"> </el-input>
+            <el-input  class="searchInput" placeholder="搜索" icon="search" v-model="keyword"
+             :on-icon-click="handleIconClick" @keyup.enter="handleIconClick"> </el-input>
             <div   class="rightMenuLogin" v-show="!isLogin" >
                 <span @click="login" >登录</span>
                 <span @click="register">注册</span>
@@ -34,7 +35,8 @@
     export default {
         data() {
             return{
-                userInfo:{}
+                userInfo:{},
+                keyword:''
             }
         },
         mounted(){
@@ -57,7 +59,9 @@
                 this.$router.push('/login')
             },
             handleIconClick(){
-
+                if(this.keyword.length > 0){
+                    this.$router.push('/search/' + this.keyword.trim())
+                }
             },
             register(){
                 this.$router.push('/register')

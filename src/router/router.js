@@ -6,6 +6,8 @@ const demo = r => require.ensure([], () => r(require('../page/demo')), 'demo')
 
 const index = r => require.ensure([], () => r(require('../page/blog/index')), 'index')
 
+const search = r => require.ensure([], () => r(require('../page/blog/searchResult')), 'search')
+
 const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
 const register = r => require.ensure([], () => r(require('../page/blog/register')), 'register')
@@ -51,11 +53,15 @@ export default [
     },
     {
         path: '/register',
-        component: register, //顶层路由，对应index.html
+        component: register,
+    },
+    {
+        path: '/search/:keyword',
+        component: search, 
     },
     {
         path: '/active/:userid/:code',
-        component: active, //顶层路由，对应index.html
+        component: active, 
     },
     
     {
