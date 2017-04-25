@@ -7,7 +7,32 @@
                 <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                     <el-tab-pane   name="articles">
                         <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
-                        
+                        <div v-if="articles.users.length > 0 || articles.sorts.length > 0"  class="usersSearchResult">
+                            <div v-if="articles.users.length > 0" >
+                                <div class="usersSearchResultTitle">
+                                    相关用户
+                                </div>
+                                <div v-for="user in articles.users" class="usersSearchResultLists">
+                                    <img class="usersSearchResultUserHead" :src="user.user_image_url" alt="">
+                                    <div>
+                                        <div>
+                                            {{user.user_real_name}}
+                                        </div>
+                                        <div>
+                                            文章 {{user.article_count}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div v-if="articles.sorts.length > 0" >
+                                <div>
+                                    相关分类
+                                </div>
+                                <div v-for="user in articles.users">
+                                    
+                                </div>
+                            </div>
+                        </div>
                         <articleCell v-for="art in articles.articles" :articleInfo = "art"></articleCell>
                         </el-tab-pane>
                     <el-tab-pane  name="users">
@@ -75,7 +100,7 @@ import articleCell from './userInfo/com/articleCell.vue'
             }
         },
         handleClick(tab,event){
-                
+            console.log(this.activeName)
         }
         
         
@@ -100,5 +125,26 @@ import articleCell from './userInfo/com/articleCell.vue'
     font-size: 20px;
     padding: 10px;
     color: #666;
+}
+.usersSearchResult{
+    font-size: 16px;
+    background: #eee;
+}
+.usersSearchResultTitle{
+    padding: 5px;
+}
+.usersSearchResultLists{
+    display: flex;
+    font-size: 14px;
+    padding:5px;
+    max-width: 120px;
+}
+.usersSearchResultLists:hover{
+    cursor: pointer
+}
+.usersSearchResultUserHead{
+    width: 40px;
+    height: 40px;
+    margin-right: 4px;
 }
 </style>
