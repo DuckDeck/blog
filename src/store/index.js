@@ -11,3 +11,9 @@ export const index = function(){
     const url =  HostName + 'index'
     return setpromiseGet(url)
 }
+
+export const search = function(keyword,type,index = 0,size = 10){
+    const url =  HostName + 'search/' + keyword + '/' + type + '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+

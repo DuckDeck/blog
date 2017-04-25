@@ -7,8 +7,8 @@
         </div>
         <div class="articleCellContent">
             <div >
-               <span @click="togoArticle" class="articleCellContentTitle">{{articleInfo.article_name}}</span>
-               <p style="margin-bottom: 0rem;margin-top: 10px;">{{articleInfo.article_brief.slice(0,100)}}</p>
+               <span @click="togoArticle" class="articleCellContentTitle" v-html= "articleInfo.article_name" ></span>
+               <p style="margin-bottom: 0rem;margin-top: 10px;" v-html = "articleInfo.article_brief.slice(0,100)" ></p>
                <div class="articleTailInfo">
                 <span class="articleTailSortName">{{articleInfo.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
                     {{articleInfo.article_click}}  <i class="fa fa-comment"  aria-hidden="true"></i> {{articleInfo.comment_count}} 
@@ -39,7 +39,8 @@
     computed:{
         createTile(){
             return moment(this.articleInfo.article_create_time)
-        }
+        },
+
     }
 }
 </script>
