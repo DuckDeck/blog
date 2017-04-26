@@ -92,7 +92,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
            }
         },
         async refreshComment(comment_id){
-             res = await getComment(comment_id)
+             let res = await getComment(comment_id)
              if(res.code == 0){
                 let index = this.article.comments.findIndex(s=>{
                     s.comment_id == comment_id
