@@ -178,16 +178,19 @@ async function searchArticle(keyword,index,size){
 
 async function searchUser(keyword,index,size){
     let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
-    from user_info where user_real_name like ‘%?%’ limit ?,?`
-    let res = await DB.exec(sql,[keyword,index*size,size])
+    from user_info where user_real_name like  '%`+ keyword +`%' limit ?,?`
+    let res = await DB.exec(sql,[index*size,size])
     return res
 }
 
 async function searchSort(keyword,index,size){
     let sql = `select *,(select count(article_id) from article where article.article_id = article_sort.sort_article_id)  as 
-    article_count from article_sort where sort_article_name like '%?%' limit ?,?`
-    let res = await DB.exec(sql,[keyword,index*size,size])
+    article_count from article_sort where sort_article_name like  '%`+ keyword +`%' limit ?,?`
+    let res = await DB.exec(sql,[index*size,size])
     if(res.code != 0){
+        return res
+    }
+    if(res.data.length <= 0){
         return res
     }
     let user_ids = res.data.map(s=>{

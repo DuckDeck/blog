@@ -15,6 +15,8 @@ const register = r => require.ensure([], () => r(require('../page/blog/register'
 const active = r => require.ensure([], () => r(require('../page/blog/active')), 'active')
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
+
+const myTag = r => require.ensure([], () => r(require('../page/blog/userInfo/myTag')), 'myTag')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
 
 const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writeArticle')), 'writeArticle')
@@ -73,6 +75,11 @@ export default [
         path: '/userInfo/:userId',
         component: userInfo, 
     },
+    {
+        path: '/mytag/:userId',
+        component: myTag, 
+    },
+    
     {
         path: '/sortArticleList/:userId',
         component: sortArticleList, 

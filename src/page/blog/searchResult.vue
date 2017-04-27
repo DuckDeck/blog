@@ -12,7 +12,7 @@
                                 <div class="usersSearchResultTitle">
                                     相关用户
                                 </div>
-                                <div v-for="user in articles.users" class="usersSearchResultLists">
+                                <div v-for="user in articles.users" class="usersSearchResultLists" @click="gotoUser(user)">
                                     <img class="usersSearchResultUserHead" :src="user.user_image_url" alt="">
                                     <div>
                                         <div>
@@ -37,10 +37,25 @@
                         </el-tab-pane>
                     <el-tab-pane  name="users">
                         <span slot="label"><i class="el-icon-date"></i> 用户 </span>
-                        
+                        <div v-for="user in users" class="searchResultUsers" @click="gotoUser(user)">
+                            <img class="usersSearchResultUserHead" :src="user.user_image_url" alt="">
+                                    <div>
+                                        <div>
+                                            {{user.user_real_name}}
+                                        </div>
+                                        <div>
+                                            文章 {{user.article_count}}
+                                        </div>
+                                    </div>
+                        </div>
                     </el-tab-pane>
                     <el-tab-pane  name="sorts">
                         <span slot="label"><i class="fa fa-comment-o"></i> 分类 </span>
+                        <div  class="searchResultSorts">
+                            <el-button   v-for="sort in sorts"   @click="selectSort(sort)" >
+                                 {{sort.sort_article_name}}
+                            </el-button>      
+                        </div>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -100,10 +115,27 @@ import articleCell from './userInfo/com/articleCell.vue'
             }
         },
         handleClick(tab,event){
-            console.log(this.activeName)
-        }
-        
-        
+            switch (this.activeName) {
+                case 'articles':
+                    
+                    break;
+                case 'users':
+                 if(this.users.length <= 0){
+                     this.searchResult(this.keyword,'user',0,10)
+                 }
+                break
+                case 'sorts':
+                 if(this.sorts.length <= 0){
+                     this.searchResult(this.keyword,'sort',0,10)
+                 }
+                break
+                default:
+                    break;
+            }
+        },
+        gotoUser(user){
+            this.$router.push('/userInfo/' + user.user_id)
+        }      
     },
     components:{
         upToTop,blogFoot,articleCell
@@ -120,6 +152,9 @@ import articleCell from './userInfo/com/articleCell.vue'
 .searchResult{
     margin-top: 70px;
 }
+.userInfoTab{
+    font-size: 20px;
+}
 .searchResultHint{
     background: white;
     font-size: 20px;
@@ -129,6 +164,8 @@ import articleCell from './userInfo/com/articleCell.vue'
 .usersSearchResult{
     font-size: 16px;
     background: #eee;
+    margin-bottom: 40px;
+    padding: 8px;
 }
 .usersSearchResultTitle{
     padding: 5px;
@@ -145,6 +182,13 @@ import articleCell from './userInfo/com/articleCell.vue'
 .usersSearchResultUserHead{
     width: 40px;
     height: 40px;
-    margin-right: 4px;
+    margin-right: 8px;
+}
+.searchResultUsers{
+    display: flex;
+    font-size: 14px;
+    border-bottom: 1px solid #999;
+    padding-bottom: 8px;
+    color: #555;
 }
 </style>

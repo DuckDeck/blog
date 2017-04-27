@@ -66,7 +66,6 @@
 
 <script>
 import {getUserInfo,getDynamics,getUserComments} from '../../../store/service'
-import blogHeader from './../com/blogHead.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'

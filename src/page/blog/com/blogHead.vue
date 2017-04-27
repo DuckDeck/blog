@@ -76,7 +76,7 @@
                     this.$router.push('/userInfo/' + this.userInfo.user_id)
                 }
                 else if(command == "tag"){
-
+                     this.$router.push('/mytag/' + this.userInfo.user_id)
                 }
                 else if(command == "setting"){
 
