@@ -1,7 +1,7 @@
 <template>
        <div class="userHeadInfo">
             <img :src="userInfo.user_image_url" class="userHeader" alt="">
-            <div class="articleUserDetail">
+            <div class="userHeadDetail">
                 <div >
                     <span style="font-weight: bold">{{userInfo.user_real_name}}</span> 
                     <i class="fa fa-venus userGender" v-show="userInfo.user_gender == '男'" aria-hidden="true"></i>
@@ -32,9 +32,12 @@
 </script>
 <style scoped>
 .userHeadInfo{
-
+ display: flex;
+ font-size: 16px;
 }
 .userHeader{
-
+ width: 50px;
+ height: 50px;
+margin-right: 15px;
 }
 </style>

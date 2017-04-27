@@ -477,5 +477,76 @@ module.exports = {
         ctx.rest(res)
     },
 
+    // can not work， it can not add to the controller
+    'GET /api/articles/:userid/sort/:sortid/tag/:tagid/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userid')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'sortid')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = ctx.params.sortid
+        let sortId = ctx.params.sortid
+        let tagId = ctx.params.tagid
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        tagId = tagId.split('_')
+        for(let t in tagId){
+            if(isNaN(t)){
+                ctx.rest(Result.create(11))
+                return
+            }
+        }
+        
+        let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
+        (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
+                article.article_id) as comment_count from article where article_sort_id = ` + sortId + ` order by article_release_time desc limit ?,?`
+        let res = await DB.exec(sql,[index * size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let articles = res.data
+        if (articles.length == 0){
+            ctx.rest(Result.create(0))
+            return
+        }
+        
+        if(tagId.length == 1 && tagId == 0 ){
+            ctx.rest(res)
+            
+        }
+        else{
+            sql = `select * from article_tag_map_view where tag_id in (` + tagId.join(',') + ')'
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            articles = articles.filter(s=>{
+                let tag = res.data.find(t=>{
+                    return t.article_id == s.article_id
+                })
+                if(tag){
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+            ctx.rest(Result.create(0,articles))
+        }
+        
+    },
 
 }

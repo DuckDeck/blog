@@ -1,45 +1,54 @@
 <template>
     <div class="container">
-         <div>
-            <userHead :userInfo = "userInfo"></userHead>
-         </div>
-         <div class="featureTitle">
-          类别/标签管理
-        </div>
-        <div class="tagSortManageClass"> 
-            <div class="sortManageClass" >
-                <div class="sortManageTitleClass">
-                    分类管理
+        <div class="tagSortContent">
+            <div class="tagSortUserHead">
+                 <userHead :userInfo = "userInfo"></userHead>
+            </div>
+            <div class="featureTitle">
+            类别/标签管理
+            </div>
+            <div class="tagSortClass"> 
+                <div class="sortClass" >
+                    <div class="sortTitleClass">
+                        分类管理
+                    </div>
+                    <div class="sortsClass">
+                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :closable="true" 
+                        :close-transition="false"  @close="handleSortClose(sort)">
+                        {{sort.sort_article_name}}
+                        </el-tag>
+                        <el-input style="width: 80px;" v-if="inputVisibleSort" v-model="inputValueSort" ref="saveSortInput" size="mini" 
+                        @keyup.enter.native="handleSortInputConfirm"@blur="handleSortInputConfirm"
+                        >
+                        </el-input>
+                        <el-button style="height: 28px;" v-else class="button-new-tag" size="small" @click="showSortInput">+ 新标签</el-button>
+                    </div>
                 </div>
-                <div class="sortsManageClass">
-                    <el-tag :key="sort" v-for="sort in sorts" type='primary' :closable="true" 
-                    :close-transition="false"  @close="handleSortClose(sort)">
-                    {{sort.sort_article_name}}
-                    </el-tag>
-                    <el-input style="width: 80px;" v-if="inputVisibleSort" v-model="inputValueSort" ref="saveSortInput" size="mini" 
-                    @keyup.enter.native="handleSortInputConfirm"@blur="handleSortInputConfirm"
-                    >
-                    </el-input>
-                    <el-button style="height: 28px;" v-else class="button-new-tag" size="small" @click="showSortInput">+ 新标签</el-button>
+
+                <div class="tagClass">
+                    <div class="tagTitleClass">
+                        标签管理
+                    </div>
+                    <div class="tagssClass">
+                        <el-tag :key="tag" v-for="tag in tags" type='primary' :closable="true" :close-transition="false" @close="handleTagClose(tag)">
+                        {{tag.tag_name}}
+                        </el-tag>
+                        <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
+                        @keyup.enter.native="handleTagInputConfirm"@blur="handleTagInputConfirm"
+                        >
+                        </el-input>
+                        <el-button v-else style="height: 28px;" class="button-new-tag" size="small" @click="showTagInput">+ 新标签</el-button>
+                    </div>
                 </div>
             </div>
 
-            <div class="tagManageClass">
-                <div class="tagManageTitleClass">
-                    标签管理
-                </div>
-                <div class="tagssManageClass">
-                    <el-tag :key="tag" v-for="tag in tags" type='primary' :closable="true" :close-transition="false" @close="handleTagClose(tag)">
-                    {{tag.tag_name}}
-                    </el-tag>
-                    <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
-                    @keyup.enter.native="handleTagInputConfirm"@blur="handleTagInputConfirm"
-                    >
-                    </el-input>
-                    <el-button v-else style="height: 28px;" class="button-new-tag" size="small" @click="showTagInput">+ 新标签</el-button>
-                </div>
+            <div>
+                <articleCell :articleInfo = "article" v-for="article in articles "></articleCell>
             </div>
+
         </div>
+         
+         
         <upToTop></upToTop>
         <blogFoot></blogFoot>
     </div>
@@ -50,6 +59,7 @@ import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo} from '
 import userHead from './../com/userHeadInfo.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
+import articleCell from './com/articleCell.vue'
     export default {
         data: function(){
             return {
@@ -61,6 +71,7 @@ import blogFoot from './../com/blogFoot.vue'
                 inputVisibleTag: false,
                 inputValueTag: '',
                 userId:0,
+                articles:[]
             }
         },
        async mounted(){
@@ -87,7 +98,7 @@ import blogFoot from './../com/blogFoot.vue'
             else{
                 toast(this,resUserInfo.cMsg)
             }
-
+            
         },
         methods:{
             handleSortClose(sort) {
@@ -169,11 +180,79 @@ import blogFoot from './../com/blogFoot.vue'
             }
         },
         components:{
-          userHead, upToTop,blogFoot
+          userHead, upToTop,blogFoot,articleCell
         }
     }
 </script>
 
 <style scoped>
+.tagSortContent{
+    background: white;
+    font-size: 20px;
+    padding: 20px;
+    margin-top: 60px;
+}
+.tagSortUserHead{
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.featureTitle{
+    font-size: 20px;
+}
+.tagSortClass{
+    display: flex;
+    font-size: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.sortClass{
+    border: 1px solid #bbb;
+    width: 48%;
+    min-height: 180px;
+}
+.tagClass{
+    border: 1px solid #bbb;
+    width: 48%;
+    min-height: 180px;
+}
+.sortTitleClass{
+    color: white;
+    background: palevioletred;
+    height: 60px;
+    padding: 5px 10px;
+    line-height: 50px;
+}
+.tagTitleClass{
+     color: white;
+    background: lightseagreen;
+    height: 60px;
+    padding: 5px 10px;
+    line-height: 50px;
+}
+.sortsClass{
+    display: flex;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+.sortsClass span{
+    margin-right: 10px;
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    margin-bottom: 10px;
+   
+}
 
+.tagssClass{
+    display: flex;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+.tagssClass span{
+    margin-right: 10px;
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
 </style>

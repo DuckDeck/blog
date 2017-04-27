@@ -128,7 +128,7 @@ import userCommentCell from './com/userCommentCell.vue'
         
     },
     components:{
-        blogHeader,upToTop,blogFoot,articleCell,dynamicCell,userCommentCell
+        upToTop,blogFoot,articleCell,dynamicCell,userCommentCell
     },
     computed:{
         releaseDate(){

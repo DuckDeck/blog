@@ -61,6 +61,8 @@ export const getUserComments = function(user_id){
     return setpromiseGet(url)
 }
 
+
+
 export const getTags = function(user_id){
     const url = HostName +  'tag/userid/' + user_id 
     return setpromiseGet(url)
@@ -96,8 +98,16 @@ export const deleteSort = function(sort){
     return setpromiseDelete(url)
 }
 
+///api/articles/:userid/sort/:sortid/tag/:tagid/:index/:size': a
 
 
+export const sortTagArticles = function(user_id,sort,tag,index = 0,size = 10){
+    if(getType(tag) == "Array"){
+        tag = tag.join('_')
+    }
+    const url = HostName +  'articles/'  + user_id + '/sort/' + sort + '/tag/' + tag +  '/' + index + '/' + size
+    return setpromiseDelete(url)
+}
 
 
 

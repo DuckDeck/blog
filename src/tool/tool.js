@@ -159,7 +159,7 @@ global.getStyle = (element, attr, NumberMode = 'int') => {
 
  global.getType = (data)=>{
         return Object.prototype.toString.call(data).slice(8, -1);
-    }
+   }
 
 
 const crypto = require('crypto')
