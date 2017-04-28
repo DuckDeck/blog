@@ -101,12 +101,12 @@ export const deleteSort = function(sort){
 ///api/articles/:userid/sort/:sortid/tag/:tagid/:index/:size': a
 
 
-export const sortTagArticles = function(user_id,sort,tag,index = 0,size = 10){
+export const articlesBySort = function(user_id,sort,tag,index = 0,size = 10){
     if(getType(tag) == "Array"){
         tag = tag.join('_')
     }
     const url = HostName +  'articles/'  + user_id + '/sort/' + sort + '/tag/' + tag +  '/' + index + '/' + size
-    return setpromiseDelete(url)
+    return setpromiseGet(url)
 }
 
 

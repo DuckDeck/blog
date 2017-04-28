@@ -478,24 +478,24 @@ module.exports = {
     },
 
     // can not work， it can not add to the controller
-    'GET /api/articles/:userid/sort/:sortid/tag/:tagid/:index/:size': async (ctx, next) => {
+    'GET /api/articles/:userId/sort/:sortId/tag/:tagid/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
             return
         }
-        let paraCheckResult = Check.checkNum(ctx.params,'userid')
-        if(paraCheckResult){
-            ctx.rest(paraCheckResult)
+        let userIdCheckResult = Check.checkNum(ctx.params,'userId')
+        if(userIdCheckResult){
+            ctx.rest(userIdCheckResult)
             return
         }
-        let paraCheckResult = Check.checkNum(ctx.params,'sortid')
-        if(paraCheckResult){
-            ctx.rest(paraCheckResult)
+        let sortIdCheckResult = Check.checkNum(ctx.params,'sortId')
+        if(sortIdCheckResult){
+            ctx.rest(sortIdCheckResult)
             return
         }
-        let userId = ctx.params.sortid
-        let sortId = ctx.params.sortid
+        let userId = ctx.params.userId
+        let sortId = ctx.params.sortId
         let tagId = ctx.params.tagid
         let index = parseInt(ctx.params.index)
         let size = parseInt(ctx.params.size)
@@ -508,15 +508,22 @@ module.exports = {
         }
         
         let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
-        (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
-                article.article_id) as comment_count from article where article_sort_id = ` + sortId + ` order by article_release_time desc limit ?,?`
+                article.article_id) as comment_count from article where article_sort_id = ` + sortId + ` and user_id = `+ userId + ` order by article_release_time desc limit ?,?`
+        if(sortId == 0){
+            sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
+                article.article_id) as comment_count from article where user_id = `+ userId + ` order by article_release_time desc limit ?,?`
+        }
         let res = await DB.exec(sql,[index * size,size])
         if(res.code != 0){
             ctx.rest(res)
             return
         }
         let articles = res.data
+        console.log(articles)
         if (articles.length == 0){
             ctx.rest(Result.create(0))
             return

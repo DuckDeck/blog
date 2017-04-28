@@ -13,7 +13,7 @@
                         分类管理
                     </div>
                     <div class="sortsClass">
-                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :closable="true" 
+                        <el-tag :key="sort" v-for="sort in sorts" type='primary'  :closable="sort.sort_article_id > 0" 
                         :close-transition="false"  @close="handleSortClose(sort)">
                         {{sort.sort_article_name}}
                         </el-tag>
@@ -30,7 +30,7 @@
                         标签管理
                     </div>
                     <div class="tagssClass">
-                        <el-tag :key="tag" v-for="tag in tags" type='primary' :closable="true" :close-transition="false" @close="handleTagClose(tag)">
+                        <el-tag :key="tag" v-for="tag in tags" type='primary' :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
                         {{tag.tag_name}}
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo} from '../../../store/service'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,articlesBySort} from '../../../store/service'
 import userHead from './../com/userHeadInfo.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
@@ -66,6 +66,8 @@ import articleCell from './com/articleCell.vue'
                 userInfo:{},
                 tags:[],
                 sorts:[],
+                selectedTag:{},
+                selectedSort:{},
                 inputVisibleSort:false,
                 inputValueSort:'',
                 inputVisibleTag: false,
@@ -78,15 +80,36 @@ import articleCell from './com/articleCell.vue'
             this.userId = this.$route.params.userId
             let resTag = await getTags(this.userId)
             if(resTag.code == 0){
-                this.tags = resTag.data
-                
+                let tmp =  resTag.data
+                tmp.unshift({
+                    tag_id: 0,
+                    user_id: this.userId,
+                    tag_name: "全部标签"
+                })
+                tmp.unshift({
+                    tag_id: -1,
+                    user_id: this.userId,
+                    tag_name: "无标签"
+                })
+                this.tags = tmp
             }
             else{
                 toast(this,resTag.cMsg)
             }
             let resSort = await getSorts(this.userId)
             if(resSort.code == 0){
-                this.sorts = resSort.data
+                let tmp = resSort.data
+                tmp.unshift({
+                    sort_article_id: 0,
+                    user_id: this.userId,
+                    sort_article_name: "全部分类"
+                })
+                tmp.unshift({
+                    sort_article_id: -1,
+                    user_id: this.userId,
+                    sort_article_name: "无分类"
+                })
+                this.sorts = tmp
             }
             else{
                 toast(this,resSort.cMsg)
@@ -98,9 +121,15 @@ import articleCell from './com/articleCell.vue'
             else{
                 toast(this,resUserInfo.cMsg)
             }
-            
+            let resArticle = await this.articlesBySortTag(0,0,0,10)
+            if(resArticle.code == 0){
+                this.articles = resArticle.data
+            }
         },
         methods:{
+            async articlesBySortTag(sort,tag,index,page){
+                return await articlesBySort(this.userId,sort,tag,index,page)
+            },
             handleSortClose(sort) {
                 let self = this
                 deleteSort(sort).then(res=>{
@@ -114,9 +143,6 @@ import articleCell from './com/articleCell.vue'
                 }).catch(err=>{
                     toast(self,err.cMsg)
                 })
-
-
-               
             },
             handleTagClose(tag) {
                 let self = this
