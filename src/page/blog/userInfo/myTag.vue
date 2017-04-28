@@ -13,8 +13,8 @@
                         分类管理
                     </div>
                     <div class="sortsClass">
-                        <el-tag :key="sort" v-for="sort in sorts" type='primary'  :closable="sort.sort_article_id > 0" 
-                        :close-transition="false"  @close="handleSortClose(sort)">
+                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.isSelected}" @click="clickSort(sort)"
+                          :closable="sort.sort_article_id > 0"   :close-transition="false"  @close="handleSortClose(sort)">
                         {{sort.sort_article_name}}
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleSort" v-model="inputValueSort" ref="saveSortInput" size="mini" 
@@ -30,7 +30,8 @@
                         标签管理
                     </div>
                     <div class="tagssClass">
-                        <el-tag :key="tag" v-for="tag in tags" type='primary' :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
+                        <el-tag :key="tag" v-for="tag in tags" type='primary' :class="{tagSelected:tag.isSelected}"
+                         :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
                         {{tag.tag_name}}
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
@@ -80,16 +81,21 @@ import articleCell from './com/articleCell.vue'
             this.userId = this.$route.params.userId
             let resTag = await getTags(this.userId)
             if(resTag.code == 0){
-                let tmp =  resTag.data
+                let tmp =  resTag.data.map(s=>{
+                     s.isSelected = false
+                     return s
+                })
                 tmp.unshift({
                     tag_id: 0,
                     user_id: this.userId,
-                    tag_name: "全部标签"
+                    tag_name: "全部标签",
+                    isSelected : true
                 })
                 tmp.unshift({
                     tag_id: -1,
                     user_id: this.userId,
-                    tag_name: "无标签"
+                    tag_name: "无标签",
+                    isSelected : false
                 })
                 this.tags = tmp
             }
@@ -98,16 +104,21 @@ import articleCell from './com/articleCell.vue'
             }
             let resSort = await getSorts(this.userId)
             if(resSort.code == 0){
-                let tmp = resSort.data
+                let tmp = resSort.data.map(s=>{
+                     s.isSelected = false
+                     return s
+                })
                 tmp.unshift({
                     sort_article_id: 0,
                     user_id: this.userId,
-                    sort_article_name: "全部分类"
+                    sort_article_name: "全部分类",
+                    isSelected : true
                 })
                 tmp.unshift({
                     sort_article_id: -1,
                     user_id: this.userId,
-                    sort_article_name: "无分类"
+                    sort_article_name: "无分类",
+                    isSelected : false
                 })
                 this.sorts = tmp
             }
@@ -203,6 +214,9 @@ import articleCell from './com/articleCell.vue'
                 }).catch(err=>{
                     toast(self,err.cMsg)
                 })
+            },
+            clickSort(sort){
+                console.log(sort)
             }
         },
         components:{
@@ -267,6 +281,12 @@ import articleCell from './com/articleCell.vue'
     cursor: pointer;
     margin-bottom: 10px;
    
+}
+
+
+.tagSelected{
+    color: white;
+    background: #20a0ff;
 }
 
 .tagssClass{
