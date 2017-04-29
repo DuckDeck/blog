@@ -32,7 +32,7 @@ module.exports = {
        ctx.rest(tagResult)  
     },
      'DELETE /api/tag/:id/:userId/:token': async (ctx, next) => {
-       let tokenResult = await Tool.checkToken(ctx)
+       let tokenResult = await Check.checkToken(ctx)
        if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return

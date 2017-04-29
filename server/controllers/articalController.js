@@ -517,13 +517,18 @@ module.exports = {
                 as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
                 article.article_id) as comment_count from article where user_id = `+ userId + ` order by article_release_time desc limit ?,?`
         }
+        else if (sortId == -1){
+            sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
+                article.article_id) as comment_count from article where user_id = `+ userId + ` and article_sort_id = 0 order by article_release_time desc limit ?,?`
+        }
         let res = await DB.exec(sql,[index * size,size])
         if(res.code != 0){
             ctx.rest(res)
             return
         }
         let articles = res.data
-        console.log(articles)
         if (articles.length == 0){
             ctx.rest(Result.create(0))
             return
@@ -531,7 +536,26 @@ module.exports = {
         
         if(tagId.length == 1 && tagId == 0 ){
             ctx.rest(res)
-            
+        }
+        else if(tagId.length == 1 && tagId == -1){
+            sql = `select article_id from article where article_id not in (select article_id from article_tag_map_view where user_id = `+ userId +`)` + `and user_id = ` + userId
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            articles = articles.filter(s=>{
+                let tag = res.data.find(t=>{
+                    return t == s.article_id
+                })
+                if(tag){
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+            ctx.rest(Result.create(0,articles))
         }
         else{
             sql = `select * from article_tag_map_view where tag_id in (` + tagId.join(',') + ')'

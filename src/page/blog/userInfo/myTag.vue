@@ -13,15 +13,15 @@
                         分类管理
                     </div>
                     <div class="sortsClass">
-                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.isSelected}" @click="clickSort(sort)"
+                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.sort_article_id == selectedSort.sort_article_id}"
                           :closable="sort.sort_article_id > 0"   :close-transition="false"  @close="handleSortClose(sort)">
-                        {{sort.sort_article_name}}
+                        <span class="clickSpan"  @click="clickSort(sort)">{{sort.sort_article_name}}</span>
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleSort" v-model="inputValueSort" ref="saveSortInput" size="mini" 
                         @keyup.enter.native="handleSortInputConfirm"@blur="handleSortInputConfirm"
                         >
                         </el-input>
-                        <el-button style="height: 28px;" v-else class="button-new-tag" size="small" @click="showSortInput">+ 新标签</el-button>
+                        <el-button style="height: 28px;" v-else class="button-new-tag" size="small" @click="showSortInput">+ 新分类</el-button>
                     </div>
                 </div>
 
@@ -32,7 +32,8 @@
                     <div class="tagssClass">
                         <el-tag :key="tag" v-for="tag in tags" type='primary' :class="{tagSelected:tag.isSelected}"
                          :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
-                        {{tag.tag_name}}
+                         <span  class="clickSpan" @click="clickTag(tag)"> {{tag.tag_name}}</span>
+                       
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
                         @keyup.enter.native="handleTagInputConfirm"@blur="handleTagInputConfirm"
@@ -66,6 +67,8 @@ import articleCell from './com/articleCell.vue'
             return {
                 userInfo:{},
                 tags:[],
+                selectedTag:[],
+                selectedSort:{},
                 sorts:[],
                 selectedTag:{},
                 selectedSort:{},
@@ -74,7 +77,9 @@ import articleCell from './com/articleCell.vue'
                 inputVisibleTag: false,
                 inputValueTag: '',
                 userId:0,
-                articles:[]
+                articles:[],
+                currentSort:"",
+                currentTag:""
             }
         },
        async mounted(){
@@ -85,18 +90,20 @@ import articleCell from './com/articleCell.vue'
                      s.isSelected = false
                      return s
                 })
-                tmp.unshift({
+                this.selectedTag = [{
                     tag_id: 0,
                     user_id: this.userId,
                     tag_name: "全部标签",
                     isSelected : true
-                })
+                }]
+                tmp.unshift( this.selectedTag[0])
                 tmp.unshift({
                     tag_id: -1,
                     user_id: this.userId,
                     tag_name: "无标签",
                     isSelected : false
                 })
+                this.currentTag = [0]
                 this.tags = tmp
             }
             else{
@@ -108,18 +115,21 @@ import articleCell from './com/articleCell.vue'
                      s.isSelected = false
                      return s
                 })
-                tmp.unshift({
-                    sort_article_id: 0,
+                this.selectedSort = {
+                     sort_article_id: 0,
                     user_id: this.userId,
                     sort_article_name: "全部分类",
                     isSelected : true
-                })
+                }
+                tmp.unshift(this.selectedSort)       
                 tmp.unshift({
                     sort_article_id: -1,
                     user_id: this.userId,
                     sort_article_name: "无分类",
                     isSelected : false
                 })
+                this.currentSort = 0
+                
                 this.sorts = tmp
             }
             else{
@@ -132,14 +142,17 @@ import articleCell from './com/articleCell.vue'
             else{
                 toast(this,resUserInfo.cMsg)
             }
-            let resArticle = await this.articlesBySortTag(0,0,0,10)
-            if(resArticle.code == 0){
-                this.articles = resArticle.data
-            }
-        },
-        methods:{
-            async articlesBySortTag(sort,tag,index,page){
-                return await articlesBySort(this.userId,sort,tag,index,page)
+            await this.articlesBySortTag(0,0,0,10)
+         
+         },
+
+
+       methods:{
+           async articlesBySortTag(sort,tag,index,page){
+                let resArticle =   await articlesBySort(this.userId,sort,tag,index,page)
+                    if(resArticle.code == 0){
+                    this.articles = resArticle.data
+                }
             },
             handleSortClose(sort) {
                 let self = this
@@ -216,13 +229,50 @@ import articleCell from './com/articleCell.vue'
                 })
             },
             clickSort(sort){
-                console.log(sort)
-            }
+                this.selectedSort.isSelected = false
+                sort.isSelected = true
+                this.selectedSort = sort 
+                this.currentSort = sort.sort_article_id
+                this.articlesBySortTag(this.currentSort,this.currentTag,0,10)
+            },
+            clickTag(tag){
+                let selected = this.tags.filter(s=>{
+                    return s.isSelected == true
+                })
+                if(selected.length  == 1){
+                    if(tag.isSelected){
+                        return
+                    }
+                }
+                if(tag.tag_id == 0 || tag.tag_id == -1){
+                    for(let t of this.tags){
+                      
+                            t.isSelected = false
+                        
+                    }
+                }
+                else{
+                    let t = this.tags.find(s=>{
+                        return s.tag_id == 0
+                    })
+                    t.isSelected = false
+                }
+                tag.isSelected = !tag.isSelected
+                selected = this.tags.filter(s=>{
+                    return s.isSelected == true
+                })
+                let tags = selected.map(s=>{
+                    return s.tag_id
+                })
+                this.currentTag = tags.join('_')
+                this.articlesBySortTag(this.currentSort,this.currentTag,0,10)
+            },
+            
         },
         components:{
           userHead, upToTop,blogFoot,articleCell
         }
-    }
+       }
 </script>
 
 <style scoped>
@@ -283,6 +333,9 @@ import articleCell from './com/articleCell.vue'
    
 }
 
+.clickSpan{
+    margin-right: 0px !important;
+}
 
 .tagSelected{
     color: white;
