@@ -17,6 +17,7 @@ const atricleInfo = r => require.ensure([], () => r(require('../page/blog/articl
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 
 const myTag = r => require.ensure([], () => r(require('../page/blog/userInfo/myTag')), 'myTag')
+const mySetting = r => require.ensure([], () => r(require('../page/blog/userInfo/myInfoSetting')), 'mySetting')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
 
 const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writeArticle')), 'writeArticle')
@@ -80,6 +81,10 @@ export default [
         component: myTag, 
     },
     
+    {
+        path: '/mysetting/:userId',
+        component: mySetting, 
+    },
     {
         path: '/sortArticleList/:userId',
         component: sortArticleList, 

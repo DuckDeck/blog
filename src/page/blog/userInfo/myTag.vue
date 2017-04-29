@@ -203,7 +203,7 @@ import articleCell from './com/articleCell.vue'
                 }
                 let self = this
                 addSort(inputValue).then(result=>{
-                     toast(self,result.cMsg)   
+                     toast(self,'添加分类成功')   
                      let id = result.data.id
                      let sort = {sort_id:id,sort_article_name:inputValue}
                      self.sorts.push(sort)
@@ -220,7 +220,7 @@ import articleCell from './com/articleCell.vue'
                 }
                 let self = this
                 addTag(inputValue).then(result=>{
-                     toast(self,result.cMsg)   
+                     toast(self,'添加标签成功')   
                      let id = result.data.id
                      let tag = {tag_id:id,tag_name:inputValue}
                      self.tags.push(tag)

@@ -79,7 +79,7 @@
                      this.$router.push('/mytag/' + this.userInfo.user_id)
                 }
                 else if(command == "setting"){
-
+                    this.$router.push('/mysetting/' + this.userInfo.user_id)
                 }
            },
            toMain(){
