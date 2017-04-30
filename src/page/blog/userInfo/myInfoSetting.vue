@@ -4,80 +4,77 @@
              <div class="featureTitle">
                  个人信息管理
             </div>
-            <div class="userInfoManageClass"> 
-                <div class="basicInfoManageClass" >
-                    <div class="basicInfoManageTitleClass">
-                        基本信息  <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
-                    </div>
-                    <div class="basicInfoEditManageClass">
-                        <el-form :model="userInfo" :rules="rules" ref="userInfo" label-width="0px" >
-                        <el-form-item >
-                        <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="true"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="user_real_name" >
-                            <span class="infoTitleClass">用户呢称</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
-                        </el-form-item>
-                        <el-form-item >
-                            <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone"  ></el-input>
-                        </el-form-item>
-                        <el-form-item >
-                            <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass"  :disabled="true"></el-input> <span class="emailValidated">已验证</span>
-                        </el-form-item>
-                        <el-form-item >
-                            <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
-                        </el-form-item>
-                        <el-form-item >
-                            <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
-                        </el-form-item>
-                        <el-form-item >
-                         <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
-                                v-model="userInfo.user_birthday"
-                                type="date" class="birthdayClass"
-                                placeholder="选择日期"  >
-                                </el-date-picker>
-                        </el-form-item>
-                    </el-form>
-                    </div>
-                </div>
-                <div class="basicInfoManageClass" >
-                    <div class="headinfoManageTitleClass">   用户头像  </div>
-                    <div class="basicInfoEditManageClass">
-                          <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
-                                    :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
-                                    <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
-                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
-                    </div>
-                </div>
-                <div class="basicInfoManageClass" >
-                    <div class="selfIntroManageTitleClass">
-                        自我描述
-                        <el-button class="saveInfoButton" type="primary" @click="submitForm('userInfo')">保存</el-button>
-                    </div>
-                    <div class="basicInfoEditManageClass">
-                        <el-form> 
-                            <el-form-item >                 
-                                <span class="infoTitleClass">自我描述</span> 
-                                <el-input
-                                    type="textarea"
-                                    :rows="2" v-model="userInfo.user_description"
-                                    placeholder="请输入内容">
-                                    </el-input>
-                                </el-form-item>
-                                <el-form-item >     
-                                <span class="infoTitleClass">个人语录</span>
-                                 <el-input
-                                    type="textarea" v-model = "userInfo.user_says"
-                                    :rows="2"
-                                    placeholder="请输入内容">
-                                    </el-input>
-                                </el-form-item>
-                        </el-form>   
-                    </div>
-                </div>
 
-            </div>
+             <el-tabs v-model="activeName" class="userSettingTab" type="border-card" @tab-click="handleClick">
+                        <el-tab-pane   name="basic">
+                            <span slot="label"><i class="fa fa-file-text"></i> 基本信息 </span>
+                                <div class="basicInfoEditManageClass">
+                                      <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                                                :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
+                                                <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
+                                                <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
+                                            <el-button style="margin-left: 20px;"  type="primary" >更换头像</el-button>    
+                                </div>
+
+                                <el-form :model="userInfo" :rules="rules" ref="userInfo" class="basicInfoForm" label-width="0px" >
+                                    <el-form-item >
+                                    <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="true"></el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="user_real_name" >
+                                        <span class="infoTitleClass">用户呢称</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
+                                    </el-form-item>
+                                    <el-form-item >
+                                        <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone"  ></el-input>
+                                    </el-form-item>
+                                    <el-form-item >
+                                        <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass"  :disabled="true"></el-input> <span class="emailValidated">已验证</span>
+                                    </el-form-item>
+                                    <el-form-item >
+                                        <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
+                                    </el-form-item>
+                                    <el-form-item >
+                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
+                                    </el-form-item>
+                                    
+                                    <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
+                                </el-form>
+                         </el-tab-pane>
+                        <el-tab-pane  name="dynamic">
+                            <span slot="label"><i class="el-icon-date"></i> 个性设置 </span>
+                           <el-form  >
+                                 <el-form-item prop="user_real_name" >
+                                <span class="infoTitleClass">性别</span> 
+                                 <el-radio-group v-model="gender">
+                                    <el-radio :label="1">男</el-radio>
+                                    <el-radio :label="2">女</el-radio>
+                                    <el-radio :label="0">保密</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                            <el-form-item >
+                              <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
+                                    v-model="userInfo.user_birthday"
+                                    type="date" class="birthdayClass"
+                                    placeholder="选择日期"  >
+                                    </el-date-picker>
+                            </el-form-item>
+                            <el-form-item>
+                                  <span class="infoTitleClass">性别</span> 
+                                   <el-input   :rows="2"   type="textarea"
+                                        placeholder="请输入内容" ></el-input>
+                            </el-form-item>
+                           </el-form>
+                        </el-tab-pane>
+                        <el-tab-pane  name="comment">
+                            <span slot="label"><i class="fa fa-comment-o"></i> 修改密码 </span>
+                           
+                        </el-tab-pane>
+                        
+                    </el-tabs>
+
+
+                
          </div>
-        <upToTop></upToTop>
+    
         <blogFoot></blogFoot>
     </div>
 </template>
@@ -89,6 +86,7 @@
     export default {
         data: function(){
             return {
+                activeName:'basic',
                 userInfo:{
                     user_birthday:'',
                     user_image_url:'',
@@ -98,7 +96,7 @@
                 rules: {
                     
                 },
-
+                gender:0,
             }
         },
         mounted(){
@@ -139,8 +137,10 @@
                 this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
-            }
-            
+            },
+             handleClick(tab,event){
+                
+             }
         },
         computed:{
             uploadHeadUrl(){
@@ -164,31 +164,17 @@
     padding: 10px;
     font-weight: bold;
 }
-.userInfoManageClass{
-    display: flex;
+.userSettingTab{
     font-size: 20px;
-    flex-direction: column;
-    justify-content: space-between;
-
-}
-.basicInfoManageClass{
-    border: 1px solid #bbb;
-
-    min-height: 180px;
-    margin-bottom: 20px;
 }
 
-.basicInfoManageTitleClass{
-    color: white;
-    background: palevioletred;
-    height: 60px;
-    padding: 5px 10px;
-    line-height: 50px;
+.basicInfoForm{
+    margin-left: 20px;
+    margin-top: 50px;
 }
-
 .basicInfoEditManageClass{
     padding: 15px;
-
+    margin-top: 20px;
 }
 .basicInfoEditManageClass form{
     display:  flex;
@@ -201,29 +187,24 @@
 .basicInfoEditManageClass form div div{
     width: 70%
 }
+.el-input{
+    width: 300px;
+}
 .emailValidated{
     font-size: 14px;
     color: #666;
 }
-.saveInfoButton{
-    width: 100px;
-    float: right;
-    margin-top: 8px;
-    margin-right: 10px;
-}
+
 .infoTitleClass{
-    width: 60px;
+    width: 80px;
     display: inline-block
+
 }
-.emailClass{
-    width: 60% !important;
-}
+
 .birthdayTitleClass{
-    width: -10px;
+    margin-left: -9px;
 }
-.birthdayClass{
-    width: 75% !important
-}
+
 .avatar-uploader{
 display: inline-block;
 }
@@ -242,10 +223,11 @@ display: inline-block;
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 128px;
-    height: 128px;
-    line-height: 128px;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
     text-align: center;
+    border-radius: 50px;
     border: 1px dotted #20a0ff;
   }
   .avatar {
@@ -253,20 +235,21 @@ display: inline-block;
     height: 128px;
     display: block;
   }
-  .headinfoManageTitleClass{
-       color: white;
-   
-        height: 60px;
-        padding: 5px 10px;
-        line-height: 50px;
-      background: limegreen
-  }
-  .selfIntroManageTitleClass{
-        color: white;
-   
-        height: 60px;
-        padding: 5px 10px;
-        line-height: 50px;
-      background: orchid
-  }
+
+.saveBasicInfoButton{
+    width: 100px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+ @media (max-width:500px){
+
+    .basicInfoForm{
+         margin-left: 5px;
+ 
+    }
+    .el-input{
+        width: 200px;
+    }
+} 
 </style>
