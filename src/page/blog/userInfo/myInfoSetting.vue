@@ -12,8 +12,10 @@
                                       <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                                 <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
-                                                <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
-                                            <el-button style="margin-left: 20px;"  type="primary" >更换头像</el-button>    
+                                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                                <el-button style="margin-left: 20px; "  type="primary" >更换头像</el-button>  
+                                                 </el-upload>
+                                              
                                 </div>
 
                                 <el-form :model="userInfo" :rules="rules" ref="userInfo" class="basicInfoForm" label-width="0px" >
@@ -138,15 +140,12 @@
         mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
-
-                console.log(this.userInfo)
             }
             else{
                 let self = this
                  getUserInfo().then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
-
                         setStore('userInfo',data.data)
                     }
                     else{
@@ -190,7 +189,7 @@
     }
 </script>
 
-<style scoped>
+<style >
 .mySetting{
     background: white;
     margin-top: 70px;
@@ -223,6 +222,10 @@
 .basicInfoEditManageClass form div div{
     width: 70%
 }
+div.el-upload{
+    display: flex;
+    align-items: center;
+}
 .el-input{
     width: 300px;
 }
@@ -245,7 +248,7 @@
 display: inline-block;
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
+    
     border-radius: 6px;
     cursor: pointer;
     position: relative;
@@ -267,9 +270,11 @@ display: inline-block;
     border: 1px dotted #20a0ff;
   }
   .avatar {
-    width: 128px;
-    height: 128px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
     display: block;
+    border: 1px dashed #d9d9d9;
   }
 
 .saveBasicInfoButton{

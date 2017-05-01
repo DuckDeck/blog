@@ -129,7 +129,7 @@ import {login,getUserInfo,ressendemail} from '../../store/service'
     position: absolute;
     left:50%;
     top:35%;
-    width:360px;
+    width:380px;
     height:360px;
     margin: -10px 0px 0px -180px;
     padding:40px;

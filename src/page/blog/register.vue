@@ -150,8 +150,8 @@ import {checkEmail,register} from '../../store/service'
       position: absolute;
     left:50%;
     top:25%;
-    width:360px;
-    height:420px;
+    width:380px;
+    height:430px;
     margin: -10px 0px 0px -180px;
     padding:40px;
     border-radius: 5px;

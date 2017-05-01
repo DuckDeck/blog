@@ -71,6 +71,7 @@
                     removeStore('userInfo')
                     removeStore('token')
                     this.userInfo = {}
+                    this.$router.push('/')
                 }
                 else if(command == 'mypage'){
                     this.$router.push('/userInfo/' + this.userInfo.user_id)
