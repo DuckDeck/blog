@@ -125,7 +125,7 @@ module.exports = {
             return 
         }
         let activityCode = (Math.random() * 100000000).toFixed(0)
-        let user = new User(m.email,Tool.md5(m.password))
+        let user = new User(m.email,m.password)
         user.user_register_time = (new Date()).getTime()
         user.user_register_ip = ctx.request.ip
         user.token = Tool.md5(activityCode)
@@ -138,7 +138,7 @@ module.exports = {
         let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
         res = await DB.exec(sql,[id,m.nickName,m.email])
         //todo. switch the domain
-        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/"+id+"/active" + activityCode)
+        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/active/"+id+"/" + activityCode)
         ctx.rest(Result.create(0))
       },
     

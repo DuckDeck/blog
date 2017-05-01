@@ -31,6 +31,7 @@
 
 <script>
 import {checkEmail,register} from '../../store/service'
+import { Loading } from 'element-ui'
     export default {
         data: function(){
             var validatePass = (rule, value, callback) => {
@@ -103,6 +104,9 @@ import {checkEmail,register} from '../../store/service'
                     ]
                 },
                 isValidating:false,
+                loadingOption:{
+                    text:"注册中..."
+                }
             }
         },
         methods:{
@@ -115,7 +119,9 @@ import {checkEmail,register} from '../../store/service'
                             password:self.ruleForm.pass,
                             email:self.ruleForm.email
                         }
+                        let loadingInstance = Loading.service(self.loadingOption)
                         register(p).then(res=>{
+                            loadingInstance.close()
                             if(res.code == 0){
                                 toast(self,'注册成功，验证邮件已经成功发送到你的邮箱里，请验证后再登录')
                                 self.$router.replace('/login');
@@ -124,6 +130,7 @@ import {checkEmail,register} from '../../store/service'
                                 toast(self,res.cMsg)
                             }
                         }).catch(err=>{
+                            loadingInstance.close()
                             toast(self,err.cMsg)
                         })
                     }

@@ -34,6 +34,7 @@
 
 <script>
 import {login,getUserInfo,ressendemail} from '../../store/service'
+import { Loading } from 'element-ui'
     export default {
         data: function(){
             return {
@@ -50,7 +51,10 @@ import {login,getUserInfo,ressendemail} from '../../store/service'
                     ]
                 },
                 dialogVisible:false,
-                userId:0
+                userId:0,
+                loadingOption:{
+                    text:"登录中..."
+                }
             }
         },
         methods:{
@@ -65,7 +69,9 @@ import {login,getUserInfo,ressendemail} from '../../store/service'
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
+                        let loadingInstance = Loading.service(self.loadingOption)
                         login(self.ruleForm.username,self.ruleForm.password).then(function(data){
+                            loadingInstance.close()
                             if(data.code == 0){
                                 setStore('token',data.data)
                                 getUserInfo(data.data.user_id).then(res=>{
@@ -92,6 +98,7 @@ import {login,getUserInfo,ressendemail} from '../../store/service'
                                 }
                             }
                         },function(err){
+                            loadingInstance.close()
                             toast(self,err.cMsg)
                         })
                     }

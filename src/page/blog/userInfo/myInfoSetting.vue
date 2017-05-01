@@ -18,9 +18,10 @@
                                               
                                 </div>
 
-                                <el-form :model="userInfo" :rules="rules" ref="userInfo" class="basicInfoForm" label-width="0px" >
+                                <el-form :model="userInfo" :rules="ruleBasic" ref="userInfo" class="basicInfoForm" label-width="0px" >
                                     <el-form-item >
-                                    <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="true"></el-input>
+                                        <div v-show = "isEmail" style="color: red" >账号为邮箱的，可以重新设定一次</div>
+                                    <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="!isEmail"></el-input>
                                     </el-form-item>
                                     <el-form-item prop="user_real_name" >
                                         <span class="infoTitleClass">用户呢称</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
@@ -29,7 +30,8 @@
                                         <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone"  ></el-input>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass"  :disabled="true"></el-input> <span class="emailValidated">已验证</span>
+                                        <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass" 
+                                         :disabled="true"></el-input> <span class="emailValidated">已验证</span>
                                     </el-form-item>
                                     <el-form-item >
                                         <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
@@ -117,18 +119,13 @@
         data: function(){
             return {
                 activeName:'basic',
-                userInfo:{
-                    user_birthday:'',
-                    user_image_url:'',
-                    user_description:'',
-                    user_says:''
-                },
+                userInfo:{},
                  pass:{
                     old:'',
                     new:'',
                     again:''
                 },
-                rules: {
+                ruleBasic: {
                     
                 },
                 rulePass:{
@@ -180,6 +177,9 @@
         computed:{
             uploadHeadUrl(){
                 return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+            },
+            isEmail(){
+                return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(this.userInfo.user_name)
             }
         },
         components:{
@@ -193,6 +193,7 @@
 .mySetting{
     background: white;
     margin-top: 70px;
+    border-top: 5px solid deepskyblue;
 }
 .featureTitle{
     margin-bottom: 0px;
