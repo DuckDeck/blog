@@ -46,8 +46,8 @@ module.exports = {
         await DB.exec(sql,[time,manage.m_id])
         ctx.rest(Result.create(0,manage))
     },
-    'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
-       let result0 = await Tool.checkToken(ctx)
+    'POST /api/manage/uploadHead/:userId/:token': async (ctx, next) => {
+       let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return

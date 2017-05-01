@@ -393,7 +393,7 @@ module.exports = {
     },
 
     'DELETE /api/article/:articleId/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -407,7 +407,7 @@ module.exports = {
     },
 
     'POST /api/uploadImg/:userId/:token': async (ctx, next) => {
-        let result0 = await Tool.checkToken(ctx)
+        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return

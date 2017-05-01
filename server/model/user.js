@@ -10,7 +10,7 @@ const sqls = {
                group by user_id) as article_count,(select count(comment_id) from user_comments where user_comments.commenter_user_id = user_detail.user_id
             ) as comment_count from user_detail where user_id = ?`,
     userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user_detail where user_id in',
-    updateUserHead:'update user set user_image_url = ? where user_id = ?'
+    updateUserHead:'update user_info set user_image_url = ? where user_id = ?'
 }
 
 class User{

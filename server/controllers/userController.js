@@ -206,7 +206,7 @@ module.exports = {
      },
      //上传用户头像
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
-       let result0 = await Tool.checkToken(ctx)
+       let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
             ctx.rest(result0)
             return

@@ -58,15 +58,43 @@
                                     </el-date-picker>
                             </el-form-item>
                             <el-form-item>
-                                  <span class="infoTitleClass">性别</span> 
-                                   <el-input   :rows="2"   type="textarea"
+                                  <span class="infoTitleClass">自我描述</span> 
+                                   <el-input class="userdesciption"  :rows="2"   type="textarea"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
+                             <el-form-item>
+                                  <span class="infoTitleClass">个人语录</span> 
+                                   <el-input   :rows="2"   type="textarea" class="userdesciption"
+                                        placeholder="请输入内容" ></el-input>
+                            </el-form-item>
+                            <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
                            </el-form>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 修改密码 </span>
-                           
+                                <el-form :model="pass" :rules="rulePass" ref="pass"> 
+                                    <el-form-item prop="old" >                 
+                                        <span style="margin-left: -5px" class="infoTitleClass">旧密码</span> 
+                                        <el-input
+                                        type = 'password' v-model="pass.old" 
+                                            placeholder="请输入原密码">
+                                            </el-input>
+                                        </el-form-item>
+                                        <el-form-item prop="new"  >     
+                                        <span class="infoTitleClass">新密码</span>
+                                         <el-input 
+                                        type = 'password' v-model="pass.new" 
+                                            placeholder="请输入新密码">
+                                            </el-input>
+                                        </el-form-item>
+                                        <el-form-item prop="again"  >     
+                                        <span class="infoTitleClass">确认</span>
+                                         <el-input  type = 'password' v-model="pass.again" 
+                                            placeholder="请输入新密码">
+                                            </el-input>
+                                        </el-form-item>
+                                        <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
+                                </el-form> 
                         </el-tab-pane>
                         
                     </el-tabs>
@@ -93,8 +121,16 @@
                     user_description:'',
                     user_says:''
                 },
+                 pass:{
+                    old:'',
+                    new:'',
+                    again:''
+                },
                 rules: {
                     
+                },
+                rulePass:{
+
                 },
                 gender:0,
             }
@@ -240,6 +276,9 @@ display: inline-block;
     width: 100px;
     margin-top: 20px;
     margin-bottom: 50px;
+}
+.userdesciption{
+    max-width: 300px;
 }
 
  @media (max-width:500px){

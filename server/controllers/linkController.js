@@ -6,7 +6,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     'POST /api/link/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -51,7 +51,7 @@ module.exports = {
        ctx.rest(result)  
     },
     'POST /api/link/:linkId/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
@@ -79,7 +79,7 @@ module.exports = {
     },
 
      'DELETE /api/link/:linkId/:userId/:token': async (ctx, next) => {
-        let tokenResult = await Tool.checkToken(ctx)
+        let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)
             return
