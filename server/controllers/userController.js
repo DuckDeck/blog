@@ -504,45 +504,35 @@ module.exports = {
         if(userIdResult){
             ctx.rest(userIdResult)
         }
-        let userRealNameResult = Check.checkString(body,'user_real_name')
-        if(userRealNameResult){
-            ctx.rest(userRealNameResult)
+        let userGenderResult = Check.checkString(body,'user_gender')
+        if(userGenderResult){
+            ctx.rest(userGenderResult)
         }
-        let conditionPhone = ''
-        if(t.user_phone){
-            if(Check.regexCheck(t.user_phone,'cellphone')){
-                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+        let conditionBirthday = ''
+        if(t.user_birthday){
+            let userBirthdayResult = Check.checkNum(body,'user_birthday')
+            if(userBirthdayResult){
+                ctx.rest(userBirthdayResult) 
                 return 
             } 
-            conditionPhone = 'and user_phone = ' +  t.user_phone
+            conditionPhone = 'and user_birthday = ' +  t.user_birthday
         }
-        let conditionQQ = ''
-        if(t.user_qq){
-            if(Check.regexCheck(t.user_qq,'qq')){
-                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
-                return 
-            }
-            conditionQQ = ' and user_qq = ' + t.user_qq
-        }
-        let conditionAddress = ''
-        if(t.user_address){
-            conditionAddress = 'and user_address = ' + t.user_address
-        } 
+        
         let user_id = t.user_id
         let user_real_name = t.user_real_name
         let sql = ''
         let res = {}
         //need check the user_name is valid
-        if(t.user_name){
-            sql = 'update user set user_name = ? where user_id = ?'
-            res = await DB.exec(sql,[t.user_name,user_id])
-            if(res.code != 0){
-                ctx.rest(res)
-            }
+        sql = 'update user_info set user_gender = ? ' + conditionBirthday + 'where user_id = ?'
+        res = await DB.exec(sql,[t.user_gender,user_id]) 
+        if(res.code != 0){
+            ctx.rest(res)
+            return
         }
-        sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + 'where user_id = ?'
-        res = await DB.exec(sql,[user_real_name,user_id]) 
-        ctx.rest(res)
+        
+        if(t.user_description){
+            conditionUserDesc = 'and '
+        }
       },
 }
 
