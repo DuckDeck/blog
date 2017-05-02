@@ -19,15 +19,16 @@
                                 </div>
 
                                 <el-form :model="userInfo" :rules="ruleBasic" ref="userInfo" class="basicInfoForm" label-width="0px" >
-                                    <el-form-item >
+                                    <el-form-item prop = "user_name" >
                                         <div v-show = "isEmail" style="color: red" >账号为邮箱的，可以重新设定一次</div>
                                     <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="!isEmail"></el-input>
                                     </el-form-item>
                                     <el-form-item prop="user_real_name" >
                                         <span class="infoTitleClass">用户呢称</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
                                     </el-form-item>
-                                    <el-form-item >
+                                    <el-form-item prop="user_phone" >
                                         <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone"  ></el-input>
+                                        <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     <el-form-item >
                                         <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass" 
@@ -35,12 +36,14 @@
                                     </el-form-item>
                                     <el-form-item >
                                         <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
+                                        <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
+                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss"  ></el-input>
+                                        <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     
-                                    <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
+                                    <el-button class="saveBasicInfoButton" type="primary" @click="saveBasic" >保存</el-button> 
                                 </el-form>
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
@@ -120,13 +123,20 @@
             return {
                 activeName:'basic',
                 userInfo:{},
-                 pass:{
+                pass:{
                     old:'',
                     new:'',
                     again:''
                 },
                 ruleBasic: {
-                    
+                    user_real_name: [
+                       
+                        { required: true, message: '请输入用户呢称', trigger: 'blur' }
+                    ],
+                    user_name: [
+                       
+                        { required: true, message: '请输入用户呢称', trigger: 'blur' }
+                    ],
                 },
                 rulePass:{
 
@@ -170,9 +180,13 @@
                 }
                 return isJPG && isLt2M;
             },
-             handleClick(tab,event){
+            handleClick(tab,event){
                 
-             }
+            },
+            saveBasic(){
+                //save basic info
+                
+            }
         },
         computed:{
             uploadHeadUrl(){
@@ -237,8 +251,8 @@ div.el-upload{
 
 .infoTitleClass{
     width: 80px;
-    display: inline-block
-
+    display: inline-block;
+    color: #555;
 }
 
 .birthdayTitleClass{

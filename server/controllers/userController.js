@@ -444,7 +444,106 @@ module.exports = {
             }
        }
        ctx.rest(Result.create(0,comments))
-     }
+     },
+
+
+
+  
+  
+    'POST /api/user/updatebasic': async (ctx, next) => {
+        var  t = ctx.request.body
+        let userIdResult = Check.checkNum(body,'user_id')
+        if(userIdResult){
+            ctx.rest(userIdResult)
+        }
+        let userRealNameResult = Check.checkString(body,'user_real_name')
+        if(userRealNameResult){
+            ctx.rest(userRealNameResult)
+        }
+        let conditionPhone = ''
+        if(t.user_phone){
+            if(Check.regexCheck(t.user_phone,'cellphone')){
+                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                return 
+            } 
+            conditionPhone = 'and user_phone = ' +  t.user_phone
+        }
+        let conditionQQ = ''
+        if(t.user_qq){
+            if(Check.regexCheck(t.user_qq,'qq')){
+                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                return 
+            }
+            conditionQQ = ' and user_qq = ' + t.user_qq
+        }
+        let conditionAddress = ''
+        if(t.user_address){
+            conditionAddress = 'and user_address = ' + t.user_address
+        } 
+        let user_id = t.user_id
+        let user_real_name = t.user_real_name
+        let sql = ''
+        let res = {}
+        //need check the user_name is valid
+        if(t.user_name){
+            sql = 'update user set user_name = ? where user_id = ?'
+            res = await DB.exec(sql,[t.user_name,user_id])
+            if(res.code != 0){
+                ctx.rest(res)
+            }
+        }
+        sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + 'where user_id = ?'
+        res = await DB.exec(sql,[user_real_name,user_id]) 
+        ctx.rest(res)
+       },
+
+
+     'POST /api/user/updateindividual': async (ctx, next) => {
+        var  t = ctx.request.body
+        let userIdResult = Check.checkNum(body,'user_id')
+        if(userIdResult){
+            ctx.rest(userIdResult)
+        }
+        let userRealNameResult = Check.checkString(body,'user_real_name')
+        if(userRealNameResult){
+            ctx.rest(userRealNameResult)
+        }
+        let conditionPhone = ''
+        if(t.user_phone){
+            if(Check.regexCheck(t.user_phone,'cellphone')){
+                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                return 
+            } 
+            conditionPhone = 'and user_phone = ' +  t.user_phone
+        }
+        let conditionQQ = ''
+        if(t.user_qq){
+            if(Check.regexCheck(t.user_qq,'qq')){
+                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                return 
+            }
+            conditionQQ = ' and user_qq = ' + t.user_qq
+        }
+        let conditionAddress = ''
+        if(t.user_address){
+            conditionAddress = 'and user_address = ' + t.user_address
+        } 
+        let user_id = t.user_id
+        let user_real_name = t.user_real_name
+        let sql = ''
+        let res = {}
+        //need check the user_name is valid
+        if(t.user_name){
+            sql = 'update user set user_name = ? where user_id = ?'
+            res = await DB.exec(sql,[t.user_name,user_id])
+            if(res.code != 0){
+                ctx.rest(res)
+            }
+        }
+        sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + 'where user_id = ?'
+        res = await DB.exec(sql,[user_real_name,user_id]) 
+        ctx.rest(res)
+      },
 }
 
 
