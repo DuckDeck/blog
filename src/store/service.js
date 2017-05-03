@@ -35,6 +35,11 @@ export const checkEmail = function(email){
     return setpromisePost(url,{email:email})
 }
 
+export const checkUserName = function(user_name){
+    const url =  HostName + 'checkusername'
+    return setpromisePost(url,{user_name:user_name})
+}
+
 export const validateUser = function(code){
     const url =  HostName + 'active/' + code
     return setpromiseGet(url)
@@ -181,6 +186,32 @@ export const deleteLink = function(link_id){
     return setpromiseDelete(url)
 }
 
+
+
+export const updateUserInfo = function(type,data){
+    const url = HostName +  type
+    return setpromisePost(url,data)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const submitComment = (comment)=>{
     let url = HostName +  'comment'
     if(getStore('token')){
@@ -193,8 +224,6 @@ export const getComment =(commentId)=>{
     let url = HostName +  'comment/'+ commentId 
     return setpromiseGet(url)
 }
-
-
 
 
 

@@ -51,10 +51,10 @@
                            <el-form  >
                                  <el-form-item prop="user_real_name" >
                                 <span class="infoTitleClass">性别</span> 
-                                 <el-radio-group v-model="gender">
-                                    <el-radio :label="1">男</el-radio>
+                                 <el-radio-group v-model="userInfo.user_gender">
+                                    <el-radio :label="男">男</el-radio>
                                     <el-radio :label="2">女</el-radio>
-                                    <el-radio :label="0">保密</el-radio>
+                                    <el-radio :label="3">保密</el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <el-form-item >
@@ -66,12 +66,12 @@
                             </el-form-item>
                             <el-form-item>
                                   <span class="infoTitleClass">自我描述</span> 
-                                   <el-input class="userdesciption"  :rows="2"   type="textarea"
+                                   <el-input class="userdesciption"  :rows="2"   type="textarea" v-model="userInfo.user_description"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
                              <el-form-item>
                                   <span class="infoTitleClass">个人语录</span> 
-                                   <el-input   :rows="2"   type="textarea" class="userdesciption"
+                                   <el-input   :rows="2"   type="textarea" class="userdesciption" v-model="userInfo.user_says"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
                             <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
@@ -115,11 +115,54 @@
 </template>
 
 <script>
-    import {getUserInfo} from '../../../store/service'
+    import {getUserInfo,updateUserInfo,checkUserName} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
     export default {
         data: function(){
+             var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请输入密码'));
+                } 
+                else {
+                    if (this.pass.again !== '') {
+                        this.$refs.pass.validateField('again');
+                    }
+                     callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                  callback(new Error('请再次输入密码'));
+                } 
+                else if (value !== this.pass.new) {
+                    callback(new Error('两次输入密码不一致!'));
+                } 
+                else {
+                 callback();
+                }
+            };
+            var validateUserName =  (rule, value, callback) => {
+                if(!this.isValidating){
+                    this.isValidating = true
+                    checkUserName(value).then(res=>{
+                        console.log(res)
+                        if(res.code == 0){
+                            callback()
+                        }
+                        else{
+                            callback(new Error(res.cMsg))
+                        }
+                        this.isValidating = false
+                    }).catch(err=>{
+                        callback(new Error(err.cMsg))
+                        this.isValidating = false
+                    })
+                    
+                    
+                }
+                
+            };
             return {
                 activeName:'basic',
                 userInfo:{},
@@ -130,16 +173,26 @@
                 },
                 ruleBasic: {
                     user_real_name: [
-                       
                         { required: true, message: '请输入用户呢称', trigger: 'blur' }
                     ],
                     user_name: [
                        
-                        { required: true, message: '请输入用户呢称', trigger: 'blur' }
+                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                        { validator: validateUserName, trigger: 'blur' },
                     ],
                 },
                 rulePass:{
-
+                    old: [
+                        { required: true, message: '原密码不能为空', trigger: 'blur' }
+                    ],
+                    new: [
+                         { validator: validatePass, trigger: 'blur' },
+                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+                    ],
+                    again: [
+                        { validator: validatePass2, trigger: 'blur' },
+                        { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+                    ]
                 },
                 gender:0,
             }
@@ -185,8 +238,40 @@
             },
             saveBasic(){
                 //save basic info
-                
+                const self = this;
+                self.$refs['userInfo'].validate((valid) => {
+                    if (valid) {
+                        let dict = {
+                            user_id:self.userInfo.user_id,
+                            user_real_name:self.userInfo.user_real_name
+                        }
+                        if(self.userInfo.user_Phone.length > 0){
+                            dict.user_phone = self.userInfo.user_Phone
+                        }
+                        if(self.userInfo.user_qq.length > 0){
+                            dict.user_qq = self.userInfo.user_qq
+                        }
+                        if(self.userInfo.user_address.length > 0){
+                            dict.user_address = self.userInfo.user_address
+                        }
+                        updateUserInfo('updatebasic',dict).then(res=>{
+                            if(res.code == 0){
+                                toast(self,`修改成功`)
+                                setStore('userInfo',self.userInfo)
+                            }
+                        }).catch(err=>{
+                            toast(self,err.cMsg)
+                        })
+
+                    }
+                });
+               
+            },
+            close(e){
+                if(e.target!=e.currentTarget) return;
+               
             }
+            
         },
         computed:{
             uploadHeadUrl(){

@@ -56,6 +56,9 @@ function createResult(code,data){
         case 503:
             return new Result(503,'user is not validate','用户未验证',data||{})
             break;
+        case 504:
+            return new Result(504,'userName already exist','用户名已经存在',data||{})
+            break;
         case -100:
             return new Result(-100,'sql language error','sql语句错误',data||{})
             break;

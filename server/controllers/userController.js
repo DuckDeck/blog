@@ -190,6 +190,29 @@ module.exports = {
 
       },
 
+    'POST /api/checkusername': async (ctx, next) => {
+        var  t = ctx.request.body
+        if (!t.user_name || !t.user_name.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss userName'})) 
+            return
+        }
+
+        let sql = 'select user_id from user where user_name = ? ' 
+        let res =await DB.exec(sql,[t.user_name])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data.length == 0){
+            ctx.rest(Result.create(0))
+            return
+        }
+        else{
+            ctx.rest(Result.create(504))
+            return
+        }
+
+      },
      //重新发邮件
     'GET /api/resendemail/:userid': async (ctx, next) => {
         let userid = ctx.params.userid
@@ -498,7 +521,7 @@ module.exports = {
        },
 
 
-     'POST /api/user/updateindividual': async (ctx, next) => {
+    'POST /api/user/updateindividual': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(body,'user_id')
         if(userIdResult){
@@ -518,6 +541,8 @@ module.exports = {
             conditionPhone = 'and user_birthday = ' +  t.user_birthday
         }
         
+
+
         let user_id = t.user_id
         let user_real_name = t.user_real_name
         let sql = ''
@@ -531,8 +556,55 @@ module.exports = {
         }
         
         if(t.user_description){
-            conditionUserDesc = 'and '
+            sql = 'update user_info set user_description = ? where user_id = ?'
+            res = await DB.exec(sql,[t.user_description,user_id]) 
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
         }
+
+        if(t.user_says){
+             sql = 'update user_info set user_says = ? where user_id = ?'
+            res = await DB.exec(sql,[t.user_says,user_id]) 
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+        }
+        ctx.rest(Result.create(0))
+      },
+
+
+    'POST /api/user/updatepassword': async (ctx, next) => {
+        var  t = ctx.request.body
+        let userIdResult = Check.checkNum(body,'user_id')
+        if(userIdResult){
+            ctx.rest(userIdResult)
+        }
+        let userOldPassResult = Check.checkString(body,'oldPasword')
+        if(userOldPassResult){
+            ctx.rest(userOldPassResult)
+        }
+        let userNewPassResult = Check.checkString(body,'newPassword')
+        if(userNewPassResult){
+            ctx.rest(userNewPassResult)
+        }
+        
+
+
+        let user_id = t.user_id
+        let old_password = t.oldPasword
+        let new_password = t.newPasword
+        let sql = 'select user_id,user_password from user where user_id = ?'
+        let res = await DB.exec(sql,[user_id])
+        if(Tool.md5(old_password) != re.data[0].user_password){
+            ctx.rest(Result.create(501))
+            return
+        }
+        sql = 'update user set user_password = ? where user_id  ?'
+        res = await DB.exec(sql,[Tool.md5(new_password),user_id])
+        ctx.rest(res)
       },
 }
 
