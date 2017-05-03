@@ -51,10 +51,10 @@
                            <el-form  >
                                  <el-form-item prop="user_real_name" >
                                 <span class="infoTitleClass">性别</span> 
-                                 <el-radio-group v-model="userInfo.user_gender">
-                                    <el-radio :label="男">男</el-radio>
+                                 <el-radio-group v-model="gender">
+                                    <el-radio :label='1'>男</el-radio>
                                     <el-radio :label="2">女</el-radio>
-                                    <el-radio :label="3">保密</el-radio>
+                                    <el-radio :label="0">保密</el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <el-form-item >
@@ -106,8 +106,6 @@
                         
                     </el-tabs>
 
-
-                
          </div>
     
         <blogFoot></blogFoot>
@@ -194,18 +192,23 @@
                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
                 },
-                gender:0,
+                gender:0
             }
         },
         mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
+                let gen = this.userInfo.user_gender
+                this.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
+
             }
             else{
                 let self = this
                  getUserInfo().then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
+                        let gen = self.userInfo.user_gender
+                        self.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
                         setStore('userInfo',data.data)
                     }
                     else{
@@ -279,7 +282,9 @@
             },
             isEmail(){
                 return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(this.userInfo.user_name)
-            }
+            },
+
+
         },
         components:{
             upToTop,blogFoot
