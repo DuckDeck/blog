@@ -523,17 +523,17 @@ module.exports = {
 
     'POST /api/user/updateindividual': async (ctx, next) => {
         var  t = ctx.request.body
-        let userIdResult = Check.checkNum(body,'user_id')
+        let userIdResult = Check.checkNum(ctx,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
         }
-        let userGenderResult = Check.checkString(body,'user_gender')
+        let userGenderResult = Check.checkString(ctx,'user_gender')
         if(userGenderResult){
             ctx.rest(userGenderResult)
         }
         let conditionBirthday = ''
         if(t.user_birthday){
-            let userBirthdayResult = Check.checkNum(body,'user_birthday')
+            let userBirthdayResult = Check.checkNum(ctx,'user_birthday')
             if(userBirthdayResult){
                 ctx.rest(userBirthdayResult) 
                 return 
