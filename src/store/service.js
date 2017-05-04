@@ -189,7 +189,7 @@ export const deleteLink = function(link_id){
 
 
 export const updateUserInfo = function(type,data){
-    const url = HostName +  type
+    const url = HostName + 'user/' +   type
     return setpromisePost(url,data)
 }
 

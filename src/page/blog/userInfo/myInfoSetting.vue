@@ -39,7 +39,7 @@
                                         <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss"  ></el-input>
+                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_address"  ></el-input>
                                         <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     
@@ -48,10 +48,10 @@
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 个性设置 </span>
-                           <el-form  >
+                           <el-form   >
                                  <el-form-item prop="user_real_name" >
                                 <span class="infoTitleClass">性别</span> 
-                                 <el-radio-group v-model="gender">
+                                 <el-radio-group v-model="gender" @change = "genderChange">
                                     <el-radio :label='1'>男</el-radio>
                                     <el-radio :label="2">女</el-radio>
                                     <el-radio :label="0">保密</el-radio>
@@ -59,7 +59,7 @@
                             </el-form-item>
                             <el-form-item >
                               <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
-                                    v-model="userInfo.user_birthday"
+                                    v-model="birthday"
                                     type="date" class="birthdayClass"
                                     placeholder="选择日期"  >
                                     </el-date-picker>
@@ -74,7 +74,7 @@
                                    <el-input   :rows="2"   type="textarea" class="userdesciption" v-model="userInfo.user_says"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
-                            <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
+                            <el-button class="saveBasicInfoButton" type="primary" @click="saveInfo" >保存</el-button> 
                            </el-form>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
@@ -141,6 +141,10 @@
                 }
             };
             var validateUserName =  (rule, value, callback) => {
+               if(!this.isEmail){
+                  callback()
+                  return
+               }
                 if(!this.isValidating){
                     this.isValidating = true
                     checkUserName(value).then(res=>{
@@ -174,7 +178,6 @@
                         { required: true, message: '请输入用户呢称', trigger: 'blur' }
                     ],
                     user_name: [
-                       
                         { required: true, message: '请输入用户名', trigger: 'blur' },
                         { validator: validateUserName, trigger: 'blur' },
                     ],
@@ -192,7 +195,8 @@
                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
                 },
-                gender:0
+                gender:0,
+                birthday:''
             }
         },
         mounted(){
@@ -200,7 +204,7 @@
                 this.userInfo = getStore('userInfo')
                 let gen = this.userInfo.user_gender
                 this.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
-
+                this.birthday = new Date(this.userInfo.user_birthday)
             }
             else{
                 let self = this
@@ -209,6 +213,7 @@
                         self.userInfo = data.data
                         let gen = self.userInfo.user_gender
                         self.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
+                        self.birthday = new Date(self.userInfo.user_birthday)
                         setStore('userInfo',data.data)
                     }
                     else{
@@ -239,6 +244,21 @@
             handleClick(tab,event){
                 
             },
+            genderChange(val){
+                switch (val) {
+                    case 1:
+                        this.userInfo.user_gender = '男'
+                        break;
+                    case 2:
+                        this.userInfo.user_gender = '女'
+                        break;
+                    case 0:
+                        this.userInfo.user_gender = '保密'
+                        break;
+                    default:
+                        break;
+                }
+            },
             saveBasic(){
                 //save basic info
                 const self = this;
@@ -248,8 +268,8 @@
                             user_id:self.userInfo.user_id,
                             user_real_name:self.userInfo.user_real_name
                         }
-                        if(self.userInfo.user_Phone.length > 0){
-                            dict.user_phone = self.userInfo.user_Phone
+                        if(self.userInfo.user_phone.length > 0){
+                            dict.user_phone = self.userInfo.user_phone
                         }
                         if(self.userInfo.user_qq.length > 0){
                             dict.user_qq = self.userInfo.user_qq
@@ -269,6 +289,23 @@
                     }
                 });
                
+            },
+            saveInfo(){
+                let bir = this.birthday.getTime()
+                let dict = {
+                    user_gender:this.userInfo.user_gender,
+                    user_birthday:bir,
+                    user_description:this.userInfo.user_description,
+                    user_says:this.userInfo.user_says
+                }
+                updateUserInfo('updateindividual',dict).then(res=>{
+                            if(res.code == 0){
+                                toast(self,`修改成功`)
+                                setStore('userInfo',self.userInfo)
+                            }
+                        }).catch(err=>{
+                            toast(self,err.cMsg)
+                        })
             },
             close(e){
                 if(e.target!=e.currentTarget) return;

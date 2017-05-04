@@ -475,11 +475,11 @@ module.exports = {
   
     'POST /api/user/updatebasic': async (ctx, next) => {
         var  t = ctx.request.body
-        let userIdResult = Check.checkNum(body,'user_id')
+        let userIdResult = Check.checkNum(ctx,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
         }
-        let userRealNameResult = Check.checkString(body,'user_real_name')
+        let userRealNameResult = Check.checkString(ctx,'user_real_name')
         if(userRealNameResult){
             ctx.rest(userRealNameResult)
         }
@@ -489,7 +489,7 @@ module.exports = {
                 ctx.rest(Result.create(11,{msg:'email format wrong'})) 
                 return 
             } 
-            conditionPhone = 'and user_phone = ' +  t.user_phone
+            conditionPhone = ', user_phone = "' +  t.user_phone + '"'
         }
         let conditionQQ = ''
         if(t.user_qq){
@@ -497,11 +497,11 @@ module.exports = {
                 ctx.rest(Result.create(11,{msg:'email format wrong'})) 
                 return 
             }
-            conditionQQ = ' and user_qq = ' + t.user_qq
+            conditionQQ = ' , user_qq =  "' + t.user_qq  + '"'
         }
         let conditionAddress = ''
         if(t.user_address){
-            conditionAddress = 'and user_address = ' + t.user_address
+            conditionAddress = ', user_address =  "' + t.user_address + '"'
         } 
         let user_id = t.user_id
         let user_real_name = t.user_real_name
@@ -515,7 +515,7 @@ module.exports = {
                 ctx.rest(res)
             }
         }
-        sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + 'where user_id = ?'
+        sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + ' where user_id = ?'
         res = await DB.exec(sql,[user_real_name,user_id]) 
         ctx.rest(res)
        },
