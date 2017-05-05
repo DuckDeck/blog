@@ -7,8 +7,7 @@ const Tool = require('./tool')
 class Check{
     static checkNum(body,name){
         if(!body[name] || !body[name].trim()){
-             return Result.create(10,{msg:'miss' + name})
-           
+             return Result.create(10,{msg:'miss ' + name})
         }
         if(isNaN(body[name])){
             return Result.create(10,{msg: name + 'wrong format'})

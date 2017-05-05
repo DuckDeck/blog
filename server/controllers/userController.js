@@ -475,11 +475,11 @@ module.exports = {
   
     'POST /api/user/updatebasic': async (ctx, next) => {
         var  t = ctx.request.body
-        let userIdResult = Check.checkNum(ctx,'user_id')
+        let userIdResult = Check.checkNum(t,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
         }
-        let userRealNameResult = Check.checkString(ctx,'user_real_name')
+        let userRealNameResult = Check.checkString(t,'user_real_name')
         if(userRealNameResult){
             ctx.rest(userRealNameResult)
         }
@@ -523,22 +523,24 @@ module.exports = {
 
     'POST /api/user/updateindividual': async (ctx, next) => {
         var  t = ctx.request.body
-        let userIdResult = Check.checkNum(ctx,'user_id')
+        let userIdResult = Check.checkNum(t,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
+            return
         }
-        let userGenderResult = Check.checkString(ctx,'user_gender')
+        let userGenderResult = Check.checkString(t,'user_gender')
         if(userGenderResult){
             ctx.rest(userGenderResult)
+            return
         }
         let conditionBirthday = ''
         if(t.user_birthday){
-            let userBirthdayResult = Check.checkNum(ctx,'user_birthday')
+            let userBirthdayResult = Check.checkNum(t,'user_birthday')
             if(userBirthdayResult){
                 ctx.rest(userBirthdayResult) 
                 return 
             } 
-            conditionPhone = 'and user_birthday = ' +  t.user_birthday
+            conditionBirthday = ', user_birthday = ' +  t.user_birthday
         }
         
 
@@ -548,14 +550,15 @@ module.exports = {
         let sql = ''
         let res = {}
         //need check the user_name is valid
-        sql = 'update user_info set user_gender = ? ' + conditionBirthday + 'where user_id = ?'
+        sql = 'update user_info set user_gender = ? ' + conditionBirthday + ' where user_id = ?'
         res = await DB.exec(sql,[t.user_gender,user_id]) 
         if(res.code != 0){
             ctx.rest(res)
             return
         }
-        
+         console.log(t.user_description)
         if(t.user_description){
+           
             sql = 'update user_info set user_description = ? where user_id = ?'
             res = await DB.exec(sql,[t.user_description,user_id]) 
             if(res.code != 0){
@@ -581,14 +584,17 @@ module.exports = {
         let userIdResult = Check.checkNum(body,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
+            return
         }
         let userOldPassResult = Check.checkString(body,'oldPasword')
         if(userOldPassResult){
             ctx.rest(userOldPassResult)
+            return
         }
         let userNewPassResult = Check.checkString(body,'newPassword')
         if(userNewPassResult){
             ctx.rest(userNewPassResult)
+            return
         }
         
 

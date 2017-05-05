@@ -49,7 +49,7 @@ const sqls = {
         user_address varchar(255) NOT NULL DEFAULT '' COMMENT '用户地址',
         user_mark mediumint(9) NOT NULL DEFAULT 0 COMMENT '用户积分',
         user_rank_id tinyint(3) NOT NULL DEFAULT 0 COMMENT '用户等级',
-        user_birthday int(13) NOT NULL DEFAULT 0  COMMENT '用户生日',
+        user_birthday BIGINT(15) NOT NULL DEFAULT 0  COMMENT '用户生日',
         user_description varchar(255) NOT NULL DEFAULT ''  COMMENT '自我描述',
         user_image_url varchar(255) NOT NULL DEFAULT ''  COMMENT '用户头像',
         user_last_update_time int(13) NOT NULL DEFAULT 0  COMMENT '用户上次更新博客时间',

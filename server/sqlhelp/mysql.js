@@ -21,11 +21,10 @@ db.exec = function(sql,data){
            console.log(sql)
            data = []
         }
+        console.log(sql)
+        console.log(data)
        pool.query(sql,data, function(err, rows, fields) {  
           if (err) {  
-              console.log(err);  
-              console.log(sql);
-              console.log(data)
               reject(result.create(-50))
               return;    
             }

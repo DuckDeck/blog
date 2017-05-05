@@ -71,7 +71,7 @@
                             </el-form-item>
                              <el-form-item>
                                   <span class="infoTitleClass">个人语录</span> 
-                                   <el-input   :rows="2"   type="textarea" class="userdesciption" v-model="userInfo.user_says"
+                                   <el-input   :rows="2"   type="textarea"  class="userdesciption" v-model="userInfo.user_says"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
                             <el-button class="saveBasicInfoButton" type="primary" @click="saveInfo" >保存</el-button> 
@@ -196,7 +196,7 @@
                     ]
                 },
                 gender:0,
-                birthday:''
+                birthday:new Date()
             }
         },
         mounted(){
@@ -293,15 +293,20 @@
             saveInfo(){
                 let bir = this.birthday.getTime()
                 let dict = {
+                    user_id:this.userInfo.user_id,
                     user_gender:this.userInfo.user_gender,
                     user_birthday:bir,
                     user_description:this.userInfo.user_description,
                     user_says:this.userInfo.user_says
                 }
+                let self = this
                 updateUserInfo('updateindividual',dict).then(res=>{
                             if(res.code == 0){
                                 toast(self,`修改成功`)
                                 setStore('userInfo',self.userInfo)
+                            }
+                            else{
+                                toast(self,res.cMsg)
                             }
                         }).catch(err=>{
                             toast(self,err.cMsg)
