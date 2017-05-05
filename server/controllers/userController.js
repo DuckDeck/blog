@@ -581,17 +581,17 @@ module.exports = {
 
     'POST /api/user/updatepassword': async (ctx, next) => {
         var  t = ctx.request.body
-        let userIdResult = Check.checkNum(body,'user_id')
+        let userIdResult = Check.checkNum(t,'user_id')
         if(userIdResult){
             ctx.rest(userIdResult)
             return
         }
-        let userOldPassResult = Check.checkString(body,'oldPasword')
+        let userOldPassResult = Check.checkString(t,'old_password')
         if(userOldPassResult){
             ctx.rest(userOldPassResult)
             return
         }
-        let userNewPassResult = Check.checkString(body,'newPassword')
+        let userNewPassResult = Check.checkString(t,'new_password')
         if(userNewPassResult){
             ctx.rest(userNewPassResult)
             return
@@ -600,15 +600,19 @@ module.exports = {
 
 
         let user_id = t.user_id
-        let old_password = t.oldPasword
-        let new_password = t.newPasword
+        let old_password = t.old_password
+        let new_password = t.new_password
+        if(old_password == new_password){
+            ctx.rest(Result.create(505))
+            return
+        }
         let sql = 'select user_id,user_password from user where user_id = ?'
         let res = await DB.exec(sql,[user_id])
-        if(Tool.md5(old_password) != re.data[0].user_password){
+        if(Tool.md5(old_password) != res.data[0].user_password){
             ctx.rest(Result.create(501))
             return
         }
-        sql = 'update user set user_password = ? where user_id  ?'
+        sql = 'update user set user_password = ? where user_id = ?'
         res = await DB.exec(sql,[Tool.md5(new_password),user_id])
         ctx.rest(res)
       },

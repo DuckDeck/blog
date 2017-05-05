@@ -82,25 +82,20 @@
                                 <el-form :model="pass" :rules="rulePass" ref="pass"> 
                                     <el-form-item prop="old" >                 
                                         <span style="margin-left: -5px" class="infoTitleClass">旧密码</span> 
-                                        <el-input
-                                        type = 'password' v-model="pass.old" 
-                                            placeholder="请输入原密码">
+                                        <el-input   style="margin-left: 5px;"  type = 'password' v-model="pass.old"      placeholder="请输入原密码">
                                             </el-input>
                                         </el-form-item>
                                         <el-form-item prop="new"  >     
                                         <span class="infoTitleClass">新密码</span>
-                                         <el-input 
-                                        type = 'password' v-model="pass.new" 
-                                            placeholder="请输入新密码">
+                                         <el-input    type = 'password' v-model="pass.new"     placeholder="请输入新密码">
                                             </el-input>
                                         </el-form-item>
                                         <el-form-item prop="again"  >     
                                         <span class="infoTitleClass">确认</span>
-                                         <el-input  type = 'password' v-model="pass.again" 
-                                            placeholder="请输入新密码">
+                                         <el-input  type = 'password' v-model="pass.again" placeholder="请输入新密码">
                                             </el-input>
                                         </el-form-item>
-                                        <el-button class="saveBasicInfoButton" type="primary" >保存</el-button> 
+                                        <el-button class="saveBasicInfoButton" type="primary" @click="changePassword" >保存</el-button> 
                                 </el-form> 
                         </el-tab-pane>
                         
@@ -311,6 +306,32 @@
                         }).catch(err=>{
                             toast(self,err.cMsg)
                         })
+            },
+            changePassword(){
+                
+                let dict = {
+                      user_id:this.userInfo.user_id,    
+                      old_password:this.pass.old,
+                      new_password:this.pass.new
+                }
+                const self = this;
+                self.$refs['pass'].validate((valid) => {
+                    if (valid) {
+                         updateUserInfo('updatepassword',dict).then(res=>{
+                             if(res.code == 0){
+                                toast(self,'密码修改成功')
+                                 clearStore()
+                                self.$router.replace('/login'); 
+                             }
+                             else{
+                                toast(self,res.cMsg)
+                             }
+                         }).catch(err=>{
+                                toast(self,err.cMsg)
+                         })
+                      
+                    }
+                });
             },
             close(e){
                 if(e.target!=e.currentTarget) return;

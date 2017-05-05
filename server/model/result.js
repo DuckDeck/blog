@@ -59,6 +59,9 @@ function createResult(code,data){
         case 504:
             return new Result(504,'userName already exist','用户名已经存在',data||{})
             break;
+         case 505:
+            return new Result(505,'new password and old password can not be the same','新旧密码不能相同',data||{})
+            break;
         case -100:
             return new Result(-100,'sql language error','sql语句错误',data||{})
             break;
