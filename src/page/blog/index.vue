@@ -197,14 +197,15 @@ import blogFoot from './com/blogFoot.vue'
         async loadMore(){
             this.loadMoreWord = '正在加载...'
             let res = await indexMore(this.pageIndex)
-             console.log(res)
+
             if(res.code == 0){
                 if(res.data.length == 0){
+                    toast(this,'已经全部加载完')
                     this.canLoadMore = false
                 }
                 else{
                     this.loadMoreWord = '加载更多...'
-                    this.articles =  this.articles.concat(res.data)
+                    this.articles =  this.articles.concat(Array.from(res.data))
                     this.pageIndex ++
                 }
             }

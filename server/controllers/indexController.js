@@ -130,7 +130,7 @@ module.exports = {
             return
         }
         let result = Result.create(0)
-        result.data.articles = res.data
+        result.data = res.data
         let user_ids = res.data.map(s=>{
             return s.user_id
         })
@@ -143,7 +143,7 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        for(let k of result.data.articles){
+        for(let k of result.data){
             let user = res.data.find(s=>{
                 return s.user_id == k.user_id
             })
