@@ -37,7 +37,7 @@
                   
                </div>
                <!--这里面以添加加载细节-->
-               <div class="loadMore" @click="loadMore">
+               <div class="loadMore" @click="loadMore" v-show="canLoadMore">
                    {{loadMoreWord}}
                </div>
            </div>
@@ -97,7 +97,7 @@
 
 <script>
 import {getUserInfo} from '../../store/service'
-import {index} from '../../store/index'
+import {index,indexMore} from '../../store/index'
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'
@@ -112,6 +112,7 @@ import blogFoot from './com/blogFoot.vue'
             newComment:[],
             authors:[],
             pageIndex:0,
+            canLoadMore:true,
             loadMoreWord:'加载更多...',
             swiperOption: {
                 pagination: '.swiper-pagination',
@@ -141,6 +142,7 @@ import blogFoot from './com/blogFoot.vue'
                 self.sorts = res.data.sorts
                 self.newComment = res.data.newComment
                 self.authors = res.data.authors
+                self.pageIndex = 1
             }
             else{
                 toast(self,res.cMsg)
@@ -191,8 +193,24 @@ import blogFoot from './com/blogFoot.vue'
         gotoUserInfo(com){
              this.$router.push('userInfo/' + com.user_id)
         },
-        loadMore(){
-
+     
+        async loadMore(){
+            this.loadMoreWord = '正在加载...'
+            let res = await indexMore(this.pageIndex)
+             console.log(res)
+            if(res.code == 0){
+                if(res.data.length == 0){
+                    this.canLoadMore = false
+                }
+                else{
+                    this.loadMoreWord = '加载更多...'
+                    this.articles =  this.articles.concat(res.data)
+                    this.pageIndex ++
+                }
+            }
+            else{
+                toast(this,'加载更多失败')
+            }
         }
     },
   }

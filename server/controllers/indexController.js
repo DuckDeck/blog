@@ -22,7 +22,7 @@ module.exports = {
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                article.article_id) as comment_count from article where article_up = 0 order by article_release_time desc limit 15`
+                article.article_id) as comment_count from article where article_up = 0 order by article_release_time desc limit 10`
         res = await DB.exec(sql)
         if(res.code != 0){
             ctx.rest(res)
@@ -107,7 +107,7 @@ module.exports = {
 
 
 
-    'GET /api/index/:index/:page': async (ctx, next) => {
+    'GET /api/index/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -125,6 +125,11 @@ module.exports = {
             ctx.rest(res)
             return
         }
+        if(res.data.length == 0){
+             ctx.rest(res)
+            return
+        }
+        let result = Result.create(0)
         result.data.articles = res.data
         let user_ids = res.data.map(s=>{
             return s.user_id
