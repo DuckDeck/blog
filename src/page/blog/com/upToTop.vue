@@ -17,7 +17,8 @@
 
         methods:{
            uptoTop(){
-				console.log('to TOP')
+				var top = document.body.scrollTop || document.documentElement.scrollTop
+				scrollBy(0,-top);
 			}
         },
     }

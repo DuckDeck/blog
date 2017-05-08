@@ -37,7 +37,7 @@
                   
                </div>
                <!--这里面以添加加载细节-->
-               <div class="loadMore">
+               <div class="loadMore" @click="loadMore">
                    {{loadMoreWord}}
                </div>
            </div>
@@ -111,7 +111,8 @@ import blogFoot from './com/blogFoot.vue'
             sorts:[],
             newComment:[],
             authors:[],
-            isCanLoadMore:true,
+            pageIndex:0,
+            loadMoreWord:'加载更多...',
             swiperOption: {
                 pagination: '.swiper-pagination',
                 slidesPerView: 1,
@@ -189,13 +190,11 @@ import blogFoot from './com/blogFoot.vue'
         },
         gotoUserInfo(com){
              this.$router.push('userInfo/' + com.user_id)
+        },
+        loadMore(){
+
         }
     },
-    computed:{
-        loadMoreWord(){
-           return  this.isCanLoadMore?'加载更多...':'已经全部加载完'
-        }
-    }
   }
 
 </script>
@@ -267,15 +266,7 @@ import blogFoot from './com/blogFoot.vue'
     width: 80%;
    
 }
-.loadMore{
-    background: #aaa;
-    margin: 10px 10px;
-    color: white;
-    font-size: 18px;
-    padding: 4px;
-    text-align: center;
-    border-radius: 5px;
-}
+
 .loadMore:hover{
     cursor: pointer;
 }

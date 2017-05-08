@@ -183,6 +183,7 @@ import articleCell from './userInfo/com/articleCell.vue'
     width: 40px;
     height: 40px;
     margin-right: 8px;
+    border-radius: 20px;
 }
 .searchResultUsers{
     display: flex;
