@@ -1,8 +1,20 @@
 <template>
     <div class="blogFoot">
-        <span>关于ZOE Blog</span> * <span>联系我们</span> * <span>关于作者</span>
+        <span @click="aboutVue">关于ZOE Blog & 作者</span> 
     </div>
 </template>
+<script>
+     export default {
+        data: function(){
+            return {}
+        },
+        methods:{
+            aboutVue(){
+                this.$router.push('/aboutVue')
+            }
+        }
+    }
+</script>
 <style>
  .blogFoot{
      font-size: 18px;

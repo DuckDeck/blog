@@ -92,6 +92,8 @@ module.exports = {
             }
             return s
         })
+        //ISSUE   in the group by sql, when the condition is not in the group by it will return 'null' (not true null) it can not usr ifnull to replace to 0, so i must use 
+        //js to do this
         sql = `select user_id,user_real_name,user_image_url,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id
                group by user_id) as article_count from user_detail  ` 
         res = await DB.exec(sql)
@@ -99,7 +101,13 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        result.data.authors = res.data
+    
+        result.data.authors = res.data.map(s=>{
+            if(!s.article_count){
+                s.article_count = 0
+            }
+            return s
+        })
         ctx.rest(result)
      
     },

@@ -20,7 +20,7 @@
                        </div>
                        <div class="articleAuthor">
                             <span class="articleAuthorName" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> 
-                            <span>{{art.article_sort_name}}</span>  <span>{{art.comment_count}} 条评论</span> 
+                            <span style="color: mediumblue">{{art.article_sort_name}}</span>  <span>{{art.comment_count}} 条评论</span> 
                        </div>
                    </div>
                    <div style="text-align: center;margin-top: 17px;">
@@ -81,7 +81,7 @@
                                 <div class="userRealName">
                                     {{author.user_real_name}}
                                 </div>
-                                <div>
+                                <div class="userReleaseArticle">
                                     发布了{{author.article_count}}文章
                                 </div>
                             </div>
@@ -229,7 +229,7 @@ import blogFoot from './com/blogFoot.vue'
     margin-top: 20px;
    display: flex;
    font-size: 20px;
-   
+   border-top: 5px solid mediumvioletred;
 }
 .articlesNews{
     background: #fff;
@@ -306,7 +306,7 @@ import blogFoot from './com/blogFoot.vue'
     font-size: 15px;
 }
 .articleRightContent div{
-     color: #888;
+     color: #222;
      margin-bottom: 3px;
 }
 .articleRightContent div:hover{
@@ -325,6 +325,10 @@ import blogFoot from './com/blogFoot.vue'
 }
 .userComment{
     font-size: 12px;
+}
+.userReleaseArticle{
+    font-size: 13px;
+    color: #aaa
 }
  @media (max-width:1000px){
      .articlesList{

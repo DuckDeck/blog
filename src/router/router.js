@@ -22,6 +22,10 @@ const sortArticleList = r => require.ensure([], () => r(require('../page/blog/so
 
 const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writeArticle')), 'writeArticle')
 
+const aboutVue =  r => require.ensure([], () => r(require('../page/blog/aboutVue')), 'aboutVue')
+
+
+
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const manageLogin =  r => require.ensure([], () => r(require('../page/backstage/manageLogin')), 'manageLogin')
 const blogSummary  = r => require.ensure([], () => r(require('../page/backstage/summary')), 'blogSummary')
@@ -102,7 +106,10 @@ export default [
         path:'/managelogin',
         component:manageLogin
     },
-        
+    {
+        path:'/aboutVue',
+        component:aboutVue
+    },   
    
      {
         path: '/manage',

@@ -31,7 +31,6 @@
 <script>
 import {articleById,submitComment,getComment} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
-import blogSide from './com/blogSide.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
 import upToTop from './com/upToTop.vue'
@@ -104,7 +103,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
         }
     },
     components:{
-        blogHeader,blogSide,writeComment,userComment,upToTop,blogFoot,userArtileInfo
+        blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo
     },
     computed:{
         releaseDate(){
