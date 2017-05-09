@@ -49,8 +49,6 @@
             </div>
 
         </div>
-         
-         
         <upToTop></upToTop>
         <blogFoot></blogFoot>
     </div>
