@@ -1,31 +1,25 @@
 <template>
      <div class="container">   
-            <div class="main-page">          
-                    <div class=" article-content">
-                       <header>
-                            <div  class="articleHeader" >
-                                {{article.article_name}}
-                            </div>
-                            <userArtileInfo class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
-                            <div  class="articleTagClass">
-                                  <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
-                            </div>
-                       </header>
-                    <div class="articleSeperateLine"></div>
-                    <article class="articleContentClass" v-html = "article.article_content"></article>
-                        <writeComment  @submitComment="submitComment" @refreshComment = "refreshComment"></writeComment>
-                        
-                    <div class="articleComments">
-                        <div class="articleCommentsCount">
-                            {{commentCount}}条评论  
-                        </div>
-                        <userComment v-for="com in article.comments" :comment="com" ></userComment>
-                    </div>
-                    </div>
+         <blogLogo></blogLogo>
+        <div class="aboutBlogContent">
+            <div class="aboutBlog">
+                <div class="aboutBlogTitle">
+                    关于Zoe Blog
                 </div>
-           <upToTop></upToTop>
-           <blogFoot></blogFoot>
-        </div> 
+                <div class="aboutBlogintro">
+                    <p>Zoe Blog是一个由Vue和Node.js实现的一个开源Blog网站</p>
+                
+                </div>
+            </div>
+            <div class="aboutAuthor">
+                
+            </div>
+            <div class="contactAuthor">
+                
+            </div>
+        </div>   
+        
+     </div> 
 </template>
 
 <script>
@@ -53,6 +47,19 @@ import blogLogo from './com/blogLogo.vue'
   }
 </script>
 <style >
-
+.aboutBlogContent{
+    background: white;
+}
+.aboutBlog{
+    font-size: 20px;
+}
+.aboutBlogTitle{
+    border-left: 5px solid mediumvioletred;
+    height: 50px;
+    color: #111;
+    font-size: 25px;
+    line-height: 50px;
+    padding-left: 20px;
+}
 
 </style>
