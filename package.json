@@ -54,6 +54,7 @@
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "mavon-editor": "^1.5.4",
     "node-gyp": "^3.6.0",
     "node-sass": "^4.5.2",
     "opn": "^4.0.2",

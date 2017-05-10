@@ -4,7 +4,7 @@
             <div class="featureTitle">
              发布文章
               <el-button class="editor-btn" type="primary" @click="save('article',1)">预览文章</el-button>
-              <el-button class="editor-btn" type="primary" @click="save('article',0)">切换Markdown</el-button>
+              <el-button class="editor-btn" type="primary" @click="switchMarkDown">切换Markdown</el-button>
             </div>
             <div style="font-size: 20px;height: 90%">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
@@ -24,7 +24,8 @@
                             </el-button>
                         </el-form-item>
 
-                        <vue-html5-editor :content="content" @change="updateData" ></vue-html5-editor>
+                        <vue-html5-editor v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
+                        <mavonEditor v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
                             <el-button class="editor-btn" type="primary" @click="save('article',0)">保存草稿</el-button>
@@ -41,6 +42,7 @@
 <script>
 import {getTags,getSorts,saveArticle,tempArticle} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
+import { mavonEditor } from 'mavon-editor'
 //wait to do auto save feature
 
     export default {
@@ -60,6 +62,7 @@ import blogFoot from './com/blogFoot.vue'
                 articleSort:[],
                 selectedSortId:0,
                 content: '',
+                markDownContent:'',
                 editorOption: {
                     placeholder:'从这里开始写你的文章'
                 },
@@ -67,6 +70,7 @@ import blogFoot from './com/blogFoot.vue'
                 articleId:0,
                 isEdit:true,
                 needAutoSave:false,
+                editMode:true,
                 userInfo:{}
             }
         },
@@ -124,7 +128,9 @@ import blogFoot from './com/blogFoot.vue'
             selectSort(sort) {
                 this.selectedSortId = sort.sort_article_id
             },
-
+            switchMarkDown(){
+                this.editMode = !this.editMode
+            },
 
             updateData(data){
                 this.content = data
@@ -191,10 +197,11 @@ import blogFoot from './com/blogFoot.vue'
         computed:{
             editStatus(){
                 return this.isEdit?'发布文章':'预览文章'
-            }
+            },
+
         },
         components:{
-            blogFoot
+            blogFoot,mavonEditor
         }
     }
 </script>
