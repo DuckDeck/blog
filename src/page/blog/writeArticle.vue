@@ -4,7 +4,7 @@
             <div class="featureTitle">
              发布文章
               <el-button class="editor-btn" type="primary" @click="reviewArticle">预览文章</el-button>
-              <el-button class="editor-btn" type="primary" @click="switchMarkDown">切换Markdown</el-button>
+              <el-button class="editor-btn" type="primary" @click="switchMarkDown">{{editStatus}}</el-button>
             </div>
             <div style="font-size: 20px;height: 90%">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
@@ -43,6 +43,7 @@
 import {getTags,getSorts,saveArticle,tempArticle,articleById} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
+import  toMarkdown  from 'to-markdown'
 //wait to do auto save feature
 
     export default {
@@ -135,6 +136,10 @@ import { mavonEditor } from 'mavon-editor'
             },
             switchMarkDown(){
                 this.editMode = !this.editMode
+                if(!this.editMode)
+                {
+                    this.markDownContent = toMarkdown(this.content)
+                }
             },
             reviewArticle(){
 
@@ -205,7 +210,9 @@ import { mavonEditor } from 'mavon-editor'
             editStatus(){
                 return this.isEdit?'发布文章':'预览文章'
             },
-
+            editStatus(){
+                return this.editMode ? '切换Markdown': '切换富文本'
+            }
         },
         components:{
             blogFoot,mavonEditor
