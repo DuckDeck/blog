@@ -3,7 +3,7 @@
       <div class="writeClassPage">
             <div class="featureTitle">
              发布文章
-              <el-button class="editor-btn" type="primary" @click="save('article',1)">预览文章</el-button>
+              <el-button class="editor-btn" type="primary" @click="reviewArticle">预览文章</el-button>
               <el-button class="editor-btn" type="primary" @click="switchMarkDown">切换Markdown</el-button>
             </div>
             <div style="font-size: 20px;height: 90%">
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-import {getTags,getSorts,saveArticle,tempArticle} from '../../store/service'
+import {getTags,getSorts,saveArticle,tempArticle,articleById} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
 //wait to do auto save feature
@@ -77,14 +77,9 @@ import { mavonEditor } from 'mavon-editor'
         async mounted(){
             this.userInfo = getStore('userInfo')
             let res = {}
-            if( this.$route.params.id){
-                 let articleDetail = res.data
-                 this.article.title = articleDetail.article_name
-                 this.selectedTags = articleDetail.tags
-                 this.selectedSortId = articleDetail.article_sort_id
-                 this.content = articleDetail.article_content
-            }
-            else{
+            let id = parseInt(this.$route.params.id)
+            this.articleId = id
+            if( id == 0){
                 res = await tempArticle()
                 if(res.code == 0){
                     let articleDetail = res.data
@@ -95,7 +90,17 @@ import { mavonEditor } from 'mavon-editor'
                     this.articleId = articleDetail.article_id
                 }
             }
-
+            else{
+                res = await articleById(id)
+                if(res.code == 0){
+                    let articleDetail = res.data
+                    this.article.title = articleDetail.article_name
+                    this.selectedTags = articleDetail.tags
+                    this.selectedSortId = articleDetail.article_sort_id
+                    this.content = articleDetail.article_content
+                    this.articleId = articleDetail.article_id
+                }
+            }
             res = await getTags(this.userInfo.user_id)
             if(res.code == 0){
                 this.tags = res.data
@@ -131,7 +136,9 @@ import { mavonEditor } from 'mavon-editor'
             switchMarkDown(){
                 this.editMode = !this.editMode
             },
+            reviewArticle(){
 
+            },
             updateData(data){
                 this.content = data
             },

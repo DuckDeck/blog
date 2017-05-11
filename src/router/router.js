@@ -94,11 +94,7 @@ export default [
         component: sortArticleList, 
     },
     {
-        path: '/writeArticle',
-        component: writeArticle, 
-    },
-    {
-        path: '/writeArticle/:articleId',
+        path: '/writeArticle/:id',
         component: writeArticle, 
     },
 

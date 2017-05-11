@@ -119,7 +119,7 @@ import userCommentCell from './com/userCommentCell.vue'
            
        },
        writeArticle(){
-            this.$router.push('/writeArticle')
+            this.$router.push('/writeArticle/0')
        },
        handleClick(tab,event){
                 
