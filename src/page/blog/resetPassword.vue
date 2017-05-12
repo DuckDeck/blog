@@ -7,10 +7,15 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 
                 <el-form-item prop="email">
-                    <el-input  placeholder="你的邮箱" v-model="ruleForm.email" 
-                    @keyup.enter.native="submitForm('ruleForm')"></el-input> <el-button type="primary" :disabled="emailValid" class="resetButtonClass" >发送重设码</el-button>
+                    <el-input  placeholder="你的邮箱" @change="emailChange"></el-input>
+                   <div class="hintDiv" >
+                      <span class="resetHint" >输入你的注册邮箱后点击发送重设码,系统会发送一封邮件到你填写的邮箱里
+                          ,你可以用邮件里的重设码来重设你的密码
+                      </span>
+                     <el-button type="primary" :disabled="!emailValid" class="resetButtonClass" >发送重设码</el-button>
+                   </div>
                 </el-form-item>
-                <el-form-item prop="pass" >
+                <el-form-item  prop='resetCode'>
                      <el-input   placeholder="重设码" v-model="ruleForm.pass" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
@@ -24,6 +29,10 @@
                 </el-form-item>
                 <div class="reset-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')" >提交</el-button>
+                </div>
+                <div class="resetOption"  >
+                    <a class="loginAction" @click="login" >重新登录</a>
+                    <a  style="float: right" class="loginAction" @click="register">去注册</a>
                 </div>
             </el-form>
         </div>
@@ -61,10 +70,14 @@ import { Loading } from 'element-ui'
            
             return {
                ruleForm: {
+                   resetCode:'',
                     pass: '',
                     passAgain:'' 
                 },
                 rules: {
+                    resetCode: [
+                      { required: true, message: '重设码不能为空', trigger: 'blur' }
+                    ],
                     pass: [
                          { validator: validatePass, trigger: 'blur' },
                          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
@@ -75,13 +88,28 @@ import { Loading } from 'element-ui'
                     ]
                 },
                 emailValid:false,
+                isSendedEmail:false,
                 loadingOption:{
                     text:"重设中..."
                 }
             }
         },
         methods:{
-             submitForm(formName){
+            emailChange(val){
+                if(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val)){
+                    this.emailValid = true
+                }
+                else{
+                     this.emailValid = false
+                }
+            },
+            login(){
+                this.$router.back();
+            },
+            register(){
+                this.$router.replace('/register');
+            },
+            submitForm(formName){
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -109,8 +137,8 @@ import { Loading } from 'element-ui'
       position: absolute;
     left:50%;
     top:25%;
-    width:380px;
-    height:480px;
+    width:400px;
+    height:500px;
     margin: -10px 0px 0px -180px;
     padding:40px;
     border-radius: 5px;
@@ -129,8 +157,31 @@ import { Loading } from 'element-ui'
     width: 270px;
     margin-top: 15px;
 }
+.hintDiv{
+    display: flex;
+   
+}
+.resetHint{
+    width: 210px;
+    display: inline-block;
+     font-size: 11px;
+     line-height: 14px;
+     margin-top: 20px;
+     color: #20a0ff;
+     margin-right: 10px;
+}
 .resetButtonClass{
     float: right;
     margin-top: 20px;
+}
+.resetOption{
+    margin-top: 15px;
+}
+.resetOption a{
+    font-size: 14px;
+    color: #20a0ff
+}
+.resetOption a:hover{
+  cursor: pointer;
 }
 </style>
