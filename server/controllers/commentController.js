@@ -199,6 +199,7 @@ module.exports = {
      }, //不能让游客评论
 
 
+     // 一般来说，评论有main评论和子评论，这里的评论统一获取main评论再加上这个main评论下面的所有子评论
     'GET /api/comment/:commentId': async (ctx, next) => {
       await getComment(ctx)
      },
@@ -221,11 +222,13 @@ async function getComment(ctx){
     var  id = ctx.params.commentId
     let resMainCom = await Comment.commentById(id)
     if(resMainCom.code!=0){
-        ctx(resMainCom)
+        ctx.rest(resMainCom)
+        return
     }
     let resSubCom = await Comment.subCommentById(id)
     if(resSubCom.code!=0){
-        ctx(resSubCom)
+        ctx.rest(resSubCom)
+        return
     }
     let mainCom = resMainCom.data[0]
     let subCom = resSubCom.data

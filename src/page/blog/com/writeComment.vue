@@ -26,7 +26,17 @@
             default:'写下你的评论...'
         }
     },
+    mounted(){
+        this.$nextTick(function () {
+            this.$on('clear', function () {
+                console.log('监听成功')
+            })
+        })
+    },
     methods:{
+        clear(){
+            this.comment = ''
+        },
         submitComment(){
             if(this.comment.length == 0){
                 toast(this,'评论内容不能为空')

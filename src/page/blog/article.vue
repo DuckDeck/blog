@@ -13,7 +13,7 @@
                        </header>
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
-                        <writeComment  @submitComment="submitComment" @refreshComment = "refreshComment"></writeComment>
+                        <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
                     <div class="articleComments">
                         <div class="articleCommentsCount">
@@ -87,10 +87,13 @@ import userArtileInfo from './com/userArticleInfo.vue'
                res = await getComment(id)
                if(res.code == 0){
                  this.article.comments.push(res.data)
+                 this.$refs.mainWriteComment.clear()
                }
            }
         },
         async refreshComment(comment_id){
+            console.log('this code not run?')
+            // it looks not run
              let res = await getComment(comment_id)
              if(res.code == 0){
                 let index = this.article.comments.findIndex(s=>{

@@ -4,7 +4,7 @@
            <img :src="comment.userInfo.user_image_url" alt="">
             <div style="display: inline-block;vertical-align: middle">
                 <div class="userNameDiv">
-                    {{comment.userInfo.user_name}}
+                    {{comment.userInfo.user_real_name}}
                 </div>
                 <div class="userCommentTimeDiv">
                     {{formatedDate}}
@@ -31,12 +31,12 @@
            </div>
        </div>
        <writeComment style="margin-top: 10px;" :needCancel="true"  @cancelComment="cancelComment"  v-show = "isShowWriteComment" 
-       @submitComment = "submitComment" :placeHolder="placeHolder"></writeComment>
+       @submitComment = "submitComment" :placeHolder="placeHolder" ref='writeCommentCom'></writeComment>
     </div>
 </template>
 <script>
 import writeComment from './writeComment.vue'
-import {submitComment} from '../../../store/service'
+import {submitComment,getComment} from '../../../store/service'
     export default {
     data() {
         return{
@@ -94,7 +94,12 @@ import {submitComment} from '../../../store/service'
            toast(this,res.cMsg)
            if(res.code == 0){
                 this.$emit('refreshComment',this.comment.comment_id)
+                res = await getComment(this.comment.comment_id)
+                if(res.code == 0){
+                   this.comment = res.data //the vue will warn  can not mutating the property.......
+                }   
                 this.isShowWriteComment = false
+                this.$refs.writeCommentCom.clear()
            }
        },
        writeSubComment(com){
