@@ -63,13 +63,15 @@
     margin-left: 15px;
     width: 70%;
     padding-top: 1px;
+    font-size: 13px;
+    margin-top: 2px;
 }
 .comArticleAuthorTag{
     color: mediumvioletred;
     border: 1px solid mediumvioletred;
     padding: 2px;
     border-radius: 2px;
-    
+    margin-right: 2px;
 }
 .comArticleReleaseTime{
     font-size: 14px;

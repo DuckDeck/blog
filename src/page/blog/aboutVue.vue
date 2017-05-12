@@ -76,7 +76,9 @@ import blogLogo from './com/blogLogo.vue'
 </script>
 <style >
 .aboutBlogContent{
+    border-top: 5px solid darkred;
     background: white;
+    margin-top: 10px;
 }
 .aboutBlog{
     font-size: 20px;
@@ -88,6 +90,8 @@ import blogLogo from './com/blogLogo.vue'
     font-size: 25px;
     line-height: 50px;
     padding-left: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
 }
 .aboutBlogintro{
     padding: 20px;
