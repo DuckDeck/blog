@@ -2,7 +2,7 @@
       <div class="register-body">
           <div class="ms-register">
               <div class="blog-register-title">
-                  ZOE
+                  注册 ZOE Blog
               </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 <el-form-item prop="username">

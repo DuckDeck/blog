@@ -11,7 +11,7 @@ const search = r => require.ensure([], () => r(require('../page/blog/searchResul
 const login = r => require.ensure([], () => r(require('../page/blog/login')), 'login')
 
 const register = r => require.ensure([], () => r(require('../page/blog/register')), 'register')
-
+const resetPassword = r => require.ensure([], () => r(require('../page/blog/resetPassword')), 'resetPassword')
 const active = r => require.ensure([], () => r(require('../page/blog/active')), 'active')
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
@@ -63,6 +63,10 @@ export default [
         component: register,
     },
     {
+        path: '/resetpassword',
+        component: resetPassword,
+    },
+    {
         path: '/search/:keyword',
         component: search, 
     },
@@ -94,11 +98,7 @@ export default [
         component: sortArticleList, 
     },
     {
-        path: '/writeArticle',
-        component: writeArticle, 
-    },
-    {
-        path: '/writeArticle/:articleId',
+        path: '/writeArticle/:id',
         component: writeArticle, 
     },
 

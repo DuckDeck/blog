@@ -21,25 +21,25 @@
                                 <el-form :model="userInfo" :rules="ruleBasic" ref="userInfo" class="basicInfoForm" label-width="0px" >
                                     <el-form-item prop = "user_name" >
                                         <div v-show = "isEmail" style="color: red" >账号为邮箱的，可以重新设定一次</div>
-                                    <span class="infoTitleClass">账号</span>   <el-input v-model="userInfo.user_name" :disabled="!isEmail"></el-input>
+                                    <span class="infoTitleClass">账号</span>   <el-input class="user_input" v-model="userInfo.user_name" :disabled="!isEmail"></el-input>
                                     </el-form-item>
                                     <el-form-item prop="user_real_name" >
-                                        <span class="infoTitleClass">用户呢称</span>  <el-input v-model="userInfo.user_real_name" ></el-input>
+                                        <span class="infoTitleClass">用户呢称</span>  <el-input  class="user_input" v-model="userInfo.user_real_name" ></el-input>
                                     </el-form-item>
                                     <el-form-item prop="user_phone" >
-                                        <span class="infoTitleClass">手机号</span>  <el-input v-model="userInfo.user_phone"  ></el-input>
+                                        <span class="infoTitleClass">手机号</span>  <el-input  class="user_input" v-model="userInfo.user_phone"  ></el-input>
                                         <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass ">邮箱</span>  <el-input v-model="userInfo.user_email" class="emailClass" 
+                                        <span class="infoTitleClass ">邮箱</span>  <el-input    v-model="userInfo.user_email" class="user_input emailClass" 
                                          :disabled="true"></el-input> <span class="emailValidated">已验证</span>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass">QQ号</span>  <el-input v-model="userInfo.user_qq" ></el-input>
+                                        <span class="infoTitleClass">QQ号</span>  <el-input  class="user_input" v-model="userInfo.user_qq" ></el-input>
                                         <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     <el-form-item >
-                                        <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_address"  ></el-input>
+                                        <span class="infoTitleClass">地址</span>  <el-input  class="user_input" v-model="userInfo.user_address"  ></el-input>
                                         <span class="emailValidated">可选</span>
                                     </el-form-item>
                                     
@@ -49,14 +49,22 @@
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 个性设置 </span>
                            <el-form   >
-                                 <el-form-item prop="user_real_name" >
+                               <el-form-item  >
                                 <span class="infoTitleClass">性别</span> 
                                  <el-radio-group v-model="gender" @change = "genderChange">
-                                    <el-radio :label='1'>男</el-radio>
-                                    <el-radio :label="2">女</el-radio>
-                                    <el-radio :label="0">保密</el-radio>
+                                    <el-radio :label='11'>男</el-radio>
+                                    <el-radio :label="12">女</el-radio>
+                                    <el-radio :label="10">保密</el-radio>
                                 </el-radio-group>
-                            </el-form-item>
+                              </el-form-item>
+                               <el-form-item >
+                                 <span class="infoTitleClass">常用编辑器</span> 
+                                 <el-radio-group  v-model="editor_type" @change = "editorTypeChange">
+                                    <el-radio :label='0'>富文本</el-radio>
+                                    <el-radio :label="1">Markdown</el-radio>
+                                    
+                                </el-radio-group>
+                              </el-form-item>
                             <el-form-item >
                               <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
                                     v-model="birthday"
@@ -66,12 +74,12 @@
                             </el-form-item>
                             <el-form-item>
                                   <span class="infoTitleClass">自我描述</span> 
-                                   <el-input class="userdesciption"  :rows="2"   type="textarea" v-model="userInfo.user_description"
+                                   <el-input class="userdesciption"  :rows="6"   type="textarea" v-model="userInfo.user_description"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
                              <el-form-item>
                                   <span class="infoTitleClass">个人语录</span> 
-                                   <el-input   :rows="2"   type="textarea"  class="userdesciption" v-model="userInfo.user_says"
+                                   <el-input   :rows="6"   type="textarea"  class="userdesciption" v-model="userInfo.user_says"
                                         placeholder="请输入内容" ></el-input>
                             </el-form-item>
                             <el-button class="saveBasicInfoButton" type="primary" @click="saveInfo" >保存</el-button> 
@@ -190,7 +198,8 @@
                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
                 },
-                gender:0,
+                gender:10,
+                editor_type:0,
                 birthday:new Date()
             }
         },
@@ -198,7 +207,8 @@
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
                 let gen = this.userInfo.user_gender
-                this.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
+                this.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
+                this.editor_type = this.userInfo.user_editor_type
                 this.birthday = new Date(this.userInfo.user_birthday)
             }
             else{
@@ -207,7 +217,8 @@
                     if(data.code == 0){
                         self.userInfo = data.data
                         let gen = self.userInfo.user_gender
-                        self.gender = gen == '男' ? 1 : (gen == '女' ? 2 : 0)
+                        self.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
+                        self.editor_type = self.userInfo.user_editor_type
                         self.birthday = new Date(self.userInfo.user_birthday)
                         setStore('userInfo',data.data)
                     }
@@ -241,18 +252,21 @@
             },
             genderChange(val){
                 switch (val) {
-                    case 1:
+                    case 11:
                         this.userInfo.user_gender = '男'
                         break;
-                    case 2:
+                    case 12:
                         this.userInfo.user_gender = '女'
                         break;
-                    case 0:
+                    case 10:
                         this.userInfo.user_gender = '保密'
                         break;
                     default:
                         break;
                 }
+            },
+            editorTypeChange(val){
+                this.userInfo.user_editor_type = val
             },
             saveBasic(){
                 //save basic info
@@ -403,13 +417,13 @@ div.el-upload{
 }
 
 .infoTitleClass{
-    width: 80px;
+    width: 70px;
     display: inline-block;
     color: #555;
 }
 
 .birthdayTitleClass{
-    margin-left: -9px;
+    margin-left: -5px;
 }
 
 .avatar-uploader{
@@ -451,17 +465,45 @@ display: inline-block;
     margin-bottom: 50px;
 }
 .userdesciption{
-    max-width: 300px;
+    max-width: 600px;
 }
-
  @media (max-width:500px){
 
     .basicInfoForm{
          margin-left: 5px;
  
     }
-    .el-input{
+    .user_input{
+        width: 220px;
+    }
+    .userdesciption{
+        max-width: 300px;
+    }
+} 
+ @media (max-width:360px){
+
+    .basicInfoForm{
+         margin-left: 5px;
+ 
+    }
+    .user_input{
         width: 200px;
+    }
+    .userdesciption{
+        max-width: 300px;
+    }
+} 
+ @media (max-width:400px){
+
+    .basicInfoForm{
+         margin-left: 5px;
+ 
+    }
+    .user_input{
+        width: 180px;
+    }
+    .userdesciption{
+        max-width: 300px;
     }
 } 
 </style>

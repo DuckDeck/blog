@@ -14,7 +14,7 @@
                 </el-form-item>
                 <el-form-item  style="margin-bottom: 10px;height: 50px;">
                     <a class="loginAction" @click="register" >注册</a>
-                    <a  style="float: right" class="loginAction">忘记密码？</a>
+                    <a  style="float: right" class="loginAction" @click="resetPassword">忘记密码？</a>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')" >登录</el-button>
@@ -64,6 +64,9 @@ import { Loading } from 'element-ui'
              async reSendMail(){
                let res = await ressendemail(this.userId)
                toast(this,res.cMsg)
+             },
+             resetPassword(){
+                 this.$router.push('/resetpassword')
              },
              submitForm(formName){
                 const self = this;
