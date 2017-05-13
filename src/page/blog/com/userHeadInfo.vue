@@ -38,6 +38,7 @@
 .userHeader{
  width: 50px;
  height: 50px;
-margin-right: 15px;
+ margin-right: 15px;
+ border-radius: 25px;
 }
 </style>

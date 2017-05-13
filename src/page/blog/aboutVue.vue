@@ -7,7 +7,7 @@
                     关于Zoe Blog
                 </div>
                 <div class="aboutBlogintro">
-                    <p>Zoe Blog是一个由Vue和Node.js实现的一个开源Blog网站,使用了以下技术</p>
+                    <p>Zoe Blog是一个由Vue和Node.js实现的一个开源博客网站,使用了以下技术</p>
                     <div>
                         后端:
                         <ul>
@@ -38,12 +38,47 @@
                         </ul>
                     </div>
                 </div>
+                <div class="aboutBlog">
+               
+                     <div class="aboutBlogTitle">
+                        ZOE博客功能
+                    </div>
+                    <div class="completeFeatureDiv">
+                        已完成功能
+                        <el-checkbox style="margin-left: 15px;" checked label="注册，登录" ></el-checkbox>
+                        <el-checkbox checked label="搜索文章，作者，分类功能" ></el-checkbox>
+                        <el-checkbox checked label="发送邮箱验证用户和重设密码" ></el-checkbox>
+                        <el-checkbox checked label="文章标签和分类功能" ></el-checkbox>
+                        <el-checkbox checked label="富文本编辑和Markdown编辑模式自由切换" ></el-checkbox>
+                        <el-checkbox checked label="自由评论文章和其他人的评论" ></el-checkbox>
+                        <el-checkbox checked label="查看其他作者信息和文章" ></el-checkbox>
+                        <el-checkbox checked label="个性设置" ></el-checkbox>
+                        <el-checkbox checked label="后台管理员登录" ></el-checkbox>
+                    </div>
+                    <div class="unCompletedFeatureDiv">
+                        未完成功能
+                        <el-checkbox style="margin-left: 15px;"  label="富文本评论" ></el-checkbox>
+                        <el-checkbox  label="关注其他作者，粉丝功能" ></el-checkbox>
+                        <el-checkbox  label="收藏文章" ></el-checkbox>
+                        <el-checkbox  label="点赞文章" ></el-checkbox>
+                        <el-checkbox  label="用户之间互私信功能" ></el-checkbox>
+                        <el-checkbox  label="其他更多......" ></el-checkbox>
+                    </div>
+                    
+
+                </div>
+               
             </div>
             <div class="aboutAuthor">
-                
+                网络开发者Stan
             </div>
             <div class="contactAuthor">
-                
+                <ul>
+                    <li>
+                        QQ:3421902
+                    </li>
+                    <li>网站 </li>
+                </ul>
             </div>
         </div>   
         
@@ -95,5 +130,31 @@ import blogLogo from './com/blogLogo.vue'
 }
 .aboutBlogintro{
     padding: 20px;
+}
+.completeFeatureDiv{
+    padding: 10px;
+}
+.completeFeatureDiv label{
+    display: block;
+}
+.unCompletedFeatureDiv{
+ padding: 10px;
+}
+
+.unCompletedFeatureDiv label{
+    display: block;
+}
+.aboutAuthor{
+    padding: 20px;
+    font-size: 18px;
+}
+.contactAuthor{
+     font-size: 18px;
+}
+p{
+    margin-bottom: 10px;
+}
+ul{
+    margin-bottom: 20px;
 }
 </style>

@@ -4,7 +4,7 @@
        <blogSwiper class="blogSwiper" :articles = "top"></blogSwiper>
        <div class="blogContent">
            <div class="articlesList">
-               <div style="position: relative;margin-top: 20px;margin-bottom: 10px;" v-for="art in articles">
+               <div style="position: relative;margin-top: 20px;margin-bottom: 10px;padding-bottom: 20px;" v-for="art in articles">
                    <div class="releaseDate">
                        <div style="font-size: 15px;margin-top: 2px;">
                           {{getMonth(art.article_release_time)}}
@@ -191,6 +191,7 @@ import blogFoot from './com/blogFoot.vue'
             this.$router.push('sortArticleList/' + sort.user_id)
         },
         gotoUserInfo(com){
+            console.log(com)
              this.$router.push('userInfo/' + com.user_id)
         },
      
@@ -306,7 +307,7 @@ import blogFoot from './com/blogFoot.vue'
     font-size: 15px;
 }
 .articleRightContent div{
-     color: #222;
+     color: #333;
      margin-bottom: 3px;
 }
 .articleRightContent div:hover{
@@ -325,6 +326,7 @@ import blogFoot from './com/blogFoot.vue'
 }
 .userComment{
     font-size: 12px;
+
 }
 .userReleaseArticle{
     font-size: 13px;

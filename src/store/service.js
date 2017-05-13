@@ -55,6 +55,10 @@ export const resetPasswordCode = function(mail){
     return setpromisePost(url,{email:mail})
 }
 
+export const resetPassword = function(dict){
+    const url =  HostName + 'resetpassword'
+    return setpromisePost(url,dict)
+}
 
 export const getUserInfo = function(user_id){
     const url = HostName +  'user/' + user_id 

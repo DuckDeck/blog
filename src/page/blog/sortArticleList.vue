@@ -3,7 +3,7 @@
         <div class="mainSortArticles">
             <div class="blogSortsList">
                 <div>
-                    <userHead :userInfo = "userInfo"></userHead>
+                    <userHead class="sortArticleUserHead" :userInfo = "userInfo"></userHead>
                 </div>
                <el-button   :class="[{selectedSortClass:selectedSort.sort_article_id == sort.sort_article_id},'sortCellClass']" v-for="sort in sorts"
                   @click="selectSort(sort)" >
@@ -99,11 +99,17 @@ import articleCell from './userInfo/com/articleCell.vue'
 .mainSortArticles{
     background: white;
     margin-top: 50px;
+    border-top: 5px solid slateblue;
+    margin-top: 60px;
 }
 .blogSortsList{
     margin: 10px;
     padding: 10px;
     font-size: 20px;
+}
+.sortArticleUserHead{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .sortCellClass{
     cursor: pointer;

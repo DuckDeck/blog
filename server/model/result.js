@@ -37,12 +37,14 @@ function createResult(code,data){
         case 11:
             return new Result(11,'wrong arguments format','参数格式错误',data||{})
             break;
-        
         case 100:
             return new Result(100,'invalid or expire token','无效或过期的token',data||{})
             break;
         case 101:
             return new Result(101,'invalid or expire active code','无效或过期的验证码',data||{})
+            break;
+        case 102:
+            return new Result(102,'invalid or expire reset code','无效或过期的重设码',data||{})
             break;
         case 500:
             return new Result(500,'user not found','找不到用户',data||{})

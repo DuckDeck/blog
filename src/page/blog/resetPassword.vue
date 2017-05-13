@@ -16,7 +16,7 @@
                    </div>
                 </el-form-item>
                 <el-form-item  prop='resetCode'>
-                     <el-input   placeholder="重设码" v-model="ruleForm.pass" 
+                     <el-input   placeholder="重设码" v-model="ruleForm.resetCode" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <el-form-item prop="pass" >
@@ -28,7 +28,7 @@
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <div class="reset-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')" >提交</el-button>
+                    <el-button type="primary" :loading="isLoading" @click="submitForm('ruleForm')" >提交</el-button>
                 </div>
                 <div class="resetOption"  >
                     <a class="loginAction" @click="login" >重新登录</a>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {resetPasswordCode} from '../../store/service'
+import {resetPasswordCode,resetPassword} from '../../store/service'
 import { Loading } from 'element-ui'
     export default {
         data: function(){
@@ -90,9 +90,7 @@ import { Loading } from 'element-ui'
                 },
                 emailValid:false,
                 isSendedEmail:false,
-                loadingOption:{
-                    text:"重设中..."
-                },
+                isLoading:false,
                 btnSendEmailText:'发送重设码'
             }
         },
@@ -113,6 +111,7 @@ import { Loading } from 'element-ui'
                 if(res.code == 0){
                     this.isSendedEmail = true
                     this.countDown()
+                    setStore('tempEmail',this.email)
                     toast(this,"获取成功,请到邮箱里查看")
                 }
                 else{
@@ -127,7 +126,32 @@ import { Loading } from 'element-ui'
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
-                       
+                       let tmpEmail = getStore('tempEmail') || self.email
+                       if(!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(tmpEmail)){
+                            toast(self,'请填写正确的Email地址')
+                            return
+                       }
+                       let dict = {
+                           email:tmpEmail,
+                           code:self.ruleForm.resetCode,
+                           password:self.ruleForm.pass
+                       }
+                       self.isLoading = true
+                       resetPassword(dict).then(res=>{
+                           self.isLoading = false
+                           if(res.code == 0){
+                               toast(self,"重设成功，待转到登录页面")
+                               setTimeout(function() {
+                                   self.$router.replace('/login')
+                               }, 500);
+                           }
+                           else{
+                               toast(self,res.cMsg)
+                           }
+                       }).catch(err=>{
+                           self.isLoading = false
+                            toast(self,err.cMsg)
+                       })
                     }
                 });
             },

@@ -229,6 +229,7 @@ module.exports = {
      },
      //上传用户头像
    
+    
     'POST /api/resetcode': async (ctx, next) => {
         var  t = ctx.request.body
         if (!t.email || !t.email.trim()) {
@@ -239,6 +240,55 @@ module.exports = {
             ctx.rest(Result.create(11,{msg:'email format wrong'})) 
             return 
         }
+        let sql = 'select user_id,user_real_name from user_info where user_email = ? ' 
+        let res =await DB.exec(sql,[t.email])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data.length == 0){
+            ctx.rest(Result.create(500))
+            return
+        }
+        let user_id = res.data[0].user_id;
+        let user_real_name = res.data[0].user_real_name;
+        let reset_code = (Math.random() * 10000000).toString().slice(0,6)
+        let md5_reset_code = Tool.md5(reset_code)
+        sql = 'update user set user_token = ? where user_id = ?'
+        res = await DB.exec(sql,[md5_reset_code,user_id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let mailResult = await Tool.sendEmailToReset(user_real_name, reset_code, t.email)
+        console.log(mailResult)
+        ctx.rest(Result.create(0))
+      },
+   
+    'POST /api/resetpassword': async (ctx, next) => {
+        var  t = ctx.request.body
+        let emailResult = Check.regexCheck(t.email,'email')
+        if(emailResult){
+            let result = Result.create(11)
+            result.cMsg = "email参数格式错误"
+            result.msg = "email parament format wrong"
+            ctx.rest(result)
+            return
+        }
+        let codeResult = Check.checkNum(t,'code')
+        if(codeResult){
+            ctx.rest(codeResult)
+            return
+        }
+        let passResult = Check.checkString(t,'password')
+        if(passResult){
+            ctx.rest(passResult)
+            return
+        }
+        let email = t.email
+        let code = t.code;
+        let password = t.password;
+        
         let sql = 'select user_id from user_info where user_email = ? ' 
         let res =await DB.exec(sql,[t.email])
         if(res.code != 0){
@@ -249,20 +299,23 @@ module.exports = {
             ctx.rest(Result.create(500))
             return
         }
-        let user_id = res.data[9],user_id;
-        let reset_code = (Math.random() * 10000000).toString().slice(0,6)
-        let md5_reset_code = Tool.md5(reset_code)
-        sql = 'update user set user_token = ? where user_id = ?'
-        res = await DB.exec(sql,[md5_reset_code,user_id])
+        let user_id = res.data[0].user_id
+        sql = 'select user_token from user where user_id = ' + user_id
+        res = await DB.exec(sql)
         if(res.code != 0){
             ctx.rest(res)
             return
+        } 
+        let token = res.data[0].user_token
+        if(token != Tool.md5(code)){
+            ctx.rest(Result.create(102))
+            return
         }
-        let mailResult = await Tool.sendEmailToReset(m.nickName, reset_code, m.email)
-        console.log(mailResult)
-        ctx.rest(Result.create(0))
+        sql = 'update user set user_password = ? where user_id = ?'
+        res = await DB.exec(sql,[Tool.md5(password),user_id])
+        ctx.rest(res)
       },
-   
+
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){

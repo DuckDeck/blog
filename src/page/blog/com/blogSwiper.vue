@@ -63,15 +63,15 @@
 }
 .swiperArticleTitle{
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     text-align: center;
-    margin-top: 2.5rem;
+    margin-top: 2.8rem;
 }
 .swiperArticleTitle:hover{
     cursor: pointer
 }
 .swiperArticleBrief{
-    font-size: 0.35rem;
+    font-size: 0.32rem;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;
