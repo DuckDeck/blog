@@ -7,12 +7,12 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
                 
                 <el-form-item prop="email">
-                    <el-input  placeholder="你的邮箱" @change="emailChange"></el-input>
+                    <el-input  placeholder="你的邮箱" v-model="email" @change="emailChange"></el-input>
                    <div class="hintDiv" >
                       <span class="resetHint" >输入你的注册邮箱后点击发送重设码,系统会发送一封邮件到你填写的邮箱里
                           ,你可以用邮件里的重设码来重设你的密码
                       </span>
-                     <el-button type="primary" :disabled="!emailValid" class="resetButtonClass" >发送重设码</el-button>
+                     <el-button type="primary" :disabled="!emailValid||isSendedEmail" class="resetButtonClass" @click="sendEmail" >{{btnSendEmailText}}</el-button>
                    </div>
                 </el-form-item>
                 <el-form-item  prop='resetCode'>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="resetOption"  >
                     <a class="loginAction" @click="login" >重新登录</a>
-                    <a  style="float: right" class="loginAction" @click="register">去注册</a>
+                    <a   class="loginAction" @click="register">去注册</a>
                 </div>
             </el-form>
         </div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {checkEmail,register} from '../../store/service'
+import {resetPasswordCode} from '../../store/service'
 import { Loading } from 'element-ui'
     export default {
         data: function(){
@@ -69,6 +69,7 @@ import { Loading } from 'element-ui'
             };
            
             return {
+               email:'',
                ruleForm: {
                    resetCode:'',
                     pass: '',
@@ -91,7 +92,8 @@ import { Loading } from 'element-ui'
                 isSendedEmail:false,
                 loadingOption:{
                     text:"重设中..."
-                }
+                },
+                btnSendEmailText:'发送重设码'
             }
         },
         methods:{
@@ -106,6 +108,18 @@ import { Loading } from 'element-ui'
             login(){
                 this.$router.back();
             },
+            async sendEmail(){
+                let res = await resetPasswordCode(this.email)
+                if(res.code == 0){
+                    this.isSendedEmail = true
+                    this.countDown()
+                    toast(this,"获取成功,请到邮箱里查看")
+                }
+                else{
+                    toast(this,"获取重设码失败，请稍侯重新再试...")
+                }
+              
+            },
             register(){
                 this.$router.replace('/register');
             },
@@ -116,10 +130,22 @@ import { Loading } from 'element-ui'
                        
                     }
                 });
-               
             },
             close(e){
                 if(e.target!=e.currentTarget) return;
+            },
+            countDown(){
+                let num = 60;
+                this.btnSendEmailText = "60后再发送"
+                let countTime =  setInterval(()=>{
+                    num = num - 1
+                    this.btnSendEmailText = num + "后再发送"
+                    if(num == 0){
+                        clearInterval(countTime)
+                        this.btnSendEmailText = "重新发送"
+                        this.isSendedEmail = false
+                    }
+                },1000)
             }
         }
 
@@ -136,9 +162,9 @@ import { Loading } from 'element-ui'
 .ms-reset{
       position: absolute;
     left:50%;
-    top:25%;
+    top:22%;
     width:400px;
-    height:500px;
+    height:550px;
     margin: -10px 0px 0px -180px;
     padding:40px;
     border-radius: 5px;
@@ -173,9 +199,12 @@ import { Loading } from 'element-ui'
 .resetButtonClass{
     float: right;
     margin-top: 20px;
+    width: 100px;
 }
 .resetOption{
-    margin-top: 15px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 .resetOption a{
     font-size: 14px;

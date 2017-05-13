@@ -32,7 +32,7 @@ class Article{
         this.create_time = Date.parse(new Date())
         this.release_time = Date.parse(new Date())
         this.content = content
-        this.ip = '192.123.111.111'
+        this.ip = ''
         this.readerCount = 0
         this.category = 1
         this.userId = 0

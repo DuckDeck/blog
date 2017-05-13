@@ -79,7 +79,7 @@ class Tool{
         return Tool.decrypt(key,iv,token)
      }
 
-     static sendEmail(user_real_name,mail,link){
+     static sendEmailToActive(user_real_name,mail,link){
         var options = {
             from           : '"ZOE" <zoe_blog@163.com>',
             to             : '"' +user_real_name + '" <'+mail+'>',
@@ -100,7 +100,29 @@ class Tool{
             }
         })})
      }
-    
+
+     static sendEmailToReset(user_real_name,reset_code,mail){
+        var options = {
+            from           : '"ZOE" <zoe_blog@163.com>',
+            to             : '"' +user_real_name + '" <'+mail+'>',
+            // cc          : ''    //抄送
+            // bcc         : ''    //密送
+            subject        : 'ZOE Blog',
+            text           : 'ZOE Blog',
+            html           : '<h1>你好，' + user_real_name + ',你的重设码是'+reset_code + '</h1>',
+        
+        }
+        return new Promise((resolve,reject)=>{
+            mailTransport.sendMail(options, function(err, msg){
+            if(err){
+                reject(err)
+            }
+            else {
+                resolve(msg)
+            }
+        })})
+     }
+
    
 
 }

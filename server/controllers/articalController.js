@@ -277,8 +277,8 @@ module.exports = {
         m.userId = id
         m.articalStatus = t.articleStatus
         m.articleBrief = t.articleBrief || ''
-        m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
-        m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
+        m.articleMainImage = t.articelImage
+        // m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
         let result2 = await Article.save(m)
         if(result2.code != 0)
         {

@@ -50,6 +50,12 @@ export const ressendemail = function(user_id){
     return setpromiseGet(url)
 }
 
+export const resetPasswordCode = function(mail){
+    const url =  HostName + 'resetcode'
+    return setpromisePost(url,{email:mail})
+}
+
+
 export const getUserInfo = function(user_id){
     const url = HostName +  'user/' + user_id 
     return setpromiseGet(url)

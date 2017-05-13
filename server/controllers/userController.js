@@ -134,11 +134,11 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        let id = res.data.id
-        let sql = 'insert into user_info (user_id,user_real_name,user_email) values (?,?,?)'
+        let id = res.data.i
+        let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,'http://localhost:3000/static/system/tra.png')"
         res = await DB.exec(sql,[id,m.nickName,m.email])
         //todo. switch the domain
-        let mailResult = await Tool.sendEmail(m.nickName,m.email,"http://localhost:8088/#/active/"+id+"/" + activityCode)
+        let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,"http://localhost:8088/#/active/"+id+"/" + activityCode)
         ctx.rest(Result.create(0))
       },
     
@@ -228,6 +228,41 @@ module.exports = {
         ctx.rest(Result.create(0))
      },
      //上传用户头像
+   
+    'POST /api/resetcode': async (ctx, next) => {
+        var  t = ctx.request.body
+        if (!t.email || !t.email.trim()) {
+            ctx.rest(Result.create(10,{msg:'miss email'})) 
+            return
+        }
+        if(Check.regexCheck(t.email,'email')){
+            ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+            return 
+        }
+        let sql = 'select user_id from user_info where user_email = ? ' 
+        let res =await DB.exec(sql,[t.email])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data.length == 0){
+            ctx.rest(Result.create(500))
+            return
+        }
+        let user_id = res.data[9],user_id;
+        let reset_code = (Math.random() * 10000000).toString().slice(0,6)
+        let md5_reset_code = Tool.md5(reset_code)
+        sql = 'update user set user_token = ? where user_id = ?'
+        res = await DB.exec(sql,[md5_reset_code,user_id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let mailResult = await Tool.sendEmailToReset(m.nickName, reset_code, m.email)
+        console.log(mailResult)
+        ctx.rest(Result.create(0))
+      },
+   
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
        let result0 = await Check.checkToken(ctx)
         if(result0.code != 0){
