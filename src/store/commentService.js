@@ -22,7 +22,7 @@ export const getComment =(commentId)=>{
 
 
 
-export const commentsByArticleId = (id)=>{
-    let url = HostName +   'articleComment/'+ id 
+export const commentsByArticleId = (id,index = 0,size = 10)=>{
+    let url = HostName +   'articleComment/'+ id + '/' + index + '/' + size
     return setpromiseGet(url)
 }

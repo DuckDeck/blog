@@ -30,12 +30,12 @@ module.exports = {
             ctx.rest(resCount)
             return
         }
-        if(res.data[0].count == 0){
+        if(resCount.data[0].count == 0){
             ctx.rest(Result.createCount(0,0,[]))
             return
         }
-        let count = res.data[0].count
-        let sqlMainComment = `select comment_id from user_comment where comment_target_id = ? and comment_type_id = 0 and delete_flag = 0 order by comment_time desc limit ?,?`
+        let count = resCount.data[0].count
+        let sqlMainComment = `select comment_id from user_comment where comment_target_id = ? and comment_type_id = 0  and delete_flag = 0 order by comment_time desc  limit ?,?`
         let resMainComment = await DB.exec(sqlMainComment,[articleId,index * size,size])
         if(resMainComment.code != 0){
             ctx.rest(resMainComment)

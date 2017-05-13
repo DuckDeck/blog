@@ -1,8 +1,8 @@
 <template>
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
-            <img :src="articleInfo.user_image_url" alt="">
-            <span class="articleCellUserName">{{articleInfo.user_name}}</span>
+            <img :src="articleInfo.user_info.user_image_url" alt="">
+            <span class="articleCellUserName">{{articleInfo.user_info.user_name}}</span>
             <span>{{createTile}}</span>
         </div>
         <div class="articleCellContent">

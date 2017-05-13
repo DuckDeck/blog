@@ -19,10 +19,10 @@
                         <div class="articleCommentsCount">
                             {{commentCount}}条评论  
                         </div>
-                        <userComment v-for="com in article.comments" :comment="com" ></userComment>
+                        <userComment v-for="com in comments" :comment="com" ></userComment>
                     </div>
-                    <div v-show="article.comments>=10" class="loadMoreDiv">
-                        
+                    <div v-show="comments.length < commentCount" class="loadMoreDiv">
+                        <el-button :loading="isLoadingMore" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                     </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment} from '../../store/service'
+import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
@@ -44,7 +44,10 @@ import userArtileInfo from './com/userArticleInfo.vue'
     data() {
       return {
           article:{},
-          articleUserInfo:{}
+          articleUserInfo:{},
+          comments:[],
+          commentCount:0,
+          isLoadingMore:false,
       }
     },
     async mounted(){
@@ -55,13 +58,19 @@ import userArtileInfo from './com/userArticleInfo.vue'
             this.article = res.data
             this.articleUserInfo = res.data.userInfo
             this.articleUserInfo.article_release_time = res.data.article_release_time
-            this.articleUserInfo.comment_count = res.data.comments.length
             this.articleUserInfo.browse = res.data.article_click
             this.articleUserInfo.article_id = res.data.article_id
         }
         else{
             toast(this,res.cMsg)
         }
+        res = await commentsByArticleId(id)
+        if(res.code == 0){
+            this.comments = res.data
+            this.commentCount = res.count
+        }
+        articlebroswer(id)
+        
     },
     methods:{
         headAction(action){
@@ -89,13 +98,21 @@ import userArtileInfo from './com/userArticleInfo.vue'
            let res = await submitComment(comment)
            toast(this,res.cMsg)
            if(res.code == 0){
-                let id = res.data.id  
-               res = await getComment(id)
+               this.commentCount = this.commentCount + 1
+               res = await commentsByArticleId(this.article.article_id)
                if(res.code == 0){
-                 this.article.comments.unshift(res.data)
+                 this.comments = res.data
                  this.$refs.mainWriteComment.clear()
                }
            }
+        },
+        async loadMoreComment(){
+           this.isLoadingMore = true
+           let res = await commentsByArticleId(this.article.article_id,this.comments.length / 10,10)
+           this.isLoadingMore = false
+            if(res.code == 0){
+                this.comments = this.comments.concat(res.data)
+            }
         },
         async refreshComment(comment_id){
              let res = await getComment(comment_id)
@@ -116,13 +133,6 @@ import userArtileInfo from './com/userArticleInfo.vue'
         releaseDate(){
             return  moment(this.article.article_create_time)
         },
-        commentCount(){
-            if(this.article.comments != undefined){
-                return this.article.comments.length
-            }
-            return 0
-
-        }
     }
 
   }
@@ -157,6 +167,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
 .article-content{
     background: white;
     border-top: 7px solid #10a5cd;
+    padding-bottom: 20px;
 }
 .articleHeader{
     font-size: 35px;
@@ -187,6 +198,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
 
 .articleComments{
     padding:25px;
+    padding-bottom: 0px;
 }
 .articleCommentsCount{
     font-size: 20px;
@@ -196,6 +208,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
     padding-bottom: 5px;
     border-bottom: 1px solid #777;
 }
+
 @media (max-width:991px) {
 .content-main{
     padding-left: 0px;    

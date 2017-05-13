@@ -16,6 +16,10 @@ export const articlesBySort = function(user_id,sort,tag,index = 0,size = 10){
     return setpromiseGet(url)
 }
 
+export const articlebroswer = function(id){
+    const url = HostName +  'updatearticlecunt/'  + id
+    return setpromiseGet(url)
+}
 
 
 

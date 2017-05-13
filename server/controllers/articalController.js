@@ -58,7 +58,7 @@ module.exports = {
         let result = Result.create(0,articles)
         result.count = actArticleCount.data[0].articleCount
         ctx.rest(result)
-    },
+     },
 
 
     'POST /api/manage/releaseArticle/:mId/:token': async (ctx, next) => {
@@ -80,7 +80,7 @@ module.exports = {
         let status = t.setType
         let res = await Article.setReleaseArticle(status,ids)
         ctx.rest(res)
-    },
+     },
 
 
     'GET /api/manage/articleinfo/:articleId/:mId/:token': async (ctx, next) => {
@@ -112,7 +112,7 @@ module.exports = {
         let article = resArticle.data[0]
         article.tags = resTags.data
         ctx.rest(Result.create(0,article))
-    },
+     },
 
     'GET /api/article/:articleId': async (ctx, next) => {
        let id = ctx.params.articleId
@@ -135,101 +135,6 @@ module.exports = {
        }
        let article = resArticle.data[0]
        article.tags = resTags.data
-       let mainCom = resMainCom.data
-       if(mainCom.length > 0){
-            mainCom.sort((a,b)=>{
-                if(a.comment_time == b.comment_time){
-                    return 0
-                }
-                if(a.comment_time < b.comment_time){
-                    return 1
-                }
-                else{
-                    return -1
-                }
-            })
-
-            let subIds = mainCom.map(s=>{
-                return s.comment_id
-            })
-            let resSubCom = await Article.getArticleSubCommentById(subIds)
-            if(resSubCom.code != 0){
-                ctx.rest(resSubCom)
-                return
-            }
-            let subCom = resSubCom.data
-            subCom.sort((a,b)=>{
-                if(a.comment_time == b.comment_time){
-                    return 0
-                }
-                if(a.comment_time < b.comment_time){
-                    return 1
-                }
-                else{
-                    return -1
-                }
-            })
-
-
-            //找出所有评论者的id
-            let ids = new Set()
-            for(let com of mainCom){
-                ids.add(com.commenter_user_id)
-            }
-            for(let com of subCom){
-                ids.add(com.commenter_user_id)
-                ids.add(com.comment_target_user_id)
-            }
-            ids.delete(0)
-            //获取所有评论者有信息
-            let userInfos =await User.userInfoByIds(Array.from(ids))
-            if(userInfos.code != 0){
-                ctx.rest(userInfos)
-                return
-            }
-            //hk暂时不需要加上几楼功能
-            //赞功能也不加上
-            let tra = {
-                    user_id:0,
-                    user_name:'游客',
-                    user_image_url:'http://localhost:3000/static/system/tra.png'
-            }
-            for(let m of mainCom){
-                m.sub_comments = []
-                if(m.commenter_user_id == 0){
-                        m.userInfo = tra
-                }
-                else{
-                        m.userInfo = userInfos.data.find(s=>{
-                            return s.user_id == m.commenter_user_id
-                        })
-                }
-                for(let n of subCom){
-                    if(n.comment_target_id == m.comment_id){
-                        if(n.commenter_user_id == 0){
-                            n.userInfo = tra
-                        }
-                        else{
-                            n.userInfo = userInfos.data.find(s=>{
-                                return s.user_id == n.commenter_user_id
-                            })
-                        }
-                        if(n.comment_target_user_id == 0){
-                            n.targetUserInfo = tra
-                        }
-                        else{
-                            n.targetUserInfo = userInfos.data.find(s=>{
-                                return s.user_id == n.comment_target_user_id
-                            })
-                        }
-                        
-                        m.sub_comments.push(n)
-                    }
-                }
-            }
-       }
-       article.comments = mainCom
-     
        let user_id = article.user_id
        let resUser = await User.userInfoById(user_id)
        if(resUser.code != 0){
@@ -238,9 +143,15 @@ module.exports = {
        }
        article.userInfo = resUser.data[0]
        ctx.rest(Result.create(0,article))
-    
-       
-    },
+     },
+
+    'GET /api/updatearticlecunt/:articleId': async (ctx, next) => {
+       let id = ctx.params.articleId
+       let sql = 'update article set article_click = article_click + 1 where article_id = ?'
+       await DB.exec(sql,[id])
+       ctx.rest(Result.create(0))
+     },
+
 
     'POST /api/article/:userId/:token': async (ctx, next) => {
         let result0 = await Check.checkToken(ctx)
@@ -288,7 +199,7 @@ module.exports = {
         let articleId = result2.data.id
         let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
         ctx.rest(Result.create(0,{id:articleId}))
-    },
+     },
 
 
     'POST /api/autosavearticle/:userId/:token': async (ctx, next) => {
@@ -346,7 +257,7 @@ module.exports = {
             ctx.rest(Result.create(0))
         }
        
-    },
+     },
 
     //对于更新，是有很多优化的空间的，可以专业来记录更新了哪些东西，史把更新的数据更新到数据库里面
     'PUT /api/article/:articleId/:userId/:token': async (ctx, next) => {
@@ -390,7 +301,7 @@ module.exports = {
         await Tag.deleteTagByArticleId(articleId)
         await Tag.saveArticalMap(articleId,t.articalTags)
         ctx.rest(Result.create(0,{id:articleId}))
-    },
+     },
 
     'DELETE /api/article/:articleId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkToken(ctx)
@@ -404,7 +315,7 @@ module.exports = {
        }).catch(err=>{
            ctx.rest(err)
        })
-    },
+     },
 
     'POST /api/uploadImg/:userId/:token': async (ctx, next) => {
         let result0 = await Check.checkToken(ctx)
@@ -427,7 +338,7 @@ module.exports = {
        let urlPath = "http://localhost:3000/static/img/" + newFileName
        console.log(urlPath)
        ctx.rest(Result.create(0,urlPath))
-    },
+     },
 
 
     'GET /api/temparticle/:userId/:token': async (ctx, next) => {
@@ -454,7 +365,7 @@ module.exports = {
        }
        resArticle.data.tags = resTags.data
        ctx.rest(resArticle)
-    },
+     },
 
     'GET /api/articleswithsort/:sortId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
@@ -475,7 +386,7 @@ module.exports = {
         }
         let res = await DB.exec(sql,[index * size,size])
         ctx.rest(res)
-    },
+     },
 
     // can not work， it can not add to the controller
     'GET /api/articles/:userId/sort/:sortId/tag/:tagid/:index/:size': async (ctx, next) => {
@@ -578,6 +489,6 @@ module.exports = {
             ctx.rest(Result.create(0,articles))
         }
         
-    },
+     },
 
 }

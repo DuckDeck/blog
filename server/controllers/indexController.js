@@ -110,11 +110,7 @@ module.exports = {
         })
         ctx.rest(result)
      
-    },
-
-
-
-
+     },
     'GET /api/index/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
@@ -160,9 +156,21 @@ module.exports = {
         
         ctx.rest(result)
      
-    },
+     },
 
-
+    'GET /api/searchinfo/:keyword': async (ctx, next) => {
+        let keyword = ctx.params.keyword
+        let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
+        from user_info where user_real_name like '%` +keyword + `%' limit 0,3`
+        let res = await DB.exec(sql)
+        let result = Result.create(0)
+        result.data.users = res.data
+        sql = `select * from article_sort where sort_article_name like '%` + keyword + `%' limit 0,3`
+        res = await DB.exec(sql)
+        result.data.sorts = res.data
+        ctx.rest(result)
+     },
+     
 
     'GET /api/search/:keyword/:type/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
@@ -198,14 +206,15 @@ module.exports = {
 }
 
 async function searchArticle(keyword,index,size){
-    let result = Result.create(0)
-    let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
-    from user_info where user_real_name like '%` +keyword + `%' limit 0,3`
+    let sql = `select count(article_id) as count from article  where article_up = 0 and (article_name like '%`+ keyword +`%' or article_brief like '%`+ keyword +`%')`
     let res = await DB.exec(sql)
-    result.data.users = res.data
-    sql = `select * from article_sort where sort_article_name like '%` + keyword + `%' limit 0,3`
-    res = await DB.exec(sql)
-    result.data.sorts = res.data
+    if(res.code != 0){
+        return res
+    }
+    if(res.data.count <= 0){
+        return Result.createCount(0,0,[])
+    }
+    let count = res.data[0].count
     sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
@@ -219,34 +228,53 @@ async function searchArticle(keyword,index,size){
     let user_ids = res.data.map(s=>{
         return s.user_id
     })
-    result.data.articles = res.data
+    let result = Result.createCount(0,count,[])
+    result.data = res.data
     sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
     res =  await DB.exec(sql)
     if(res.code != 0){
        ctx.rest(res)
        return
     }
-    for(let k of result.data.articles){
+    for(let k of result.data){
         let user = res.data.find(s=>{
             return s.user_id == k.user_id
         })
-        k.userInfo = user
+        k.user_info = user
     }
     return result
- 
 }
 
 async function searchUser(keyword,index,size){
-    let sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
+    let sql = `select count(user_id) as count from user_info where user_real_name like  '%`+ keyword +`%'`
+    let res = await DB.exec(sql)
+    if(res.code != 0){
+        return res
+    }
+    if(res.data.count <= 0){
+        return Result.createCount(0,0,[])
+    }
+    let count = res.data[0].count
+    sql = `select user_real_name,user_id,user_image_url,(select count(article_id) from article where article.user_id = user_info.user_id) as article_count 
     from user_info where user_real_name like  '%`+ keyword +`%' limit ?,?`
-    let res = await DB.exec(sql,[index*size,size])
+    res = await DB.exec(sql,[index*size,size])
+    res.count = count
     return res
 }
 
 async function searchSort(keyword,index,size){
-    let sql = `select *,(select count(article_id) from article where article.article_id = article_sort.sort_article_id)  as 
+    let sql = `select count(sort_article_id) as count from article_sort where sort_article_name like  '%`+ keyword +`%'`
+    let res = await DB.exec(sql)
+    if(res.code != 0){
+        return res
+    }
+    if(res.data.count <= 0){
+        return Result.createCount(0,0,[])
+    }
+    let count = res.data[0].count
+    sql = `select *,(select count(article_id) from article where article.article_id = article_sort.sort_article_id)  as 
     article_count from article_sort where sort_article_name like  '%`+ keyword +`%' limit ?,?`
-    let res = await DB.exec(sql,[index*size,size])
+    res = await DB.exec(sql,[index*size,size])
     if(res.code != 0){
         return res
     }
@@ -270,5 +298,6 @@ async function searchSort(keyword,index,size){
         })
         k.userInfo = user
     }
+    result.count = count
     return result
 }

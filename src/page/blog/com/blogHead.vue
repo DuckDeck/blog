@@ -61,7 +61,13 @@
             },
             handleIconClick(){
                 if(this.keyword.length > 0){
-                    this.$router.push('/search/' + this.keyword.trim())
+                    if(window.location.href.indexOf('search') > 0){
+                        window.location.reload()
+                        //这里就作重新刷新吧
+                    }
+                    else{
+                        this.$router.push('/search/' + this.keyword.trim())
+                    }
                 }
             },
             register(){
