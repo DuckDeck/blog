@@ -7,16 +7,36 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
 module.exports = {
-
-    'GET /api/articleComment/:articleId': async (ctx, next) => {
+    'GET /api/articleComment/:articleId/:index/:size': async (ctx, next) => {
         let paraCheckResult = Check.checkNum(ctx.params,'articleId')
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
             return
         }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
         let articleId = ctx.params.articleId
-        let sqlMainComment = `select comment_id from user_comment where comment_target_id = ?`
-        let resMainComment = await DB.exec(sqlMainComment,[articleId])
+        
+        //先查数量
+
+        let sqlCount = "select count(comment_id) as count from user_comment where comment_type_id = 0 and delete_flag = 0 and comment_target_id = " + articleId
+        let resCount = await DB.exec(sqlCount)
+        if(resCount.code != 0){
+            ctx.rest(resCount)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        let sqlMainComment = `select comment_id from user_comment where comment_target_id = ? and comment_type_id = 0 and delete_flag = 0 order by comment_time desc limit ?,?`
+        let resMainComment = await DB.exec(sqlMainComment,[articleId,index * size,size])
         if(resMainComment.code != 0){
             ctx.rest(resMainComment)
             return
@@ -72,7 +92,7 @@ module.exports = {
                     }
                 })
             })
-            ctx.rest(Result.create(0,resCom))
+            ctx.rest(Result.createCount(0,count,resCom))
         }
         else{
              ctx.rest(resMainComment)
@@ -200,6 +220,7 @@ module.exports = {
 
 
      // 一般来说，评论有main评论和子评论，这里的评论统一获取main评论再加上这个main评论下面的所有子评论
+    
     'GET /api/comment/:commentId': async (ctx, next) => {
       await getComment(ctx)
      },

@@ -96,8 +96,7 @@
 </template>
 
 <script>
-import {getUserInfo} from '../../store/service'
-import {index,indexMore} from '../../store/index'
+import {getUserInfo,index,indexMore} from '../../store/service'
 import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'

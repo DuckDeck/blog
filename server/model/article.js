@@ -16,7 +16,7 @@ const sqls = {
     user_id = ?, article_type_id = ?, article_type = ?, article_content = ?,article_brief=?, article_main_img=?,article_up = ?, article_recommend = ?,
      article_status = ? WHERE article_id = ?`,
     selectArticleMainCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time FROM user_comment where  comment_target_id = ?`,
+comment_content,commenter_user_id,comment_time FROM user_comment where  comment_target_id = ? order by comment_time desc limit 10`,
     selectArticleSubCommentById:`SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM user_sub_comment where  comment_scope in `,
 // fck when you use in  to select  ? is a trouble

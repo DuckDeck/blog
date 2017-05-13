@@ -65,8 +65,7 @@
 </template>
 
 <script>
-import {search} from '../../store/index'
-
+import {search} from '../../store/service'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import articleCell from './userInfo/com/articleCell.vue'

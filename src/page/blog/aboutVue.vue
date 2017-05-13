@@ -58,6 +58,7 @@
                     <div class="unCompletedFeatureDiv">
                         未完成功能
                         <el-checkbox style="margin-left: 15px;"  label="富文本评论" ></el-checkbox>
+                        <el-checkbox   label="修改评论" ></el-checkbox>
                         <el-checkbox  label="关注其他作者，粉丝功能" ></el-checkbox>
                         <el-checkbox  label="收藏文章" ></el-checkbox>
                         <el-checkbox  label="点赞文章" ></el-checkbox>

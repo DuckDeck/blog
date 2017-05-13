@@ -6,7 +6,7 @@
                             <div  class="articleHeader" >
                                 {{article.article_name}}
                             </div>
-                            <userArtileInfo class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
+                            <userArtileInfo @userHeadClick="userHeadClick" class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
                             <div  class="articleTagClass">
                                   <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
                             </div>
@@ -20,6 +20,9 @@
                             {{commentCount}}条评论  
                         </div>
                         <userComment v-for="com in article.comments" :comment="com" ></userComment>
+                    </div>
+                    <div v-show="article.comments>=10" class="loadMoreDiv">
+                        
                     </div>
                     </div>
                 </div>
@@ -69,6 +72,9 @@ import userArtileInfo from './com/userArticleInfo.vue'
                 this.userInfo =  {}
             }
         },
+        userHeadClick(userInfo){
+             this.$router.push('/userInfo/' + userInfo.user_id)
+        },
         async submitComment(com){
            if(com == ''){
                toast(this,'评论内容不能为空')
@@ -86,14 +92,12 @@ import userArtileInfo from './com/userArticleInfo.vue'
                 let id = res.data.id  
                res = await getComment(id)
                if(res.code == 0){
-                 this.article.comments.push(res.data)
+                 this.article.comments.unshift(res.data)
                  this.$refs.mainWriteComment.clear()
                }
            }
         },
         async refreshComment(comment_id){
-            console.log('this code not run?')
-            // it looks not run
              let res = await getComment(comment_id)
              if(res.code == 0){
                 let index = this.article.comments.findIndex(s=>{

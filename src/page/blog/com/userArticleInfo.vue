@@ -1,9 +1,9 @@
 <template>
     <div class="comArticleUserInfo">
-        <img :src="userInfo.user_image_url" class="comUserArticleHead" alt="">
+        <img :src="userInfo.user_image_url"  @click="userheadClick" class="comUserArticleHead" alt="">
         <div class="comArticleUserDetail">
             <div>
-                <span class="comArticleAuthorTag">作者</span> <span>{{userInfo.user_real_name}}</span>
+                <span @click="userheadClick" class="comArticleAuthorTag">作者</span> <span @click="userheadClick">{{userInfo.user_real_name}}</span>
             </div>
             <div class="comArticleReleaseTime">
                 <span>发布于: {{articleReleaseTime}}  </span> <span>  文章 {{userInfo.article_count}}</span>
@@ -31,6 +31,9 @@
                 if(this.userInfo.article_id){
                     this.$router.push('/writeArticle/' + this.userInfo.article_id)
                 }
+            },
+            userheadClick(){
+                 this.$emit("userHeadClick",this.userInfo)
             }
         },
         computed:{

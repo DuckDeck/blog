@@ -1,0 +1,3 @@
+对于DB里面的一些在这里一起解脱下
+user_comment表里的comment_type_id 目前只有文章，统一为0
+0：文章

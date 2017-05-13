@@ -1,6 +1,6 @@
 <template>
        <div class="userHeadInfo">
-            <img :src="userInfo.user_image_url" class="userHeader" alt="">
+            <img :src="userInfo.user_image_url" @click="userheadClick" class="userHeader" alt="">
             <div class="userHeadDetail">
                 <div >
                     <span style="font-weight: bold">{{userInfo.user_real_name}}</span> 
@@ -28,6 +28,12 @@
               type:Object
           }
         },
+        methods:{
+            userheadClick(){
+
+                this.$emit("userHeadClick",this.userInfo)
+            }
+        }
     }
 </script>
 <style scoped>
