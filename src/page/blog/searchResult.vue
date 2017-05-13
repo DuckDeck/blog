@@ -38,7 +38,7 @@
                             共搜索出<span class="countResult">{{articleCount}}</span>篇文章
                         </div>
 
-                        <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
+                        <articleCell @userHeadClick="userHeadClick" v-for="art in articles" :articleInfo = "art"></articleCell>
 
                         <div v-show="articles.length < articleCount" class="loadMoreDiv">
                             <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
@@ -164,13 +164,13 @@ import articleCell from './userInfo/com/articleCell.vue'
             }
         },
         loadMoreArticle(){
-            this.searchResult(keyword,'article',this.articles.length / 10,10)
+            this.searchResult(this.keyword,'article',this.articles.length / 10,10)
         },
         loadMoreUser(){
-            this.searchResult(keyword,'user',this.users.length / 10,10)
+            this.searchResult(this.keyword,'user',this.users.length / 10,10)
         },
         loadMoreSort(){
-            this.searchResult(keyword,'sort',this.sorts.length / 50,50)
+            this.searchResult(this.keyword,'sort',this.sorts.length / 50,50)
         },
         handleClick(tab,event){
             switch (this.activeName) {
@@ -192,7 +192,14 @@ import articleCell from './userInfo/com/articleCell.vue'
         },
         gotoUser(user){
             this.$router.push('/userInfo/' + user.user_id)
-        }      
+        },
+        selectSort(sort){
+            localStorage.sortId = sort.sort_article_id
+            this.$router.push('/sortArticleList/' + sort.user_info.user_id)
+        },
+        userHeadClick(user){
+            this.$router.push('/userInfo/' + user.user_id)
+        }
     },
     components:{
         upToTop,blogFoot,articleCell
@@ -259,5 +266,8 @@ import articleCell from './userInfo/com/articleCell.vue'
     padding-bottom: 8px;
     color: #555;
     margin-bottom: 20px;
+}
+.searchResultUsers:hover{
+    cursor: pointer;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
     <div class="articleCellClass">
-        <div class="articleCellUserInfo">
+        <div class="articleCellUserInfo" @click="userHeadClick">
             <img :src="articleInfo.user_info.user_image_url" alt="">
-            <span class="articleCellUserName">{{articleInfo.user_info.user_name}}</span>
+            <span class="articleCellUserName">{{articleInfo.user_info.user_real_name}}</span>
             <span>{{createTile}}</span>
         </div>
         <div class="articleCellContent">
@@ -34,6 +34,9 @@
     methods:{
         togoArticle(){
              this.$router.push('/article/'+ this.articleInfo.article_id)
+        },
+        userHeadClick(){
+            this.$emit("userHeadClick",this.articleInfo.user_info)
         }
     },
     computed:{
@@ -74,6 +77,9 @@
     width: 40px;
     height: 40px;
     border-radius: 20px;
+}
+.articleCellUserInfo:hover{
+    cursor: pointer;
 }
 .articleCellUserName{
  margin-left: 10px;   

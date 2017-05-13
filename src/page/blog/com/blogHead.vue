@@ -62,6 +62,7 @@
             handleIconClick(){
                 if(this.keyword.length > 0){
                     if(window.location.href.indexOf('search') > 0){
+                        this.$router.replace('/search/' + this.keyword.trim())
                         window.location.reload()
                         //这里就作重新刷新吧
                     }

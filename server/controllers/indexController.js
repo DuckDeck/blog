@@ -211,7 +211,7 @@ async function searchArticle(keyword,index,size){
     if(res.code != 0){
         return res
     }
-    if(res.data.count <= 0){
+    if(res.data[0].count <= 0){
         return Result.createCount(0,0,[])
     }
     let count = res.data[0].count
@@ -251,7 +251,7 @@ async function searchUser(keyword,index,size){
     if(res.code != 0){
         return res
     }
-    if(res.data.count <= 0){
+    if(res.data[0].count <= 0){
         return Result.createCount(0,0,[])
     }
     let count = res.data[0].count
@@ -268,7 +268,7 @@ async function searchSort(keyword,index,size){
     if(res.code != 0){
         return res
     }
-    if(res.data.count <= 0){
+    if(res.data[0].count <= 0){
         return Result.createCount(0,0,[])
     }
     let count = res.data[0].count
@@ -279,6 +279,7 @@ async function searchSort(keyword,index,size){
         return res
     }
     if(res.data.length <= 0){
+        res.count = 0
         return res
     }
     let user_ids = res.data.map(s=>{
@@ -296,7 +297,7 @@ async function searchSort(keyword,index,size){
         let user = res.data.find(s=>{
             return s.user_id == k.user_id
         })
-        k.userInfo = user
+        k.user_info = user
     }
     result.count = count
     return result
