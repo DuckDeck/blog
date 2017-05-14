@@ -2,11 +2,11 @@
     <div class="container">
       <div class="writeClassPage">
             <div class="featureTitle">
-             发布文章
-              <el-button class="editor-btn" type="primary" @click="reviewArticle">预览文章</el-button>
+             {{previewStatus}}
+              <el-button class="editor-btn" type="primary" @click="reviewArticle">{{previewButtonStatus}}</el-button>
               <el-button class="editor-btn" type="primary" @click="switchMarkDown">{{editStatus}}</el-button>
             </div>
-            <div style="font-size: 20px;height: 90%">
+            <div style="font-size: 20px;height: 90%" v-show="isEdit">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
                         <el-form-item prop="title">
                             <el-input v-model="article.title" placeholder="文章标题"></el-input>
@@ -30,10 +30,18 @@
                             <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
                             <el-button class="editor-btn" type="primary" @click="save('article',0)">保存草稿</el-button>
                             <div style="clear: both">
-                                
                             </div>
                         </div>
                     </el-form>
+            </div>
+            <div class=previecArticle v-show="!isEdit">
+                <div  class="articleHeader" >
+                    {{article.title}}
+                </div>
+                <div  class="articleTagClass">
+                        <el-tag  v-for="t in selectedTags"   type="primary"  >{{t.tag_name}}</el-tag>
+                </div>
+                <article class="articleContentClass" v-html = "content"></article>
             </div>
       </div>
       <blogFoot></blogFoot>
@@ -142,7 +150,7 @@ import  toMarkdown  from 'to-markdown'
                 }
             },
             reviewArticle(){
-
+                this.isEdit = !this.isEdit
             },
             updateData(data){
                 this.content = data
@@ -208,10 +216,13 @@ import  toMarkdown  from 'to-markdown'
 
         computed:{
             editStatus(){
-                return this.isEdit?'发布文章':'预览文章'
-            },
-            editStatus(){
                 return this.editMode ? '切换Markdown': '切换富文本'
+            },
+            previewStatus(){
+                return this.isEdit ? '发布文章': '预览文章'
+            },
+            previewButtonStatus(){
+                return this.isEdit ? '预览文章': '编辑文章'
             }
         },
         components:{
@@ -243,5 +254,8 @@ import  toMarkdown  from 'to-markdown'
 .editor-btn{
     float: right;
     margin-left: 20px;
+}
+.previecArticle{
+    min-height: 665px;
 }
 </style>

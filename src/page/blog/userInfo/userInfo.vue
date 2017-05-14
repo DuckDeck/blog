@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {getUserInfo,getDynamics,getUserComments} from '../../../store/service'
+import {getUserInfo,getDynamics,getUserComments,articlesByUser} from '../../../store/service'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
@@ -77,8 +77,11 @@ import userCommentCell from './com/userCommentCell.vue'
       return {
           userInfo:{},
           articles:[],
+          articlesCount:0,
           dynamics:[],
+          dynamicsCount:0,
           comments:[],
+          commentsCount:0,
           activeName:'articles',
       }
     },
@@ -91,32 +94,28 @@ import userCommentCell from './com/userCommentCell.vue'
            let res = await getUserInfo(id)
            if(res.code == 0){
                this.userInfo = res.data
-               this.articles = this.userInfo.articles.map(s=>{
-                    s.user_head = this.userInfo.user_image_url
-                    s.user_name = this.userInfo.user_real_name
-                    return s
-               })
            }
            else{
                toast(this,res.cMsg)
            }
-           res = await getDynamics(id)
-           if(res.code == 0){
-               this.dynamics = res.data.map(s=>{
-                    s.user_head = this.userInfo.user_image_url
-                    s.user_name = this.userInfo.user_real_name
-                    return s
-               })
-           }
-           res = await getUserComments(id)
-           if(res.code == 0){
-               this.comments = res.data.map(s=>{
-                    s.user_head = this.userInfo.user_image_url
-                    s.user_name = this.userInfo.user_real_name
-                    return s
-               })
-           }
-           
+       },
+       async getUserArticles(id){
+            let res = await articlesByUser(this.userInfo.user_id,this.dynamics.length / 10,10)
+            if(res.code == 0){
+                this.articles = this.articles.concat(res.data)
+            }
+       },
+       async getUserDynamics(id){
+            let res = await getDynamics(this.userInfo.user_id,this.dynamics.length / 10,10)
+            if(res.code == 0){
+                this.dynamics = this.dynamics.concat(res.data)
+            }
+       },
+       async getComments(id){
+             let res = await getUserComments(this.userInfo.user_id,this.dynamics.length / 10,10)
+             if(res.code == 0){
+                this.comments = this.comments.concat(res.data)
+             }
        },
        writeArticle(){
             this.$router.push('/writeArticle/0')
@@ -183,6 +182,7 @@ import userCommentCell from './com/userCommentCell.vue'
     font-size: 20px;
     background: white;
     margin-top: 20px;
+    min-height: 500px;
 }
 .writeArticle{
     background: orangered;

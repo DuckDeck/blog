@@ -66,12 +66,12 @@ export const getUserInfo = function(user_id){
 }
 
 
-export const getDynamics = function(user_id){
+export const getDynamics = function(user_id,index=0,size=10){
     const url = HostName +  'userdynamic/' + user_id 
     return setpromiseGet(url)
 }
 
-export const getUserComments = function(user_id){
+export const getUserComments = function(user_id,index=0,size=10){
     const url = HostName +  'usercomment/' + user_id 
     return setpromiseGet(url)
 }

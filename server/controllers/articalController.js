@@ -145,7 +145,62 @@ module.exports = {
        ctx.rest(Result.create(0,article))
      },
 
-    'GET /api/updatearticlecunt/:articleId': async (ctx, next) => {
+
+    'GET /api/articlewithuser/:userId/:index/:size': async (ctx, next) => {
+       let pageResult = Check.checkPage(ctx)
+       if(pageResult){
+           ctx.rest(pageResult)
+           return
+       }
+       let id = ctx.params.userId
+       let index = parseInt(ctx.params.index)
+       let size = parseInt(ctx.params.size)
+       let sqlCount = "select count(article_id) as count  from article where user_id = ? and article_status = 1"  
+       let resCount = DB.exec(sqlCount,[id])
+       if(resCount.code != 0){
+           ctx.rest(resCount)
+           return
+       }
+       if(resCount.data[0].count == 0){
+           ctx.rest(Result.createCount(0,0,[]))
+           return
+       }
+       let sqlArticles = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
+                (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
+                 article.article_id) as comment_count from article where user_id = ? and articles_status = 1  order by article_create_time desc limit ?,?`
+       let resArticles = DB.exec(sqlArticles,[id,index * size,size])
+       if(resArticles.code != 0)
+       {
+           ctx.rest(resArticles)
+           return
+       }
+       if(resArticles.data.length == 0){
+           ctx.rest(Result.createCount(0,0,[]))
+           return
+       }
+       let user_ids = resArticles.data.map(s=>{
+            return s.user_id
+       })
+       let count = resCount.data[0].count
+       let result = Result.createCount(0,count,[])
+       result.data = resArticles.data
+       sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
+       res =  await DB.exec(sql)
+       if(res.code != 0){
+       ctx.rest(res)
+           return
+       }
+       for(let k of result.data){
+           let user = res.data.find(s=>{
+               return s.user_id == k.user_id
+           })
+           k.user_info = user
+       }
+       ctx.rest(result)
+     },
+
+    'GET /api/updatearticlecont/:articleId': async (ctx, next) => {
        let id = ctx.params.articleId
        let sql = 'update article set article_click = article_click + 1 where article_id = ?'
        await DB.exec(sql,[id])

@@ -17,11 +17,15 @@ export const articlesBySort = function(user_id,sort,tag,index = 0,size = 10){
 }
 
 export const articlebroswer = function(id){
-    const url = HostName +  'updatearticlecunt/'  + id
+    const url = HostName +  'updatearticlecont/'  + id
     return setpromiseGet(url)
 }
 
 
+export const articlesByUser = function(user_id,index = 0,size = 10){
+    const url = HostName +  'articlewithuser/'  + user_id  +  '/' + index + '/' + size
+    return setpromiseGet(url)
+}
 
 export const saveArticle = function(article){
     if(article.articleId > 0){

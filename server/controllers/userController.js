@@ -359,15 +359,7 @@ module.exports = {
           return
        }
        userInfo.links = res.data
-       let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
-                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article where user_id = ?  order by article_create_time desc limit 10`
-       res = await DB.exec(sql,[id])
-       if(res.code != 0){
-          ctx.rest(res)
-          return
-       }
-       userInfo.articles = res.data
+       
        res = await Sort.sorts(id)
        if(res.code != 0){
           ctx.rest(res)
