@@ -23,6 +23,9 @@
                         <el-tab-pane   name="articles">
                             <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
                             <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
+                            <div v-show="articles.length < articlesCount" class="loadMoreDiv">
+                                <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
+                            </div>
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
@@ -83,11 +86,15 @@ import userCommentCell from './com/userCommentCell.vue'
           comments:[],
           commentsCount:0,
           activeName:'articles',
+          isLoadingArticle:false,
+          userId:0,
       }
     },
     mounted(){
         let id = this.$route.params.userId
         this.getTargetUserInfo(id)
+        this.getUserArticles(id)
+        this.userId = id
     },
     methods:{
        async getTargetUserInfo(id){
@@ -100,30 +107,51 @@ import userCommentCell from './com/userCommentCell.vue'
            }
        },
        async getUserArticles(id){
-            let res = await articlesByUser(this.userInfo.user_id,this.dynamics.length / 10,10)
+            let res = await articlesByUser(id,this.dynamics.length / 10,10)
             if(res.code == 0){
+                this.articlesCount = res.count
                 this.articles = this.articles.concat(res.data)
             }
        },
        async getUserDynamics(id){
             let res = await getDynamics(this.userInfo.user_id,this.dynamics.length / 10,10)
             if(res.code == 0){
+                this.dynamicsCount = res.count
                 this.dynamics = this.dynamics.concat(res.data)
             }
        },
        async getComments(id){
+           let self = this
              let res = await getUserComments(this.userInfo.user_id,this.dynamics.length / 10,10)
              if(res.code == 0){
-                this.comments = this.comments.concat(res.data)
+                 this.commentsCount = res.count
+                 this.comments = this.comments.concat(res.data.map(s=>{
+                    s.user_info = self.userInfo
+                    return s
+                }))
+                console.log(this.comments)
              }
        },
        writeArticle(){
             this.$router.push('/writeArticle/0')
        },
        handleClick(tab,event){
-                
+          switch(tab.index){
+            case "1":
+               if(isEmpty(this.dynamics)){
+                    this.getUserDynamics(this.userId)
+               }
+            break;
+            case "2":
+                if(isEmpty(this.comments)){
+                    this.getComments(this.userId)
+               }
+            break;
+          }       
+       },
+       loadMoreArticle(){
+         this.getUserArticles(this.userId)
        }
-        
         
     },
     components:{

@@ -1,7 +1,7 @@
 <template>
     <div class="commentBigCell">
        <div class="commentUserInfo">
-           <img :src="comment.userInfo.user_image_url" alt="">
+           <img :src="comment.userInfo.user_image_url" @click="userHeadClick" alt="">
             <div style="display: inline-block;vertical-align: middle">
                 <div class="userNameDiv">
                     {{comment.userInfo.user_real_name}}
@@ -58,6 +58,9 @@ import {submitComment,getComment} from '../../../store/service'
            this.currentCom = {}
            this.placeHolder = '写下你的评论...'
            this.isShowWriteComment = true
+       },
+       userHeadClick(){
+            this.$emit("userHeadClick",this.comment.userInfo)
        },
        cancelComment(){
            this.isShowWriteComment = false

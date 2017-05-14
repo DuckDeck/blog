@@ -156,7 +156,7 @@ module.exports = {
        let index = parseInt(ctx.params.index)
        let size = parseInt(ctx.params.size)
        let sqlCount = "select count(article_id) as count  from article where user_id = ? and article_status = 1"  
-       let resCount = DB.exec(sqlCount,[id])
+       let resCount = await DB.exec(sqlCount,[id])
        if(resCount.code != 0){
            ctx.rest(resCount)
            return
@@ -165,11 +165,11 @@ module.exports = {
            ctx.rest(Result.createCount(0,0,[]))
            return
        }
-       let sqlArticles = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
+       let sqlArticles = `select article_id,article_name,user_id,article_create_time,article_brief,article_main_img,article_click,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                  as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article where user_id = ? and articles_status = 1  order by article_create_time desc limit ?,?`
-       let resArticles = DB.exec(sqlArticles,[id,index * size,size])
+                 article.article_id) as comment_count from article where user_id = ? and article_status = 1  order by article_create_time desc limit ?,?`
+       let resArticles = await DB.exec(sqlArticles,[id,index * size,size])
        if(resArticles.code != 0)
        {
            ctx.rest(resArticles)
@@ -179,16 +179,16 @@ module.exports = {
            ctx.rest(Result.createCount(0,0,[]))
            return
        }
-       let user_ids = resArticles.data.map(s=>{
+       let user_ids = new Set(resArticles.data.map(s=>{
             return s.user_id
-       })
+       }))
        let count = resCount.data[0].count
        let result = Result.createCount(0,count,[])
        result.data = resArticles.data
-       sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
-       res =  await DB.exec(sql)
+       let sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + Array.from(user_ids).join(',') + ')'
+       let res =  await DB.exec(sql)
        if(res.code != 0){
-       ctx.rest(res)
+           ctx.rest(res)
            return
        }
        for(let k of result.data){
@@ -200,7 +200,7 @@ module.exports = {
        ctx.rest(result)
      },
 
-    'GET /api/updatearticlecont/:articleId': async (ctx, next) => {
+    'GET /api/updatearticlecount/:articleId': async (ctx, next) => {
        let id = ctx.params.articleId
        let sql = 'update article set article_click = article_click + 1 where article_id = ?'
        await DB.exec(sql,[id])

@@ -1,8 +1,8 @@
 <template>
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
-            <img :src="commentInfo.user_image_url" alt="">
-            <span>{{commentInfo.user_name}}</span>
+            <img :src="commentInfo.user_info.user_image_url" alt="">
+            <span>{{commentInfo.user_info.user_real_name}}</span>
             发表了评论
             <span>{{createTime}}</span>
         </div>

@@ -19,7 +19,7 @@
                         <div class="articleCommentsCount">
                             {{commentCount}}条评论  
                         </div>
-                        <userComment v-for="com in comments" :comment="com" ></userComment>
+                        <userComment @userHeadClick="userHeadClick" v-for="com in comments" :comment="com" ></userComment>
                     </div>
                     <div v-show="comments.length < commentCount" class="loadMoreDiv">
                         <el-button :loading="isLoadingMore" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
