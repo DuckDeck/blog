@@ -305,12 +305,12 @@ select
  a.user_auth ,b.*
  from user a join user_info b on a.user_id = b.user_id`,
    createUserCommentsView:`
-    create view user_comments as 
+     create view user_comments as 
  SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comment_scope' FROM user_comment  union
+comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comment_scope',delete_flag FROM user_comment  union
 SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM 
-user_sub_comment`,
+comment_content,commenter_user_id,comment_time,comment_type,comment_scope,delete_flag FROM 
+user_sub_comment `,
 }
 
 

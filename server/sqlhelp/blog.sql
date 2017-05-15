@@ -307,7 +307,7 @@ CREATE TABLE  IF NOT EXISTS article (
  article_main_img varchar(128) NOT NULL DEFAULT '' COMMENT '文章主要图片',
  article_up tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否置顶:0为否，1为是',
  article_recommend tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否博主推荐:0为否，1为是',
- article_status tinyint(3) NOT NULL DEFAULT 0 COMMENT '文章状态，0为没有发布，也就是草稿，1 为发布',
+ article_status tinyint(3) NOT NULL DEFAULT 0 COMMENT '文章状态，0为没有发布，也就是草稿，1 为发布 5是临时文章',
  PRIMARY KEY (article_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -475,7 +475,7 @@ select
 
  create view user_comments as 
  SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comment_scope' FROM user_comment  union
+comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comment_scope',delete_flag FROM user_comment  union
 SELECT comment_id,comment_target_user_id,comment_target_id,
-comment_content,commenter_user_id,comment_time,comment_type,comment_scope FROM 
+comment_content,commenter_user_id,comment_time,comment_type,comment_scope,delete_flag FROM 
 user_sub_comment 

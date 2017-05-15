@@ -9,6 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
+const Dynamic = require('../model/dynamic')
 module.exports = {
     //管理员获取所有文章
     'GET /api/manage/article/:mId/:token/:index/:size': async (ctx, next) => {
@@ -253,6 +254,8 @@ module.exports = {
         }
         let articleId = result2.data.id
         let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+        let dynamic = new Dynamic(id,articleId,0,1,0,1)
+        await Dynamic.save(dynamic)
         ctx.rest(Result.create(0,{id:articleId}))
      },
 
@@ -266,13 +269,12 @@ module.exports = {
         let id = ctx.params.userId
         let token = ctx.params.token
         let  t = ctx.request.body
-        console.log(t)
         //如果有id，就是自动更新
-        if(t.articleId && ! isNaN(t.articleId)) {
+        if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
             let m =new Article(t.articalTitle,t.articalContent)
             m.category = t.articalSort
             m.userId = id
-            m.articalStatus = t.articleStatus
+            m.articalStatus = 5
             m.article_id = t.articleId
             let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
@@ -286,30 +288,28 @@ module.exports = {
                 console.log(t.articalTags)
                 let result3 = await Tag.saveArticalMap(m.article_id,t.articalTags)
             }
-           
             ctx.rest(Result.create(0,{id:m.article_id}))
         }
         else{
-            // let m =new Article(t.articalTitle,t.articalContent)
-            // m.ip = ctx.request.ip
-            // m.category = t.articalSort
-            // m.userId = id
-            // m.articalStatus = t.articleStatus
-            // m.articleBrief = t.articleBrief || ''
-            // m.articleMainImage = t.articelImage || 'http://localhost:3000/static/img/default.jpg'
-            // let result2 = await Article.save(m)
-            // if(result2.code != 0)
-            // {
-            //     ctx.rest(result1)
-            //     return 
-            // }
-            // console.log(t.articalTags)
-            // let articleId = result2.data.id
-            // if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
-            //     let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
-            // }
-            // ctx.rest(Result.create(0,{id:articleId}))
-            ctx.rest(Result.create(0))
+            let m =new Article(t.articalTitle,t.articalContent)
+            m.ip = ctx.request.ip
+            m.category = t.articalSort
+            m.userId = id
+            m.articalStatus = 5
+            m.articleBrief = ''
+            m.articleMainImage = t.articelImage
+            let result2 = await Article.save(m)
+            if(result2.code != 0)
+            {
+                ctx.rest(result1)
+                return 
+            }
+            console.log(t.articalTags)
+            let articleId = result2.data.id
+            if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
+                let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+            }
+            ctx.rest(Result.create(0,{id:articleId}))
         }
        
      },

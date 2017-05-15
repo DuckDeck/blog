@@ -353,6 +353,9 @@ module.exports = {
           return
        }
        let userInfo = res.data[0]
+       if(!userInfo.article_count){
+           userInfo.article_count = 0
+       }
        res = await Link.userLinks(id)
        if(res.code != 0){
           ctx.rest(res)

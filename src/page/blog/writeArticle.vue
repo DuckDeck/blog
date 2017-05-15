@@ -3,8 +3,9 @@
       <div class="writeClassPage">
             <div class="featureTitle">
              {{previewStatus}}
+             
               <el-button class="editor-btn" type="primary" @click="reviewArticle">{{previewButtonStatus}}</el-button>
-              <el-button class="editor-btn" type="primary" @click="switchMarkDown">{{editStatus}}</el-button>
+              <el-button class="editor-btn" type="primary" v-show="isEdit" @click="switchMarkDown">{{editStatus}}</el-button>
             </div>
             <div style="font-size: 20px;height: 90%" v-show="isEdit">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
@@ -24,11 +25,12 @@
                             </el-button>
                         </el-form-item>
 
-                        <vue-html5-editor v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
-                        <mavonEditor v-show="!editMode" v-model="markDownContent"/>
+                        <vue-html5-editor class="editor" v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
+                        <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
                             <el-button class="editor-btn" type="primary" @click="save('article',0)">保存草稿</el-button>
+                            <i class="fa fa-spinner fa-pulse" v-show="isSaving" style="float: right;margin-top: 7px;"></i>
                             <div style="clear: both">
                             </div>
                         </div>
@@ -48,12 +50,11 @@
     </div>
 </template>
 <script>
-import {getTags,getSorts,saveArticle,tempArticle,articleById} from '../../store/service'
+import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
 import  toMarkdown  from 'to-markdown'
 //wait to do auto save feature
-
     export default {
         data: function(){
             return {
@@ -80,7 +81,9 @@ import  toMarkdown  from 'to-markdown'
                 isEdit:true,
                 needAutoSave:false,
                 editMode:true,
-                userInfo:{}
+                userInfo:{},
+                isSaving:false,
+                previousLetterCount:0,
             }
         },
         async mounted(){
@@ -154,6 +157,39 @@ import  toMarkdown  from 'to-markdown'
             },
             updateData(data){
                 this.content = data
+                this.saveData()
+            },
+            updateMarkdownData(val,render){
+                this.markDownContent =  val;
+                this.content = render
+                this.saveData()
+            },
+            saveMarkdownData(val,render){
+                console.log('start avoke save func')
+                this.markDownContent =  val;
+                this.content = render
+                let self = this
+                self.isSaving = true
+                this.tempSave().then(res=>{
+                    self.isSaving = false
+                    if(res.code == 0){
+                        self.articleId = res.data.id
+                    }
+                })
+                
+            },
+            saveData(){
+                let self = this
+                 if(this.content.length - this.previousLetterCount > 100){
+                    self.isSaving = true
+                    this.tempSave().then(res=>{
+                        self.isSaving = false
+                        self.previousLetterCount = self.content.length
+                        if(res.code == 0){
+                            self.articleId = res.data.id
+                        }
+                    })
+                }
             },
             imgCallBack(result){
                 console.log(result)
@@ -211,9 +247,24 @@ import  toMarkdown  from 'to-markdown'
             cancle(){
                 this.$router.replace('/manage/manageArticle');
             },
-          
+            async tempSave(){
+                let self = this
+                let article = {
+                    articalTitle:self.article.title,
+                    articalSort:self.selectedSortId,
+                    articalTags:self.selectedTags.map((s=>{
+                                    return s.tag_id
+                                })),
+                    articalContent:self.content,
+                    articleId:self.articleId,
+                    articelImage:self.mainImage,
+                }
+                let res = await saveTempArticle(article)
+                if(res.code == 0){
+                    self.articleId = res.data.id
+                }
+            }
         },
-
         computed:{
             editStatus(){
                 return this.editMode ? '切换Markdown': '切换富文本'
@@ -227,6 +278,9 @@ import  toMarkdown  from 'to-markdown'
         },
         components:{
             blogFoot,mavonEditor
+        },
+        beforeDestroy(){
+            this.tempSave()
         }
     }
 </script>
@@ -246,7 +300,10 @@ import  toMarkdown  from 'to-markdown'
     background: #20a0ff;
     color: white;
  }
-
+.editor{
+    min-height: 500px;
+    height: auto;
+}
 .handleArticleClass{
     margin-top: 20px;
     margin-bottom: 30px;
