@@ -88,6 +88,7 @@ import  toMarkdown  from 'to-markdown'
         },
         async mounted(){
             this.userInfo = getStore('userInfo')
+            this.editMode = this.userInfo.user_editor_type == 0
             let res = {}
             let id = parseInt(this.$route.params.id)
             this.articleId = id
@@ -99,6 +100,7 @@ import  toMarkdown  from 'to-markdown'
                     this.selectedTags = articleDetail.tags
                     this.selectedSortId = articleDetail.article_sort_id
                     this.content = articleDetail.article_content
+                    this.markDownContent = toMarkdown(this.content)
                     this.articleId = articleDetail.article_id
                 }
             }
@@ -110,6 +112,7 @@ import  toMarkdown  from 'to-markdown'
                     this.selectedTags = articleDetail.tags
                     this.selectedSortId = articleDetail.article_sort_id
                     this.content = articleDetail.article_content
+                    this.markDownContent = toMarkdown(this.content)
                     this.articleId = articleDetail.article_id
                 }
             }
@@ -164,31 +167,19 @@ import  toMarkdown  from 'to-markdown'
                 this.content = render
                 this.saveData()
             },
-            saveMarkdownData(val,render){
-                console.log('start avoke save func')
+            async saveMarkdownData(val,render){
                 this.markDownContent =  val;
                 this.content = render
-                let self = this
-                self.isSaving = true
-                this.tempSave().then(res=>{
-                    self.isSaving = false
-                    if(res.code == 0){
-                        self.articleId = res.data.id
-                    }
-                })
-                
+                this.isSaving = true
+                await this.tempSave()
+                this.isSaving = false
             },
-            saveData(){
-                let self = this
+            async saveData(){
                  if(this.content.length - this.previousLetterCount > 100){
-                    self.isSaving = true
-                    this.tempSave().then(res=>{
-                        self.isSaving = false
-                        self.previousLetterCount = self.content.length
-                        if(res.code == 0){
-                            self.articleId = res.data.id
-                        }
-                    })
+                    this.isSaving = true
+                    await this.tempSave()
+                    this.isSaving = false
+                    this.previousLetterCount = self.content.length
                 }
             },
             imgCallBack(result){
