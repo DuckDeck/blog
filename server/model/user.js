@@ -6,7 +6,7 @@ const sqls = {
     checkLogin:'select * from user where user_name = ?',
     userInfoById:`select  user_id , user_name, user_real_name , user_phone , user_gender , 
     user_qq  , user_email, user_address, user_mark,user_birthday,user_description,user_image_url, 
-    user_last_update_time , user_says ,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id
+    user_last_update_time , user_says ,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id and article_status = 1
                group by user_id) as article_count,(select count(comment_id) from user_comments where user_comments.commenter_user_id = user_detail.user_id
             ) as comment_count from user_detail where user_id = ?`,
     userInfoByIds:'SELECT  user_id,user_name,user_real_name,user_gender,user_image_url from user_detail where user_id in',

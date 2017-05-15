@@ -10,7 +10,7 @@ const DB = require('../sqlhelp/mysql')
 module.exports = {
     'GET /api/index': async (ctx, next) => {
 
-        let sql = 'select article_id,article_name,article_main_img,article_brief from article where article_up > 0 order by article_up desc limit 2'
+        let sql = 'select article_id,article_name,article_main_img,article_brief from article where article_up > 0 and article_status = 1 order by article_up desc limit 2'
         let res = await DB.exec(sql)
         let result = Result.create(0)
         if(res.code != 0){
@@ -18,11 +18,22 @@ module.exports = {
             return
         }
         result.data.top  = res.data
+        sql = 'select count(article_id) as count from article where article_up = 0 and article_status = 1'
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
         sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                article.article_id) as comment_count from article where article_up = 0 order by article_release_time desc limit 10`
+                article.article_id) as comment_count from article where article_up = 0 and article_status = 1 order by article_release_time desc limit 10`
         res = await DB.exec(sql)
         if(res.code != 0){
             ctx.rest(res)
@@ -108,6 +119,7 @@ module.exports = {
             }
             return s
         })
+        result.count = count
         ctx.rest(result)
      
      },
@@ -123,7 +135,7 @@ module.exports = {
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                article.article_id) as comment_count from article where article_up = 0 order by article_release_time desc limit ?,?`
+                article.article_id) as comment_count from article where article_up = 0 and article_status = 1 order by article_release_time desc limit ?,?`
         let res = await DB.exec(sql,[index * size, size])
         if(res.code != 0){
             ctx.rest(res)
@@ -218,8 +230,8 @@ async function searchArticle(keyword,index,size){
     sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
-                as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                article.article_id) as comment_count from article where article_up = 0 and (article_name like '%`+ keyword +`%' or article_brief like '%`+ keyword +`%')
+                as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id = 
+                article.article_id) as comment_count from article where article_up = 0 and (article_name like '%`+ keyword +`%' or article_brief like '%`+ keyword +`%') and article_status = 1
                   order by article_release_time desc limit ?,?`
     res = await DB.exec(sql,[index * size,size])
     if(res.code != 0){

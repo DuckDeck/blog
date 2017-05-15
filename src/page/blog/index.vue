@@ -37,7 +37,7 @@
                   
                </div>
                <!--这里面以添加加载细节-->
-               <div class="loadMore" @click="loadMore" v-show="canLoadMore">
+               <div class="loadMore" @click="loadMore" v-show="articles.length < articlesCount">
                    {{loadMoreWord}}
                </div>
            </div>
@@ -111,7 +111,7 @@ import blogFoot from './com/blogFoot.vue'
             newComment:[],
             authors:[],
             pageIndex:0,
-            canLoadMore:true,
+            articlesCount:0,
             loadMoreWord:'加载更多...',
             swiperOption: {
                 pagination: '.swiper-pagination',
@@ -142,6 +142,7 @@ import blogFoot from './com/blogFoot.vue'
                 self.newComment = res.data.newComment
                 self.authors = res.data.authors
                 self.pageIndex = 1
+                self.articlesCount = res.count
             }
             else{
                 toast(self,res.cMsg)
@@ -200,8 +201,7 @@ import blogFoot from './com/blogFoot.vue'
 
             if(res.code == 0){
                 if(res.data.length == 0){
-                    toast(this,'已经全部加载完')
-                    this.canLoadMore = false
+                    toast(this,'已经全部加载完') 
                 }
                 else{
                     this.loadMoreWord = '加载更多...'
