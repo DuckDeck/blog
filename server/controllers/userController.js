@@ -142,7 +142,7 @@ module.exports = {
         ctx.rest(Result.create(0))
       },
     
-   //todo active route need change add the user id to tell the active is need or not
+    //todo active route need change add the user id to tell the active is need or not
     'GET /api/active/:code': async (ctx, next) => {
         let code = ctx.params.code
         let sql = `select user_id from user where user_token = ?`
@@ -369,15 +369,32 @@ module.exports = {
        ctx.rest(Result.create(0,userInfo))
      },
     
-    'GET /api/userdynamic/:userId': async (ctx, next) => {
+    'GET /api/userdynamic/:userId/:index/:size': async (ctx, next) => {
+       let pageResult = Check.checkPage(ctx)
+       if(pageResult){
+           ctx.rest(pageResult)
+           return
+       }
        let id = ctx.params.userId
-       let res = await Dynamic.userDynamic(id)
+       let index = parseInt(ctx.params.index)
+       let size = parseInt(ctx.params.size)
+       let sql = `select count(dynamic_id) as count from user_dynamic where dynamic_user_id = ?`
+       let res = await DB.exec(sql,[id])
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
+       if(res.data[0].count == 0){
+           return ctx.rest(Result.createCount(0,0,[]))
+           return
+       }
+       let count = res.data[0].count
+       res = await Dynamic.userDynamic(id,index,size)
        if(res.code != 0){
          ctx.rest(res)
          return
        }
        let dynamics = res.data
-       
        let sqlSubCommendIds = dynamics.map(s=>{
            if(s.dynamic_type_id == 7){
                return s.dynamic_target_id
@@ -402,7 +419,6 @@ module.exports = {
            }
            return 0
        })
-       let sql = ``
        if(sqlSubCommendIds.length > 0){
             sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
                    comment_time,comment_type,comment_scope FROM user_sub_comment where comment_id in (` + sqlSubCommendIds.join(',') + `)`
@@ -495,14 +511,32 @@ module.exports = {
        }
 
 
-       ctx.rest(Result.create(0,dynamics))
+       ctx.rest(Result.createCount(0,count,dynamics))
      },
 
 
-    'GET /api/usercomment/:userId': async (ctx, next) => {
+    'GET /api/usercomment/:userId/:index/:size': async (ctx, next) => {
+       let pageResult = Check.checkPage(ctx)
+       if(pageResult){
+           ctx.rest(pageResult)
+           return
+       }
+       let index = parseInt(ctx.params.index)
+       let size = parseInt(ctx.params.size)
        let id = ctx.params.userId
-       let sql = 'select * from user_comments where commenter_user_id = ' + id + ' order by comment_time desc limit 10'
-       let res = await DB.exec(sql)
+       let sql = `select count(comment_id) as count from user_comments where commenter_user_id = ?  and delete_flag = 0`
+       let res = await DB.exec(sql,[id])
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
+       if(res.data[0].count == 0){
+           ctx.rest(Result.createCount(0,0,[]))
+           return
+       }
+       let count = res.data[0].count
+       sql = 'select * from user_comments where commenter_user_id = ? and delete_flag = 0 order by comment_time desc limit ?,?'
+       res = await DB.exec(sql,[id,index*size,size])
        if(res.code != 0){
            ctx.rest(res)
            return
@@ -546,7 +580,7 @@ module.exports = {
                 com.target = bigCom
             }
        }
-       ctx.rest(Result.create(0,comments))
+       ctx.rest(Result.createCount(0,count,comments))
      },
 
 

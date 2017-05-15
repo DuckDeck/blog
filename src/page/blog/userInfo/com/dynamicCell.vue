@@ -1,8 +1,8 @@
 <template>
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
-            <img :src="dynamicInfo.user_image_url" alt="">
-            <span>{{dynamicInfo.user_name}}</span>
+            <img :src="dynamicInfo.user_info.user_image_url" alt="">
+            <span>{{dynamicInfo.user_info.user_real_name}}</span>
             <span>{{dynamicInfo.dynamic_type_name}}</span>
             <span>{{createTime}}</span>
         </div>
@@ -44,6 +44,7 @@
     },
     computed:{
         createTime(){
+
             return formatTime(new Date(this.dynamicInfo.dynamic_oper_time))
         }
     }

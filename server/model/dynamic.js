@@ -59,8 +59,8 @@ class Dynamic{
        dynamic.dynamic_type_id,dynamic.dynamic_type_name,dynamic.dynamic_oper_type,dynamic.dynamic_oper_name,dynamic.dynamic_oper_time])
     }
 
-    static userDynamic(id,limit = 0,size = 10){
-        return db.exec(sqls.dynamicByUserId,[id,limit,size])
+    static userDynamic(id,index = 0,size = 10){
+        return db.exec(sqls.dynamicByUserId,[id,index * size,size])
     }
 }
 module.exports = Dynamic

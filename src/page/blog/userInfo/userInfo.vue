@@ -30,10 +30,16 @@
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
                             <dynamicCell v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
+                            <div v-show="dynamics.length < dynamicsCount" class="loadMoreDiv">
+                                <el-button :loading="isLoadingDynamic" @click="loadMoreArticle" class="loadmoreButton">加载更多动态...</el-button>
+                            </div>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
                             <userCommentCell v-for="comment in comments" :commentInfo = "comment"></userCommentCell>
+                            <div v-show="comments.length < commentsCount" class="loadMoreDiv">
+                                <el-button :loading="isLoadingComment" @click="loadMoreArticle" class="loadmoreButton">加载更多评论...</el-button>
+                            </div>
                         </el-tab-pane>
                         
                     </el-tabs>
@@ -87,6 +93,8 @@ import userCommentCell from './com/userCommentCell.vue'
           commentsCount:0,
           activeName:'articles',
           isLoadingArticle:false,
+          isLoadingDynamic:false,
+          isLoadingComment:false,
           userId:0,
       }
     },
@@ -107,30 +115,40 @@ import userCommentCell from './com/userCommentCell.vue'
            }
        },
        async getUserArticles(id){
+            this.isLoadingArticle = true
             let res = await articlesByUser(id,this.dynamics.length / 10,10)
+            this.isLoadingArticle = false
             if(res.code == 0){
                 this.articlesCount = res.count
                 this.articles = this.articles.concat(res.data)
             }
        },
        async getUserDynamics(id){
+            let self = this
+            this.isLoadingDynamic = true
             let res = await getDynamics(this.userInfo.user_id,this.dynamics.length / 10,10)
+            this.isLoadingDynamic = false
             if(res.code == 0){
                 this.dynamicsCount = res.count
-                this.dynamics = this.dynamics.concat(res.data)
+                this.dynamics = this.dynamics.concat(res.data.map(s=>{
+                  s.user_info = self.userInfo
+                  return s
+                }))
             }
        },
        async getComments(id){
            let self = this
-             let res = await getUserComments(this.userInfo.user_id,this.dynamics.length / 10,10)
-             if(res.code == 0){
-                 this.commentsCount = res.count
-                 this.comments = this.comments.concat(res.data.map(s=>{
-                    s.user_info = self.userInfo
-                    return s
-                }))
-                console.log(this.comments)
-             }
+           this.isLoadingComment = true
+           let res = await getUserComments(this.userInfo.user_id,this.dynamics.length / 10,10)
+           this.isLoadingComment = false
+           if(res.code == 0){
+               this.commentsCount = res.count
+               this.comments = this.comments.concat(res.data.map(s=>{
+                  s.user_info = self.userInfo
+                  return s
+              }))
+             
+           }
        },
        writeArticle(){
             this.$router.push('/writeArticle/0')
