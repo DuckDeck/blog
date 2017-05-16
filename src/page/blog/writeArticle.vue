@@ -2,10 +2,12 @@
     <div class="container">
       <div class="writeClassPage">
             <div class="featureTitle">
-             {{previewStatus}}
+             <span>{{previewStatus}}</span>
              
-              <el-button class="editor-btn" type="primary" @click="reviewArticle">{{previewButtonStatus}}</el-button>
-              <el-button class="editor-btn" type="primary" v-show="isEdit" @click="switchMarkDown">{{editStatus}}</el-button>
+              <div>
+                  <el-button class="editor-btn" type="primary" @click="reviewArticle">{{previewButtonStatus}}</el-button>
+                  <el-button class="editor-btn" type="primary" v-show="isEdit" @click="switchMarkDown">{{editStatus}}</el-button>
+              </div>
             </div>
             <div style="font-size: 20px;height: 90%" v-show="isEdit">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
@@ -28,8 +30,8 @@
                         <vue-html5-editor class="editor" v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
                         <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
-                            <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
-                            <el-button class="editor-btn" type="primary" @click="save('article',0)">保存草稿</el-button>
+                            <el-button class="editor-btn" type="primary"  @click="save('article',1)">发布文章</el-button>
+                            <el-button class="editor-btn" type="primary" v-show="articleId == 0" @click="tempSave(false)">保存草稿</el-button>
                             <i class="fa fa-spinner fa-pulse" v-show="isSaving" style="float: right;margin-top: 7px;"></i>
                             <div style="clear: both">
                             </div>
@@ -169,32 +171,28 @@ import  toMarkdown  from 'to-markdown'
             },
             async saveMarkdownData(val,render){
                 this.markDownContent =  val;
-                this.content = render
-                this.isSaving = true
-                await this.tempSave()
-                this.isSaving = false
+                this.content = render            
+                await this.tempSave(false)
             },
             async saveData(){
                  if(this.content.length - this.previousLetterCount > 100){
-                    this.isSaving = true
                     await this.tempSave()
-                    this.isSaving = false
-                    this.previousLetterCount = self.content.length
+                    this.previousLetterCount = this.content.length
                 }
             },
             imgCallBack(result){
-                console.log(result)
                 if(result.code == 0){
                     if(this.mainImage == ''){
                         this.mainImage = result.data
                     }
-                    this.content = this.content +  "<div style='text-align:center'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></div>"
+                    this.content = this.content +  "<span style='text-align:center;display:block'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></span>"
+
                 }
                 else{
                     toast(this,result.cMsg)
                 }
             },
-            save(formName,mode){
+            save(formName){
                 let self = this;
                 if(self.selectedTags.length <= 0){
                     toast(self,'你没有选择文章标签')
@@ -204,6 +202,7 @@ import  toMarkdown  from 'to-markdown'
                     toast(self,'你没有选择文章类型')
                     return
                 }
+                
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
@@ -214,14 +213,13 @@ import  toMarkdown  from 'to-markdown'
                                             return s.tag_id
                                         })),
                             articalContent:self.content,
-                            articleStatus:mode,
+                            articleStatus:1,
                             articleId:self.articleId,
                             articelImage:self.mainImage,
                             articleBrief:filterContent,
                         }
                         saveArticle(article).then(function(data){
                             if(data.code == 0){
-                               
                                toast(self,'保存成功')
                                let id = data.data.id
                                self.$router.push('/article/' + id)
@@ -238,7 +236,9 @@ import  toMarkdown  from 'to-markdown'
             cancle(){
                 this.$router.replace('/manage/manageArticle');
             },
-            async tempSave(){
+            async tempSave(auto = true){
+                if(this.articleId > 0)
+                    return
                 let self = this
                 let article = {
                     articalTitle:self.article.title,
@@ -250,9 +250,14 @@ import  toMarkdown  from 'to-markdown'
                     articleId:self.articleId,
                     articelImage:self.mainImage,
                 }
+                this.isSaving = true
                 let res = await saveTempArticle(article)
+                this.isSaving = false
                 if(res.code == 0){
                     self.articleId = res.data.id
+                    if(!auto){
+                        toast(this,"保存成功")
+                    }
                 }
             }
         },
@@ -271,12 +276,18 @@ import  toMarkdown  from 'to-markdown'
             blogFoot,mavonEditor
         },
         beforeDestroy(){
-            this.tempSave()
+            if(this.articleId == 0)
+               this.tempSave()
         }
     }
 </script>
 
 <style scoped>
+.featureTitle{
+    display: flex;
+    justify-content: space-between;
+    line-height: 36px;
+}
 .writeClassPage{
     background: white;
     padding: 20px;
@@ -306,4 +317,11 @@ import  toMarkdown  from 'to-markdown'
 .previecArticle{
     min-height: 665px;
 }
+@media (max-width:500px){
+.featureTitle{
+    
+    flex-direction: column;
+}
+    
+} 
 </style>

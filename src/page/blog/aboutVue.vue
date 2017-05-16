@@ -30,7 +30,7 @@
                         前端:
                         <ul>
                             <li>
-                                Vue2.x vue-router 和 Element UI 
+                                Vue2.x , vue-router 和 Element UI 
                             </li>
                             <li>
                                 使用vue-html5-editor实现富文本编辑,使用mavon-editor实现Markdown编辑
@@ -54,6 +54,12 @@
                         <el-checkbox checked label="查看其他作者信息和文章" ></el-checkbox>
                         <el-checkbox checked label="个性设置" ></el-checkbox>
                         <el-checkbox checked label="后台管理员登录" ></el-checkbox>
+                    </div>
+                    <div class="unCompletedFeatureDiv">
+                        存在问题
+                        <el-checkbox style="margin-left: 15px;"  label="富文本不能上传图片到server" ></el-checkbox>
+                        <el-checkbox  label="富文本和markdown不能完全正确转换" ></el-checkbox>
+                        
                     </div>
                     <div class="unCompletedFeatureDiv">
                         未完成功能
