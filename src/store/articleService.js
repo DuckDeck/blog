@@ -27,8 +27,8 @@ export const articlesByUser = function(user_id,index = 0,size = 10){
     return setpromiseGet(url)
 }
 
-export const saveArticle = function(article){
-    if(article.articleId > 0){
+export const saveArticle = function(article,isNew){
+    if(!isNew){
         const url = HostName +  'article/'+ article.articleId + '/'+ userId + '/' + createToken()
         return setpromisePut(url,article)
     }

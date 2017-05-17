@@ -31,7 +31,7 @@
                         <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary"  @click="save('article',1)">发布文章</el-button>
-                            <el-button class="editor-btn" type="primary" v-show="articleId == 0" @click="tempSave(false)">保存草稿</el-button>
+                            <el-button class="editor-btn" type="primary" v-show="isNew" @click="tempSave(false)">保存草稿</el-button>
                             <i class="fa fa-spinner fa-pulse" v-show="isSaving" style="float: right;margin-top: 7px;"></i>
                             <div style="clear: both">
                             </div>
@@ -80,6 +80,7 @@ import  toMarkdown  from 'to-markdown'
                 },
                 mainImage:'',
                 articleId:0,
+                isNew:false,//是不是新文章  
                 isEdit:true,
                 needAutoSave:false,
                 editMode:true,
@@ -93,6 +94,9 @@ import  toMarkdown  from 'to-markdown'
             this.editMode = this.userInfo.user_editor_type == 0
             let res = {}
             let id = parseInt(this.$route.params.id)
+            if(id == 0){
+                this.isNew = true
+            }
             this.articleId = id
             if( id == 0){
                 res = await tempArticle()
@@ -218,8 +222,9 @@ import  toMarkdown  from 'to-markdown'
                             articelImage:self.mainImage,
                             articleBrief:filterContent,
                         }
-                        saveArticle(article).then(function(data){
+                        saveArticle(article,self.isNew).then(function(data){
                             if(data.code == 0){
+                                self.isNew = false
                                toast(self,'保存成功')
                                let id = data.data.id
                                self.$router.push('/article/' + id)
@@ -237,24 +242,27 @@ import  toMarkdown  from 'to-markdown'
                 this.$router.replace('/manage/manageArticle');
             },
             async tempSave(auto = true){
-                if(this.articleId > 0)
+                if(!this.isNew)
+                {
                     return
-                let self = this
+                }
+                let filterContent  = this.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
                 let article = {
-                    articalTitle:self.article.title,
-                    articalSort:self.selectedSortId,
-                    articalTags:self.selectedTags.map((s=>{
+                    articalTitle:this.article.title,
+                    articalSort:this.selectedSortId,
+                    articalTags:this.selectedTags.map((s=>{
                                     return s.tag_id
                                 })),
-                    articalContent:self.content,
-                    articleId:self.articleId,
-                    articelImage:self.mainImage,
+                    articalContent:this.content,
+                    articleId:this.articleId,
+                    articelImage:this.mainImage,
+                    articleBrief:filterContent,
                 }
                 this.isSaving = true
                 let res = await saveTempArticle(article)
                 this.isSaving = false
                 if(res.code == 0){
-                    self.articleId = res.data.id
+                    this.articleId = res.data.id
                     if(!auto){
                         toast(this,"保存成功")
                     }
@@ -276,8 +284,7 @@ import  toMarkdown  from 'to-markdown'
             blogFoot,mavonEditor
         },
         beforeDestroy(){
-            if(this.articleId == 0)
-               this.tempSave()
+             this.tempSave()
         }
     }
 </script>

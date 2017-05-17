@@ -29,7 +29,7 @@
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
-                            <dynamicCell v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
+                            <dynamicCell @articleTitleClick="articleTitleClick" v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
                             <div v-show="dynamics.length < dynamicsCount" class="loadMoreDiv">
                                 <el-button :loading="isLoadingDynamic" @click="loadMoreArticle" class="loadmoreButton">加载更多动态...</el-button>
                             </div>
@@ -166,6 +166,9 @@ import userCommentCell from './com/userCommentCell.vue'
                }
             break;
           }       
+       },
+       articleTitleClick(id){
+             this.$router.push('/article/'+ id)
        },
        loadMoreArticle(){
          this.getUserArticles(this.userId)

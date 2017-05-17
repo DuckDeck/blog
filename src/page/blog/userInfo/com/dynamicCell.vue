@@ -6,12 +6,12 @@
             <span>{{dynamicInfo.dynamic_type_name}}</span>
             <span>{{createTime}}</span>
         </div>
-        <div class="dynamicComment" v-show = "dynamicInfo.dynamic_type_id == 4">
+        <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 4">
            <div class="dynamicCommentContent">
                {{dynamicInfo.selfObject.comment_content}}
            </div>
            <div class="dynamicCommentArticleInfo">
-               <div class="articleCellContentTitle" >
+               <div class="articleCellContentTitle" @click="togoArticle(dynamicInfo.targetObject.article_id)" >
                     {{dynamicInfo.targetObject.article_name}}
                </div>
                 <p style="margin-bottom: 0rem;margin-top: 10px;">{{dynamicInfo.targetObject.article_brief.slice(0,100)}}</p>  
@@ -22,6 +22,21 @@
          
                </div>
              </div>
+               
+           </div>
+           <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 1">
+            <div class="articleCellContent">
+            <div >
+               <span @click="togoArticle(dynamicInfo.selfObject.article_id)" class="articleCellContentTitle" v-html= "dynamicInfo.selfObject.article_name" ></span>
+               <p style="margin-bottom: 0rem;margin-top: 10px;" v-html = "dynamicInfo.selfObject.article_brief.slice(0,100)" ></p>
+               <div class="articleTailInfo">
+                <span class="articleTailSortName">{{dynamicInfo.selfObject.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
+                    {{dynamicInfo.selfObject.article_click}}  <i class="fa fa-comment"  aria-hidden="true"></i> {{dynamicInfo.selfObject.comment_count}} 
+                </div>
+            </div>
+            
+        </div>
+            
                
            </div>
         </div>
@@ -40,11 +55,12 @@
          }
     },
     methods:{
-        
+        togoArticle(id){
+            this.$emit('articleTitleClick',id)
+        }
     },
     computed:{
         createTime(){
-
             return formatTime(new Date(this.dynamicInfo.dynamic_oper_time))
         }
     }

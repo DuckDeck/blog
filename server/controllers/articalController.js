@@ -242,9 +242,10 @@ module.exports = {
         m.ip = ctx.request.ip
         m.category = t.articalSort
         m.userId = id
-        m.articalStatus = t.articleStatus
-        m.articleBrief = t.articleBrief || ''
+        m.articalStatus = 1
+        m.articleBrief = t.articleBrief
         m.articleMainImage = t.articelImage
+
         // m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
         let result2 = await Article.save(m)
         if(result2.code != 0)
@@ -274,8 +275,10 @@ module.exports = {
             let m =new Article(t.articalTitle,t.articalContent)
             m.category = t.articalSort
             m.userId = id
+            m.ip = ctx.request.ip
             m.articalStatus = 5
             m.article_id = t.articleId
+            m.articleBrief = t.articleBrief
             let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
             {
@@ -296,7 +299,8 @@ module.exports = {
             m.category = t.articalSort
             m.userId = id
             m.articalStatus = 5
-            m.articleBrief = ''
+            m.ip = ctx.request.ip
+            m.articleBrief = t.articleBrief
             m.articleMainImage = t.articelImage
             let result2 = await Article.save(m)
             if(result2.code != 0)
@@ -325,7 +329,7 @@ module.exports = {
        let token = ctx.params.token
        let articleId = ctx.params.articleId
        let  t = ctx.request.body
-
+       
         if(!t.articalTitle || !t.articalTitle.trim()) {
             ctx.rest(Result.create(10,{msg:'miss articalTitle'})) 
             return
@@ -343,10 +347,13 @@ module.exports = {
             return
         }
         let m =new Article(t.articalTitle,t.articalContent)
-        m.category = t.articalSort
-        m.userId = id
         m.article_id = articleId
-        m.articalStatus = t.articleStatus
+        m.category = t.articalSort
+        m.ip = ctx.request.ip
+        m.userId = id
+        m.articalStatus = 1
+        m.articleBrief = t.articleBrief
+        m.articleMainImage = t.articelImage
         let result2 = await Article.updateAtricle(m)
         if(result2.code != 0)
         {
