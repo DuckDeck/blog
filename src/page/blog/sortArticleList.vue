@@ -12,6 +12,9 @@
             </div>
             <div class="blogSortArticleList">
                  <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
+                 <div v-show="articles.length < articleCount" class="loadMoreDiv">
+                    <el-button :loading="isLoadingArticles" @click="loadMoreArticle(false)" class="loadmoreButton">加载更多文章...</el-button>
+                </div>
             </div>
         </div>
        <upToTop></upToTop>
@@ -33,7 +36,9 @@ import articleCell from './userInfo/com/articleCell.vue'
             articles:[],
             selectedSort:{},
             userId:0,
-            sortId:0           
+            sortId:0,
+            articleCount:0,   
+            isLoadingArticles:false,       
       }
     },
    async mounted(){ 
@@ -52,7 +57,11 @@ import articleCell from './userInfo/com/articleCell.vue'
         }
         res = await articleListWithSort(this.sortId)
         if(res.code == 0){
-            this.articles = res.data
+            this.articles = res.data.map(s=>{
+                s.user_info = this.userInfo
+                return s
+            })
+            this.articleCount = res.count
         }
         else{
             toast(this,res.sMsg)
@@ -73,18 +82,41 @@ import articleCell from './userInfo/com/articleCell.vue'
        async selectSort(sort){
            this.selectedSort = sort
            localStorage.sortId = this.selectedSort.sort_article_id
-          let  res = await articleListWithSort(this.selectedSort.sort_article_id)
-          if(res.code == 0){
-               this.articles = res.data
-          }
-          else{
-            toast(this,res.sMsg)
-          }
+           this.loadMoreArticle(true)
        },
-       checkMore(){
+        checkMore(){
             this.$router.push('/articleList')
         },
-        
+        async loadMoreArticle(isNew){
+            if(!isNew){
+                this.isLoadingArticles = true
+            }
+            else{
+                this.articles = []
+            }
+            let  res = await articleListWithSort(this.selectedSort.sort_article_id,this.articles.length / 10,10)
+            this.isLoadingArticles = false
+            if(res.code == 0){
+                if(isNew){
+                    this.articles = res.data.map(s=>{
+                        s.user_info = this.userInfo
+                        return s
+                    })
+                     console.log(" console.log(this.articles) console.log(this.articles)")
+                }
+                else{
+                    this.articles = this.articles.concat(res.data.map(s=>{
+                        s.user_info = this.userInfo
+                        return s
+                    }))
+                    console.log(this.articles)
+                }
+                this.articleCount = res.count
+            }
+            else{
+                toast(this,res.sMsg)
+            }
+        }
         
     },
     computed:{
@@ -117,12 +149,13 @@ import articleCell from './userInfo/com/articleCell.vue'
     margin-top: 10px;
 }
 .selectedSortClass{
-     background: #20a0ff;
+    background: lightslategray;
     color: white;
 }
 
 .blogSortArticleList{
 margin-top: 30px;
 padding: 0px 20px;
+padding-bottom: 40px;
 }
 </style>

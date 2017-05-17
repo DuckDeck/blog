@@ -438,15 +438,31 @@ module.exports = {
         let index = parseInt(ctx.params.index)
         let size = parseInt(ctx.params.size)
         let id = ctx.params.sortId
-        let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
+
+        let sql = `select count(article_id) as count from article where  article_sort_id = ` + id + ` and article_status = 1`
+        if(id == 0){
+            sql = `select count(article_id) as count from article where  article_status = 1`
+        }
+        let res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+         sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                  as article_sort_name ,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article where article_sort_id = ` + id + ` order by article_release_time desc limit ?,?`
+                 article.article_id) as comment_count from article where article_sort_id = ` + id + ` and article_status = 1 order by article_release_time desc limit ?,?`
         if(id == 0){
             sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,(select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                  as article_sort_name ,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article  order by article_release_time desc limit ?,?`
+                 article.article_id) as comment_count from article where article_status = 1  order by article_release_time desc limit ?,?`
         }
-        let res = await DB.exec(sql,[index * size,size])
+        res = await DB.exec(sql,[index * size,size])
+        res.count = count
         ctx.rest(res)
      },
 

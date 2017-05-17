@@ -54,14 +54,20 @@
                         </div>
                     </div>
                     <div class="userLinks">
-                        <i  class="fa fa-link userLink" v-for="link in userInfo.links" aria-hidden="true"></i>
+                         <div style="color: #888">
+                            我的网站
+                        </div>
+                        <div>
+                            <a class="mylink" :href="link.link_url" v-for="link in userInfo.links" >{{link.link_name}}</a> 
+                        </div>
+                        
                     </div>
                     <div class="mySorts">
                         <div style="color: #888">
                             {{isMine == true ? '我' : '他'}}的分类
                         </div>
                         <div class="mySortsList">
-                            <div v-for="sort in userInfo.sorts">
+                            <div v-for="sort in userInfo.sorts" @click="gotoSort(sort)">
                                 {{sort.sort_article_name}}
                             </div>
                         </div>
@@ -172,8 +178,11 @@ import userCommentCell from './com/userCommentCell.vue'
        },
        loadMoreArticle(){
          this.getUserArticles(this.userId)
+       },
+       gotoSort(sort){
+           localStorage.sortId = sort.sort_article_id
+           this.$router.push('/sortArticleList/' + sort.user_id)
        }
-        
     },
     components:{
         upToTop,blogFoot,articleCell,dynamicCell,userCommentCell
@@ -256,11 +265,13 @@ import userCommentCell from './com/userCommentCell.vue'
     margin-top: 20px;
     margin-bottom: 10px;
 }
-.userLink{
-    margin: 0px 3px;
+.mylink{
+    margin-right: 7px;
+    color: #20a0ff !important;
 }
-.userLink:hover{
+.mylink:hover{
     cursor: pointer;
+    text-decoration: underline !important;
 }
 .mySorts{
     border-top: 1px sol
