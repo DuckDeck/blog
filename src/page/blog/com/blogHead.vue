@@ -54,6 +54,15 @@
                     this.userInfo = getStore('userInfo')
                 }
             }
+            let self = this
+            window.addEventListener("afterSetItemEvent", function(e) {
+                // 检测是否为需要监听的key值
+                     if(getStore('userInfo')){
+                       let u  = getStore('userInfo')
+                       self.userInfo = u
+                   }
+                
+            });
         },
         methods:{
             login(){

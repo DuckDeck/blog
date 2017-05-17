@@ -59,7 +59,6 @@ global.moment = function(timestamp){
     else{
         return formatTime(time)
     }
-    
 }
 global.isEmpty = function(obj){
     for (var key in obj) {
@@ -208,7 +207,22 @@ class Tool{
 
 }
 
-
+global.register = function(){
+     var orignalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key,newValue){
+        let oldValue = localStorage.getItem(key)
+        var beforeSetItemEvent = new Event("beforeSetItemEvent");
+        beforeSetItemEvent.oldValue = oldValue
+        beforeSetItemEvent.newValue = newValue;
+        window.dispatchEvent(beforeSetItemEvent);
+        orignalSetItem.apply(this,arguments);
+         var afterSetItemEvent = new Event("afterSetItemEvent");
+        afterSetItemEvent.newValue = newValue;
+        afterSetItemEvent.oldValue = oldValue
+        window.dispatchEvent(afterSetItemEvent);
+    }
+  
+}
 
 global.toast = function(vue,message){
     if(globalVue != vue){

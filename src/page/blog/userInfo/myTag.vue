@@ -46,6 +46,9 @@
 
             <div>
                 <articleCell :articleInfo = "article" v-for="article in articles "></articleCell>
+                 <div v-show="articles.length < articleCount" class="loadMoreDiv">
+                    <el-button :loading="isLoadingArticles" @click="loadMoreArticle(false)" class="loadmoreButton">加载更多文章...</el-button>
+                </div>
             </div>
 
         </div>
@@ -77,7 +80,8 @@ import articleCell from './com/articleCell.vue'
                 userId:0,
                 articles:[],
                 currentSort:"",
-                currentTag:""
+                currentTag:"",
+                articleCount:0,
             }
         },
        async mounted(){

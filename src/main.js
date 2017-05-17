@@ -38,7 +38,7 @@ Vue.use(VueHtml5Editor,{
     },
 
 });
-
+register()
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
     FastClick.attach(document.body);

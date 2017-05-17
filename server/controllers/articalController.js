@@ -495,7 +495,10 @@ module.exports = {
                 return
             }
         }
-        
+         //这里的分布有点问题,要加上分布功能要重新设计这个接口，等待做
+        //let sql = `select article_id from article where article_sort_id = ` + sortId + ` and user_id = `+ userId + ``
+
+
         let sql = `select article_id,article_name,article_create_time,article_brief,article_main_img,article_click,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                 as article_sort_name ,(select count(comment_id) from user_comment where user_comment.comment_target_id =
