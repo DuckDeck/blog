@@ -141,7 +141,6 @@ import {allArticle,releaseArticle} from  '../../store/manageService'
                     return
                 }
                 let res = await releaseArticle(status,ids)
-                console.log(res)
                 if(res.code == 0){
                     this.loadData(this.pageIndex - 1,10)
                 }

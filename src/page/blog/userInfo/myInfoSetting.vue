@@ -151,7 +151,6 @@
                 if(!this.isValidating){
                     this.isValidating = true
                     checkUserName(value).then(res=>{
-                        console.log(res)
                         if(res.code == 0){
                             callback()
                         }

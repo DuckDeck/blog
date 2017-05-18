@@ -60,7 +60,6 @@ import { Loading } from 'element-ui'
                 if(!this.isValidating){
                     this.isValidating = true
                     checkEmail(value).then(res=>{
-                        console.log(res)
                         if(res.code == 0){
                             callback()
                         }

@@ -288,7 +288,6 @@ module.exports = {
             
             await Tag.deleteTagByArticleId(m.article_id)
             if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
-                console.log(t.articalTags)
                 let result3 = await Tag.saveArticalMap(m.article_id,t.articalTags)
             }
             ctx.rest(Result.create(0,{id:m.article_id}))
@@ -308,7 +307,6 @@ module.exports = {
                 ctx.rest(result1)
                 return 
             }
-            console.log(t.articalTags)
             let articleId = result2.data.id
             if(t.articalTags && Tool.getType(t.articalTags) == "Array"){
                 let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
@@ -398,7 +396,6 @@ module.exports = {
        let newPath =    path.join(__dirname,'../static/img/' + newFileName)
        fs.renameSync(oldPath,newPath)
        let urlPath = "http://localhost:3000/static/img/" + newFileName
-       console.log(urlPath)
        ctx.rest(Result.create(0,urlPath))
      },
 

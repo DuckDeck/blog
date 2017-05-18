@@ -125,7 +125,6 @@ import blogFoot from './com/blogFoot.vue'
     mounted(){
         let self= this
         if(getStore('userInfo')){
-            console.log('logined')
             this.isLogin = true
             this.userInfo = getStore('userInfo')
         }
@@ -166,7 +165,6 @@ import blogFoot from './com/blogFoot.vue'
                this.isLogin = true
                setStore('userInfo',res.data)
                this.userInfo = res.data
-               console.log(res.data)
            }
            else{
                toast(this,res.cMsg)
@@ -191,7 +189,6 @@ import blogFoot from './com/blogFoot.vue'
             this.$router.push('sortArticleList/' + sort.user_id)
         },
         gotoUserInfo(com){
-            console.log(com)
              this.$router.push('userInfo/' + com.user_id)
         },
      

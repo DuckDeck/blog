@@ -115,8 +115,6 @@ module.exports = {
         }
         let index = parseInt(ctx.params.index)
         let size = parseInt(ctx.params.size)
-        console.log(index)
-        console.log(size)
         let sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                     user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                     (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
@@ -135,7 +133,6 @@ module.exports = {
         if(article_ids==undefined){
             article_ids = [0]
         }
-        console.log(article_ids)
         let sqlLastComments = ` select comment_id,comment_target_user_id,comment_target_id,
                                 comment_content,commenter_user_id,comment_time from user_comment where comment_id in 
                                 (select max(comment_id) from user_comment group by comment_target_id) and comment_target_id in ` + `(` + article_ids.join(',') + `)`
@@ -210,7 +207,6 @@ module.exports = {
         }
         else{
             let res = await Comment.insertMainComment(com)
-            console.log(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_target_id,4,0)
             await Dynamic.save(dynamic)
             ctx.rest(res)

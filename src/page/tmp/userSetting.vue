@@ -104,8 +104,6 @@
         mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
-
-                console.log(this.userInfo)
             }
             else{
                 let self = this

@@ -70,7 +70,6 @@ const store = new Vuex.Store({
   },
   mutations: {
    setWebUrl(state,url){
-       console.log(url)
     state.webViewUrl = url
    },
 

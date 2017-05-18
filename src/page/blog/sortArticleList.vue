@@ -102,14 +102,12 @@ import articleCell from './userInfo/com/articleCell.vue'
                         s.user_info = this.userInfo
                         return s
                     })
-                     console.log(" console.log(this.articles) console.log(this.articles)")
                 }
                 else{
                     this.articles = this.articles.concat(res.data.map(s=>{
                         s.user_info = this.userInfo
                         return s
                     }))
-                    console.log(this.articles)
                 }
                 this.articleCount = res.count
             }

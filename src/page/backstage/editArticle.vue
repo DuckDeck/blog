@@ -120,7 +120,6 @@ import {articleById} from '../../store/manageService'
                 this.content = data
             },
             imgCallBack(result){
-                console.log(result)
                 if(result.code == 0){
                     if(this.mainImage == ''){
                         this.mainImage = result.data

@@ -126,7 +126,6 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
         },
         methods: {
             editFriendLink(link){
-                console.log(link)
                 this.editLink = clone(link)
             },
             deleteFriendLink(link){
@@ -139,7 +138,6 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                 if(!this.deleteLink){
                     return
                 }
-                console.log(this.deleteLink)
                 let result = await deleteLink(this.deleteLink.link_id)
                 toast(this,result.cMsg)
                 if(result.code == 0){
@@ -158,7 +156,6 @@ import {getUserLinks,updateFriendLinks,deleteLink} from '../../store/service'
                            sort = 0
                        }
                        self.editLink.show_order = sort
-                       console.log(self.editLink)
                        updateFriendLinks(self.editLink).then(res=>{
                            toast(self,res.cMsg)
                             if(res.code == 0){

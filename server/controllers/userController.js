@@ -261,7 +261,6 @@ module.exports = {
             return
         }
         let mailResult = await Tool.sendEmailToReset(user_real_name, reset_code, t.email)
-        console.log(mailResult)
         ctx.rest(Result.create(0))
       },
    
@@ -673,7 +672,6 @@ module.exports = {
             ctx.rest(res)
             return
         }
-         console.log(t.user_description)
         if(t.user_description){
            
             sql = 'update user_info set user_description = ? where user_id = ?'
