@@ -72,6 +72,15 @@
                                     placeholder="选择日期"  >
                                     </el-date-picker>
                             </el-form-item>
+                            <el-form-item >
+                              <span class="infoTitleClass birthdayTitleClass">我的网站</span> 
+                              <div style="max-width: 800px;display: inline-block">
+                                    <el-input class="myLinkInput" placeholder="http://个人网站" v-model="mainLink.link_url" ></el-input>
+                                    <el-input style="width: 30%;margin-left: 10px;"  placeholder="网站名称" v-model="mainLink.link_name" ></el-input>
+                                    <i class="fa fa-plus-circle addNewLink" @click="addNewLinkClick"></i>
+                              </div>
+                              <addLink v-for="link in otherLinks" @deleteLink="deleteLink"  :linkInfo="link"></addLink>
+                            </el-form-item>
                             <el-form-item>
                                   <span class="infoTitleClass">自我描述</span> 
                                    <el-input class="userdesciption"  :rows="6"   type="textarea" v-model="userInfo.user_description"
@@ -119,6 +128,7 @@
     import {getUserInfo,updateUserInfo,checkUserName} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
+    import addLink from './com/addLink.vue'
     export default {
         data: function(){
              var validatePass = (rule, value, callback) => {
@@ -169,7 +179,9 @@
             };
             return {
                 activeName:'basic',
-                userInfo:{},
+                userInfo:{
+                    user_image_url:''
+                },
                 pass:{
                     old:'',
                     new:'',
@@ -199,7 +211,12 @@
                 },
                 gender:10,
                 editor_type:0,
-                birthday:new Date()
+                birthday:new Date(),
+                mainLink:{
+                    link_name:'',
+                    link_url:''
+                },
+                otherLinks:[]
             }
         },
         mounted(){
@@ -209,6 +226,7 @@
                 this.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
                 this.editor_type = this.userInfo.user_editor_type
                 this.birthday = new Date(this.userInfo.user_birthday)
+                this.initLink()
             }
             else{
                 let self = this
@@ -219,6 +237,7 @@
                         self.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
                         self.editor_type = self.userInfo.user_editor_type
                         self.birthday = new Date(self.userInfo.user_birthday)
+                        self.initLink()
                         setStore('userInfo',data.data)
                     }
                     else{
@@ -322,8 +341,7 @@
                             toast(self,err.cMsg)
                         })
             },
-            changePassword(){
-                
+            changePassword(){     
                 let dict = {
                       user_id:this.userInfo.user_id,    
                       old_password:this.pass.old,
@@ -350,7 +368,42 @@
             },
             close(e){
                 if(e.target!=e.currentTarget) return;
-               
+            },
+            addNewLinkClick(){
+                let newLink = {
+                    link_id:0,
+                    link_name:'',
+                    link_url:'',
+                }
+                newLink.index = this.otherLinks.length
+                this.otherLinks.push(newLink)  
+            },
+            deleteLink(link){
+                console.log(link)
+                if(link.link_id==0){
+                    let index = link.index
+                    this.otherLinks.slice(index,1)
+                }
+                else{
+                    //delete from web
+                    let index = this.otherLinks.findIndex(s=>{
+                        return link.link_id == s.link_id
+                    })
+                    if(index >= 0){
+                        this.otherLinks.slice(index,1)
+                    }
+                }
+            },
+            initLink(){
+                if(this.userInfo.links && Array.from(this.userInfo.links).length > 0){
+                    this.mainLink = this.userInfo.links[0]
+                    console.log(this.mainLink)
+                    if(Array.from(this.userInfo.links).length > 1){
+                        this.otherLinks = this.userInfo.links.filter(s=>{
+                            return s.link_id != this.mainLink.link_id
+                        })
+                    }
+                }
             }
             
         },
@@ -365,7 +418,7 @@
 
         },
         components:{
-            upToTop,blogFoot
+            upToTop,blogFoot,addLink
         }
         
     }
@@ -426,7 +479,16 @@ div.el-upload{
 .birthdayTitleClass{
     margin-left: -5px;
 }
-
+.myLinkInput{
+    width: 300px;
+}
+.addNewLink{
+   font-size: 16px;
+   color: #20a0ff
+}
+.addNewLink:hover{
+    cursor: pointer;
+}
 .avatar-uploader{
 display: inline-block;
 }
@@ -474,12 +536,23 @@ display: inline-block;
          margin-left: 5px;
  
     }
+    .myLinkInput{
+        width: 250px;
+    }
     .user_input{
         width: 220px;
     }
     .userdesciption{
-        max-width: 300px;
+        max-width: 400px;
     }
+} 
+ @media (max-width:550px){
+
+ 
+    .myLinkInput{
+        width: 200px;
+    }
+
 } 
  @media (max-width:360px){
 
@@ -493,6 +566,9 @@ display: inline-block;
     .userdesciption{
         max-width: 300px;
     }
+    .myLinkInput{
+        width: 120px;
+    }
 } 
  @media (max-width:400px){
 
@@ -505,6 +581,10 @@ display: inline-block;
     }
     .userdesciption{
         max-width: 300px;
+    }
+
+    .myLinkInput{
+        width: 180px;
     }
 } 
 </style>

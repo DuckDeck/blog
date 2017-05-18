@@ -9,10 +9,10 @@
                   <el-button class="editor-btn" type="primary" v-show="isEdit" @click="switchMarkDown">{{editStatus}}</el-button>
               </div>
             </div>
-            <div style="font-size: 20px;height: 90%" v-show="isEdit">
+            <div style="font-size: 20px;height: 90%;margin-top: 30px;" v-show="isEdit">
                 <el-form :model="article" :rules="rules" ref="article" label-width="0px" style="height: 60%"  >
                         <el-form-item prop="title">
-                            <el-input v-model="article.title" placeholder="文章标题"></el-input>
+                            <el-input class="articleTitle" v-model="article.title" placeholder="文章标题"></el-input>
                         </el-form-item>
                         <el-form-item >
                             <span>请选择文章标签:   </span>
@@ -294,6 +294,9 @@ import  toMarkdown  from 'to-markdown'
     display: flex;
     justify-content: space-between;
     line-height: 36px;
+}
+.articleTitle{
+    width: 100%;
 }
 .writeClassPage{
     background: white;
