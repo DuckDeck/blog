@@ -125,7 +125,7 @@
 </template>
 
 <script>
-    import {getUserInfo,updateUserInfo,checkUserName} from '../../../store/service'
+    import {getUserInfo,updateUserInfo,checkUserName,deleteLink} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
     import addLink from './com/addLink.vue'
@@ -379,18 +379,23 @@
                 this.otherLinks.push(newLink)  
             },
             deleteLink(link){
-                console.log(link)
                 if(link.link_id==0){
-                    let index = link.index
-                    this.otherLinks.slice(index,1)
+                   let index = link.index
+                   console.log(index)
+                   this.otherLinks.splice(index - 1,1)
+                   console.log(this.otherLinks)
                 }
                 else{
-                    //delete from web
+                    let res = deleteLink(link.link_id)//delete from web
+                    if(res.code != 0){
+                        toast(this,res.cMsg)
+                    }
+                    toast(this,'删除成功')
                     let index = this.otherLinks.findIndex(s=>{
                         return link.link_id == s.link_id
                     })
                     if(index >= 0){
-                        this.otherLinks.slice(index,1)
+                        this.otherLinks.splice(index,1)
                     }
                 }
             },

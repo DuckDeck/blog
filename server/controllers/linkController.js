@@ -78,7 +78,7 @@ module.exports = {
          ctx.rest(res)  
     },
 
-     'DELETE /api/link/:linkId/:userId/:token': async (ctx, next) => {
+    'DELETE /api/link/:linkId/:userId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkToken(ctx)
         if(tokenResult.code != 0){
             ctx.rest(tokenResult)

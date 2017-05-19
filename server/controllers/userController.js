@@ -659,8 +659,6 @@ module.exports = {
             conditionBirthday = ', user_birthday = ' +  t.user_birthday
         }
         
-
-
         let user_id = t.user_id
         let user_real_name = t.user_real_name
         let sql = ''
@@ -683,12 +681,15 @@ module.exports = {
         }
 
         if(t.user_says){
-             sql = 'update user_info set user_says = ? where user_id = ?'
+            sql = 'update user_info set user_says = ? where user_id = ?'
             res = await DB.exec(sql,[t.user_says,user_id]) 
             if(res.code != 0){
                 ctx.rest(res)
                 return
             }
+        }
+        if(t.links){
+            
         }
         ctx.rest(Result.create(0))
       },
