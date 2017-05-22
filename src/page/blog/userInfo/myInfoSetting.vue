@@ -339,16 +339,18 @@
                 }
                 for(let l of this.otherLinks){
                     if(this.checkLink(l)){
+                        //加上http
+                        //todo
                         links.push(l)
                     }
                 }
                 if(links.length > 0){
-                    dict.links = links
+                    dict.links = JSON.stringify(links)
                 }
                 //上传要转化一个格式
                 //这确实 是个问题，上传对象要研究
                 let self = this
-                updateUserInfo('updateindividual',qs.stringify(dict)).then(res=>{
+                updateUserInfo('updateindividual',dict).then(res=>{
                             if(res.code == 0){
                                 toast(self,`修改成功`)
                                 setStore('userInfo',self.userInfo)

@@ -26,6 +26,5 @@ class Link{
     static deleteLink(link_id){
         return db.exec(sqls.delete,[link_id])
     }
-
 }
 module.exports = Link

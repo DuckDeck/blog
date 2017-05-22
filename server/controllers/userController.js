@@ -658,11 +658,22 @@ module.exports = {
             } 
             conditionBirthday = ', user_birthday = ' +  t.user_birthday
         }
-        
+        if(t.links){
+            let links = JSON.parse(t.links)
+            for(let l of links){
+                let urlResult = Check.regexCheck(l,"url")
+                if(urlResult){
+                     ctx.rest(Result.create(11))
+                     return  
+                }
+            }
+        }
         let user_id = t.user_id
         let user_real_name = t.user_real_name
         let sql = ''
         let res = {}
+        let links = JSON.parse(t.links)
+        console.log(links)
         //need check the user_name is valid
         sql = 'update user_info set user_gender = ? ' + conditionBirthday + ' where user_id = ?'
         res = await DB.exec(sql,[t.user_gender,user_id]) 
@@ -688,9 +699,13 @@ module.exports = {
                 return
             }
         }
-        if(t.links){
-            console.log(links)
+        
+        for(let l of links){
+            let link = new Link(l.link_name,l.link_url,"")
+            link.link_id = l.link_id
+            await Link.update(link)
         }
+        
         ctx.rest(Result.create(0))
       },
 
