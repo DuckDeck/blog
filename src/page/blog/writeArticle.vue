@@ -106,7 +106,7 @@ import  toMarkdown  from 'to-markdown'
                     this.selectedTags = articleDetail.tags
                     this.selectedSortId = articleDetail.article_sort_id
                     this.content = articleDetail.article_content
-                    this.markDownContent = toMarkdown(this.content)
+                    // this.markDownContent = toMarkdown(this.content)
                     this.articleId = articleDetail.article_id
                 }
             }
@@ -118,7 +118,7 @@ import  toMarkdown  from 'to-markdown'
                     this.selectedTags = articleDetail.tags
                     this.selectedSortId = articleDetail.article_sort_id
                     this.content = articleDetail.article_content
-                    this.markDownContent = toMarkdown(this.content)
+                    // this.markDownContent = toMarkdown(this.content)
                     this.articleId = articleDetail.article_id
                 }
             }

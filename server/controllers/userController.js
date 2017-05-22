@@ -644,7 +644,7 @@ module.exports = {
             ctx.rest(userIdResult)
             return
         }
-        let userGenderResult = Check.checkString(t,'user_gender')
+        let userGenderResult = Check.checkNum(t,'user_gender')
         if(userGenderResult){
             ctx.rest(userGenderResult)
             return
@@ -657,6 +657,15 @@ module.exports = {
                 return 
             } 
             conditionBirthday = ', user_birthday = ' +  t.user_birthday
+        }
+        let conditionEditType = ''
+        if(t.edit_type){
+            let edit_typeResult = Check.checkNum(t,'user_birthday')
+            if(edit_typeResult){
+                ctx.rest(edit_typeResult) 
+                return 
+            } 
+            conditionEditType = ', user_editor_type = ' +  t.edit_type
         }
         if(t.links){
             let links = JSON.parse(t.links)
@@ -675,14 +684,13 @@ module.exports = {
         let links = JSON.parse(t.links)
         console.log(links)
         //need check the user_name is valid
-        sql = 'update user_info set user_gender = ? ' + conditionBirthday + ' where user_id = ?'
+        sql = 'update user_info set user_gender = ? ' + conditionBirthday + conditionEditType+' where user_id = ?'
         res = await DB.exec(sql,[t.user_gender,user_id]) 
         if(res.code != 0){
             ctx.rest(res)
             return
         }
         if(t.user_description){
-           
             sql = 'update user_info set user_description = ? where user_id = ?'
             res = await DB.exec(sql,[t.user_description,user_id]) 
             if(res.code != 0){

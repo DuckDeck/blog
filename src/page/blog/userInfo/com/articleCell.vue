@@ -58,6 +58,7 @@
     display: flex;
     font-size: 15px;
     color: #555;
+    justify-content: space-between;
 }
 .articleCellContentTitle{
     font-size: 18px;
@@ -66,7 +67,7 @@
 
 }
 .articleCellContenImg{
-    width: 150px;
+    width: auto;
     height: 140px;
     margin-left: 10px;
 }

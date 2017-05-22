@@ -52,9 +52,9 @@
                                <el-form-item  >
                                 <span class="infoTitleClass">性别</span> 
                                  <el-radio-group v-model="gender" @change = "genderChange">
-                                    <el-radio :label='11'>男</el-radio>
-                                    <el-radio :label="12">女</el-radio>
-                                    <el-radio :label="10">保密</el-radio>
+                                    <el-radio :label='1'>男</el-radio>
+                                    <el-radio :label="2">女</el-radio>
+                                    <el-radio :label="4">保密</el-radio>
                                 </el-radio-group>
                               </el-form-item>
                                <el-form-item >
@@ -236,8 +236,7 @@
         mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
-                let gen = this.userInfo.user_gender
-                this.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
+                this.gender = this.userInfo.user_gender
                 this.editor_type = this.userInfo.user_editor_type
                 this.birthday = new Date(this.userInfo.user_birthday)
                 this.initLink()
@@ -257,8 +256,7 @@
                  getUserInfo(id).then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
-                        let gen = self.userInfo.user_gender
-                        self.gender = gen == '男' ? 11 : (gen == '女' ? 12 : 10)
+                        self.gender = self.userInfo.user_gender
                         self.editor_type = self.userInfo.user_editor_type
                         self.birthday = new Date(self.userInfo.user_birthday)
                         self.initLink()
@@ -293,19 +291,7 @@
                 
             },
             genderChange(val){
-                switch (val) {
-                    case 11:
-                        this.userInfo.user_gender = '男'
-                        break;
-                    case 12:
-                        this.userInfo.user_gender = '女'
-                        break;
-                    case 10:
-                        this.userInfo.user_gender = '保密'
-                        break;
-                    default:
-                        break;
-                }
+                this.userInfo.user_gender = val
             },
             editorTypeChange(val){
                 this.userInfo.user_editor_type = val
@@ -347,6 +333,7 @@
                     user_id:this.userInfo.user_id,
                     user_gender:this.userInfo.user_gender,
                     user_birthday:bir,
+                    edit_type:this.editor_type,
                     user_description:this.userInfo.user_description,
                     user_says:this.userInfo.user_says
                 }

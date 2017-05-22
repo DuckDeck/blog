@@ -43,7 +43,7 @@ const sqls = {
         user_id mediumint(8) NOT NULL  COMMENT '用户ID 对于用户信息表，主键要和user表一要，所以不要让自己增',
         user_real_name varchar(32) NOT NULL COMMENT '用户真名',
         user_phone int(12) NOT NULL DEFAULT 0 COMMENT '用户手机号码',
-        user_gender varchar(6) NOT NULL DEFAULT '' COMMENT '用户性别',
+        user_gender int(2) NOT NULL DEFAULT 0 COMMENT '用户性别 --0未知 1：男 2：女，3： 人妖，4： 保密',
         user_qq mediumint(9) NOT NULL DEFAULT 0 COMMENT '用户QQ号码',
         user_email varchar(64) NOT NULL DEFAULT '' COMMENT '用户EMAIL地址',
         user_address varchar(255) NOT NULL DEFAULT '' COMMENT '用户地址',
