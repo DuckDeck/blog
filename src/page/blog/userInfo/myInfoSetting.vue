@@ -121,7 +121,14 @@
                     </el-tabs>
 
          </div>
-    
+        <el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span>{{deleteMessage}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteArticleConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
+
         <blogFoot></blogFoot>
     </div>
 </template>
@@ -220,7 +227,10 @@
                     link_name:'',
                     link_url:''
                 },
-                otherLinks:[]
+                otherLinks:[],
+                deleteMessage:'',
+                dialogVisible:false,
+                currentDeleteLink:{}
             }
         },
         mounted(){
@@ -233,6 +243,15 @@
                 this.initLink()
             }
             else{
+                this.getUserInfoFromNet()
+            }
+        },
+        methods:{
+            deleteArticleConfirm(){
+               this.dialogVisible = false
+               this.deleteUserLink()
+            },
+            getUserInfoFromNet(){
                 let id = this.$route.params.userId
                 let self = this
                  getUserInfo(id).then(function(data){
@@ -251,9 +270,7 @@
                 },function(err){
                    toast(self,err.cMsg)
                 })
-            }
-        },
-        methods:{
+            },
             handleAvatarScucess(res, file) {
                 this.userInfo.user_image_url = res.data.url
                 let u = getStore('userInfo')
@@ -337,11 +354,17 @@
                 if(this.checkLink(this.mainLink)){
                     links.push(this.mainLink)
                 }
+                else{
+                    return
+                }
                 for(let l of this.otherLinks){
                     if(this.checkLink(l)){
                         //加上http
                         //todo
                         links.push(l)
+                    }
+                    else{
+                        return
                     }
                 }
                 if(links.length > 0){
@@ -353,7 +376,7 @@
                 updateUserInfo('updateindividual',dict).then(res=>{
                             if(res.code == 0){
                                 toast(self,`修改成功`)
-                                setStore('userInfo',self.userInfo)
+                                self.getUserInfoFromNet()
                             }
                             else{
                                 toast(self,res.cMsg)
@@ -400,10 +423,23 @@
                 this.otherLinks.push(newLink)  
             },
             deleteLink(link){
-                if(link.link_id==0){
+                this.currentDeleteLink = link
+               if(link.link_id > 0){
+                    this.deleteMessage = "你确定要删除" + link.link_name + "这个链接吗？"
+                    this.dialogVisible = true
+                    this.currentDeleteLink = link
+               }
+               else{
+                   this.deleteUserLink()
+               } 
+               
+            },
+            deleteUserLink(){
+                 let link = this.currentDeleteLink
+                 if(link.link_id==0){
                    let index = link.index
                    console.log(index)
-                   this.otherLinks.splice(index - 1,1)
+                   this.otherLinks.splice(index,1)
                    console.log(this.otherLinks)
                 }
                 else{
@@ -437,7 +473,17 @@
                     return false
                 }
                 if(!isStringNullOrEmpty(link.link_name) && !isStringNullOrEmpty(link.link_url)){
-                    return true
+                    if(link.link_url.substring(0,7) != "http://" && link.link_url.substring(0,8) != "https://"){
+                        link.link_url = "http://" + link.link_url
+                    }
+                    if(/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(link.link_url)){
+                        return true
+                    }
+                    else{
+                        toast(this,'名称为 ' + link.link_name + ' 的url格式填写错误，请修正')
+                        return false
+                    }
+                    
                 }
                 toast(this,'网站名称和网站地址不能有一样为空')
                 return false

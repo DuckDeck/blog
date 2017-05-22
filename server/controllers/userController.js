@@ -661,7 +661,7 @@ module.exports = {
         if(t.links){
             let links = JSON.parse(t.links)
             for(let l of links){
-                let urlResult = Check.regexCheck(l,"url")
+                let urlResult = Check.regexCheck(l.link_url,"url")
                 if(urlResult){
                      ctx.rest(Result.create(11))
                      return  
@@ -703,6 +703,8 @@ module.exports = {
         for(let l of links){
             let link = new Link(l.link_name,l.link_url,"")
             link.link_id = l.link_id
+            link.link_user_id = user_id
+            link.link_type = 1
             await Link.update(link)
         }
         

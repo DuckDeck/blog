@@ -130,7 +130,8 @@ import blogFoot from './com/blogFoot.vue'
         }
         else{
             if(getStore('token')){ //this mean login is-success
-                this.getUserInfo()
+                let user_id = getStore('token').user_id
+                this.getUserInfo(user_id)
             }
         }
         index().then(res=>{
@@ -159,8 +160,8 @@ import blogFoot from './com/blogFoot.vue'
         checkMore(){
             this.$router.push('/articleList')
         },
-        async getUserInfo(){
-           let res = await getUserInfo()
+        async getUserInfo(user_id){
+           let res = await getUserInfo(user_id)
            if(res.code == 0){
                this.isLogin = true
                setStore('userInfo',res.data)
