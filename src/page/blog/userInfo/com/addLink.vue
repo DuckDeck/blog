@@ -34,7 +34,7 @@
 
 .linkCell{
     max-width: 800px;
-    display: inline-block;
+    display: block;
     margin-top: 10px;
 }
 .deleteNewLink{

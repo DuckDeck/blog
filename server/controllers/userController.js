@@ -689,7 +689,7 @@ module.exports = {
             }
         }
         if(t.links){
-            
+            console.log(links)
         }
         ctx.rest(Result.create(0))
       },

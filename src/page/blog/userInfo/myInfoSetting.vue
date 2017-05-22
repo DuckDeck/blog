@@ -72,14 +72,16 @@
                                     placeholder="选择日期"  >
                                     </el-date-picker>
                             </el-form-item>
-                            <el-form-item >
+                            <el-form-item  >
                               <span class="infoTitleClass birthdayTitleClass">我的网站</span> 
-                              <div style="max-width: 800px;display: inline-block">
+                              <div style="display: inline-block">
+                                  <div style="max-width: 800px;display: block">
                                     <el-input class="myLinkInput" placeholder="http://个人网站" v-model="mainLink.link_url" ></el-input>
                                     <el-input style="width: 30%;margin-left: 10px;"  placeholder="网站名称" v-model="mainLink.link_name" ></el-input>
                                     <i class="fa fa-plus-circle addNewLink" @click="addNewLinkClick"></i>
+                                </div>
+                                <addLink v-for="link in otherLinks" @deleteLink="deleteLink"  :linkInfo="link"></addLink>
                               </div>
-                              <addLink v-for="link in otherLinks" @deleteLink="deleteLink"  :linkInfo="link"></addLink>
                             </el-form-item>
                             <el-form-item>
                                   <span class="infoTitleClass">自我描述</span> 
@@ -129,6 +131,7 @@
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
     import addLink from './com/addLink.vue'
+    import qs from 'qs'
     export default {
         data: function(){
              var validatePass = (rule, value, callback) => {
@@ -213,6 +216,7 @@
                 editor_type:0,
                 birthday:new Date(),
                 mainLink:{
+                    link_id:0,
                     link_name:'',
                     link_url:''
                 },
@@ -229,8 +233,9 @@
                 this.initLink()
             }
             else{
+                let id = this.$route.params.userId
                 let self = this
-                 getUserInfo().then(function(data){
+                 getUserInfo(id).then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
                         let gen = self.userInfo.user_gender
@@ -328,8 +333,22 @@
                     user_description:this.userInfo.user_description,
                     user_says:this.userInfo.user_says
                 }
+                let links = []
+                if(this.checkLink(this.mainLink)){
+                    links.push(this.mainLink)
+                }
+                for(let l of this.otherLinks){
+                    if(this.checkLink(l)){
+                        links.push(l)
+                    }
+                }
+                if(links.length > 0){
+                    dict.links = links
+                }
+                //上传要转化一个格式
+                //这确实 是个问题，上传对象要研究
                 let self = this
-                updateUserInfo('updateindividual',dict).then(res=>{
+                updateUserInfo('updateindividual',qs.stringify(dict)).then(res=>{
                             if(res.code == 0){
                                 toast(self,`修改成功`)
                                 setStore('userInfo',self.userInfo)
@@ -397,6 +416,7 @@
                     if(index >= 0){
                         this.otherLinks.splice(index,1)
                     }
+                    removeStore('userInfo')
                 }
             },
             initLink(){
@@ -409,7 +429,18 @@
                         })
                     }
                 }
-            }
+            },
+            checkLink(link){
+                if(isStringNullOrEmpty(link.link_name) && isStringNullOrEmpty(link.link_url)){
+                    return false
+                }
+                if(!isStringNullOrEmpty(link.link_name) && !isStringNullOrEmpty(link.link_url)){
+                    return true
+                }
+                toast(this,'网站名称和网站地址不能有一样为空')
+                return false
+            },
+            
             
         },
         computed:{

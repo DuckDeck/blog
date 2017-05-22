@@ -69,6 +69,18 @@ global.isEmpty = function(obj){
     }
     return true;
 }
+global.isStringNullOrEmpty = function(str){
+    if(str == null || str == undefined){
+        return true
+    }
+    else if(typeof(str) != 'string'){
+        return true
+    }
+    else if(str.length <= 0){
+        return true
+    }
+    return false
+}
 global.findChildWithClass = function(ele,name){
             let result = []
             function childWithClass(element,className){
