@@ -7,8 +7,6 @@ var conf = {
 }
 var pool ;
 
-
-
 const sqls = require('./tableSql')
 
 function createPool(){
@@ -20,7 +18,6 @@ function createPool(){
         pool = mysql.createPool(conf)
     }
 }
-
 const actions = {
     createDB:function(){
         var connection = mysql.createConnection(conf);
@@ -69,7 +66,6 @@ const actions = {
 
         
         pool.query(sqls.createSiteManagerTb)
-
 
 
         //create createview
