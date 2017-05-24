@@ -208,6 +208,7 @@ import userCommentCell from './com/userCommentCell.vue'
 .userInfoContent{
     display: flex;
     margin-top: 60px;
+    border-top: 5px solid #990066
 }
 .userMainPage{
    

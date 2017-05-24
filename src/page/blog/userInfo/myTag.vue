@@ -300,6 +300,7 @@ import articleCell from './com/articleCell.vue'
     font-size: 20px;
     padding: 20px;
     margin-top: 60px;
+    border-top: 5px solid #c71585
 }
 .tagSortUserHead{
     padding: 10px;
