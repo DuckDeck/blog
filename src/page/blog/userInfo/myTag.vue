@@ -82,6 +82,7 @@ import articleCell from './com/articleCell.vue'
                 currentSort:"",
                 currentTag:"",
                 articleCount:0,
+                isLoadingArticles:false,
             }
         },
        async mounted(){
@@ -93,14 +94,14 @@ import articleCell from './com/articleCell.vue'
                      return s
                 })
                 this.selectedTag = [{
-                    tag_id: 0,
+                    tag_id: -1,
                     user_id: this.userId,
                     tag_name: "全部标签",
                     isSelected : true
                 }]
                 tmp.unshift( this.selectedTag[0])
                 tmp.unshift({
-                    tag_id: -1,
+                    tag_id: 0,
                     user_id: this.userId,
                     tag_name: "无标签",
                     isSelected : false
@@ -118,14 +119,14 @@ import articleCell from './com/articleCell.vue'
                      return s
                 })
                 this.selectedSort = {
-                     sort_article_id: 0,
+                     sort_article_id: -1,
                     user_id: this.userId,
                     sort_article_name: "全部分类",
                     isSelected : true
                 }
                 tmp.unshift(this.selectedSort)       
                 tmp.unshift({
-                    sort_article_id: -1,
+                    sort_article_id: 0,
                     user_id: this.userId,
                     sort_article_name: "无分类",
                     isSelected : false
@@ -153,8 +154,21 @@ import articleCell from './com/articleCell.vue'
            async articlesBySortTag(sort,tag,index,page){
                 let resArticle =   await articlesBySort(this.userId,sort,tag,index,page)
                     if(resArticle.code == 0){
-                    this.articles = resArticle.data
-                }
+                        this.articleCount = resArticle.count
+                        let self = this
+                        if(index == 0){
+                            this.articles = resArticle.data.map(s=>{
+                                s.user_info = self.userInfo
+                                return s
+                            })
+                        }
+                        else{
+                            this.articles = this.articles.concat(resArticle.data.map(s=>{
+                                s.user_info = self.userInfo
+                                return s
+                            }))
+                        }
+                    }
             },
             handleSortClose(sort) {
                 let self = this
@@ -246,16 +260,15 @@ import articleCell from './com/articleCell.vue'
                         return
                     }
                 }
-                if(tag.tag_id == 0 || tag.tag_id == -1){
+
+                if( tag.tag_id == -1){
                     for(let t of this.tags){
-                      
-                            t.isSelected = false
-                        
+                         t.isSelected = false   
                     }
                 }
                 else{
                     let t = this.tags.find(s=>{
-                        return s.tag_id == 0
+                        return s.tag_id == -1
                     })
                     t.isSelected = false
                 }
@@ -269,7 +282,11 @@ import articleCell from './com/articleCell.vue'
                 this.currentTag = tags.join('_')
                 this.articlesBySortTag(this.currentSort,this.currentTag,0,10)
             },
-            
+            loadMoreArticle(){
+                this.isLoadingArticles = true
+                this.articlesBySortTag(this.currentSort,this.currentTag,this.articles.count / 10,10)
+                this.isLoadingArticles = false
+            }
         },
         components:{
           userHead, upToTop,blogFoot,articleCell
