@@ -106,7 +106,7 @@ import articleCell from './com/articleCell.vue'
                     tag_name: "无标签",
                     isSelected : false
                 })
-                this.currentTag = [0]
+                this.currentTag = [-1]
                 this.tags = tmp
             }
             else{
@@ -131,7 +131,7 @@ import articleCell from './com/articleCell.vue'
                     sort_article_name: "无分类",
                     isSelected : false
                 })
-                this.currentSort = 0
+                this.currentSort = -1
                 
                 this.sorts = tmp
             }
@@ -145,7 +145,7 @@ import articleCell from './com/articleCell.vue'
             else{
                 toast(this,resUserInfo.cMsg)
             }
-            await this.articlesBySortTag(0,0,0,10)
+            await this.articlesBySortTag(-1,-1,0,10)
          
          },
 
@@ -284,7 +284,7 @@ import articleCell from './com/articleCell.vue'
             },
             loadMoreArticle(){
                 this.isLoadingArticles = true
-                this.articlesBySortTag(this.currentSort,this.currentTag,this.articles.count / 10,10)
+                this.articlesBySortTag(this.currentSort,this.currentTag,this.articles.length / 10,10)
                 this.isLoadingArticles = false
             }
         },
