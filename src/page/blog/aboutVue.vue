@@ -82,10 +82,16 @@
             <div class="contactAuthor">
                 <ul>
                     <li>
-                        QQ:3421902
+                        QQ:3421902,如果此Demo有问题，请在github提交issue或者给这个QQ号发邮件
                     </li>
-                    <li>网站 </li>
+                  
                 </ul>
+            </div>
+             <div class="aboutRight">
+                版权声明
+            </div>
+            <div class="rightDetail">
+                此网站除引用框架和库外，全部代码都由开发者完成并且开源，该网站仅供前端爱好者参考，不作其他用途。
             </div>
         </div>   
         
@@ -157,6 +163,16 @@ import blogLogo from './com/blogLogo.vue'
 }
 .contactAuthor{
      font-size: 18px;
+}
+.aboutRight{
+      padding: 20px;
+    font-size: 18px;
+}
+
+.rightDetail{
+     padding: 20px;
+    padding-bottom: 50px;
+ font-size: 18px;
 }
 p{
     margin-bottom: 10px;
