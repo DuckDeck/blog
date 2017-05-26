@@ -73,7 +73,17 @@ module.exports = {
             password: t.password.trim()
         }
         // this a bug which can make the password is not the same from register
-       let res =  await User.checkLogin(m.userName)
+       let isMail = false
+       if(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(m.userName)){
+           isMail = true
+       }
+       let res = {}
+       if(isMail){
+           res = await User.checkLoginEmail(m.userName)
+       }
+       else{
+            res =  await User.checkLogin(m.userName)
+       }
        if(res.code != 0){
            ctx.rest(res)
            return
@@ -82,8 +92,7 @@ module.exports = {
            ctx.rest(Result.create(500))
            return
        }
-       let user = res.data[0]
-       
+       let user = res.data[0]  
        let pass = user.user_password    
        let mdPass = Tool.md5(m.password)
        if(pass != mdPass){
@@ -93,11 +102,11 @@ module.exports = {
        if(user.user_isValidate != 1){
            ctx.rest(Result.create(503,{user_id:user.user_id}))
            return
-       }
-       let token = Tool.md5(Math.random().toString())
+        }
+      let token = Tool.md5(Math.random().toString())
        await User.saveToken(token,user.user_id)
        let result = Result.create(0,{token:token,user_id:user.user_id})
-       ctx.rest(result)
+       ctx.rest(result)      
       },
 
     'POST /api/register': async (ctx, next) => {

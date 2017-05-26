@@ -124,11 +124,25 @@ import  toMarkdown  from 'to-markdown'
             }
             res = await getTags(this.userInfo.user_id)
             if(res.code == 0){
-                this.tags = res.data
+                let tmp = res.data
+                tmp.unshift({
+                    tag_id: 0,
+                    user_id: this.userId,
+                    tag_name: "无标签",
+                    isSelected : false
+                })
+                this.tags = tmp
             }
             res = await getSorts(this.userInfo.user_id)
             if(res.code == 0){
-                this.articleSort = res.data
+                let tmp  = res.data
+                tmp.unshift({
+                    sort_article_id: 0,
+                    user_id: this.userId,
+                    sort_article_name: "无分类",
+                    isSelected : false
+                })
+                this.articleSort = tmp
             }
             
             setGlobalVue(this)
