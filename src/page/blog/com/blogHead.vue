@@ -150,22 +150,22 @@
 } 
 @media (min-width:1200px){
     .blogheader{
-        padding: 0px 100px;
+        padding: 7px 100px;
     }
 } 
 @media (min-width:1400px){
     .blogheader{
-        padding: 0px 200px;
+        padding: 7px 200px;
     }
 } 
 @media (min-width:1600px){
     .blogheader{
-        padding: 0px 300px;
+        padding: 7px 300px;
     }
 } 
 @media (min-width:1800px){
     .blogheader{
-        padding: 0px 400px;
+        padding: 7px 400px;
     }
 } 
 .rightMenuLogin{

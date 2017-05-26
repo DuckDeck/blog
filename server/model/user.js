@@ -4,6 +4,7 @@ const Tool = require('../tool/tool')
 const sqls = {
     insert:'insert into user values(0,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     checkLogin:'select * from user where user_name = ?',
+    checkLoginEmail:'select * from user_info where user_email = ?',
     userInfoById:`select  user_id , user_name, user_real_name , user_phone , user_gender , 
     user_qq  , user_email, user_address, user_editor_type,user_mark,user_birthday,user_description,user_image_url, 
     user_last_update_time , user_says ,(select count(article_id) as article_count  from article where article.user_id = user_detail.user_Id and article_status = 1
@@ -50,6 +51,10 @@ class User{
 
     static checkLogin(userName){
         return db.exec(sqls.checkLogin,[userName])
+    }
+
+    static checkLoginEmail(email){
+        return db.exec(sqls.checkLoginEmail,[email])
     }
 
     static userInfoById(user_id){

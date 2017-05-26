@@ -20,8 +20,8 @@
 
                                 <el-form :model="userInfo" :rules="ruleBasic" ref="userInfo" class="basicInfoForm" label-width="0px" >
                                     <el-form-item prop = "user_name" >
-                                        <div v-show = "isEmail" style="color: red" >账号为邮箱的，可以重新设定一次</div>
-                                    <span class="infoTitleClass">账号</span>   <el-input class="user_input" v-model="userInfo.user_name" :disabled="!isEmail"></el-input>
+                                        <div v-show = "isCanResetUserName" style="color: red" >账号为邮箱的，可以重新设定一次</div>
+                                    <span class="infoTitleClass">账号</span>   <el-input class="user_input" v-model="userInfo.user_name" :disabled="!isCanResetUserName"></el-input>
                                     </el-form-item>
                                     <el-form-item prop="user_real_name" >
                                         <span class="infoTitleClass">用户呢称</span>  <el-input  class="user_input" v-model="userInfo.user_real_name" ></el-input>
@@ -141,7 +141,7 @@
     import qs from 'qs'
     export default {
         data: function(){
-             var validatePass = (rule, value, callback) => {
+            var validatePass = (rule, value, callback) => {
                 if (value === '') {
                   callback(new Error('请输入密码'));
                 } 
@@ -151,7 +151,7 @@
                     }
                      callback();
                 }
-            };
+             };
             var validatePass2 = (rule, value, callback) => {
                 if (value === '') {
                   callback(new Error('请再次输入密码'));
@@ -162,7 +162,7 @@
                 else {
                  callback();
                 }
-            };
+             };
             var validateUserName =  (rule, value, callback) => {
                if(!this.isEmail){
                   callback()
@@ -186,7 +186,7 @@
                     
                 }
                 
-            };
+             };
             return {
                 activeName:'basic',
                 userInfo:{
@@ -205,7 +205,7 @@
                         { required: true, message: '请输入用户名', trigger: 'blur' },
                         { validator: validateUserName, trigger: 'blur' },
                     ],
-                },
+                 },
                 rulePass:{
                     old: [
                         { required: true, message: '原密码不能为空', trigger: 'blur' }
@@ -218,7 +218,7 @@
                         { validator: validatePass2, trigger: 'blur' },
                         { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
                     ]
-                },
+                 },
                 gender:10,
                 editor_type:0,
                 birthday:new Date(),
@@ -230,12 +230,14 @@
                 otherLinks:[],
                 deleteMessage:'',
                 dialogVisible:false,
-                currentDeleteLink:{}
+                currentDeleteLink:{},
+                isCanResetUserName:false,//是否可以重设用户名
             }
         },
         mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
+                this.isCanResetUserName = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(this.userInfo.user_name)
                 this.gender = this.userInfo.user_gender
                 this.editor_type = this.userInfo.user_editor_type
                 this.birthday = new Date(this.userInfo.user_birthday)
@@ -256,6 +258,7 @@
                  getUserInfo(id).then(function(data){
                     if(data.code == 0){
                         self.userInfo = data.data
+                        self.isCanResetUserName = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(self.userInfo.user_name)
                         self.gender = self.userInfo.user_gender
                         self.editor_type = self.userInfo.user_editor_type
                         self.birthday = new Date(self.userInfo.user_birthday)
@@ -305,6 +308,13 @@
                             user_id:self.userInfo.user_id,
                             user_real_name:self.userInfo.user_real_name
                         }
+                        if(self.isCanResetUserName){
+                            if(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(self.userInfo.user_name)){
+                                toast(self,"新用户名不能再使用邮箱")
+                                return
+                            }
+                            dict.user_name = self.userInfo.user_name
+                        }
                         if(self.userInfo.user_phone.length > 0){
                             dict.user_phone = self.userInfo.user_phone
                         }
@@ -318,6 +328,7 @@
                             if(res.code == 0){
                                 toast(self,`修改成功`)
                                 setStore('userInfo',self.userInfo)
+                                self.isCanResetUserName =  /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(self.userInfo.user_name)
                             }
                         }).catch(err=>{
                             toast(self,err.cMsg)
@@ -482,11 +493,6 @@
             uploadHeadUrl(){
                 return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
             },
-            isEmail(){
-                return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(this.userInfo.user_name)
-            },
-
-
         },
         components:{
             upToTop,blogFoot,addLink
