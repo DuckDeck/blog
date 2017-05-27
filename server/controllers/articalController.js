@@ -227,10 +227,7 @@ module.exports = {
             ctx.rest(Result.create(10,{msg:'miss articalSort'})) 
             return
         }
-        if (!t.articalTags) {
-            ctx.rest(Result.create(10,{msg:'miss articalTags'})) 
-            return
-        }
+   
         if (!t.articalContent) {
             ctx.rest(Result.create(10,{msg:'miss articalContent'})) 
             return
@@ -254,7 +251,9 @@ module.exports = {
             return 
         }
         let articleId = result2.data.id
-        let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+        if (t.articalTags&& Tool.getType(t.articalTags) == "Array") {
+             let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
+        }
         let dynamic = new Dynamic(id,articleId,0,1,0,1)
         await Dynamic.save(dynamic)
         ctx.rest(Result.create(0,{id:articleId}))

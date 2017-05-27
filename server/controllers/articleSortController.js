@@ -43,7 +43,7 @@ module.exports = {
        let user_id =  ctx.params.userId
        let token = ctx.params.token
        let deleteResult =await Sort.deleteSort(id)
-       let sql = `update artile set article_sort_id = 0 where article_sort_id = ` + id
+       let sql = `update article set article_sort_id = 0 where article_sort_id = ` + id
        await DB.exec(sql)
        ctx.rest(deleteResult)
  
