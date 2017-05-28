@@ -50,8 +50,17 @@ module.exports = {
             ctx.rest(paraCheckResult)
             return
         }
-        let oldPass = ctx.request.body.oldPassword
-        let newPass = ctx.request.body.newPassword
+        let oldPass =  Check.decryptyPass(ctx.request.body.oldPassword.trim())
+        if(oldPass == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
+        let newPass =  Check.decryptyPass(ctx.request.body.newPassword.trim())
+        if(newPass == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
+
         let m_id = ctx.params.mId
         let md5OldPass = Tool.md5(oldPass)
         let sql = 'select m_id from blog_manager where m_id = ? and m_password = ?'

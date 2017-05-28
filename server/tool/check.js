@@ -15,22 +15,22 @@ class Check{
             return Result.create(10,{msg: name + 'wrong format'})
         }
         return null
-    }
+      }
 
     static checkString(body,name){
         if(!body[name] || !body[name].trim()){
              return Result.create(10,{msg:'miss ' + name})
         }
         return null
-    }
+      }
 
     static deleteManagerCache(){
         myCache.del('managerKey')
-    }
-
+      }
+ 
     static deleteUserKey(){
          myCache.del('userKey')
-    }
+      }
 
     static regexCheck(str,regex){
         switch(regex){
@@ -65,7 +65,7 @@ class Check{
             default :
             break
         }
-    }
+      }
 
     static checkPage(req){
        if(req == undefined){
@@ -83,7 +83,7 @@ class Check{
            return Result.create(9)
        }
        return null
-    } 
+      } 
 
     static  async checkManageToken(req){
       if(req == undefined){
@@ -135,9 +135,9 @@ class Check{
                 reject(Result.create(9))
             })
         }
-  }
+     }
 
-  static async checkToken(req){
+    static async checkToken(req){ 
         if(req == undefined){
             return Tool.setPromise(Result.create(9),false)
         }
@@ -187,7 +187,21 @@ class Check{
                 reject(Result.create(9))
             })
         }
-    }
+     }
+
+     static decryptyPass(pass){
+        if(pass == undefined || pass == null){
+            return ""
+        }
+        let t = Tool.decrypt(key,iv,pass)
+        let para = t.split('=')
+        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
+            return para[0]
+        }
+        else{
+            return ""
+        }
+     }
 }
 module.exports = Check
 

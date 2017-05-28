@@ -18,9 +18,14 @@ module.exports = {
             ctx.rest(Result.create(10,{msg:'miss password'})) 
             return
         }
+        let password =  Check.decryptyPass(t.password.trim())
+        if(password == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
         m = {
             userName: t.userName.trim(),
-            password: t.password.trim()
+            password: password)
         };
         let resManage = await BlogManager.checkLogin(m.userName)
         if(resManage.code != 0){

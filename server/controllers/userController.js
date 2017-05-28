@@ -93,7 +93,12 @@ module.exports = {
            return
        }
        let user = res.data[0]  
-       let pass = user.user_password    
+       let pass =  Check.decryptyPass(user.user_password)
+       if(pass == ""){
+            ctx.rest(Result.create(501))
+           return
+       }
+
        let mdPass = Tool.md5(m.password)
        if(pass != mdPass){
            ctx.rest(Result.create(501))
@@ -123,10 +128,14 @@ module.exports = {
             ctx.rest(Result.create(10,{msg:'miss email'})) 
             return
         }
-        
+       let pass =  Check.decryptyPass(t.password.trim())
+       if(pass == ""){
+           ctx.rest(Result.create(501))
+           return
+       }
        let m = {
             nickName: t.nickname.trim(),
-            password: t.password.trim(),
+            password: pass,
             email:t.email.trim()
         }
         if(Check.regexCheck(m.email,'email')){
@@ -295,7 +304,12 @@ module.exports = {
         }
         let email = t.email
         let code = t.code;
-        let password = t.password;
+        let password =  Check.decryptyPass(t.password.trim())
+        if(password == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
+
         
         let sql = 'select user_id from user_info where user_email = ? ' 
         let res =await DB.exec(sql,[t.email])
@@ -750,8 +764,16 @@ module.exports = {
 
 
         let user_id = t.user_id
-        let old_password = t.old_password
-        let new_password = t.new_password
+        let old_password =  Check.decryptyPass(t.old_password.trim())
+        if(old_password == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
+        let new_password =  Check.decryptyPass(t.new_password.trim())
+        if(new_password == ""){
+            ctx.rest(Result.create(501))
+            return
+        }
         if(old_password == new_password){
             ctx.rest(Result.create(505))
             return
