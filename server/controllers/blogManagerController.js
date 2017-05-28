@@ -38,6 +38,7 @@ module.exports = {
             ctx.rest(Result.create(501))
             return
         }
+        Check.deleteManagerCache()
         let token = Tool.md5(Math.random().toString())
         await BlogManager.saveToken(token,manage.m_id)
         manage.m_token = token

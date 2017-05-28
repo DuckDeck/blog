@@ -1,4 +1,6 @@
 const Result = require('../model/result')
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
 const crypto = require('crypto')
 const key = '751f621ea5c8f930'
 const iv = '2624750004598718'
@@ -22,6 +24,13 @@ class Check{
         return null
     }
 
+    static deleteManagerCache(){
+        myCache.del('managerKey')
+    }
+
+    static deleteUserKey(){
+         myCache.del('userKey')
+    }
 
     static regexCheck(str,regex){
         switch(regex){
@@ -78,40 +87,48 @@ class Check{
 
     static  async checkManageToken(req){
       if(req == undefined){
-                return Tool.setPromise(Result.create(9),false)
-            }
+            return Tool.setPromise(Result.create(9),false)
+        }
         let id = req.params.mId
         let token = req.params.token
         if(id == undefined || token == undefined){
                 return Tool.setPromise(Result.create(9),false)
        }
-    //    if(!isNaN(token)){
-    //        return setPromise(Result.create(9),false)
-    //    }
-    // for now do not care what is token is
-       return Tool.setPromise(Result.create(0),true) 
+       if(!isNaN(token)){
+           return Tool.setPromise(Result.create(9),false)
+       }
        let t = Tool.decrypt(key,iv,token)
        let para = t.split('=')
-        
         if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
             return new Promise(function(resolve,reject){
-                //check this later
-                // db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){
-                //     if(data.data.length == 1){
-                //         if( data.data[0].user_token == para[0]){
-                //             console.log('validateToken completed')
-                //             resolve(Result.create(0))
-                //         }
-                //         else{
-                //             reject(Result.create(100))
-                //         }
-                //     }
-                //     else{
-                //         reject(Result.create(100))
-                //     }
-                // },function(err){
-                //     reject(err)
-                // })
+               let value =  myCache.get('managerKey')
+               if(value == undefined){
+                   db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
+                        if(data.data.length == 1){
+                            if( data.data[0].m_token == para[0]){
+                                console.log('validateToken completed')
+                                resolve(Result.create(0))
+                                myCache.set("managerKey",data.data[0].m_token)
+                            }
+                            else{
+                                reject(Result.create(100))
+                            }
+                        }
+                        else{
+                            reject(Result.create(100))
+                        }
+                    },function(err){
+                        reject(err)
+                    })
+               }
+               else  if(para[0] == value){
+                   console.log('cache success')
+                    resolve(Result.create(0))
+                }
+                else{
+                    reject(Result.create(100))
+                }
+                               
             })
         }else{
             return new Promise(function(resolve,reject){
