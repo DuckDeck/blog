@@ -386,8 +386,8 @@
             changePassword(){     
                 let dict = {
                       user_id:this.userInfo.user_id,    
-                      old_password:this.pass.old,
-                      new_password:this.pass.new
+                      old_password:createPasswordEnctypt(this.pass.old),
+                      new_password:createPasswordEnctypt(this.pass.new)
                 }
                 const self = this;
                 self.$refs['pass'].validate((valid) => {

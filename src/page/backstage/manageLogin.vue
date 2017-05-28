@@ -49,7 +49,7 @@ import {login} from '../../store/manageService'
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
-                        login(self.ruleForm.username,self.ruleForm.password).then(function(data){
+                        login(self.ruleForm.username, createPasswordEnctypt(self.ruleForm.password)).then(function(data){
                             if(data.code == 0){
                                 clearStore()
                                 setStore('m_token',data.data)    

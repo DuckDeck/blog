@@ -131,7 +131,7 @@
                 const self = this;
                 self.$refs['pass'].validate((valid) => {
                     if (valid) {
-                       updateManagerPass(this.pass.old,this.pass.new).then(res=>{
+                       updateManagerPass(createPasswordEnctypt(this.pass.old),createPasswordEnctypt(this.pass.new)).then(res=>{
                              if(res.code == 0){
                                  toast(self,'密码修改成功，请重新登录')
                                 clearStore()

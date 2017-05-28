@@ -134,7 +134,7 @@ import { Loading } from 'element-ui'
                        let dict = {
                            email:tmpEmail,
                            code:self.ruleForm.resetCode,
-                           password:self.ruleForm.pass
+                           password:createPasswordEnctypt(self.ruleForm.pass)
                        }
                        self.isLoading = true
                        resetPassword(dict).then(res=>{

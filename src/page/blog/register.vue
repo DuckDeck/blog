@@ -115,7 +115,7 @@ import { Loading } from 'element-ui'
                     if (valid) {
                         let p = {
                             nickname:self.ruleForm.username,
-                            password:self.ruleForm.pass,
+                            password:self.createPasswordEnctypt(self.ruleForm.pass),
                             email:self.ruleForm.email
                         }
                         let loadingInstance = Loading.service(self.loadingOption)

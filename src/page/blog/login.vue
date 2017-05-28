@@ -73,7 +73,7 @@ import { Loading } from 'element-ui'
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let loadingInstance = Loading.service(self.loadingOption)
-                        login(self.ruleForm.username,self.ruleForm.password).then(function(data){
+                        login(self.ruleForm.username,createPasswordEnctypt(self.ruleForm.password)).then(function(data){
                             loadingInstance.close()
                             if(data.code == 0){
                                 setStore('token',data.data)

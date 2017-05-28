@@ -154,6 +154,15 @@ global.createMtoken = function(){
     return criptDa
 }
 
+global.createPasswordEnctypt(password){
+    if(password == undefined){
+        return ""
+    }
+    let date = Date.parse(new Date())
+    let criptDa = Tool.encrypt(key,iv,password + '=' + date)
+    return encodeURIComponent(criptDa)
+}
+
 global.getStyle = (element, attr, NumberMode = 'int') => {
     let target;
     // scrollTop 获取方式不同，没有它不属于style，而且只有document.body才能用
