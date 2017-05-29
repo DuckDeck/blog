@@ -43,7 +43,7 @@
     },
     computed:{
         createTime(){
-            return formatTime(new Date(this.commentInfo.comment_time))
+            return moment(this.commentInfo.comment_time)
         }
     }
 }

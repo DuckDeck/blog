@@ -454,7 +454,7 @@ module.exports = {
             }
             for(var day of dynamics){
                 let com = res.data.find(s=>{
-                    return s.commend_id == day.dynamic_target_id && day.dynamic_type_id == 7
+                    return s.comment_id == day.dynamic_target_id && day.dynamic_type_id == 7
                 })
                 if(com){
                     day.selfObject = com
@@ -467,6 +467,7 @@ module.exports = {
 
        if(sqlMainCommendIds.length > 0){
             sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
+            (select user_real_name from user_info where user_info.user_id = user_comment.commenter_user_id) as user_real_name,
                     comment_time FROM user_comment where comment_id in (` + sqlMainCommendIds.join(',') + `)`
             res = await DB.exec(sql)
             if(res.code != 0){
