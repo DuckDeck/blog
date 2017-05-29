@@ -25,7 +25,7 @@ module.exports = {
         }
         m = {
             userName: t.userName.trim(),
-            password: password)
+            password: password
         };
         let resManage = await BlogManager.checkLogin(m.userName)
         if(resManage.code != 0){

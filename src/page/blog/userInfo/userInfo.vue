@@ -31,14 +31,14 @@
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
                             <dynamicCell @articleTitleClick="articleTitleClick" v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
                             <div v-show="dynamics.length < dynamicsCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingDynamic" @click="loadMoreArticle" class="loadmoreButton">加载更多动态...</el-button>
+                                <el-button :loading="isLoadingDynamic" @click="loadMoreDynamic" class="loadmoreButton">加载更多动态...</el-button>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
                             <userCommentCell v-for="comment in comments" :commentInfo = "comment"></userCommentCell>
                             <div v-show="comments.length < commentsCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingComment" @click="loadMoreArticle" class="loadmoreButton">加载更多评论...</el-button>
+                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                             </div>
                         </el-tab-pane>
                         
@@ -145,7 +145,7 @@ import userCommentCell from './com/userCommentCell.vue'
        async getComments(id){
            let self = this
            this.isLoadingComment = true
-           let res = await getUserComments(this.userInfo.user_id,this.dynamics.length / 10,10)
+           let res = await getUserComments(this.userInfo.user_id,this.comments.length / 10,10)
            this.isLoadingComment = false
            if(res.code == 0){
                this.commentsCount = res.count
@@ -178,6 +178,12 @@ import userCommentCell from './com/userCommentCell.vue'
        },
        loadMoreArticle(){
          this.getUserArticles(this.userId)
+       },
+        loadMoreDynamic(){
+         this.getUserDynamics(this.userId)
+       },
+        loadMoreComment(){
+         this.getComments(this.userId)
        },
        gotoSort(sort){
            localStorage.sortId = sort.sort_article_id

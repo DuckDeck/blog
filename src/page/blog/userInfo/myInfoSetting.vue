@@ -98,7 +98,7 @@
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 修改密码 </span>
-                                <el-form :model="pass" :rules="rulePass" ref="pass"> 
+                                <el-form :model="pass" :rules="rulePass" ref="pass" style="min-height: 650px" > 
                                     <el-form-item prop="old" >                 
                                         <span style="margin-left: -5px" class="infoTitleClass">旧密码</span> 
                                         <el-input   style="margin-left: 5px;"  type = 'password' v-model="pass.old"      placeholder="请输入原密码">
@@ -394,7 +394,7 @@
                     if (valid) {
                          updateUserInfo('updatepassword',dict).then(res=>{
                              if(res.code == 0){
-                                toast(self,'密码修改成功')
+                                toast(self,'密码修改成功,请重新登录')
                                  clearStore()
                                 self.$router.replace('/login'); 
                              }

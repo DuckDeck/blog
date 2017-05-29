@@ -93,14 +93,14 @@ module.exports = {
            return
        }
        let user = res.data[0]  
-       let pass =  Check.decryptyPass(user.user_password)
-       if(pass == ""){
-            ctx.rest(Result.create(501))
+       m.password =  Check.decryptyPass(m.password)
+       if(m.password == ""){
+           ctx.rest(Result.create(501))
            return
        }
 
        let mdPass = Tool.md5(m.password)
-       if(pass != mdPass){
+       if(res.data[0].user_password != mdPass){
            ctx.rest(Result.create(501))
            return
        }

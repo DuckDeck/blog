@@ -154,13 +154,13 @@ global.createMtoken = function(){
     return criptDa
 }
 
-global.createPasswordEnctypt(password){
+global.createPasswordEnctypt = function(password){
     if(password == undefined){
         return ""
     }
     let date = Date.parse(new Date())
-    let criptDa = Tool.encrypt(key,iv,password + '=' + date)
-    return encodeURIComponent(criptDa)
+    return Tool.encrypt(key,iv,password + '=' + date)
+
 }
 
 global.getStyle = (element, attr, NumberMode = 'int') => {
