@@ -2,5 +2,4 @@
 my open-source blog website
 it will finish on june
 
-# will test very soon trouble
-
+# 5 - 30 zoe blog develop completed, will test very soon 
