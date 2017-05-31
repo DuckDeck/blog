@@ -24,6 +24,18 @@
                </div>
              </div>
         </div>
+        <div class="commentDetail" v-show = "commentInfo.comment_scope > 0">
+           <div class="dynamicCommentContent">
+               {{commentInfo.comment_content}}
+           </div>
+           <div class="dynamicCommentParentContent">
+                    {{dynamicInfo.targetObject.comment_content}}
+                    <div class="dynamicCommentArticlelTail">
+                        <span >{{dynamicInfo.targetObject.user_real_name}}</span>发布于{{formaTime(dynamicInfo.targetObject.comment_time)}}
+                    </div>  
+
+                </div> 
+        </div>
     </div>
 </template>
 <script>

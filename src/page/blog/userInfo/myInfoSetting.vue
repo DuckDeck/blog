@@ -190,7 +190,10 @@
             return {
                 activeName:'basic',
                 userInfo:{
-                    user_image_url:''
+                    user_image_url:'',
+                    user_phone:'',
+                    user_qq:'',
+                    user_address:''
                 },
                 pass:{
                     old:'',
@@ -273,20 +276,25 @@
                 })
             },
             handleAvatarScucess(res, file) {
-                this.userInfo.user_image_url = res.data.url
-                let u = getStore('userInfo')
-                u.user_image_url = res.data.url
-                setStore('userInfo',u)
+                if(res.code == 0){
+                    this.userInfo.user_image_url = res.data.url
+                    let u = getStore('userInfo')
+                    u.user_image_url = res.data.url
+                    setStore('userInfo',u)
+                }
+                else{
+                   toast(this,res.cMsg)
+                }
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
-                     this.$message.error('上传头像图片只能是 JPG 格式!');
+                     toast(this,'上传头像图片只能是 JPG 格式!');
                 }
                 if (!isLt2M) {
-                     this.$message.error('上传头像图片大小不能超过 2MB!');
+                     toast(this,'上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
             },
@@ -436,9 +444,7 @@
                  let link = this.currentDeleteLink
                  if(link.link_id==0){
                    let index = link.index
-                   console.log(index)
                    this.otherLinks.splice(index,1)
-                   console.log(this.otherLinks)
                 }
                 else{
                     let res = deleteLink(link.link_id)//delete from web
@@ -458,7 +464,6 @@
             initLink(){
                 if(this.userInfo.links && Array.from(this.userInfo.links).length > 0){
                     this.mainLink = this.userInfo.links[0]
-                    console.log(this.mainLink)
                     if(Array.from(this.userInfo.links).length > 1){
                         this.otherLinks = this.userInfo.links.filter(s=>{
                             return s.link_id != this.mainLink.link_id

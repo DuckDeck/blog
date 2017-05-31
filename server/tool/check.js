@@ -85,7 +85,7 @@ class Check{
        return null
       } 
 
-    static  async checkManageToken(req){
+    static  async checkManageToken(req,outTime = 5000){
         return new Promise((resolve,reject)=>{
             if(req == undefined){
                  resolve(Result.create(9))
@@ -100,7 +100,7 @@ class Check{
             }
             let t = Tool.decrypt(key,iv,token)
             let para = t.split('=')
-            if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
+            if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('managerKey' + id)
                 if(value == undefined){
                     db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
@@ -134,7 +134,7 @@ class Check{
         })
      }
 
-    static async checkToken(req){ 
+    static async checkToken(req,outTime = 5000){ 
        return new Promise((resolve,reject)=>{
            if(req == undefined){
                 resolve(Result.create(9))
@@ -149,9 +149,9 @@ class Check{
            }
            let t = Tool.decrypt(key,iv,token)
            let para = t.split('=')
-            if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
+           if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('userKey' + id)
-                 if(value == undefined){
+                if(value == undefined){
                      db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){
                         if(data.data.length == 1){
                             if( data.data[0].user_token == para[0]){
