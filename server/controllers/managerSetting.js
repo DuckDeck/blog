@@ -102,7 +102,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath + "static/myimg/" + newFileName
+       let urlPath = imgPath.imgPath + "static/myimg/" + newFileName
        let sql = 'update blog_manager set m_head = ? where m_id = ?'
        let res = await DB.exec(sql,[urlPath,id])
        res.data = {url:urlPath}

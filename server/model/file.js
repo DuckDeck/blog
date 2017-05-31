@@ -20,7 +20,7 @@ class File{
         })
         paths = paths.map(s=>{
             
-            return new File(s,imgPath+'static/img/' + s,s.split('.')[1] )
+            return new File(s,imgPath.imgPath+'static/img/' + s,s.split('.')[1] )
         })
         return paths
     }

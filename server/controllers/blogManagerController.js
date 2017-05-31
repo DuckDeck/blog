@@ -72,7 +72,7 @@ module.exports = {
        let newFileName ='manage' +  id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath + "static/myimg/" + newFileName
+       let urlPath = imgPath.imgPath + "static/myimg/" + newFileName
        let userInsert = {
            user_id:id,
            user_image_url:urlPath

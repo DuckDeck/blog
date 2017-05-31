@@ -395,7 +395,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =    path.join(__dirname,'../static/img/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath + "static/img/" + newFileName
+       let urlPath = imgPath.imgPath + "static/img/" + newFileName
        ctx.rest(Result.create(0,urlPath))
      },
 

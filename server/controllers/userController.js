@@ -155,11 +155,11 @@ module.exports = {
         }
         console.log(res)
         let id = res.data.id
-        let img_path = imgPath + "static/system/tra.png"
+        let img_path = imgPath.imgPath + "static/system/tra.png"
         let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,?)"
         res = await DB.exec(sql,[id,m.nickName,m.email,img_path])
         //todo. switch the domain
-        let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,imgPath + "#/active/"+id+"/" + activityCode)
+        let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,imgPath.imgPath + "#/active/"+id+"/" + activityCode)
         ctx.rest(Result.create(0))
       },
     
@@ -245,7 +245,7 @@ module.exports = {
         let user = res.data[0]
         //DOTO switch the inner net to outer
 
-        await Tool.sendEmail(user.user_real_name,user.user_email,imgPath + "#/active/"+userid+"/" + activityCode)
+        await Tool.sendEmail(user.user_real_name,user.user_email,imgPath.imgPath + "#/active/"+userid+"/" + activityCode)
         ctx.rest(Result.create(0))
      },
      //上传用户头像
@@ -360,7 +360,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath +  "static/myimg/" + newFileName
+       let urlPath = imgPath.imgPath +  "static/myimg/" + newFileName
        let userInsert = {
            user_id:id,
            user_image_url:urlPath
