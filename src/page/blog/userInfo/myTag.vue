@@ -54,6 +54,13 @@
         </div>
         <upToTop></upToTop>
         <blogFoot></blogFoot>
+         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span>{{deleteMessage}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="deleteArticleConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -83,6 +90,11 @@ import articleCell from './com/articleCell.vue'
                 currentTag:"",
                 articleCount:0,
                 isLoadingArticles:false,
+                deleteMessage:'',
+                dialogVisible:false,
+                currentDeleteSort:{},
+                currentDeleteTag:{},
+                deleteType:0
             }
         },
        async mounted(){
@@ -171,32 +183,19 @@ import articleCell from './com/articleCell.vue'
                     }
             },
             handleSortClose(sort) {
-                let self = this
-                deleteSort(sort).then(res=>{
-                    toast(self,res.cMsg)
-                    if(res.code == 0){
-                       let index = self.sorts.indexOf(sort)
-                       if(index >=0){
-                            self.sorts.splice(index,1)
-                       } 
-                    }
-                }).catch(err=>{
-                    toast(self,err.cMsg)
-                })
+                this.deleteMessage = "你确定要删除分类 " + sort.sort_article_name + " 吗?"
+                this.deleteType = 0
+                this.dialogVisible = true
+                this.currentDeleteSort = sort
+               
+               
             },
             handleTagClose(tag) {
-                let self = this
-                deleteTag(tag).then(res=>{
-                    toast(self,res.cMsg)
-                    if(res.code == 0){
-                       let index = self.tags.indexOf(tag)
-                       if(index >=0){
-                            self.tags.splice(index,1)
-                       } 
-                    }
-                }).catch(err=>{
-                    toast(self,err.cMsg)
-                })
+                this.deleteMessage = "你确定要删除标签 " + tag.tag_name + " 吗?"
+                this.deleteType = 1
+                this.dialogVisible = true
+                this.currentDeleteTag = tag
+                
             },
             showSortInput() {
                 this.inputVisibleSort = true;
@@ -286,6 +285,37 @@ import articleCell from './com/articleCell.vue'
                 this.isLoadingArticles = true
                 this.articlesBySortTag(this.currentSort,this.currentTag,this.articles.length / 10,10)
                 this.isLoadingArticles = false
+            },
+            deleteArticleConfirm(){
+                this.dialogVisible = false
+                if(this.deleteType == 0){
+                     let self = this
+                     deleteSort(this.currentDeleteSort).then(res=>{
+                        toast(self,res.cMsg)
+                        if(res.code == 0){
+                        let index = self.sorts.indexOf(sort)
+                        if(index >=0){
+                                self.sorts.splice(index,1)
+                        } 
+                        }
+                    }).catch(err=>{
+                        toast(self,err.cMsg)
+                    })
+                }
+                else{
+                    let self = this
+                    deleteTag(this.currentDeleteTag).then(res=>{
+                        toast(self,res.cMsg)
+                        if(res.code == 0){
+                        let index = self.tags.indexOf(tag)
+                        if(index >=0){
+                                self.tags.splice(index,1)
+                        } 
+                        }
+                    }).catch(err=>{
+                        toast(self,err.cMsg)
+                    })
+                }
             }
         },
         components:{

@@ -6,7 +6,7 @@
             发表了评论
             <span>{{createTime}}</span>
         </div>
-        <div class="commentDetail" v-show = "commentInfo.comment_scope == 0">
+        <div class="commentDetail" v-if = "commentInfo.comment_scope == 0">
            <div class="dynamicCommentContent">
                {{commentInfo.comment_content}}
            </div>
@@ -24,14 +24,14 @@
                </div>
              </div>
         </div>
-        <div class="commentDetail" v-show = "commentInfo.comment_scope > 0">
+        <div class="commentDetail" v-if = "commentInfo.comment_scope > 0">
            <div class="dynamicCommentContent">
                {{commentInfo.comment_content}}
            </div>
            <div class="dynamicCommentParentContent">
-                    {{dynamicInfo.targetObject.comment_content}}
+                    {{commentInfo.target.comment_content}}
                     <div class="dynamicCommentArticlelTail">
-                        <span >{{dynamicInfo.targetObject.user_real_name}}</span>发布于{{formaTime(dynamicInfo.targetObject.comment_time)}}
+                        <span >{{commentInfo.target.user_real_name}}</span>发布于{{formaTime(commentInfo.target.comment_time)}}
                     </div>  
 
                 </div> 
@@ -51,7 +51,9 @@
          }
     },
     methods:{
-        
+        formaTime(time){
+             return moment(time)
+        }
     },
     computed:{
         createTime(){

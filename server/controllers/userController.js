@@ -104,6 +104,7 @@ module.exports = {
            ctx.rest(Result.create(501))
            return
        }
+       Check.deleteUserKey(user.user_id)
        if(user.user_isValidate != 1){
            ctx.rest(Result.create(503,{user_id:user.user_id}))
            return

@@ -24,12 +24,12 @@ class Check{
         return null
       }
 
-    static deleteManagerCache(){
-        myCache.del('managerKey')
+    static deleteManagerCache(id){
+        myCache.del('managerKey' + id)
       }
  
-    static deleteUserKey(){
-         myCache.del('userKey')
+    static deleteUserKey(id){
+         myCache.del('userKey' + id)
       }
 
     static regexCheck(str,regex){
@@ -102,8 +102,11 @@ class Check{
             let para = t.split('=')
             if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('managerKey' + id)
+                console.log("value" + value)
+                console.log("token" + para[0])
                 if(value == undefined){
                     db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
+                        console.log("data" + data)
                         if(data.data.length == 1){
                             if( data.data[0].m_token == para[0]){
                                 console.log('validateToken completed')
@@ -152,7 +155,7 @@ class Check{
            if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('userKey' + id)
                 if(value == undefined){
-                     db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){
+                     db.exec('select user_token from user where user_id = ?',[id]).then(function(data){
                         if(data.data.length == 1){
                             if( data.data[0].user_token == para[0]){
                                 console.log('validateToken completed')

@@ -107,6 +107,8 @@ global.setStore = (name, content) => {
 global.getStore = name => {
 	if (!name) return;
     let content = window.localStorage.getItem(name);
+    console.log(name)
+    console.log(content)
     if(content){
         try {
             return JSON.parse(content)
