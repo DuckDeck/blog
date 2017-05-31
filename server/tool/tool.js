@@ -69,12 +69,6 @@ class Tool{
      };
 
 
-    static setPromise(result,ok){
-        return new Promise((resolve,reject)=>{
-            ok?resolve(result):reject(result)
-        })
-     }
-
     static decryptToken(token){
         return Tool.decrypt(key,iv,token)
      }
