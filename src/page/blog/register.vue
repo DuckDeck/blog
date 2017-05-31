@@ -112,10 +112,11 @@ import { Loading } from 'element-ui'
              submitForm(formName){
                 const self = this;
                 self.$refs[formName].validate((valid) => {
+                    console.log(valid)
                     if (valid) {
                         let p = {
                             nickname:self.ruleForm.username,
-                            password:self.createPasswordEnctypt(self.ruleForm.pass),
+                            password:createPasswordEnctypt(self.ruleForm.pass),
                             email:self.ruleForm.email
                         }
                         let loadingInstance = Loading.service(self.loadingOption)

@@ -5,6 +5,7 @@ const fs = require('fs')
 const Tool = require('../tool/tool')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
+const imgPath = require('../../config/imgPathConfig')
 module.exports = {
     //管理用户
     'GET /api/manage/list/:mId/:token': async (ctx, next) => {
@@ -101,7 +102,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = "http://localhost:3000/static/myimg/" + newFileName
+       let urlPath = imgPath + "static/myimg/" + newFileName
        let sql = 'update blog_manager set m_head = ? where m_id = ?'
        let res = await DB.exec(sql,[urlPath,id])
        res.data = {url:urlPath}

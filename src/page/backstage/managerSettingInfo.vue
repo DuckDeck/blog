@@ -53,6 +53,7 @@
 
 <script>
     import {managerInfoById,updateManagerPass} from '../../store/manageService'
+    import {imgPath} from '../../../config/imgPathConfig'
     export default {
         data: function(){
              var validatePass = (rule, value, callback) => {
@@ -153,7 +154,7 @@
         },
         computed:{
             uploadHeadUrl(){
-                return 'http://localhost:3000/api/manage/head/' + manageId + '/' + createMtoken()
+                return  imgPath + 'api/manage/head/' + manageId + '/' + createMtoken()
             }
         }
         

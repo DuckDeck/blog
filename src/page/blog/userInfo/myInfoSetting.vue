@@ -139,6 +139,7 @@
     import blogFoot from './../com/blogFoot.vue'
     import addLink from './com/addLink.vue'
     import qs from 'qs'
+    import {imgPath} from '../../../../config/imgPathConfig'
     export default {
         data: function(){
             var validatePass = (rule, value, callback) => {
@@ -496,7 +497,7 @@
         },
         computed:{
             uploadHeadUrl(){
-                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+                return imgPath + 'api/user/uploadHead/' + userId + '/' + createToken()
             },
         },
         components:{

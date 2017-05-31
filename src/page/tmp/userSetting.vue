@@ -86,6 +86,7 @@
     import {getUserInfo} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
+    import {imgPath} from '../../../config/imgPathConfig'
     export default {
         data: function(){
             return {
@@ -142,7 +143,7 @@
         },
         computed:{
             uploadHeadUrl(){
-                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+                return  imgPath +  'api/user/uploadHead/' + userId + '/' + createToken()
             }
         },
         components:{

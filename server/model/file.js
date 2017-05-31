@@ -3,6 +3,7 @@ const path = require('path')
 const Tool = require('../tool/tool')
 const fs = require('fs')
 const filteredFormat = ['jpeg','jpg','png','gif','txt','rar','zip']
+const imgPath = require('../../config/imgPathConfig')
 class File{
     constructor(file_name,file_url,file_type){
        this.file_name = file_name
@@ -19,7 +20,7 @@ class File{
         })
         paths = paths.map(s=>{
             
-            return new File(s,'http://localhost:3000/'+'static/img/' + s,s.split('.')[1] )
+            return new File(s,imgPath+'static/img/' + s,s.split('.')[1] )
         })
         return paths
     }

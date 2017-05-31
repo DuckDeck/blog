@@ -10,6 +10,7 @@ const path = require('path')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
+const imgPath = require('../../config/imgPathConfig')
 module.exports = {
     //管理员获取所有文章
     'GET /api/manage/article/:mId/:token/:index/:size': async (ctx, next) => {
@@ -394,7 +395,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =    path.join(__dirname,'../static/img/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = "http://localhost:3000/static/img/" + newFileName
+       let urlPath = imgPath + "static/img/" + newFileName
        ctx.rest(Result.create(0,urlPath))
      },
 

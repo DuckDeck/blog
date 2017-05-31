@@ -6,6 +6,7 @@ const path = require('path')
 const fs = require('fs')
 const DB = require('../sqlhelp/mysql')
 const Check = require('../tool/check')
+const imgPath = require('../../config/imgPathConfig')
 module.exports = {
     'POST /api/manage/login': async (ctx, next) => {
        var
@@ -71,7 +72,7 @@ module.exports = {
        let newFileName ='manage' +  id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = "http://localhost:3000/static/myimg/" + newFileName
+       let urlPath = imgPath + "static/myimg/" + newFileName
        let userInsert = {
            user_id:id,
            user_image_url:urlPath

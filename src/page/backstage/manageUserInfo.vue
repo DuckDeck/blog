@@ -152,7 +152,7 @@
 <script>
 import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
 import {userInfoById} from '../../store/manageService'
-
+import {imgPath} from '../../../config/imgPathConfig'
     export default {
         data: function(){
             return {
@@ -302,7 +302,7 @@ import {userInfoById} from '../../store/manageService'
         },
         computed:{
             uploadHeadUrl(){
-                return 'http://localhost:3000/api/user/uploadHead/' + userId + '/' + createToken()
+                return imgPath +  'api/user/uploadHead/' + userId + '/' + createToken()
             }
         },
         components:{
