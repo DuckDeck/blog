@@ -6,7 +6,7 @@
        <div class="meterContentClass">
            <div class="meterMenu">
                <div class="articleStatus">
-                   <img  src="/static/img/pen.jpeg" alt="">
+                   <img  src="static/img/pen.jpeg" alt="">
                    <div >
                         <span>用户发表了</span>
                         <span class="meterMenuCount">{{meter.articleCount}}</span>
@@ -14,7 +14,7 @@
                    </div>    
                </div>
                <div class="articleStatus">
-                   <img src="/static/img/text.jpeg" alt="">
+                   <img src="static/img/text.jpeg" alt="">
                    <div>
                         <span>一共收到了</span>
                         <span class="meterMenuCount">{{meter.commentCount}}</span>
@@ -22,7 +22,7 @@
                    </div>
                </div>
                <div class="articleStatus">
-                   <img src="/static/img/file.jpeg" alt="">
+                   <img src="static/img/file.jpeg" alt="">
                    <div>
                        <span>用户上传了</span>
                        <span class="meterMenuCount">{{meter.fileCount}}</span>

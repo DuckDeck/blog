@@ -104,6 +104,7 @@ module.exports = {
            ctx.rest(Result.create(501))
            return
        }
+       Check.deleteUserKey(user.user_id)
        if(user.user_isValidate != 1){
            ctx.rest(Result.create(503,{user_id:user.user_id}))
            return
@@ -339,11 +340,12 @@ module.exports = {
       },
 
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
-       let result0 = await Check.checkToken(ctx)
-        if(result0.code != 0){
+        //因为上传图片要很多时间，所以这埋在的checkToken时间就不够，就会有问题
+       let result0 = await Check.checkToken(ctx,999999)
+       if(result0.code != 0){
             ctx.rest(result0)
             return
-        }
+       }
        let id = ctx.params.userId
        let token = ctx.params.token
        let  t = ctx.request.body.files.file
@@ -561,7 +563,7 @@ module.exports = {
            return
        }
        let count = res.data[0].count
-       sql = 'select * from user_comments where commenter_user_id = ? and delete_flag = 0 order by comment_time desc limit ?,?'
+       sql = `select * from user_comments where commenter_user_id = ? and delete_flag = 0 order by comment_time desc limit ?,?`
        res = await DB.exec(sql,[id,index*size,size])
        if(res.code != 0){
            ctx.rest(res)
@@ -578,7 +580,8 @@ module.exports = {
        })
        if(articleIds.length > 0){
            sql = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
-           user_id,article_type_id,article_type,article_brief,article_main_img,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, (select count(comment_id) from user_comment where user_comment.comment_target_id =
+           user_id,article_type_id,article_type,article_brief,article_main_img,(select user_real_name from user_info where user_info.user_id = article.user_id) as user_real_name, 
+           (select count(comment_id) from user_comment where user_comment.comment_target_id =
                  article.article_id) as comment_count from article where article_id in (` + articleIds.join(',') + `)`
            res = await DB.exec(sql)
            if(res.code != 0){
@@ -598,13 +601,21 @@ module.exports = {
             else
                 return 0
        })
+       sql = `select *,(select user_real_name from user_info where user_info.user_id = user_comment.commenter_user_id) as user_real_name
+        from user_comment where comment_id in (`+subIds.join(',') + `) and delete_flag = 0`
+       res = await DB.exec(sql)
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
        for(let com of comments){
-            let bigCom = comments.find(s=>{
-                return s.comment_scope == com.comment_id
-            })
-            if(!com.target){
-                com.target = bigCom
-            }
+           if(com.comment_scope > 0){
+               let art = res.data.find(s=>{
+                    return s.comment_id == com.comment_scope
+                })
+                console.log(art)
+                com.target = art
+           }
        }
        ctx.rest(Result.createCount(0,count,comments))
      },

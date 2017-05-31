@@ -24,12 +24,12 @@ class Check{
         return null
       }
 
-    static deleteManagerCache(){
-        myCache.del('managerKey')
+    static deleteManagerCache(id){
+        myCache.del('managerKey' + id)
       }
  
-    static deleteUserKey(){
-         myCache.del('userKey')
+    static deleteUserKey(id){
+         myCache.del('userKey' + id)
       }
 
     static regexCheck(str,regex){
@@ -85,108 +85,107 @@ class Check{
        return null
       } 
 
-    static  async checkManageToken(req){
-      if(req == undefined){
-            return Tool.setPromise(Result.create(9),false)
-        }
-        let id = req.params.mId
-        let token = req.params.token
-        if(id == undefined || token == undefined){
-                return Tool.setPromise(Result.create(9),false)
-       }
-       if(!isNaN(token)){
-           return Tool.setPromise(Result.create(9),false)
-       }
-       let t = Tool.decrypt(key,iv,token)
-       let para = t.split('=')
-        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
-            return new Promise(function(resolve,reject){
-               let value =  myCache.get('managerKey')
-               if(value == undefined){
-                   db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
+    static  async checkManageToken(req,outTime = 5000){
+        return new Promise((resolve,reject)=>{
+            if(req == undefined){
+                 resolve(Result.create(9))
+            }
+            let id = req.params.mId
+            let token = req.params.token
+            if(id == undefined || token == undefined){
+                 resolve(Result.create(9))
+            }
+            if(!isNaN(token)){
+                return resolve(Result.create(9))
+            }
+            let t = Tool.decrypt(key,iv,token)
+            let para = t.split('=')
+            if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
+                let value =  myCache.get('managerKey' + id)
+                console.log("value" + value)
+                console.log("token" + para[0])
+                if(value == undefined){
+                    db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
+                        console.log("data" + data)
                         if(data.data.length == 1){
                             if( data.data[0].m_token == para[0]){
                                 console.log('validateToken completed')
                                 resolve(Result.create(0))
-                                myCache.set("managerKey",data.data[0].m_token)
+                                myCache.set("managerKey" + id,data.data[0].m_token)
                             }
                             else{
-                                reject(Result.create(100))
+                                resolve(Result.create(100))
                             }
                         }
                         else{
-                            reject(Result.create(100))
+                            resolve(Result.create(100))
                         }
                     },function(err){
                         reject(err)
                     })
-               }
-               else  if(para[0] == value){
-                   console.log('cache success')
+                }
+                else  if(para[0] == value){
                     resolve(Result.create(0))
                 }
                 else{
-                    reject(Result.create(100))
+                    resolve(Result.create(100))
                 }
-                               
-            })
-        }else{
-            return new Promise(function(resolve,reject){
-                reject(Result.create(9))
-            })
-        }
+            }
+            else{
+                resolve(Result.create(9))
+            }
+        })
      }
 
-    static async checkToken(req){ 
-        if(req == undefined){
-            return Tool.setPromise(Result.create(9),false)
-        }
-       let id = req.params.userId
-       let token = req.params.token
-       if(id == undefined || token == undefined){
-            return Tool.setPromise(Result.create(9),false)
-       }
-       if(!isNaN(token)){
-           return setPromise(Result.create(9),false)
-       }
-       return Tool.setPromise(Result.create(0),true) 
-       let t = Tool.decrypt(key,iv,token)
-       let para = t.split('=')
-        
-        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
-            return new Promise(function(resolve,reject){
-                 let value =  myCache.get('userKey')
-                 if(value == undefined){
-                     db.exec('select * from user_token_auth where user_id = ?',[id]).then(function(data){
+    static async checkToken(req,outTime = 5000){ 
+       return new Promise((resolve,reject)=>{
+           if(req == undefined){
+                resolve(Result.create(9))
+           }
+           let id = req.params.userId
+           let token = req.params.token
+           if(id == undefined || token == undefined){
+               resolve(Result.create(9))
+           }
+           if(!isNaN(token)){
+               resolve(Result.create(9))
+           }
+           let t = Tool.decrypt(key,iv,token)
+           let para = t.split('=')
+           if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
+                let value =  myCache.get('userKey' + id)
+                if(value == undefined){
+                     db.exec('select user_token from user where user_id = ?',[id]).then(function(data){
                         if(data.data.length == 1){
                             if( data.data[0].user_token == para[0]){
                                 console.log('validateToken completed')
                                 resolve(Result.create(0))
-                                myCache.set("userKey",data.data[0].user_token)
+                                myCache.set('userKey' + id,data.data[0].user_token)
                             }
                             else{
-                                reject(Result.create(100))
+                                resolve(Result.create(100))
                             }
                         }
                         else{
-                            reject(Result.create(100))
+                            resolve(Result.create(100))
                         }
                     },function(err){
-                        reject(err)
+                        resolve(err)
                     })
                  }
                   else if(value == para[0]){
                      resolve(Result.create(0))
                   }
                   else{
-                       reject(Result.create(100))
+                      resolve(Result.create(100))
                   }
-            })
-        }else{
-            return new Promise(function(resolve,reject){
-                reject(Result.create(9))
-            })
-        }
+            }
+            else{
+                 resolve(Result.create(9))
+            }
+       })
+       
+    
      }
 
      static decryptyPass(pass){

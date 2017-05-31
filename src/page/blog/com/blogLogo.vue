@@ -1,7 +1,7 @@
 
 <template>
     <div class="blogLogo">
-       <img src="/static/img/zoe_logo.jpg" alt="">
+       <img src="static/img/zoe_logo.jpg" alt="">
         <div class="logoDess">
             <span>{{date}}</span> | <span>POWER BY NODE&VUE </span>
         </div>

@@ -5,6 +5,7 @@ const Tool = require('../tool/tool')
 const path = require('path')
 const fs = require('fs')
 const DB = require('../sqlhelp/mysql')
+const Check = require('../tool/check')
 module.exports = {
     'POST /api/manage/login': async (ctx, next) => {
        var
@@ -43,7 +44,7 @@ module.exports = {
             ctx.rest(Result.create(501))
             return
         }
-        Check.deleteManagerCache()
+        Check.deleteManagerCache(manage.m_id)
         let token = Tool.md5(Math.random().toString())
         await BlogManager.saveToken(token,manage.m_id)
         manage.m_token = token

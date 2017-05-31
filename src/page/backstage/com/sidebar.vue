@@ -34,6 +34,7 @@ import copyRight from './copyRight'
                 return this.$route.path.replace('/','');
             }
         },
+
         methods:{
             selectMenu(index,path){
                 if(index == 'editArticle')
