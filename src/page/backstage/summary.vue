@@ -69,6 +69,13 @@ import {getMeter} from '../../store/manageService'
             }
         },
         async mounted(){
+            console.log(getStore('m_token'))
+            console.log(getStore('m_token').m_id)
+            if(!getStore('m_token')){
+                console.log('gotologin')
+                this.$router.replace('/managelogin')
+                return
+            }
             let res = await getMeter()
             if(res.code != 0){
                 toast(this,res.cMsg)

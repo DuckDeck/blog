@@ -44,7 +44,10 @@ export const articleById = (id)=>{
 }
 
 
-
+export const deleteAticleByManage = function(article){
+     const url = HostName +  'article/'  + article.article_id + '/' + manageId + '/' + createMtoken()
+     return setpromiseDelete(url)
+}
 
 export const articlesNewComment = (index = 0,size = 10)=>{
      let url = HostName +   'manage/articleslastcomment/'+ manageId + '/' + createMtoken() + '/' + index + '/' + size

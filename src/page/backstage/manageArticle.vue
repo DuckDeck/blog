@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import {articleList,deleteAticle} from '../../store/service'
-import {allArticle,releaseArticle} from  '../../store/manageService'
+import {articleList} from '../../store/service'
+import {allArticle,releaseArticle,deleteAticleByManage} from  '../../store/manageService'
     export default {
         data() {
             return {
@@ -124,7 +124,7 @@ import {allArticle,releaseArticle} from  '../../store/manageService'
                 if(!this.deleteArticle){
                     return
                 }
-                let result = await deleteAticle(this.deleteArticle)
+                let result = await deleteAticleByManage(this.deleteArticle)
                 toast(this,result.cMsg)
                 if(result.code == 0){
                     let index = this.tableData.indexOf(this.deleteArticle)

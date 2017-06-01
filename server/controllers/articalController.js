@@ -116,6 +116,25 @@ module.exports = {
         ctx.rest(Result.create(0,article))
      },
 
+    'DELETE /api/manage/article/:articleId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'articleId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+       let id = ctx.params.articleId
+       await Article.deleteArticle(id).then(res=>{
+            ctx.rest(Result.create(0))
+       }).catch(err=>{
+           ctx.rest(err)
+       })
+     },
+
     'GET /api/article/:articleId': async (ctx, next) => {
        let id = ctx.params.articleId
        let resArticle = await Article.articalById(id)
