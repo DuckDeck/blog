@@ -28,7 +28,6 @@
                 <div class="handleArticleClass">
                     
                     <el-button class="editor-btn" type="primary" @click="save('article',1)">发布文章</el-button>
-                    <el-button class="editor-btn" type="primary" @click="save('article',0)">保存草稿</el-button>
                     <el-button v-if="articleId>0" class="editor-btn" type="primary" @click="cancle">取消</el-button>
                 </div>
             </el-form>

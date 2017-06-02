@@ -53,7 +53,7 @@ import comment from './com/comment.vue'
              },
              deleteArticleConfirm(){
                 this.dialogVisible = false
-                //delete comment is unavaileble
+                toast(this,"暂时不能删除用户评论")
              }
         },
         components:{

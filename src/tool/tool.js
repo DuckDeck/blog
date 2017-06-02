@@ -144,6 +144,9 @@ global.createToken = function(){
     return criptDa
 }
 global.createMtoken = function(){
+    console.log(getStore('m_token'))
+    console.log(getStore('m_token').m_id)
+    console.log(getStore('m_token').m_token)
     let date = Date.parse(new Date())
     if(getStore('m_token') == null){
         return '0'

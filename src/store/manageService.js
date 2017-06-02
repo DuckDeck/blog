@@ -45,7 +45,7 @@ export const articleById = (id)=>{
 
 
 export const deleteAticleByManage = function(article){
-     const url = HostName +  'article/'  + article.article_id + '/' + manageId + '/' + createMtoken()
+     const url = HostName +  'manage/article/'  + article.article_id + '/' + manageId + '/' + createMtoken()
      return setpromiseDelete(url)
 }
 

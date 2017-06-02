@@ -114,30 +114,6 @@
             }).catch(err=>{
                 toast(self,err.cMsg)
             })
-            // getUserLinks().then(res=>{
-            //     if(res.code == 0){
-            //         for(var link of res.data){
-            //             if(link.link_name == 'weibo'){
-            //                 self.myLink.weibo = link.link_url
-            //                 self.myLinkId.weiboId = link.link_id
-            //             }
-            //             if(link.link_name == 'github'){
-            //                 self.myLink.github = link.link_url
-            //                 self.myLinkId.githubId = link.link_id
-                           
-            //             }
-            //             if(link.link_name == 'zhihu'){
-            //                 self.myLink.zhihu = link.link_url
-            //                 self.myLinkId.zhihuId = link.link_id
-            //             }
-            //         }
-            //     }
-            //     else{
-            //         toast(self,res.cMsg)
-            //     }
-            // }).catch(err=>{
-            //     toast(self,err.cMsg)
-            // })
         },
         methods:{
           saveSystemInfo(){

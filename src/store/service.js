@@ -7,7 +7,7 @@ import {index,indexMore,search,searchbase} from './indexService'
 
 import {submitComment,getComment,commentsByArticleId} from './commentService'
 
-import {articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,deleteAticleByManage,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle} from './articleService'
+import {articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle} from './articleService'
 
 
 export {
@@ -16,5 +16,5 @@ export {
     getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo,
     index,indexMore,search,searchbase,
     submitComment,getComment,commentsByArticleId,
-    articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,deleteAticleByManage,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle
+    articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle
 }
