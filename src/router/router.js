@@ -25,6 +25,8 @@ const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writ
 const aboutVue =  r => require.ensure([], () => r(require('../page/blog/aboutVue')), 'aboutVue')
 
 
+const notFoundPage =  r => require.ensure([], () => r(require('../page/blog/404')), 'notFoundPage')
+
 
 const manage = r => require.ensure([], () => r(require('../page/backstage/com/home')), 'manage')
 const manageLogin =  r => require.ensure([], () => r(require('../page/backstage/manageLogin')), 'manageLogin')
@@ -110,7 +112,12 @@ export default [
         path:'/aboutVue',
         component:aboutVue
     },   
-   
+  
+   {
+        path:'*',
+        component: notFoundPage,
+        name:'notfound'
+    },   
      {
         path: '/manage',
         component: manage,
