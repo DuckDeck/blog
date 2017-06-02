@@ -10,7 +10,7 @@ const HostName = baseUrl
 export const submitComment = (comment)=>{
     let url = HostName +  'comment'
     if(getStore('token')){
-        url = HostName +  'comment/'+ userId + '/' + createToken()
+        url = HostName +  'comment/'+ userId() + '/' + createToken()
     }
     return setpromisePost(url,comment)
 }

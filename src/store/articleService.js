@@ -29,11 +29,11 @@ export const articlesByUser = function(user_id,index = 0,size = 10){
 
 export const saveArticle = function(article,isNew){
     if(!isNew){
-        const url = HostName +  'article/'+ article.articleId + '/'+ userId + '/' + createToken()
+        const url = HostName +  'article/'+ article.articleId + '/'+ userId() + '/' + createToken()
         return setpromisePut(url,article)
     }
     else{
-        const url = HostName +  'article/' + userId + '/' + createToken()
+        const url = HostName +  'article/' + userId() + '/' + createToken()
         return setpromisePost(url,article)
     }
     
@@ -41,12 +41,12 @@ export const saveArticle = function(article,isNew){
 
 
 export const deleteAticle = function(article){
-     const url = HostName +  'article/'  + article.article_id + '/' + userId + '/' + createToken()
+     const url = HostName +  'article/'  + article.article_id + '/' + userId() + '/' + createToken()
      return setpromiseDelete(url)
 }
 
 export const articleList = function(index,size){
-    const url = HostName +  'article/' + userId + '/' + createToken() + '/' + index + '/' + size
+    const url = HostName +  'article/' + userId() + '/' + createToken() + '/' + index + '/' + size
     return setpromiseGet(url)
 }
 
@@ -62,11 +62,11 @@ export const articleById = function(article_id){
 }
 
 export const saveTempArticle = function(article){
-    const url = HostName +  'autosavearticle/' + userId + '/' + createToken()
+    const url = HostName +  'autosavearticle/' + userId() + '/' + createToken()
     return setpromisePost(url,article)
  }
 export const tempArticle = function(){
-    const url = HostName +  'temparticle/' +  userId + '/' + createToken()
+    const url = HostName +  'temparticle/' +  userId() + '/' + createToken()
     return setpromiseGet(url)
 }
 

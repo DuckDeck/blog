@@ -131,8 +131,9 @@ global.clearStoreExcept = (except)=>{
         }
     }
 }
-global.userId = getStore('token') == null ?  null : getStore('token').user_id
-global.manageId = getStore('m_token') == null ?  null : getStore('m_token').m_id
+global.userId = function(){ return getStore('token') == null ?  null : getStore('token').user_id}
+global.manageId = function(){ return getStore('m_token') == null ?  null : getStore('m_token').m_id}
+
 global.createToken = function(){
     let date = Date.parse(new Date())
     if(getStore('token') == null){
@@ -144,9 +145,7 @@ global.createToken = function(){
     return criptDa
 }
 global.createMtoken = function(){
-    console.log(getStore('m_token'))
-    console.log(getStore('m_token').m_id)
-    console.log(getStore('m_token').m_token)
+
     let date = Date.parse(new Date())
     if(getStore('m_token') == null){
         return '0'

@@ -15,7 +15,7 @@ const HostName = baseUrl
 export const uploadImgUrl =  function(){
      let userId = 0
      if (getStore('token')){
-         userId =  userId
+         userId =  userId()
      }
     return HostName +  'uploadImg/' + userId  + '/' + createToken()
  }
@@ -84,12 +84,12 @@ export const getTags = function(user_id){
 }
 
 export const addTag = function(tag){
-    const url = HostName +  'tag/' + userId + '/' + createToken()
+    const url = HostName +  'tag/' + userId() + '/' + createToken()
     return setpromisePost(url,{tag:tag})
 }
 
 export const deleteTag = function(tag){
-    const url = HostName +  'tag/' + tag.tag_id + '/' + userId + '/' + createToken() 
+    const url = HostName +  'tag/' + tag.tag_id + '/' + userId() + '/' + createToken() 
     return setpromiseDelete(url)
 }
 
@@ -104,12 +104,12 @@ export const getSorts = function(user_id){
 }
 
 export const addSort = function(sort){
-    const url = HostName +  'sort/' + userId + '/' + createToken()
+    const url = HostName +  'sort/' + userId() + '/' + createToken()
     return setpromisePost(url,{sort:sort})
 }
 
 export const deleteSort = function(sort){
-    const url = HostName +  'sort/'  + sort.sort_article_id + '/' + userId + '/' + createToken() 
+    const url = HostName +  'sort/'  + sort.sort_article_id + '/' + userId() + '/' + createToken() 
     return setpromiseDelete(url)
 }
 
@@ -125,16 +125,16 @@ export const getUserLinks = function(id){
 }
 
 export const updateUserLinks = function(links){
-    const url = HostName +  'link/' + userId + '/' + createToken()
+    const url = HostName +  'link/' + userId() + '/' + createToken()
     return setpromisePost(url,links)
 }
 
 export const updateFriendLinks = function(link){
-    const url = HostName +  'link/'+ link.link_id +'/' + userId + '/' + createToken()
+    const url = HostName +  'link/'+ link.link_id +'/' + userId() + '/' + createToken()
     return setpromisePost(url,link)
 }
 export const deleteLink = function(link_id){
-    const url = HostName +  'link/'+ link_id +'/' + userId + '/' + createToken()
+    const url = HostName +  'link/'+ link_id +'/' + userId() + '/' + createToken()
     return setpromiseDelete(url)
 }
 
