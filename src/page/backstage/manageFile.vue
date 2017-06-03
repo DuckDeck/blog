@@ -52,7 +52,7 @@ import {getStoredFiles,deleteFile}  from '../../store/manageService'
                         return s.file_name == file.file_name
                     })
                     if(index >= 0){
-                        this.files = this.files.slice(index,1)
+                        this.files.splice(index,1)
                     }
                     toast(this,'删除成功')
                 }
