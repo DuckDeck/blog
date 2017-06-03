@@ -1,4 +1,4 @@
-import {uploadImgUrl,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
+import {uploadImgConfig,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
 resetPassword,getUserInfo,getDynamics,getUserComments,getTags,addTag,deleteTag,getSorts,addSort,deleteSort,
 getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo} from './userService'
 
@@ -11,7 +11,7 @@ import {articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,ar
 
 
 export {
-    uploadImgUrl,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
+    uploadImgConfig,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
     resetPassword,getUserInfo,getDynamics,getUserComments,getTags,addTag,deleteTag,getSorts,addSort,deleteSort,
     getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo,
     index,indexMore,search,searchbase,

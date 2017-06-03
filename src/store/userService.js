@@ -12,9 +12,34 @@ const HostName = baseUrl
 
 
 
-export const uploadImgUrl =  function(){
 
-    return HostName +  'uploadImg/' + userId()  + '/' + createToken()
+export const uploadImgConfig =  function(){
+    return  {image: {
+        // 后端图片上传的地址，如果为空，默认转图片为base64
+        // Url of the server-side,default null and convert image to base64
+        server:HostName +  'uploadImg/' + userId()  + '/' + createToken(),
+        // 请求时表单参数名
+        // the name for file field in multipart request
+        fieldName: "image",
+        // 文件最大体积，单位字节  max file size
+        sizeLimit: 512 * 1024,
+        // 是否压缩，默认true，设置为true时会使用localResizeIMG进行压缩
+        // default true,if set to true,the image will resize by localResizeIMG (https://github.com/think2011/localResizeIMG)
+        compress: true,
+        // 图片压缩选项
+        // follows are options of localResizeIMG
+        width: 1600,
+        height: 1600,
+        quality: 80,
+        // 响应数据处理
+        // handle response data，return image url
+        uploadHandler(responseText){
+            //default accept json data like  {ok:false,msg:"unexpected"} or {ok:true,data:"image url"}
+            var json = JSON.parse(responseText)
+            callBack(json)
+        }
+    }}
+  
  }
 
 export const login = function(userName,password){

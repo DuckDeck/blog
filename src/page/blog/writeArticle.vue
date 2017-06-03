@@ -26,8 +26,8 @@
                                 {{sort.sort_article_name}}
                             </el-button>
                         </el-form-item>
-
-                        <vue-html5-editor class="editor" v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
+                        <!--VueHtml5Editor不能及时更新上传的url，因为一开始就只读读一次配置，所以是写死的，需要解决这个问题-->
+                        <VueHtml5Editor ref="html5Edit" class="editor" v-show="editMode" options="html5EditorOption" :content="content" @change="updateData" ></VueHtml5Editor>
                         <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary"  @click="save('article',1)">发布文章</el-button>
@@ -52,10 +52,11 @@
     </div>
 </template>
 <script>
-import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle} from '../../store/service'
+import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle,uploadImgConfig} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
 import  toMarkdown  from 'to-markdown'
+import {VueHtml5Editor} from 'vue-html5-editor'
 //wait to do auto save feature
     export default {
         data: function(){
@@ -188,9 +189,11 @@ import  toMarkdown  from 'to-markdown'
                 this.saveData()
             },
             async saveMarkdownData(val,render){
-                this.markDownContent =  val;
-                this.content = render            
-                await this.tempSave(false)
+                if(!this.editMode){
+                    this.markDownContent =  val;
+                    this.content = render            
+                    await this.tempSave(false)
+                }
             },
             async saveData(){
                  if(this.content.length - this.previousLetterCount > 100){
@@ -292,10 +295,13 @@ import  toMarkdown  from 'to-markdown'
             },
             previewButtonStatus(){
                 return this.isEdit ? '预览文章': '编辑文章'
+            },
+            html5EditorOption(){
+                return uploadImgConfig()
             }
         },
         components:{
-            blogFoot,mavonEditor
+            blogFoot,mavonEditor,VueHtml5Editor
         },
         beforeDestroy(){
              this.tempSave()

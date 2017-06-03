@@ -128,11 +128,20 @@ module.exports = {
             return
         }
        let id = ctx.params.articleId
-       await Article.deleteArticle(id).then(res=>{
-            ctx.rest(Result.create(0))
-       }).catch(err=>{
-           ctx.rest(err)
-       })
+       let res =  await Article.deleteArticle(id)
+       if(res.code != 0){
+           ctx.rest(res)
+           return
+       }
+       let sql = 'select comment_id from user_comment where  comment_target_id = ?'
+       res = await DB.exec(sql,[id])
+       if(res.data.length > 0){
+           sql = 'update user_comment set delete_flag = 1 where comment_id in (' + res.data.join(',') + ")"
+           await DB.exec(sql)
+           sql = 'update user_sub_comment set delete_flag = 1 where comment_scope in (' + res.data.join(',') + ")"
+           await DB.exec(sql)
+       }
+       ctx.rest(Result.create(0))
      },
 
     'GET /api/article/:articleId': async (ctx, next) => {
@@ -395,9 +404,10 @@ module.exports = {
            ctx.rest(err)
        })
      },
-
+     //上传图片目前没，只有用固定的token
     'POST /api/uploadImg/:userId/:token': async (ctx, next) => {
         let result0 = await Check.checkToken(ctx)
+        console.log(result0)
         if(result0.code != 0){
             ctx.rest(result0)
             return
@@ -406,6 +416,7 @@ module.exports = {
        let token = ctx.params.token
        let  t = ctx.request.body.files.image
        let oldPath = t.path
+       console.log(oldPath)
        if (!fs.existsSync(oldPath)){
            ctx.rest(Result.create(9))
        }

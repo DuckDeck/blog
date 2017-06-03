@@ -251,7 +251,7 @@ global.toast = function(vue,message){
     if(globalVue != vue){
         globalVue = vue
     }
-     vue.$message(message);
+    vue.$message(message);
 }
 
 global.callBack = function(result){

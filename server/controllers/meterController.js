@@ -13,14 +13,14 @@ module.exports = {
         let sqlArticleCount = `select count(article_id) as articleCount from article`
         let actArticleCount = DB.exec(sqlArticleCount)
 
-        let sqlCommentCount = 'select count(comment_id) as commentCount from user_comment'
+        let sqlCommentCount = 'select count(comment_id) as commentCount from user_comment where delete_flag = 0 '
         let actCommentCount = DB.exec(sqlCommentCount)
 
         let sqlNewArticle = 'select article_id,article_name from article order by article_create_time desc limit 10'
         let actNewArticle = DB.exec(sqlNewArticle)
 
         let sqlNewComment = `select comment_id,comment_content,comment_time,(select user_name from user where user_id = user_comment.commenter_user_id) as commenter
-         from user_comment order by comment_time desc limit 10`
+         from user_comment where delete_flag = 0 order by comment_time desc limit 10`
         let actNewComment = DB.exec(sqlNewComment)
 
         let resAll = await Promise.all([actArticleCount,actNewArticle,actCommentCount,actNewComment,File.allFile()])
