@@ -32,7 +32,7 @@ function createResult(code,data){
             return new Result(0,'success','成功',data||{})
             break;
          case -1:
-            return new Result(-1,'server wrong','服务器错误',data||{})
+            return new Result(-1,'server error','服务器内部错误',data||{})
             break;
         case 8:
             return new Result(8,'not found object','找不到数据',data||{})
@@ -70,8 +70,11 @@ function createResult(code,data){
         case 504:
             return new Result(504,'userName already exist','用户名已经存在',data||{})
             break;
-         case 505:
+        case 505:
             return new Result(505,'new password and old password can not be the same','新旧密码不能相同',data||{})
+            break;
+         case 550:
+            return new Result(550,'file do not exist','文件不存在',data||{})
             break;
         case -100:
             return new Result(-100,'sql language error','sql语句错误',data||{})

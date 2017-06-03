@@ -61,6 +61,10 @@ export const getStoredFiles = ()=>{
     return setpromiseGet(url)
 }
 
+export const deleteFile = (fileName)=>{
+    let url = HostName +  'manage/file/' +  fileName + '/' +  manageId() + '/' + createMtoken() 
+    return setpromiseDelete(url)
+}
 
 
 export const getSysytemInfo = function(){

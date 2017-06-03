@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {getStoredFiles}  from '../../store/manageService'
+import {getStoredFiles,deleteFile}  from '../../store/manageService'
     export default {
         data: function(){
             return {
@@ -45,8 +45,20 @@ import {getStoredFiles}  from '../../store/manageService'
         
         },
         methods:{
-            deleteFile(file){
-                
+            async deleteFile(file){
+                let res = await deleteFile(file.file_name)
+                if(res.code == 0){
+                    let index = this.files.findIndex(s=>{
+                        return s.file_name == file.file_name
+                    })
+                    if(index >= 0){
+                        this.files = this.files.slice(index,1)
+                    }
+                    toast(this,'删除成功')
+                }
+                else{
+                    toast(this,res.cMsg)
+                }
             }
         }
     }

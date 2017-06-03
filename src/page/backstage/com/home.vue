@@ -23,6 +23,7 @@
         mounted(){
             if(!getStore('m_token')){
                 this.$router.replace('/managelogin')
+                return
             }
             let info = getStore('m_token')
             this.userInfo = info

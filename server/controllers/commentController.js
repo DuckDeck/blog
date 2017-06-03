@@ -127,6 +127,10 @@ module.exports = {
             return
         }
         let articles = articleResult.data
+        if(articles.length == 0){
+            ctx.rest(Result.create(0,[]))
+            return
+        }
         let article_ids = articles.map((s)=>{
             return s.article_id
         })

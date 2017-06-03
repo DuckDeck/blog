@@ -13,11 +13,8 @@ const HostName = baseUrl
 
 
 export const uploadImgUrl =  function(){
-     let userId = 0
-     if (getStore('token')){
-         userId =  userId()
-     }
-    return HostName +  'uploadImg/' + userId  + '/' + createToken()
+
+    return HostName +  'uploadImg/' + userId()  + '/' + createToken()
  }
 
 export const login = function(userName,password){

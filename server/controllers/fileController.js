@@ -16,6 +16,22 @@ module.exports = {
        let filePath = File.allFile()
        ctx.rest(Result.create(0,filePath))
     },
+
+    'DELETE /api/manage/file/:fileName/:mId/:token': async (ctx, next) => {
+       let tokenResult = await Check.checkManageToken(ctx)
+       if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+       }
+       let fileNameCheckResult = Check.checkString(ctx.params,"fileName")
+       if(fileNameCheckResult){
+           ctx.rest(fileNameCheckResult)
+           return
+       }
+       let fileName = ctx.params.fileName
+       let res = await File.deleteFile(fileName)
+       ctx.rest(res)
+    },
 }
 
 
