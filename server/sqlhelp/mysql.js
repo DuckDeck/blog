@@ -22,9 +22,9 @@ db.exec = function(sql,data){
            data = []
         }
         console.log(sql)
-        console.log(data)
        pool.query(sql,data, function(err, rows, fields) {  
-          if (err) {  
+          if (err) { 
+              console.log(err)
               reject(result.create(-50))
               return;    
             }

@@ -9,7 +9,7 @@ const sqls = {
     article.article_id) as comment_count from article where user_id = ? limit ? , ?`,  
     articalById:`SELECT *,(select sort_article_name   from article_sort where article_sort.sort_article_id = article.article_id) 
     as sort_name FROM article where article_id = ?`,
-    insertArticle:'insert into article values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    insertArticle:'insert into article values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)',
     deleteArticle:`delete from article where article_id = ? `,
     deleteArticleTagMap:`delete from article_tag_map where article_id = ? `,
     updateArticle:`UPDATE article SET article_name = ?,article_create_time = ?,article_release_time = ?,article_ip = ?,article_click = ?, article_sort_id = ?, 

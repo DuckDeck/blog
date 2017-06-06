@@ -2,7 +2,7 @@
 const db = require('../sqlhelp/mysql') 
 const Tool = require('../tool/tool')
 const sqls = {
-    insert:'insert into user blog_manager(0,?,?,?,?,?,?,?)',
+    insert:'insert into user blog_manager(0,?,?,?,?,?,?,?,0)',
     checkLogin:'select * from blog_manager where m_username = ?',
     saveToken:`update blog_manager set m_token = ? where m_id = ?`
 }

@@ -12,13 +12,14 @@ CREATE TABLE   IF NOT EXISTS   user (
         user_token varchar(50) NOT NULL COMMENT 'token',
         user_isSendEmail int(2) NOT NULL DEFAULT 0 COMMENT '用户有没有发送验证邮件',
         user_isValidate int(2) NOT NULL DEFAULT 0 COMMENT '用户有没有验证',
-        user_register_time int(13) NOT NULL DEFAULT 0  COMMENT '用户注册时间',
+        user_register_time BIGINT(15) NOT NULL DEFAULT 0  COMMENT '用户注册时间',
         user_register_ip varchar(15) NOT NULL DEFAULT ''  COMMENT '用户注册时IP地址',
         user_login_times int(5) NOT NULL DEFAULT 0  COMMENT '用户登录次数',
         user_last_login_ip varchar(15) NOT NULL DEFAULT '' COMMENT '用户上一次登录IP地址',
         user_lock tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否锁定，0为不锁定，1为锁定',
         user_freeze tinyint(3) NOT NULL DEFAULT 0  COMMENT '是否冻结，0为不冻结，1为冻结',
         user_auth varchar(255) NOT NULL DEFAULT '' COMMENT '拥有权限',
+        delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
         PRIMARY KEY (user_id)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
         
@@ -39,7 +40,7 @@ CREATE TABLE   IF NOT EXISTS   user_info (
         user_birthday BIGINT(15) NOT NULL DEFAULT 0  COMMENT '用户生日',
         user_description varchar(255) NOT NULL DEFAULT ''  COMMENT '自我描述',
         user_image_url varchar(255) NOT NULL DEFAULT ''  COMMENT '用户头像',
-        user_last_update_time int(13) NOT NULL DEFAULT 0  COMMENT '用户上次更新博客时间',
+        user_last_update_time BIGINT(15) NOT NULL DEFAULT 0  COMMENT '用户上次更新博客时间',
         user_says varchar(255) NOT NULL DEFAULT ''  COMMENT '用户语录',
         PRIMARY KEY (user_id)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
@@ -115,6 +116,7 @@ CREATE TABLE  IF NOT EXISTS secret_message (
  receive_id mediumint(8) NOT NULL COMMENT '收信者ID',
  message_topic varchar(64) NOT NULL COMMENT '私信标题',
  message_content varchar(255) NOT NULL COMMENT '私信内容',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (secret_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -158,8 +160,8 @@ CREATE TABLE  IF NOT EXISTS ad (
  ad_name varchar(60) NOT NULL COMMENT '该条广告记录的广告名称',
  ad_link varchar(255) NOT NULL COMMENT '广告链接地址',
  ad_code text NOT NULL COMMENT '广告链接的表现,文字广告就是文字或图片和flash就是它们的地址',
- start_time int(13) NOT NULL DEFAULT 0 COMMENT '广告开始时间',
- end_time int(13) NOT NULL DEFAULT 0 COMMENT '广告结束时间',
+ start_time BIGINT(15) NOT NULL DEFAULT 0 COMMENT '广告开始时间',
+ end_time BIGINT(15) NOT NULL DEFAULT 0 COMMENT '广告结束时间',
  link_man varchar(60) NOT NULL COMMENT '广告联系人',
  link_email varchar(60) NOT NULL COMMENT '广告联系人的邮箱',
  link_phone varchar(60) NOT NULL COMMENT '广告联系人得电话',
@@ -178,8 +180,9 @@ CREATE TABLE  IF NOT EXISTS stay_message (
  stay_user_id mediumint(8) NOT NULL COMMENT '留言者ID',
  message_content varchar(255) NOT NULL COMMENT '留言内容',
  stay_user_ip varchar(15) NOT NULL COMMENT '留言用户的IP地址',
- message_stay_time int(13) NOT NULL COMMENT '留言时间',
+ message_stay_time BIGINT(15) NOT NULL COMMENT '留言时间',
  place varchar(64) NOT NULL COMMENT '地区',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (stay_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -203,7 +206,7 @@ visitor 最近访客表
 CREATE TABLE  IF NOT EXISTS visitor (
  v_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '访客记录ID',
  visitor_id mediumint(8) NOT NULL COMMENT '访客ID',
- visitor_time int(13) NOT NULL COMMENT '来访时间',
+ visitor_time BIGINT(15) NOT NULL COMMENT '来访时间',
  user_id mediumint(8) NOT NULL COMMENT '被访用户ID',
  visitor_ip varchar(15) NOT NULL COMMENT '访客IP地址',
  type_id int(3) NOT NULL COMMENT '访问板块ID',
@@ -218,10 +221,11 @@ shuoshuo 用户心情说说表
 CREATE TABLE  IF NOT EXISTS shuoshuo (
  shuo_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '说说记录ID',
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
- shuo_time int(13) NOT NULL DEFAULT 0 COMMENT '发布时间',
+ shuo_time BIGINT(15) NOT NULL DEFAULT 0 COMMENT '发布时间',
  shuo_ip varchar(15) NOT NULL COMMENT '说说发布时的IP地址',
  shuoshuo varchar(255) NOT NULL COMMENT '说说内容',
  type_id tinyint(3) NOT NULL DEFAULT 3 COMMENT '栏目ID,默认为3',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (shuo_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -252,8 +256,9 @@ CREATE TABLE  IF NOT EXISTS photos (
  photo_description varchar(255) NOT NULL COMMENT '图片描述',
  user_id mediumint(8) NOT NULL COMMENT '所属用户ID',
  sort_id mediumint(8) NOT NULL COMMENT '所属相册ID',
- upload_time int(13) NOT NULL COMMENT '图片上传时间',
+ upload_time BIGINT(15) NOT NULL COMMENT '图片上传时间',
  upload_ip varchar(15) NOT NULL COMMENT '图片操作上传IP地址',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (photo_id) 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -301,13 +306,14 @@ CREATE TABLE  IF NOT EXISTS article (
  article_sort_id mediumint(8) NOT NULL COMMENT '所属分类',
  user_id mediumint(8) NOT NULL COMMENT '所属用户ID',
  article_type_id tinyint(3) NOT NULL DEFAULT 1 COMMENT '栏目ID',
- article_type int(13) NOT NULL DEFAULT 1 COMMENT '文章的模式:0为私有，1为公开，2为仅好友查看',
+ article_type int(2) NOT NULL DEFAULT 1 COMMENT '文章的模式:0为私有，1为公开，2为仅好友查看',
  article_content text NOT NULL COMMENT '文章内容',
  article_brief varchar(1000) NOT NULL DEFAULT '' COMMENT '文章简要',
  article_main_img varchar(128) NOT NULL DEFAULT '' COMMENT '文章主要图片',
  article_up tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否置顶:0为否，1为是',
  article_recommend tinyint(3) NOT NULL DEFAULT 0 COMMENT '是否博主推荐:0为否，1为是',
  article_status tinyint(3) NOT NULL DEFAULT 0 COMMENT '文章状态，0为没有发布，也就是草稿，1 为发布 5是临时文章',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (article_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
@@ -355,7 +361,7 @@ CREATE TABLE  IF NOT EXISTS phone_message (
  phone_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
  phone_num varchar(12) NOT NULL COMMENT '用户手机号码',
  contents varchar(255) NOT NULL COMMENT '发送内容',
- send_time int(13) NOT NULL COMMENT '发送时间',
+ send_time BIGINT(15) NOT NULL COMMENT '发送时间',
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
  PRIMARY KEY (phone_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
@@ -373,6 +379,7 @@ CREATE TABLE  IF NOT EXISTS blog_manager (
  m_last_login_time BIGINT(15) NOT NULL COMMENT '上次登录时间',
  m_login_times int(6) DEFAULT 0 COMMENT '登录次数',
  m_head varchar(100) NOT NULL COMMENT '头像',
+ delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (m_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 

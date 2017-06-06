@@ -64,6 +64,7 @@ import { Loading } from 'element-ui'
              async reSendMail(){
                let res = await ressendemail(this.userId)
                toast(this,res.cMsg)
+               this.dialogVisible = false
              },
              resetPassword(){
                  this.$router.push('/resetpassword')

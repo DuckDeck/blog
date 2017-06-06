@@ -159,7 +159,7 @@ module.exports = {
         let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,?)"
         res = await DB.exec(sql,[id,m.nickName,m.email,img_path])
         //todo. switch the domain
-        let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,imgPath.imgPath + "#/active/"+id+"/" + activityCode)
+        let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,imgPath.emailPath + "#/active/"+id+"/" + activityCode)
         ctx.rest(Result.create(0))
       },
     
@@ -245,7 +245,7 @@ module.exports = {
         let user = res.data[0]
         //DOTO switch the inner net to outer
 
-        await Tool.sendEmail(user.user_real_name,user.user_email,imgPath.imgPath + "#/active/"+userid+"/" + activityCode)
+        await Tool.sendEmailToActive(user.user_real_name,user.user_email,imgPath.emailPath + "#/active/"+userid+"/" + activityCode)
         ctx.rest(Result.create(0))
      },
      //上传用户头像
