@@ -32,12 +32,12 @@
     "vue-router": "^2.4.0",
     "vuex": "^2.3.1",
     "vue-awesome-swiper": "^2.4.0",
-    "vue-html5-editor": "^1.1.1",
     "mavon-editor": "^1.5.4",
     "qs": "^6.4.0",
     "to-markdown": "^3.0.4"
   },
   "devDependencies": {
+    "ajax-hook": "^1.7.0",
     "autoprefixer": "^6.7.7",
     "axios": "^0.15.3",
     "babel-core": "^6.0.0",
@@ -73,6 +73,7 @@
     "shelljs": "^0.7.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "vue-html5-editor": "^1.1.1",
     "vue-loader": "^10.0.0",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.2.6",

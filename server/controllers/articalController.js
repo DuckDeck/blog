@@ -405,7 +405,7 @@ module.exports = {
        })
      },
      //上传图片目前没，只有用固定的token
-    'POST /api/uploadImg/:userId/:token': async (ctx, next) => {
+    'POST /api/uploadArticleImg/:userId/:token': async (ctx, next) => {
         let result0 = await Check.checkToken(ctx)
         console.log(result0)
         if(result0.code != 0){

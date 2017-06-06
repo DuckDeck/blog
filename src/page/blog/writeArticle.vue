@@ -27,7 +27,9 @@
                             </el-button>
                         </el-form-item>
                         <!--VueHtml5Editor不能及时更新上传的url，因为一开始就只读读一次配置，所以是写死的，需要解决这个问题-->
-                        <VueHtml5Editor ref="html5Edit" class="editor" v-show="editMode" options="html5EditorOption" :content="content" @change="updateData" ></VueHtml5Editor>
+                        <!--使用这个vue-html5-editor确实无解了，无法变成url会让上传的图片都不知道是谁，所以要么用别的组件，要么hook 这个ajax请求，更改url-->
+                        <!--搞定，使用Js 拦截全局ajax请求并更改url的方法完全解决-->
+                        <vue-html5-editor class="editor" v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
                         <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary"  @click="save('article',1)">发布文章</el-button>
@@ -52,11 +54,11 @@
     </div>
 </template>
 <script>
-import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle,uploadImgConfig} from '../../store/service'
+import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
 import  toMarkdown  from 'to-markdown'
-import {VueHtml5Editor} from 'vue-html5-editor'
+
 //wait to do auto save feature
     export default {
         data: function(){
@@ -296,12 +298,9 @@ import {VueHtml5Editor} from 'vue-html5-editor'
             previewButtonStatus(){
                 return this.isEdit ? '预览文章': '编辑文章'
             },
-            html5EditorOption(){
-                return uploadImgConfig()
-            }
         },
         components:{
-            blogFoot,mavonEditor,VueHtml5Editor
+            blogFoot,mavonEditor
         },
         beforeDestroy(){
              this.tempSave()
