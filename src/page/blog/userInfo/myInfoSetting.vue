@@ -320,9 +320,11 @@
                         if(self.isCanResetUserName){
                             if(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(self.userInfo.user_name)){
                                 toast(self,"新用户名不能再使用邮箱")
-                                return
                             }
-                            dict.user_name = self.userInfo.user_name
+                            else{
+                                 dict.user_name = self.userInfo.user_name
+                            }
+                        
                         }
                         if(self.userInfo.user_phone.length > 0){
                             dict.user_phone = self.userInfo.user_phone
@@ -509,7 +511,7 @@
         },
         computed:{
             uploadHeadUrl(){
-                return imgPath + 'api/user/uploadHead/' + userId + '/' + createToken()
+                return imgPath + 'api/user/uploadHead/' + userId() + '/' + createToken()
             },
         },
         components:{

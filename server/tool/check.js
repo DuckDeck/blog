@@ -11,7 +11,7 @@ class Check{
         if(!body[name] || !body[name].trim()){
              return Result.create(10,{msg:'miss ' + name})
         }
-        if(isNaN(body[name])){
+        if(Number.isNaN(body[name])){
             return Result.create(10,{msg: name + 'wrong format'})
         }
         return null
@@ -51,7 +51,7 @@ class Check{
                 }
             break
             case 'qq':
-                if(/^[1-9]\d{3,9}$/.test(str)){
+                if(/^[1-9]\d{3,11}$/.test(str)){
                     return null
                 }else{
                     return "QQ格式不正确"
