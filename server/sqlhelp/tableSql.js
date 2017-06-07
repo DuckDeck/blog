@@ -46,7 +46,7 @@ const sqls = {
         user_real_name varchar(32) NOT NULL COMMENT '用户真名',
         user_phone varchar(20) NOT NULL DEFAULT '' COMMENT '用户手机号码',
         user_gender int(2) NOT NULL DEFAULT 0 COMMENT '用户性别 --0未知 1：男 2：女，3： 人妖，4： 保密',
-        user_qq mediumint(9) NOT NULL DEFAULT 0 COMMENT '用户QQ号码',
+        user_qq varchar(20) NOT NULL DEFAULT '' COMMENT '用户QQ号码',
         user_email varchar(64) NOT NULL DEFAULT '' COMMENT '用户EMAIL地址',
         user_address varchar(255) NOT NULL DEFAULT '' COMMENT '用户地址',
         user_editor_type INT(2) NOT NULL DEFAULT 0 COMMENT '用户常用编辑器 0是富文本，1是markdown',
