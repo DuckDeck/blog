@@ -90,6 +90,7 @@ import  toMarkdown  from 'to-markdown'
                 userInfo:{},
                 isSaving:false,
                 previousLetterCount:0,
+                isSaving:false
             }
         },
         async mounted(){
@@ -201,7 +202,12 @@ import  toMarkdown  from 'to-markdown'
             },
             async saveData(){
                  if(this.content.length - this.previousLetterCount > 100){
+                    if(this.isSaving){
+                         return
+                    }
+                    this.isSaving = true
                     await this.tempSave()
+                    this.isSaving = false
                     this.previousLetterCount = this.content.length
                 }
             },
@@ -219,14 +225,14 @@ import  toMarkdown  from 'to-markdown'
             },
             save(formName){
                 let self = this;
-                if(self.selectedTags.length <= 0){
-                    toast(self,'你没有选择文章标签')
-                    return
-                }
-                if(self.selectedSortId <= 0){
-                    toast(self,'你没有选择文章类型')
-                    return
-                }
+                // if(self.selectedTags.length <= 0){
+                //     toast(self,'你没有选择文章标签')
+                //     return
+                // }
+                // if(self.selectedSortId <= 0){
+                //     toast(self,'你没有选择文章类型')
+                //     return
+                // }
                 
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -265,6 +271,9 @@ import  toMarkdown  from 'to-markdown'
             async tempSave(auto = true){
                 if(!this.isNew)
                 {
+                    return
+                }
+                if(isStringNullOrEmpty(this.article.title) && isStringNullOrEmpty(this.content)){
                     return
                 }
                 let filterContent  = this.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)

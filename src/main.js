@@ -47,13 +47,13 @@ ah.hookAjax({
     
   },
   open:function(arg){
-    console.log(arg)
+
     if(arg[1].indexOf('uploadArticleImg') >= 0 ){
       arg[1] += "/" + userId() + "/" + createToken()
     }
   },
   onload:function(xhr){ 
-    console.log(xhr)
+
   }
   
 })

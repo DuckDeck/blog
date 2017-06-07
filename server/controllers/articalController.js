@@ -544,7 +544,8 @@ module.exports = {
             condition2 = ''
         }
         else if(tagId.length == 1 && tagId == 0){
-            condition2 = ' and article_id not in  (select article_id from article_tag_map_view where user_id = ' + userId + ')'
+            condition2 = ` and article_id  in  (SELECT article_id FROM article where  not exists (select  
+            article_id from article_tag_map_view where  article.article_id = article_tag_map_view.article_id) and user_id =` + userId + `)`
         }
         let sql = 'select count(article_id) as count from article where article_status = 1' + condition0 + condition1 + condition2 
         let res  = await DB.exec(sql)
