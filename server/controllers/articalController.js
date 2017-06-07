@@ -273,13 +273,23 @@ module.exports = {
         m.articleMainImage = t.articelImage
 
         // m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
-        let result2 = await Article.save(m)
-        if(result2.code != 0)
+        let resultArticle = {}
+        let articleId = 0
+        if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
+            m.article_id = t.articleId
+           resultArticle = await Article.updateAtricle(m)
+           articleId = m.article_id
+        }
+        else{
+            resultArticle = await Article.save(m)
+            articleId = resultArticle.data.id
+        }
+        if(resultArticle.code != 0)
         {
-            ctx.rest(result1)
+            ctx.rest(resultArticle)
             return 
         }
-        let articleId = result2.data.id
+
         if (t.articalTags&& Tool.getType(t.articalTags) == "Array") {
              let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
         }

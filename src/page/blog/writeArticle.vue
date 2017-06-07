@@ -176,6 +176,8 @@ import  toMarkdown  from 'to-markdown'
                 if(!this.editMode)
                 {
                     this.markDownContent = toMarkdown(this.content)
+                    console.log(this.content)
+                    console.log(this.markDownContent)
                 }
             },
             reviewArticle(){
@@ -243,7 +245,7 @@ import  toMarkdown  from 'to-markdown'
                         }
                         saveArticle(article,self.isNew).then(function(data){
                             if(data.code == 0){
-                                self.isNew = false
+                               self.isNew = false
                                toast(self,'保存成功')
                                let id = data.data.id
                                self.$router.push('/article/' + id)

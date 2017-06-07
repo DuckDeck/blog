@@ -362,7 +362,13 @@
                     links.push(this.mainLink)
                 }
                 else{
-                    return
+                    if( isStringNullOrEmpty(this.mainLink.link_name) && isStringNullOrEmpty(this.mainLink.link_url)){
+
+                    }
+                    else{
+                        return
+                    }
+                    
                 }
                 for(let l of this.otherLinks){
                     if(this.checkLink(l)){
@@ -371,7 +377,13 @@
                         links.push(l)
                     }
                     else{
-                        return
+                        if( isStringNullOrEmpty(l.link_name) && isStringNullOrEmpty(l.link_url)){
+
+                        }
+                        else{
+                            return
+                        }
+                        
                     }
                 }
                 if(links.length > 0){
@@ -441,14 +453,14 @@
                } 
                
             },
-            deleteUserLink(){
+            async deleteUserLink(){
                  let link = this.currentDeleteLink
                  if(link.link_id==0){
                    let index = link.index
                    this.otherLinks.splice(index,1)
                 }
                 else{
-                    let res = deleteLink(link.link_id)//delete from web
+                    let res = await deleteLink(link.link_id)//delete from web
                     if(res.code != 0){
                         toast(this,res.cMsg)
                     }
