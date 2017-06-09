@@ -639,7 +639,7 @@ module.exports = {
         let conditionPhone = ''
         if(t.user_phone){
             if(Check.regexCheck(t.user_phone,'cellphone')){
-                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                ctx.rest(Result.create(11,{msg:'cellphone format wrong'})) 
                 return 
             } 
             conditionPhone = ', user_phone = "' +  t.user_phone + '"'
@@ -647,7 +647,7 @@ module.exports = {
         let conditionQQ = ''
         if(t.user_qq){
             if(Check.regexCheck(t.user_qq,'qq')){
-                ctx.rest(Result.create(11,{msg:'email format wrong'})) 
+                ctx.rest(Result.create(11,{msg:'qq format wrong'})) 
                 return 
             }
             conditionQQ = ' , user_qq =  "' + t.user_qq  + '"'
@@ -687,7 +687,7 @@ module.exports = {
             return
         }
         let conditionBirthday = ''
-        if(t.user_birthday){
+        if(t.user_birthday && t.user_birthday != '0'){
             let userBirthdayResult = Check.checkNum(t,'user_birthday')
             if(userBirthdayResult){
                 ctx.rest(userBirthdayResult) 
@@ -697,7 +697,7 @@ module.exports = {
         }
         let conditionEditType = ''
         if(t.edit_type){
-            let edit_typeResult = Check.checkNum(t,'user_birthday')
+            let edit_typeResult = Check.checkNum(t,'edit_type')
             if(edit_typeResult){
                 ctx.rest(edit_typeResult) 
                 return 
@@ -715,11 +715,9 @@ module.exports = {
             }
         }
         let user_id = t.user_id
-        let user_real_name = t.user_real_name
         let sql = ''
         let res = {}
-        let links = JSON.parse(t.links)
-        console.log(links)
+        
         //need check the user_name is valid
         sql = 'update user_info set user_gender = ? ' + conditionBirthday + conditionEditType+' where user_id = ?'
         res = await DB.exec(sql,[t.user_gender,user_id]) 
@@ -744,14 +742,17 @@ module.exports = {
                 return
             }
         }
-        
-        for(let l of links){
-            let link = new Link(l.link_name,l.link_url,"")
-            link.link_id = l.link_id
-            link.link_user_id = user_id
-            link.link_type = 1
-            await Link.update(link)
+        if(t.links){
+            let links = JSON.parse(t.links)
+            for(let l of links){
+                let link = new Link(l.link_name,l.link_url,"")
+                link.link_id = l.link_id
+                link.link_user_id = user_id
+                link.link_type = 1
+                await Link.update(link)
+            }
         }
+ 
         
         ctx.rest(Result.create(0))
       },

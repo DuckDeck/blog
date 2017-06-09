@@ -2,4 +2,4 @@
 my open-source blog website
 it will finish on june
 
-# 5 - 30 zoe blog develop completed, will test very soon 
+# 6-10 it'ok and will release this weekend

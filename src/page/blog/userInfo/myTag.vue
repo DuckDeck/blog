@@ -209,22 +209,24 @@ import articleCell from './com/articleCell.vue'
                   this.$refs.saveTagInput.$refs.input.focus();
                 });
             },
-            handleSortInputConfirm() {
+            async handleSortInputConfirm() {
                 let inputValue = this.inputValueSort;
                 this.inputVisibleSort = false;
                 this.inputValueSort = '';
                 if(inputValue.length == 0){
                     return
                 }
-                let self = this
-                addSort(inputValue).then(result=>{
-                     toast(self,'添加分类成功')   
+
+                let result = await addSort(inputValue)
+                if(result.code == 0){
+                     toast(this,'添加分类成功')   
                      let id = result.data.id
-                     let sort = {sort_id:id,sort_article_name:inputValue}
-                     self.sorts.push(sort)
-                }).catch(err=>{
-                    toast(self,err.cMsg)
-                })
+                     let sort = {sort_article_id:id,sort_article_name:inputValue}
+                     this.sorts.push(sort)
+                }
+                else{
+                    toast(this,result.cMsg)   
+                }
             },
             handleTagInputConfirm(){
                 let inputValue = this.inputValueTag;
