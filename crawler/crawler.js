@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const axios = require('axios')
 var count = 0
 var urls = []
-const artical = require('../server/model/artical')
+const Article = require('../server/model/article')
 
 function getUrls(){
     return new Promise(function(resolve,reject){
@@ -23,14 +23,36 @@ function getUrls(){
 }
 
 function getActicals(urls){
-   
    axios.get(urls[1]).then(function(res){
        var $ = cheerio.load(res.data)
        let title = $('.title').text()
        let lastEditTime = $('.publish-time').text()
        let content = $('.show-content').html()
-       let arc =new artical(title,lastEditTime,content)
-       artical.save(arc)
+       
+       let filterContent  = content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
+       let imgTag = content.match(/<img.*?(?:>|\/>)/gi)
+       let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+        let article = {
+            articalTitle:title,
+            articalSort:0,
+            articalContent:content,
+            articleStatus:1,
+            articleId:0,
+            articelImage: "http:" + url[0].replace("src=\"","").replace("\"",""),
+            articleBrief:filterContent,
+        }
+
+        let m =new Article(article.articalTitle,article.articalContent)
+        m.ip = "127.0.0.1"
+        m.category = article.articalSort
+        m.userId = 1
+        m.articalStatus = 1
+        m.articleBrief = article.articleBrief
+        m.articleMainImage =  article.articelImage
+        console.log(m)
+         Article.save(m)
+        
+        
    })
 }
 
