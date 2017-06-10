@@ -34,7 +34,7 @@ html,body{
     padding: 0;
     background-color: #161E2C;
     font-family: 'Open Sans', sans-serif;
-    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .clear:after{
@@ -132,4 +132,10 @@ label{
 
 .el-dialog{
     min-width: 300px;
+}
+.image-package{
+    text-align: center;
+}
+.image-package img{
+    width: 90%
 }

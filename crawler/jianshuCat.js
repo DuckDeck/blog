@@ -1,22 +1,21 @@
 
 const cheerio = require('cheerio')
 const axios = require('axios')
-var count = 0
-var urls = []
 const Article = require('../server/model/article')
-
-function getUrls(){
+let index = 1
+let itUrl = 'http://www.jianshu.com/c/V2CqjW?order_by=added_at&page='
+function getUrls(index){
     return new Promise(function(resolve,reject){
-        axios.get('http://www.jianshu.com/').then(function(res){
+        let urls = []
+        axios.get(itUrl + index).then(function(res){
             var $ = cheerio.load(res.data,{decodeEntities: false})
-            let articals = $('.content .meta')
+            let articals = $('.title')
             for(var i = 0;i<articals.length;i++){
-                if(/^(\/p\/)[a-zA-Z0-9]{12}$/.test(articals[i].children[3].attribs.href)){
-                    let l = 'http://www.jianshu.com' + articals[i].children[3].attribs.href
-                    urls.push(l)
+                if(articals[i].name == "a"){
+                    urls.push("http://www.jianshu.com" + articals[i].attribs.href)
                 }
-                
             }
+            console.log(urls)
             resolve(urls)
         })
     })
@@ -59,5 +58,9 @@ function saveArticle(url){
    })
 }
 
+while(index < 10){
+    getUrls(index).then(getActicals)
+    index ++
+}
 
-getUrls().then(getActicals)
+

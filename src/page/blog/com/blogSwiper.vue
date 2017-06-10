@@ -52,8 +52,17 @@
 }
 .swiperImg{
     width: 100%;
-
+    opacity: 0.5
 }
+
+/*.swiperImg:before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, 0.5)
+}*/
+
 .swiperArticleInfo{
     position: absolute;
     left: 0;
@@ -65,7 +74,7 @@
     color: white;
     font-size: 0.6rem;
     text-align: center;
-    margin-top: 2.8rem;
+    margin-top: 2.4rem;
 }
 .swiperArticleTitle:hover{
     cursor: pointer
