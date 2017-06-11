@@ -55,7 +55,7 @@
                     </div>
                     <div class="userLinks">
                          <div style="color: #888">
-                            我的网站
+                            {{isMine == true ? '我' : '他'}}的网站
                         </div>
                         <div>
                             <a class="mylink" :href="link.link_url" v-for="link in userInfo.links" >{{link.link_name}}</a> 

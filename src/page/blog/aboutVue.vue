@@ -84,7 +84,9 @@
                     <li>
                         QQ:3421902,如果此Demo有问题，请在github提交issue或者给这个QQ号发邮件
                     </li>
-                  
+                     <li>
+                        Github 地址: <a href="https://github.com/DuckDeck/blog">Blog Github</a>
+                    </li>
                 </ul>
             </div>
              <div class="aboutRight">
