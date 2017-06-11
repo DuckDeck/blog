@@ -19,9 +19,9 @@ class User{
         this.user_group_id = 0
         this.user_name = userName
         this.user_password = Tool.md5(password)
-        this.user_phone = 0
+        this.user_phone = ''
         this.user_gender = ' '
-        this.user_qq = 0
+        this.user_qq = ''
         this.user_email = ' '
         this.user_address = ' '
         this.user_mark = 0

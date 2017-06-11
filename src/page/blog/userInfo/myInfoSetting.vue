@@ -327,10 +327,20 @@
                         
                         }
                         if(self.userInfo.user_phone.length > 0){
-                            dict.user_phone = self.userInfo.user_phone
+                            if(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(self.userInfo.user_phone))
+                              dict.user_phone = self.userInfo.user_phone  
+                            else{
+                                toast(self,"手机号格式错误")
+                                return
+                            }                             
                         }
                         if(self.userInfo.user_qq.length > 0){
-                            dict.user_qq = self.userInfo.user_qq
+                            if(/^[1-9]\d{3,11}$/.test(self.userInfo.user_phone))
+                              dict.user_qq = self.userInfo.user_qq  
+                            else{
+                                toast(self,"QQ号格式错误")
+                                return
+                            }      
                         }
                         if(self.userInfo.user_address.length > 0){
                             dict.user_address = self.userInfo.user_address
@@ -340,6 +350,9 @@
                                 toast(self,`修改成功`)
                                 setStore('userInfo',self.userInfo)
                                 self.isCanResetUserName =  /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(self.userInfo.user_name)
+                            }
+                            else{
+                               toast(self,res.cMsg)
                             }
                         }).catch(err=>{
                             toast(self,err.cMsg)
