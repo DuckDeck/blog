@@ -21,8 +21,8 @@
        <div class="subComments" v-show = "subCommentCount > 0">
            <div v-for = "subCom in comment.sub_comments">
                <div>
-                   <span style="color: darkorange">{{subCom.userInfo.user_name}}</span> 回复 
-                   <span style="color: dodgerblue">@{{subCom.targetUserInfo.user_name}} </span>: {{subCom.comment_content}}
+                   <span style="color: darkorange">{{subCom.userInfo.user_real_name}}</span> 回复 
+                   <span style="color: dodgerblue">@{{subCom.targetUserInfo.user_real_name}} </span>: {{subCom.comment_content}}
                </div> 
                <div>
                    <span class="subCommentTime">{{formatData(subCom.comment_time)}}</span>

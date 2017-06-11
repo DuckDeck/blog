@@ -179,7 +179,7 @@ CREATE TABLE  IF NOT EXISTS stay_message (
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
  stay_user_id mediumint(8) NOT NULL COMMENT '留言者ID',
  message_content varchar(255) NOT NULL COMMENT '留言内容',
- stay_user_ip varchar(15) NOT NULL COMMENT '留言用户的IP地址',
+ stay_user_ip varchar(50) NOT NULL COMMENT '留言用户的IP地址',
  message_stay_time BIGINT(15) NOT NULL COMMENT '留言时间',
  place varchar(64) NOT NULL COMMENT '地区',
  delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
@@ -208,7 +208,7 @@ CREATE TABLE  IF NOT EXISTS visitor (
  visitor_id mediumint(8) NOT NULL COMMENT '访客ID',
  visitor_time BIGINT(15) NOT NULL COMMENT '来访时间',
  user_id mediumint(8) NOT NULL COMMENT '被访用户ID',
- visitor_ip varchar(15) NOT NULL COMMENT '访客IP地址',
+ visitor_ip varchar(50) NOT NULL COMMENT '访客IP地址',
  type_id int(3) NOT NULL COMMENT '访问板块ID',
  where_id mediumint(8) NOT NULL COMMENT '查看某板块的某个子项目，如查看相册板块的第3个相册，该ID对应该相册的ID号',
  PRIMARY KEY (v_id)
@@ -222,7 +222,7 @@ CREATE TABLE  IF NOT EXISTS shuoshuo (
  shuo_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '说说记录ID',
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
  shuo_time BIGINT(15) NOT NULL DEFAULT 0 COMMENT '发布时间',
- shuo_ip varchar(15) NOT NULL COMMENT '说说发布时的IP地址',
+ shuo_ip varchar(50) NOT NULL COMMENT '说说发布时的IP地址',
  shuoshuo varchar(255) NOT NULL COMMENT '说说内容',
  type_id tinyint(3) NOT NULL DEFAULT 3 COMMENT '栏目ID,默认为3',
  delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
@@ -257,7 +257,7 @@ CREATE TABLE  IF NOT EXISTS photos (
  user_id mediumint(8) NOT NULL COMMENT '所属用户ID',
  sort_id mediumint(8) NOT NULL COMMENT '所属相册ID',
  upload_time BIGINT(15) NOT NULL COMMENT '图片上传时间',
- upload_ip varchar(15) NOT NULL COMMENT '图片操作上传IP地址',
+ upload_ip varchar(50) NOT NULL COMMENT '图片操作上传IP地址',
  delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (photo_id) 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
@@ -301,7 +301,7 @@ CREATE TABLE  IF NOT EXISTS article (
  article_name varchar(128) NOT NULL COMMENT '文章名称',
  article_create_time BIGINT(15) NOT NULL COMMENT '创建时间',
  article_release_time BIGINT(15) NOT NULL COMMENT '发布时间',
- article_ip varchar(15) NOT NULL COMMENT '发布IP',
+ article_ip varchar(50) NOT NULL COMMENT '发布IP',
  article_click int(10) NOT NULL COMMENT '查看人数',
  article_sort_id mediumint(8) NOT NULL COMMENT '所属分类',
  user_id mediumint(8) NOT NULL COMMENT '所属用户ID',
@@ -329,7 +329,7 @@ CREATE TABLE  IF NOT EXISTS user_comment (
  comment_content varchar(255) NOT NULL COMMENT '评论内容',
  commenter_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
  comment_time BIGINT(15) NOT NULL COMMENT '评论时间',
- commenter_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ commenter_ip varchar(50) NOT NULL COMMENT '评论时的IP地址',
  delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
  PRIMARY KEY (comment_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
@@ -346,7 +346,7 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
  comment_content varchar(255) NOT NULL COMMENT '评论内容',
  commenter_user_id mediumint(8) NOT NULL COMMENT '评论者ID',
  comment_time BIGINT(15) NOT NULL COMMENT '评论时间',
- commenter_ip varchar(15) NOT NULL COMMENT '评论时的IP地址',
+ commenter_ip varchar(50) NOT NULL COMMENT '评论时的IP地址',
  comment_type tinyint(3) DEFAULT 0 NOT NULL COMMENT '评论类型，如果是0 ，就是对parent评论，如果是1 ，就是评论子评论',
  comment_scope mediumint(8) DEFAULT 0 NOT NULL COMMENT '评论的scope，就是是共同的父评论',
  delete_flag int(1) NOT NULL DEFAULT 0 COMMENT '删除标志',
