@@ -213,11 +213,7 @@ import  toMarkdown  from 'to-markdown'
             },
             imgCallBack(result){
                 if(result.code == 0){
-                    if(this.mainImage == ''){
-                        this.mainImage = result.data
-                    }
                     this.content = this.content +  "<span style='text-align:center;display:block'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></span>"
-
                 }
                 else{
                     toast(this,result.cMsg)
@@ -237,6 +233,10 @@ import  toMarkdown  from 'to-markdown'
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
+                        if(this.mainImage.length == 0){
+                            let imgTag = this.content.match(/<img.*?(?:>|\/>)/gi)
+                            this.mainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                        }
                         let article = {
                             articalTitle:self.article.title,
                             articalSort:self.selectedSortId,
@@ -277,6 +277,10 @@ import  toMarkdown  from 'to-markdown'
                     return
                 }
                 let filterContent  = this.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
+                if(this.mainImage.length == 0){
+                     let imgTag = this.content.match(/<img.*?(?:>|\/>)/gi)
+                     this.mainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                }
                 let article = {
                     articalTitle:this.article.title,
                     articalSort:this.selectedSortId,
