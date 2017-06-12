@@ -4,7 +4,7 @@ const iv = '2624750004598718'
 const Result = require('../model/result')
 const db = require('../sqlhelp/mysql')
 const Mailer  = require('nodemailer');
-
+const cheerio = require('cheerio')
 // var mailTransport = Mailer.createTransport({
 //     host : 'smtp.qq.com',
 //     secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
@@ -117,7 +117,11 @@ class Tool{
         })})
      }
 
-   
+   static handleHtmlImg(html){
+       return html.replace(/<img.*?(?:>|\/>)/gi,(img)=>{
+         return  "<span style='text-align:center;display:block'>" + img + "</span>"
+       })
+   }
 
 }
 

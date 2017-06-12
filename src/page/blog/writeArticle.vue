@@ -81,7 +81,6 @@ import  toMarkdown  from 'to-markdown'
                 editorOption: {
                     placeholder:'从这里开始写你的文章'
                 },
-                mainImage:'',
                 articleId:0,
                 isNew:false,//是不是新文章  
                 isEdit:true,
@@ -233,10 +232,6 @@ import  toMarkdown  from 'to-markdown'
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         let filterContent  = self.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
-                        if(this.mainImage.length == 0){
-                            let imgTag = this.content.match(/<img.*?(?:>|\/>)/gi)
-                            this.mainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
-                        }
                         let article = {
                             articalTitle:self.article.title,
                             articalSort:self.selectedSortId,
@@ -246,7 +241,6 @@ import  toMarkdown  from 'to-markdown'
                             articalContent:self.content,
                             articleStatus:1,
                             articleId:self.articleId,
-                            articelImage:self.mainImage,
                             articleBrief:filterContent,
                         }
                         saveArticle(article,self.isNew).then(function(data){
@@ -277,10 +271,6 @@ import  toMarkdown  from 'to-markdown'
                     return
                 }
                 let filterContent  = this.content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
-                if(this.mainImage.length == 0){
-                     let imgTag = this.content.match(/<img.*?(?:>|\/>)/gi)
-                     this.mainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
-                }
                 let article = {
                     articalTitle:this.article.title,
                     articalSort:this.selectedSortId,
@@ -289,7 +279,6 @@ import  toMarkdown  from 'to-markdown'
                                 })),
                     articalContent:this.content,
                     articleId:this.articleId,
-                    articelImage:this.mainImage,
                     articleBrief:filterContent,
                 }
                 this.isSaving = true

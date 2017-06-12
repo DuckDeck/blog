@@ -11,6 +11,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
 const imgPath = require('../../config/imgPathConfig')
+
 module.exports = {
     //管理员获取所有文章
     'GET /api/manage/article/:mId/:token/:index/:size': async (ctx, next) => {
@@ -264,15 +265,16 @@ module.exports = {
        // if(t.articalContent.match(/^data:image\/\w+;base64,/))
        //使用正则来取出里面的图片也不是好办法
        //大一点点的图片都无法直接保存在数据库了
-        let m =new Article(t.articalTitle,t.articalContent)
+        let m =new Article(t.articalTitle,Tool.handleHtmlImg(t.articalContent))
         m.ip = ctx.request.ip
         m.category = t.articalSort
         m.userId = id
         m.articalStatus = 1
         m.articleBrief = t.articleBrief
-        m.articleMainImage = t.articelImage
-
-        // m.articleMainImage = m.articleMainImage == '' ? 'http://localhost:3000/static/img/default.jpg' : m.articleMainImage
+        let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
+        if(imgTag.length > 0){
+            m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+        }
         let resultArticle = {}
         let articleId = 0
         if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
@@ -310,13 +312,17 @@ module.exports = {
         let  t = ctx.request.body
         //如果有id，就是自动更新
         if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
-            let m =new Article(t.articalTitle,t.articalContent)
+            let m =new Article(t.articalTitle,Tool.handleHtmlImg(t.articalContent))
             m.category = t.articalSort
             m.userId = id
             m.ip = ctx.request.ip
             m.articalStatus = 5
             m.article_id = t.articleId
             m.articleBrief = t.articleBrief
+            let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
+            if(imgTag.length > 0){
+                m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+            }
             let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
             {
@@ -331,14 +337,17 @@ module.exports = {
             ctx.rest(Result.create(0,{id:m.article_id}))
         }
         else{
-            let m =new Article(t.articalTitle,t.articalContent)
+            let m =new Article(t.articalTitle,Tool.handleHtmlImg(t.articalContent))
             m.ip = ctx.request.ip
             m.category = t.articalSort
             m.userId = id
             m.articalStatus = 5
             m.ip = ctx.request.ip
             m.articleBrief = t.articleBrief
-            m.articleMainImage = t.articelImage
+            let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
+            if(imgTag.length > 0){
+                m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+            }
             let result2 = await Article.save(m)
             if(result2.code != 0)
             {
