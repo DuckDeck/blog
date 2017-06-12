@@ -208,7 +208,12 @@ import userArtileInfo from './com/userArticleInfo.vue'
     padding-bottom: 5px;
     border-bottom: 1px solid #777;
 }
-
+.articleImage{
+    text-align: center
+}
+.articleImage img{
+    width: 90%
+}
 @media (max-width:991px) {
 .content-main{
     padding-left: 0px;    

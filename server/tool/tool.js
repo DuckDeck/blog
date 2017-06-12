@@ -119,7 +119,7 @@ class Tool{
 
    static handleHtmlImg(html){
        return html.replace(/<img.*?(?:>|\/>)/gi,(img)=>{
-         return  "<span style='text-align:center;display:block'>" + img + "</span>"
+         return  "<div class='articleImage'>" + img + "</div>"
        })
    }
 

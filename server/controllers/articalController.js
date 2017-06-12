@@ -127,10 +127,11 @@ module.exports = {
         if(paraCheckResult){
             ctx.rest(paraCheckResult)
             return
-        }
+       }
        let id = ctx.params.articleId
        let res =  await Article.deleteArticle(id)
-       if(res.code != 0){
+       
+       if(res.length != 2){
            ctx.rest(res)
            return
        }
@@ -271,10 +272,16 @@ module.exports = {
         m.userId = id
         m.articalStatus = 1
         m.articleBrief = t.articleBrief
-        let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
-        if(imgTag.length > 0){
-            m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
-        }
+        let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
+        if(imgTag && imgTag.length  > 0){
+                let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                if(url && url.length > 0){
+                    m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
+                }
+                else{
+                    m.articleMainImage = ''
+                }
+            }
         let resultArticle = {}
         let articleId = 0
         if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
@@ -319,9 +326,15 @@ module.exports = {
             m.articalStatus = 5
             m.article_id = t.articleId
             m.articleBrief = t.articleBrief
-            let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
-            if(imgTag.length > 0){
-                m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+            let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
+            if(imgTag && imgTag.length  > 0){
+                let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                if(url && url.length > 0){
+                    m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
+                }
+                else{
+                    m.articleMainImage = ''
+                }
             }
             let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
@@ -344,9 +357,15 @@ module.exports = {
             m.articalStatus = 5
             m.ip = ctx.request.ip
             m.articleBrief = t.articleBrief
-            let imgTag = m.articalContent.match(/<img.*?(?:>|\/>)/gi)
-            if(imgTag.length > 0){
-                m.articleMainImage = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+            let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
+            if(imgTag && imgTag.length  > 0){
+                let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                if(url && url.length > 0){
+                    m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
+                }
+                else{
+                    m.articleMainImage = ''
+                }
             }
             let result2 = await Article.save(m)
             if(result2.code != 0)

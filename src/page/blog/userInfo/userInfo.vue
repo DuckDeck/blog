@@ -122,7 +122,7 @@ import userCommentCell from './com/userCommentCell.vue'
        },
        async getUserArticles(id){
             this.isLoadingArticle = true
-            let res = await articlesByUser(id,this.dynamics.length / 10,10)
+            let res = await articlesByUser(id,this.articles.length / 10,10)
             this.isLoadingArticle = false
             if(res.code == 0){
                 this.articlesCount = res.count
