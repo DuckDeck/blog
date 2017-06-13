@@ -35,14 +35,23 @@ function saveArticle(url){
        let content = $('.show-content').html()
        let filterContent  = content.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'').substr(0,200)
        let imgTag = content.match(/<img.*?(?:>|\/>)/gi)
-       let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+       let img = ''
+       if(imgTag && imgTag.length  > 0){
+            let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+            if(url && url.length > 0){
+                img = url[0].replace("src=\"","").replace("\"","")
+                if(img.indexOf('http://') < 0){
+                    img  ="http://" + img
+                }
+            }
+       }
         let article = {
             articalTitle:title,
             articalSort:0,
             articalContent:content,
             articleStatus:1,
             articleId:0,
-            articelImage: "http:" + url[0].replace("src=\"","").replace("\"",""),
+            articelImage: img,
             articleBrief:filterContent,
         }
 
