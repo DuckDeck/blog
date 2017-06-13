@@ -58,7 +58,7 @@ function saveArticle(url){
    })
 }
 
-while(index < 10){
+while(index < 2){
     getUrls(index).then(getActicals)
     index ++
 }
