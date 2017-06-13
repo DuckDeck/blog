@@ -42,3 +42,7 @@ jspm_packages
 dist
 //本地和server的path不一样
 imgPathConfig.js
+
+server/static/img
+server/static/tmp
+server/static/myimg
