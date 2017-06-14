@@ -9,8 +9,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     'GET /api/index': async (ctx, next) => {
-        let count = parseInt(Math.random()*100%5) + 1
-        let sql = 'select article_id,article_name,article_main_img,article_brief from article where article_status = 1 and length(article_main_img) > 0 order by article_click desc limit ' + count
+        let sql = 'select article_id,article_name,article_main_img,article_brief from article where article_status = 1 and length(article_main_img) > 0 order by article_click desc limit 5'
         let res = await DB.exec(sql)
         let result = Result.create(0)
         if(res.code != 0){
@@ -28,7 +27,7 @@ module.exports = {
             ctx.rest(Result.createCount(0,0,[]))
             return
         }
-        count = res.data[0].count
+        let count = res.data[0].count
         sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 

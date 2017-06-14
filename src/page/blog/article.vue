@@ -191,7 +191,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
 }
 .articleContentClass{
     margin:20px;
-    font-size: 20px;
+    font-size: 16px;
     padding-bottom: 50px;
     margin-top: 50px;
 }
