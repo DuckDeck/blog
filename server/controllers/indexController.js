@@ -27,7 +27,7 @@ module.exports = {
             ctx.rest(Result.createCount(0,0,[]))
             return
         }
-        count = res.data[0].count
+        let count = res.data[0].count
         sql  = `select article_id,article_name,article_create_time,article_release_time,article_ip,article_click,article_sort_id,
                 user_id,article_type_id,article_type,article_brief,article_main_img,article_up,article_recommend,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
