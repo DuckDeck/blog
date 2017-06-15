@@ -4,7 +4,8 @@ const axios = require('axios')
 var count = 0
 var urls = []
 const Article = require('../server/model/article')
-
+const User = require('../server/model/user')
+const DB = require('../server/sqlhelp/mysql')
 function getUrls(){
     return new Promise(function(resolve,reject){
         axios.get('http://www.jianshu.com/').then(function(res){
@@ -54,10 +55,10 @@ function saveArticle(url){
         m.articalStatus = 1
         m.articleBrief = article.articleBrief
         m.articleMainImage =  article.articelImage
-
-         Article.save(m)
+        m.category = parseInt(Math.random()*100%4) + 1
+        Article.save(m)
    })
 }
 
 
-getUrls().then(getActicals)
+//getUrls().then(getActicals)

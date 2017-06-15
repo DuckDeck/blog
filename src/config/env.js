@@ -14,7 +14,7 @@ if (process.env.NODE_ENV == 'development') {
 	baseUrl = 'http://localhost:3000/api/';
 	routerMode = 'hash'
 }else{
-	baseUrl = 'http://45.32.23.77:3000/api/';
+	baseUrl = 'http://52stanhu.com:3000/api/';
 	routerMode = 'hash'
 }
 

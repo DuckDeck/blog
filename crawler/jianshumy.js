@@ -63,6 +63,7 @@ function saveArticle(url){
         m.articalStatus = 1
         m.articleBrief = article.articleBrief
         m.articleMainImage =  article.articelImage
+        m.category = parseInt(Math.random()*100%4) + 1
         Article.save(m)
    })
 }
@@ -73,3 +74,28 @@ while(index < 3){
 }
 
 
+
+ function createUser(name,pass){
+    let test1 = new User(name,pass)
+    test1.user_register_time = (new Date()).getTime()
+    test1.user_register_ip = '127.0.0.1'    
+    test1.token = '123'
+    User.save(test1).then(res=>{
+         let id = res.data.id
+        let img_path =  "http://localhost:3000/static/system/tra.png"
+        let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,?)"
+       DB.exec(sql,[id,test1.user_name,'youremail@qq.com',img_path]).then(res2=>{
+            sql = 'update user set user_isValidate = 1 where user_id = ' + id
+             DB.exec(sql)
+             DB.exec('insert into article_sort values (0,?,?)',[id,'iOS'])
+             DB.exec('insert into article_sort values (0,?,?)',[id,'Android'])
+             DB.exec('insert into article_sort values (0,?,?)',[id,'Web'])
+             DB.exec('insert into article_sort values (0,?,?)',[id,'Server'])
+       })
+        
+    })
+   
+}
+
+createUser('test1','123456')
+createUser('test2','123456')
