@@ -272,20 +272,18 @@ module.exports = {
         m.userId = id
         m.articalStatus = 1
         m.articleBrief = t.articleBrief
+        m.articleMainImage = ''
         let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
         if(imgTag && imgTag.length  > 0){
                 let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
                 }
-                else{
-                    m.articleMainImage = ''
-                }
             }
         let resultArticle = {}
         let articleId = 0
         if(t.articleId && ! isNaN(t.articleId) && t.articleId != 0) {
-            m.article_id = t.articleId
+           m.article_id = t.articleId
            resultArticle = await Article.updateAtricle(m)
            articleId = m.article_id
         }
@@ -326,14 +324,12 @@ module.exports = {
             m.articalStatus = 5
             m.article_id = t.articleId
             m.articleBrief = t.articleBrief
+            m.articleMainImage = ''
             let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
             if(imgTag && imgTag.length  > 0){
                 let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
-                }
-                else{
-                    m.articleMainImage = ''
                 }
             }
             let result2 = await Article.updateAtricle(m)
@@ -357,14 +353,12 @@ module.exports = {
             m.articalStatus = 5
             m.ip = ctx.request.ip
             m.articleBrief = t.articleBrief
+            m.articleMainImage = ''
             let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
             if(imgTag && imgTag.length  > 0){
                 let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
-                }
-                else{
-                    m.articleMainImage = ''
                 }
             }
             let result2 = await Article.save(m)
@@ -445,7 +439,6 @@ module.exports = {
      //上传图片目前没，只有用固定的token
     'POST /api/uploadArticleImg/:userId/:token': async (ctx, next) => {
         let result0 = await Check.checkToken(ctx)
-        console.log(result0)
         if(result0.code != 0){
             ctx.rest(result0)
             return
@@ -454,7 +447,6 @@ module.exports = {
        let token = ctx.params.token
        let  t = ctx.request.body.files.image
        let oldPath = t.path
-       console.log(oldPath)
        if (!fs.existsSync(oldPath)){
            ctx.rest(Result.create(9))
        }

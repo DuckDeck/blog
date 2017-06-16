@@ -15,7 +15,6 @@ function getUrls(index){
                     urls.push("http://www.jianshu.com" + articals[i].attribs.href)
                 }
             }
-            console.log(urls)
             resolve(urls)
         })
     })

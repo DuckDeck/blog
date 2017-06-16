@@ -15,7 +15,6 @@ function getUrls(index){
                     urls.push("http://www.jianshu.com" + articals[i].attribs.href)
                 }
             }
-            console.log(urls)
             resolve(urls)
         })
     })
@@ -45,7 +44,6 @@ function saveArticle(url){
                 }
             }
        }
-       console.log(img)
         let article = {
             articalTitle:title,
             articalSort:0,
