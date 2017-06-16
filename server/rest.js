@@ -1,3 +1,4 @@
+const ErrorInfo = require('./model/error')
 module.exports = {
     APIError: function (code, message) {
         this.code = code || 'internal:unknown_error';
@@ -17,6 +18,8 @@ module.exports = {
                 } catch (e) {
                     console.log('Process API error...' + e);
                     console.log('Process API error...' + e.message);
+                    let error = new ErrorInfo(e.number,e.name,e.message,e.description,e.toString(),new Date().getTime())
+                    ErrorInfo.insert(error)
                     ctx.response.status = 400;
                     ctx.response.type = 'application/json';
                     ctx.response.body = {

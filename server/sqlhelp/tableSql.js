@@ -273,6 +273,19 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
 
 
+  createUserDynamicTb:` CREATE TABLE  IF NOT EXISTS blog_error (
+ error_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
+ error_num mediumint(8) NOT NULL DEFAULT 0 COMMENT '错误号',
+ error_name varchar(255) NOT NULL COMMENT '错误名',
+ error_message varchar(2000) NOT NULL COMMENT '错信息',
+ error_desc varchar(2000) NOT NULL COMMENT '目标描述',
+ error_stack varchar(2000) NOT NULL COMMENT '目标Stack',
+ error_time BIGINT(15) NOT NULL COMMENT '出错时间',
+ PRIMARY KEY (error_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
+
+
+
    createMapArticleTagView:`create view article_tag_map_view as  select tag.* , 
    map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id`,
    createUserInfoView:`

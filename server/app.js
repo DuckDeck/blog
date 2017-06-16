@@ -52,6 +52,12 @@ actions.createTbs()
 
 
 // log request URL:
+
+
+
+var log4js = require('./logger');
+log4js.use(app);
+
 app.use(async (ctx, next) => {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
     var
@@ -69,10 +75,6 @@ app.use(staticFiles('/static/', __dirname + '/static'));
 app.use(cors());
 
 // parse request body:
-
-var log4js = require('log4js')
-var logger = log4js.getLogger()
-logger.debug("Some debug messages")
 
 // bind .rest() for ctx:
 app.use(rest.restify());

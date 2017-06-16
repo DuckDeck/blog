@@ -1,6 +1,7 @@
 var db    = {};  
 var mysql = require('mysql');  
 const result = require('../model/result')
+const ErrorInfo = require('../model/error')
 var pool  = mysql.createPool({  
   connectionLimit : 10,  
   host            : 'localhost',  
@@ -23,6 +24,8 @@ db.exec = function(sql,data){
        pool.query(sql,data, function(err, rows, fields) {  
           if (err) { 
               console.log(err)
+              let error = new ErrorInfo(err.number,err.name,err.message,err.description,err.toString(),new Date().getTime())
+              ErrorInfo.insert(error)
               reject(result.create(-50))
               return;    
             }
