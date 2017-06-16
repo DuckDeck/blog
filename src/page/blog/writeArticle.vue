@@ -176,8 +176,6 @@ import  toMarkdown  from 'to-markdown'
                 if(!this.editMode)
                 {
                     this.markDownContent = toMarkdown(this.content)
-                    console.log(this.content)
-                    console.log(this.markDownContent)
                 }
             },
             reviewArticle(){

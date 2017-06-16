@@ -102,14 +102,10 @@ class Check{
             let para = t.split('=')
             if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('managerKey' + id)
-                console.log("value" + value)
-                console.log("token" + para[0])
                 if(value == undefined){
                     db.exec('select * from blog_manager where m_id = ?',[id]).then(function(data){
-                        console.log("data" + data)
                         if(data.data.length == 1){
                             if( data.data[0].m_token == para[0]){
-                                console.log('validateToken completed')
                                 resolve(Result.create(0))
                                 myCache.set("managerKey" + id,data.data[0].m_token)
                             }
@@ -150,6 +146,8 @@ class Check{
            if(!isNaN(token)){
                resolve(Result.create(9))
            }
+           resolve(Result.create(0))
+           return  //the public test do not need check the token...
            let t = Tool.decrypt(key,iv,token)
            let para = t.split('=')
            if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
@@ -158,7 +156,6 @@ class Check{
                      db.exec('select user_token from user where user_id = ?',[id]).then(function(data){
                         if(data.data.length == 1){
                             if( data.data[0].user_token == para[0]){
-                                console.log('validateToken completed')
                                 resolve(Result.create(0))
                                 myCache.set('userKey' + id,data.data[0].user_token)
                             }

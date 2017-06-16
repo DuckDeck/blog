@@ -18,10 +18,8 @@ db.exec = function(sql,data){
             return;  
         }
         if(!data){
-           console.log(sql)
            data = []
         }
-        console.log(sql)
        pool.query(sql,data, function(err, rows, fields) {  
           if (err) { 
               console.log(err)

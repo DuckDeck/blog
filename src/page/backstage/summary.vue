@@ -70,7 +70,6 @@ import {getMeter} from '../../store/manageService'
         },
         async mounted(){
             if(!getStore('m_token')){
-                console.log('gotologin')
                 this.$router.replace('/managelogin')
                 return
             }

@@ -17,14 +17,12 @@
     mounted(){
         for(var i = 0;i<6;i++){
           setTimeout((function(n) {
-            console.log(n)
           })(i), 2000);
         }
 
         // let test = `<div contenteditable="true" class="content" style="min-height: 300px;">asdfa<div><img src="http://localhost:3000/static/img/1-1490170777941.jpeg">
         // </div><div style="text-align: center;"><u>asfasfasdfasdfadfasd</u></div><div style="text-align: left;"><u>afa</u></div></div>`
         // let filter = test.replace(/<(?:.|\s)*?>/g,'').replace(/\s/g,'')
-        // console.log(filter)
     },
     components: {
        

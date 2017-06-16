@@ -153,7 +153,6 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        console.log(res)
         let id = res.data.id
         let img_path = imgPath.imgPath + "static/system/tra.png"
         let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,?)"

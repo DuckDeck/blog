@@ -86,9 +86,7 @@
             this.$emit('close')
         },
         onDayClick (date, str,event) {
-          console.log('will change value' + this.value)
           this.value = str
-          console.log('did change value' + this.value)
           this.$emit('dateSelected',str)
           let ele = event.target
           
