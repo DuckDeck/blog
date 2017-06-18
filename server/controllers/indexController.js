@@ -9,7 +9,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     'GET /api/index': async (ctx, next) => {
-        let sql = 'select article_id,article_name,article_main_img,article_brief from article where article_status = 1 and length(article_main_img) > 0 order by article_click desc limit 5'
+        let sql = 'select article_i,article_name,article_main_img,article_brief from article where article_status = 1 and length(article_main_img) > 0 order by article_click desc limit 5'
         let res = await DB.exec(sql)
         let result = Result.create(0)
         if(res.code != 0){

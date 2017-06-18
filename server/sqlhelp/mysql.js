@@ -1,7 +1,6 @@
 var db    = {};  
 var mysql = require('mysql');  
 const result = require('../model/result')
-const ErrorInfo = require('../model/error')
 var pool  = mysql.createPool({  
   connectionLimit : 10,  
   host            : 'localhost',  
@@ -13,6 +12,7 @@ var pool  = mysql.createPool({
 //request result will not change, this is not looks
 //it's not a bug ,it's my issue
 db.exec = function(sql,data){
+     
     return new Promise(function(resolve,reject){
         if (!sql) {  
             reject(result.create(-100)) 
@@ -24,8 +24,9 @@ db.exec = function(sql,data){
        pool.query(sql,data, function(err, rows, fields) {  
           if (err) { 
               console.log(err)
-              let error = new ErrorInfo(err.number,err.name,err.message,err.description,err.toString(),new Date().getTime())
-              ErrorInfo.insert(error)
+              pool.query('insert into blog_error values(0,?,?,?,?,?,?)',
+              [err.errno,err.name,err.code,err.message,err.toString(),new Date().getTime()],(err,rows,fields)=>{
+              })
               reject(result.create(-50))
               return;    
             }

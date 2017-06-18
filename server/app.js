@@ -53,11 +53,6 @@ actions.createTbs()
 
 // log request URL:
 
-
-
-var log4js = require('./logger');
-log4js.use(app);
-
 app.use(async (ctx, next) => {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
     var

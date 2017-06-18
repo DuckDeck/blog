@@ -1,4 +1,4 @@
-const ErrorInfo = require('./model/error')
+const DB = require('./sqlhelp/mysql')
 module.exports = {
     APIError: function (code, message) {
         this.code = code || 'internal:unknown_error';
@@ -18,8 +18,9 @@ module.exports = {
                 } catch (e) {
                     console.log('Process API error...' + e);
                     console.log('Process API error...' + e.message);
-                    let error = new ErrorInfo(e.number,e.name,e.message,e.description,e.toString(),new Date().getTime())
-                    ErrorInfo.insert(error)
+                    DB.exec('insert into blog_error values(0,?,?,?,?,?,?)',
+                        [e.code || 0,e.name || 'no name',e.msg || 'no message',
+                        e.cMsg || 'no description',e.stack || e.toString(),new Date().getTime()])
                     ctx.response.status = 400;
                     ctx.response.type = 'application/json';
                     ctx.response.body = {

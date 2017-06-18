@@ -25,6 +25,8 @@ let levels = {
     'fatal': log4js.levels.FATAL
 };
 
+
+// this feature is for express so it will not work in koa2, abandon it
 exports.use = function (app, level = 'debug') {
     app.use(log4js.connectLogger(log4js.getLogger('logInfo'), {
         level: levels[level],
