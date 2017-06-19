@@ -296,7 +296,7 @@ module.exports = {
             ctx.rest(resultArticle)
             return 
         }
-
+        await Tag.deleteTagByArticleId(m.article_id)
         if (t.articalTags&& Tool.getType(t.articalTags) == "Array") {
              let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
         }
