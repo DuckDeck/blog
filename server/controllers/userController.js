@@ -775,9 +775,11 @@ module.exports = {
             return
         }
         
-
-
+    
         let user_id = t.user_id
+
+
+
         let old_password =  Check.decryptyPass(t.old_password.trim())
         if(old_password == ""){
             ctx.rest(Result.create(501))
@@ -792,12 +794,18 @@ module.exports = {
             ctx.rest(Result.create(505))
             return
         }
-        let sql = 'select user_id,user_password from user where user_id = ?'
+        let sql = 'select user_id,user_password,user_name from user where user_id = ?'
         let res = await DB.exec(sql,[user_id])
         if(Tool.md5(old_password) != res.data[0].user_password){
             ctx.rest(Result.create(501))
             return
         }
+        let user_name = res.data[0].user_name
+        if(user_name.indexOf('test') >= 0){
+            ctx.rest(Result.create(506))
+            return
+        }
+        
         sql = 'update user set user_password = ? where user_id = ?'
         res = await DB.exec(sql,[Tool.md5(new_password),user_id])
         ctx.rest(res)

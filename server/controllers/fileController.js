@@ -28,6 +28,8 @@ module.exports = {
            ctx.rest(fileNameCheckResult)
            return
        }
+       ctx.rest(Result.create(551))
+       return
        let fileName = ctx.params.fileName
        let res = await File.deleteFile(fileName)
        ctx.rest(res)
