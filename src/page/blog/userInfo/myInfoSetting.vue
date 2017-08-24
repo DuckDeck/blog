@@ -419,7 +419,11 @@
                             toast(self,err.cMsg)
                         })
             },
-            changePassword(){     
+            changePassword(){
+                if(this.pass.old == this.pass.new){
+                    toast(this,"新旧密码不能相同")
+                    return
+                }     
                 let dict = {
                       user_id:this.userInfo.user_id,    
                       old_password:createPasswordEnctypt(this.pass.old),

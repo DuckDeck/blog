@@ -73,8 +73,14 @@ function createResult(code,data){
         case 505:
             return new Result(505,'new password and old password can not be the same','新旧密码不能相同',data||{})
             break;
-         case 550:
+        case 506:
+            return new Result(506,'test user can not change password','测试用户不能修改密码',data||{})
+            break;
+        case 550:
             return new Result(550,'file do not exist','文件不存在',data||{})
+            break;
+        case 551:
+            return new Result(506,'you can not delete file temporary','暂时不能删除文件',data||{})
             break;
         case -100:
             return new Result(-100,'sql language error','sql语句错误',data||{})

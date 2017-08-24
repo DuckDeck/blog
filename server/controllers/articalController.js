@@ -138,9 +138,10 @@ module.exports = {
        let sql = 'select comment_id from user_comment where  comment_target_id = ?'
        res = await DB.exec(sql,[id])
        if(res.data.length > 0){
-           sql = 'update user_comment set delete_flag = 1 where comment_id in (' + res.data.join(',') + ")"
+           let ids = res.data.map(s=>{return s.comment_id}).join(',')
+           sql = 'update user_comment set delete_flag = 1 where comment_id in (' + ids + ")"
            await DB.exec(sql)
-           sql = 'update user_sub_comment set delete_flag = 1 where comment_scope in (' + res.data.join(',') + ")"
+           sql = 'update user_sub_comment set delete_flag = 1 where comment_scope in (' + ids + ")"
            await DB.exec(sql)
        }
        ctx.rest(Result.create(0))
@@ -296,7 +297,7 @@ module.exports = {
             ctx.rest(resultArticle)
             return 
         }
-
+        await Tag.deleteTagByArticleId(m.article_id)
         if (t.articalTags&& Tool.getType(t.articalTags) == "Array") {
              let result3 = await Tag.saveArticalMap(articleId,t.articalTags)
         }
