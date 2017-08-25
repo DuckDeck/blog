@@ -16,7 +16,6 @@
     "cheerio": "^0.22.0",
     "element-ui": "^1.2.9",
     "fastclick": "^1.0.6",
-    "gbk": "^0.1.0",
     "koa": "2.0.1",
     "koa-body": "^2.0.0",
     "koa-cors": "0.0.16",
