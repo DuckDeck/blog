@@ -22,13 +22,9 @@ function getFive(letter){
     if(!/[\u4e00-\u9fa5]/gm.test(letter)){
         return Promise.reject("must use chinese")
     }
-<<<<<<< HEAD
-    let params = {"hzname":iconv.encode(letter,'gbk').toString('binary')}
-=======
-
     let k = encode(letter,"gbk")
     let params = "hzname=" + k
->>>>>>> 76e84bbf3253afae18de1db6ce3e9ea0f665549a
+
     console.log(params)
     let options = {
         url:"http://www.52wubi.com/wbbmcx/search.php",
