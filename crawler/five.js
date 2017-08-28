@@ -7,18 +7,6 @@ function getFive(letter){
     if(!/[\u4e00-\u9fa5]/gm.test(letter)){
         return Promise.reject("must use chinese")
     }
-    // let instance = axios.create({
-    //     header:{
-    //         "Accept" : "text/html, application/xhtml+xml, image/jxr, */*",
-    //         "Referer" : "http://www.52wubi.com/wbbmcx/search.php",
-    //         "Accept-Language" : "zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3",
-    //         "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063",
-    //         "Content-Type" : "application/x-www-form-urlencoded",
-    //         "Content-Length" : 10,
-    //         "Proxy-Connection" : " Keep-Alive",
-    //         "Pragma" : "no-cache"
-    //     }
-    // })
     let params = {"hzname":iconv.encode(letter,'gbk').toString('binary')}
     console.log(params)
     let options = {
