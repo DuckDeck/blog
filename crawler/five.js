@@ -1,13 +1,34 @@
 const cheerio = require('cheerio')
 const request = require('request')
-const gbk = require('gbk')
 const iconv = require('iconv-lite');
+
+function encode(str, charset) {
+
+  var buf = iconv.encode(str, charset);
+  var encodeStr = '';
+  var ch = '';
+  for (var i = 0; i < buf.length; i++) {
+    ch = buf[i].toString('16');
+    if (ch.length === 1) {
+      ch = '0' + ch;
+    }
+    encodeStr += '%' + ch;
+  }
+  encodeStr = encodeStr.toUpperCase();
+  return encodeStr;
+}
 
 function getFive(letter){
     if(!/[\u4e00-\u9fa5]/gm.test(letter)){
         return Promise.reject("must use chinese")
     }
+<<<<<<< HEAD
     let params = {"hzname":iconv.encode(letter,'gbk').toString('binary')}
+=======
+
+    let k = encode(letter,"gbk")
+    let params = "hzname=" + k
+>>>>>>> 76e84bbf3253afae18de1db6ce3e9ea0f665549a
     console.log(params)
     let options = {
         url:"http://www.52wubi.com/wbbmcx/search.php",
@@ -28,17 +49,26 @@ function getFive(letter){
     function callback(error, response, body) {
         if (!error && response.statusCode == 200) {
              let h = iconv.decode(body,"gb2312")
-             console.log(h)
+              var $ = cheerio.load(h,{decodeEntities: false})
+              let s = $('.tbhover')
+              let result = []
+              for(let i = 0;i<s.length;i++){
+                  let t = s[i].children
+                  let text = t[1].children[0].children[0].data
+                  let spell = t[3].children[0].data
+                  let code = t[5].children[0].data
+                  let imgDecodeUrl = 'http://www.52wubi.com/wbbmcx/'+ t[7].children[0].attribs.src
+                result.push({
+                    "text":text,"spell":spell
+                    ,"code":code,"imgDecodeUrl":imgDecodeUrl
+                })
+              }
+              
+             console.log(result)
         }
     }
     request(options,callback)
-    // request.post({url:'http://www.52wubi.com/wbbmcx/search.php',form:params,encoding: null},function(err,response,body){
-    //     let h = iconv.decode(body,"gb2312")
-    //     let $ = cheerio.load(h,{decodeEntities: false})
-    //     console.log(h)
-    // })
-
-
-    
 }
 getFive("我")
+
+
