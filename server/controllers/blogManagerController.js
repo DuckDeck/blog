@@ -6,7 +6,7 @@ const path = require('path')
 const fs = require('fs')
 const DB = require('../sqlhelp/mysql')
 const Check = require('../tool/check')
-const imgPath = require('../../config/imgPathConfig')
+const imgPath = require('../../config/pathConfig')
 module.exports = {
     'POST /api/manage/login': async (ctx, next) => {
        var

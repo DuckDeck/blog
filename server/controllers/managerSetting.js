@@ -5,7 +5,7 @@ const fs = require('fs')
 const Tool = require('../tool/tool')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
-const imgPath = require('../../config/imgPathConfig')
+const imgPath = require('../../config/pathConfig')
 module.exports = {
     //管理用户
     'GET /api/manage/list/:mId/:token': async (ctx, next) => {

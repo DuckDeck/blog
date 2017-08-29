@@ -40,8 +40,6 @@ jspm_packages
 
 *.tmp
 dist
-//本地和server的path不一样
-imgPathConfig.js
 
 server/static/img
 server/static/tmp

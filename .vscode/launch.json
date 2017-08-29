@@ -9,7 +9,12 @@
             "request": "launch",
             "name": "启动程序",
             "program": "${workspaceRoot}/server/start.js",
-            "cwd": "${workspaceRoot}"
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "NODE_ENV": "development",
+                "DATABASE_HOST": "127.0.0.1"
+                // more env vars
+            }
         },
         {
             "type": "node",
@@ -17,5 +22,6 @@
             "name": "附加到进程",
             "port": 5858
         }
-    ]
+    ],
+    
 }

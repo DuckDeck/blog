@@ -3,7 +3,7 @@ const path = require('path')
 const Tool = require('../tool/tool')
 const fs = require('fs')
 const filteredFormat = ['jpeg','jpg','png','gif','txt','rar','zip']
-const imgPath = require('../../config/imgPathConfig')
+const imgPath = require('../../config/pathConfig')
 const Result = require('./result')
 class File{
     constructor(file_name,file_url,file_type){

@@ -9,9 +9,8 @@ const app = new Koa();
 var cors = require('koa-cors');
 
 const isProduction = process.env.NODE_ENV === 'production';
-
+console.log("当前环境：" + isProduction ? "正式":"测试")
 const actions = require('./sqlhelp/createTable')
-
 
 
 //actions.createDB()
@@ -51,7 +50,9 @@ actions.createTbs()
 // fs.createReadStream(__filename+'/stat')
 
 
-// log request URL:
+
+
+
 
 app.use(async (ctx, next) => {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);

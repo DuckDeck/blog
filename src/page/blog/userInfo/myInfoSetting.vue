@@ -139,7 +139,7 @@
     import blogFoot from './../com/blogFoot.vue'
     import addLink from './com/addLink.vue'
     import qs from 'qs'
-    import {imgPath} from '../../../../config/imgPathConfig'
+    import {imgPath} from '../../../../config/pathConfig'
     export default {
         data: function(){
             var validatePass = (rule, value, callback) => {

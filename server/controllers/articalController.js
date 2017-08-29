@@ -10,7 +10,7 @@ const path = require('path')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
-const imgPath = require('../../config/imgPathConfig')
+const imgPath = require('../../config/pathConfig')
 
 module.exports = {
     //管理员获取所有文章

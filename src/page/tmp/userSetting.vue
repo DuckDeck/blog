@@ -86,7 +86,7 @@
     import {getUserInfo} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
-    import {imgPath} from '../../../config/imgPathConfig'
+    import {imgPath} from '../../../config/pathConfig'
     export default {
         data: function(){
             return {
