@@ -8,14 +8,16 @@
  */
 let baseUrl; 
 let routerMode;
-const imgBaseUrl = 'http://45.32.23.77:3000/static/';
+let imgBaseUrl;
 
 if (process.env.NODE_ENV == 'development') {
 	baseUrl = 'http://localhost:3000/api/';
 	routerMode = 'hash'
+	imgBaseUrl = 'http://localhost:3000/static/';
 }else{
-	baseUrl = 'http://52stanhu.com:3000/api/';
+	baseUrl = 'https://api.bqbbq.com:3000/api/';
 	routerMode = 'hash'
+	imgBaseUrl = 'https://api.bqbbq.com/static/';
 }
 
 export {
