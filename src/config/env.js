@@ -15,7 +15,7 @@ if (process.env.NODE_ENV == 'development') {
 	routerMode = 'hash'
 	imgBaseUrl = 'http://localhost:3000/static/';
 }else{
-	baseUrl = 'https://api.bqbbq.com:3000/api/';
+	baseUrl = 'https://api.bqbbq.com/api/';
 	routerMode = 'hash'
 	imgBaseUrl = 'https://api.bqbbq.com/static/';
 }
