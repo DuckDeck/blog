@@ -57,14 +57,17 @@ https://bqbbq.com/#/manage
 + 2.进入项目根目录使用npm安装模块 `cd blog 后再   npm install`。
 + 3 ~~在config文件夹下新建文件imgPathConfig.js文件，在里面输入以下内容~~。
 + 3 更新，不再使用imgPathConfig，使用pathConfig文件，按照你的需要，把里面的Path改成自己的域名
-``
+
+```
 export let imgPath = isProduction?"https://yourDomainAPI.com/": "http://localhost:3000/"
 
-  export let emailPath = isProduction? "https://yourDomain
-.com":"http://localhost:8088/"
-``
+export let emailPath = isProduction? "https://yourDomain.com":"http://localhost:8088/"
+```
+
 ![配置路径](http://upload-images.jianshu.io/upload_images/1281203-8b616f65bde624e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 注意要将自己Server的NODE环境改成production
+
 ``
 export NODE_ENV = production
 ``
