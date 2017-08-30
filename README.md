@@ -1,14 +1,22 @@
 **更新，目前网站和接口全面启用HTTPS,域名改成了bqbbq.com**
 
-##Demo地址和使用
+## Demo地址和使用
+
 https://bqbbq.com/#/
+
 测试号1： test1  密码: 123456
+
 测试号2： test2  密码: 123456
+
 博客后台管理登录
+
 https://bqbbq.com/#/manage
+
 测试号1： admin密码: 123456
+
 (**请大家不要做修改密码（已更新，测试账号密码不能修改），删除里面的文章等操作，另外，管理员只能同时存在一个人登录，因为要做登录验证,后台图片也不要删除**)
-##功能
+
+## 功能
 + 注册账号，登录
 + 搜索文章，作者，分类功能
 + 文章分类和标签功能
@@ -19,7 +27,7 @@ https://bqbbq.com/#/manage
 + 后台管理员登录
 + 侧边栏
 
-##先上效果图
+## 先上效果图
 
 ![主页面](http://upload-images.jianshu.io/upload_images/1281203-c2fe05961c621d74.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -44,7 +52,7 @@ https://bqbbq.com/#/manage
 
 上面的图片只展示一小部分功能。里面还有更多的内容让读者挖掘
 
-##如何使用
+## 如何使用
 + 1.Clone项目 `git clone https://github.com/DuckDeck/blog.git`。
 + 2.进入项目根目录使用npm安装模块 `cd blog 后再   npm install`。
 + 3 ~~在config文件夹下新建文件imgPathConfig.js文件，在里面输入以下内容~~。
