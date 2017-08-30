@@ -10,13 +10,8 @@ const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
 const imgPath = require('../../config/pathConfig')
-var config = {}
-if(isProduction){
-    config = require("../../config/production")
-}
-else{
-     config = require("../../config/development")
-}
+
+
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
