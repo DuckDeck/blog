@@ -147,7 +147,8 @@ class Check{
                resolve(Result.create(9))
            }
            resolve(Result.create(0))
-           return  //the public test do not need check the token...
+           //return  //the public test do not need check the token...
+           //好像有人想黑网站
            let t = Tool.decrypt(key,iv,token)
            let para = t.split('=')
            if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
