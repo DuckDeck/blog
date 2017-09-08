@@ -187,8 +187,6 @@ import articleCell from './com/articleCell.vue'
                 this.deleteType = 0
                 this.dialogVisible = true
                 this.currentDeleteSort = sort
-               
-               
             },
             handleTagClose(tag) {
                 this.deleteMessage = "你确定要删除标签 " + tag.tag_name + " 吗?"
@@ -295,10 +293,10 @@ import articleCell from './com/articleCell.vue'
                      deleteSort(this.currentDeleteSort).then(res=>{
                         toast(self,res.cMsg)
                         if(res.code == 0){
-                        let index = self.sorts.indexOf(sort)
-                        if(index >=0){
-                                self.sorts.splice(index,1)
-                        } 
+                            let index = self.sorts.indexOf(self.currentDeleteSort)
+                            if(index >=0){
+                                 self.sorts.splice(index,1)
+                            } 
                         }
                     }).catch(err=>{
                         toast(self,err.cMsg)
@@ -309,10 +307,10 @@ import articleCell from './com/articleCell.vue'
                     deleteTag(this.currentDeleteTag).then(res=>{
                         toast(self,res.cMsg)
                         if(res.code == 0){
-                        let index = self.tags.indexOf(tag)
-                        if(index >=0){
-                                self.tags.splice(index,1)
-                        } 
+                            let index = self.tags.indexOf(self.currentDeleteTag)
+                            if(index >=0){
+                                 self.tags.splice(index,1)
+                            } 
                         }
                     }).catch(err=>{
                         toast(self,err.cMsg)
