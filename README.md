@@ -78,7 +78,7 @@ var pool  = mysql.createPool({
   connectionLimit : 10,  
   host            : 'localhost',   //主机
   user            : 'test',          /用户名
-  password        : '123456', // 密码
+  password        : '???????????????', // 密码
   database        : 'blog' , //数据库名
 });  
 ```
