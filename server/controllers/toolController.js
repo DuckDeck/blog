@@ -2,8 +2,10 @@ const Result = require('../model/result.js')
 const cheerio = require('cheerio')
 const request = require('request')
 const iconv = require('iconv-lite');
-
-
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
+const fs = require("fs")
+const path = require('path')
 
 module.exports = {
     'GET /api/tool/five/:key': async (ctx, next) => {
@@ -15,6 +17,11 @@ module.exports = {
         }
         let result = await searchFive(key)
         ctx.rest(result)
+     },
+     'GET /api/tool/fiveqrcode': async (ctx, next) => {
+        let p = path.join(__dirname,'../../static/img/qrcode.png' )
+        let data = fs.readFileSync(p)
+        ctx.renderData('image/png',data)
      },
 }
 

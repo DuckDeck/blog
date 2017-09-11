@@ -13,6 +13,10 @@ module.exports = {
                     ctx.response.type = 'application/json'; //明白为什么会在这里有问题了，因为所有的操作完成并且返回后才从数据库里找出数据，这样就会报错，方法没有同步
                     ctx.response.body = data;
                 }
+                ctx.renderData = (type,data)=>{
+                    ctx.response.type = type
+                    ctx.response.body = data;
+                }
                 try {
                     await next();
                 } catch (e) {

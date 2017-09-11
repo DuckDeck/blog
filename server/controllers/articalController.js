@@ -1,4 +1,3 @@
-const APIError = require('../rest').APIError;
 const Article = require('../model/article')
 const Tag = require('../model/tag')
 const User = require('../model/user')
