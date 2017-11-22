@@ -6,8 +6,8 @@ const City = require('../model/city')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
     'GET /api/cities': async (ctx, next) => {
-       let result =await City.getCities()
-       ctx.rest(Result.create(0,result))  
+       let result = await City.getCities()
+       ctx.rest(result)  
     },
   
 }
