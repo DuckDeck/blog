@@ -112,6 +112,7 @@ function searchAddress(address){
   
 
         axios.get("http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=" +  address).then(function(res){
+            console.log(res)
             if(res.status == 200){
                 resolve(Result.create(0,res.data))
             }   
