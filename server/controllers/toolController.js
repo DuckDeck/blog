@@ -39,14 +39,13 @@ module.exports = {
             ctx.rest(Result.create(8))
             return
         }
-        console.log(city)
         let area =  city.data[0]
-        console.log(area)
         if (area.latitude > 0){
             ctx.rest(Result.create(0,area))
             return
         }
         let result = await searchAddress(address)
+        console.log(result)
         if(result.status != 0){
             ctx.rest(Result.create(8))
             return
@@ -121,7 +120,7 @@ function searchAddress(address){
                 resolve(Result.create(0,body))
             }
             else{
-                console.log(error)
+               console.log(error)
                reject(Result.create(-1))     
             }
         }
