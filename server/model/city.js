@@ -15,11 +15,11 @@ class City{
     }
     
     static searchCity(city){
-        return db.exec(`select * from city_list where city like '%` + city +`%' or province like '%` + city + `%' limit 1`)
+        return db.exec(`select * from city_list where city like '%` + city +`%' or province like '%` + city + `%' limit 1`,null,'city')
     }
 
     static saveCityCoordinate(city){
-        return db.exec(`update cities set latitude = ?,lontitude = ? where id = ?`)
+        return db.exec(`update cities set latitude = ?,lontitude = ? where id = ?`,null,'city')
     }
     
 }
