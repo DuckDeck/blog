@@ -52,8 +52,12 @@ module.exports = {
             ctx.rest(Result.create(8))
             return
         }
+        console.log('first area')
+        console.log(area)
         area.latitude = result.result.location.lat
         area.lontitude = result.result.location.lng
+        console.log('last area')
+        console.log(area)
         await City.saveCityCoordinate(area)
         ctx.rest(Result.create(area))
       },
@@ -112,7 +116,6 @@ function searchAddress(address){
   
         return new Promise((resolve,reject)=>{
             axios.get('http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=' + encodeURI(address)).then(function(res){
-                console.log(res)
                 if(res.status == 200){
                     resolve(Result.create(0,res.data))
                 }
