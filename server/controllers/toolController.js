@@ -7,6 +7,8 @@ const myCache = new NodeCache();
 const fs = require("fs")
 const path = require('path')
 const City = require('../model/city')
+const axios = require('axios')
+
 module.exports = {
     'GET /api/tool/five/:key': async (ctx, next) => {
         let key = ctx.params.key
@@ -108,23 +110,15 @@ function searchAddress(address){
     return new Promise((resolve,reject)=>{
         //http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
   
-        let options = {
-            url:"http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=" +  address,
-            method:"GET",
-            encoding:null
-         }
 
-        function callback(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body)
-                resolve(Result.create(0,body))
-            }
+        axios.get("http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=" +  address).then(function(res){
+            if(res.status == 200){
+                resolve(Result.create(0,res.data))
+            }   
             else{
-               console.log(error)
-               reject(Result.create(-1))     
+                reject(Result.create(8))    
             }
-        }
-        request(options,callback)
+        })
     })
 }
 
