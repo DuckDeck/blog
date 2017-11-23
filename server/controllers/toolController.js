@@ -30,8 +30,29 @@ module.exports = {
      'GET /api/geocoder/:address': async (ctx, next) => {
         let address = ctx.params.address
         console.log(address)
+        let city = await City.searchCity(address)
+        if(city.code != 0){
+            ctx.rest(city)
+            return
+        }
+        if(city.data[0].count <= 0 || city.data[0].count > 1){
+            ctx.rest(Result.create(8))
+            return
+        }
+        let area =  city.data[0][0]
+        if (area.latitude > 0){
+            ctx.rest(Result.create(0,area))
+            return
+        }
         let result = await searchAddress(address)
-        ctx.rest(result)
+        if(result.status != 0){
+            ctx.rest(Result.create(8))
+            return
+        }
+        area.latitude = result.result.location.lat
+        area.lontitude = result.result.location.lng
+        await City.saveCityCoordinate(area)
+        ctx.rest(Result.create(area))
       },
 }
 
@@ -94,6 +115,7 @@ function searchAddress(address){
 
         function callback(error, response, body) {
             if (!error && response.statusCode == 200) {
+                console.log(body)
                 resolve(Result.create(0,body))
             }
             else{

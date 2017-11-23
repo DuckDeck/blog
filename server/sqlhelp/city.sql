@@ -3555,3 +3555,11 @@ insert into areas(id,areaid,area,cityid) values(3141,'659001','石河子市','65
 insert into areas(id,areaid,area,cityid) values(3142,'659002','阿拉尔市','659000');  
 insert into areas(id,areaid,area,cityid) values(3143,'659003','图木舒克市','659000');  
 insert into areas(id,areaid,area,cityid) values(3144,'659004','五家渠市','659000');  
+
+
+
+
+
+
+
+CREATE VIEW `city_list` AS select *,(select province from provinces where provinces.provinceid = cities.provinceid) as province from cities 

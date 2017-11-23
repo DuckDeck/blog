@@ -14,5 +14,13 @@ class City{
         return db.exec("select *,(select province from provinces where provinces.provinceid = cities.provinceid) as province from cities",null,'city')
     }
     
+    static searchCity(city){
+        return db.exec(`select * from city_list where city like '%` + city +`%' or province like '%` + city + `%' limit 1`)
+    }
+
+    static saveCityCoordinate(city){
+        return db.exec(`update cities set latitude = ?,lontitude = ? where id = ?`)
+    }
+    
 }
 module.exports = City
