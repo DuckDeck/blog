@@ -35,12 +35,12 @@ module.exports = {
             ctx.rest(city)
             return
         }
-        if(city.data[0].count <= 0 || city.data[0].count > 1){
+        if(city.data.count <= 0 || city.data.count > 1){
             ctx.rest(Result.create(8))
             return
         }
         console.log(city)
-        let area =  city.data[0][0]
+        let area =  city.data[0]
         console.log(area)
         if (area.latitude > 0){
             ctx.rest(Result.create(0,area))
