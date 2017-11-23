@@ -84,12 +84,11 @@ function searchFive(key){
 
 function searchAddress(address){
     return new Promise((resolve,reject)=>{
-        http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
+        //http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
   
         let options = {
             url:"http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&city=" +  address,
             method:"GET",
-            form:params,
             encoding:null
          }
 
