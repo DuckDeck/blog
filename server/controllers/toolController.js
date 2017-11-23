@@ -39,7 +39,9 @@ module.exports = {
             ctx.rest(Result.create(8))
             return
         }
+        console.log(city)
         let area =  city.data[0][0]
+        console.log(area)
         if (area.latitude > 0){
             ctx.rest(Result.create(0,area))
             return
