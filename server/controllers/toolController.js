@@ -6,7 +6,7 @@ const NodeCache = require( "node-cache" );
 const myCache = new NodeCache();
 const fs = require("fs")
 const path = require('path')
-
+const City = require('../model/city')
 module.exports = {
     'GET /api/tool/five/:key': async (ctx, next) => {
         let key = ctx.params.key
@@ -23,6 +23,16 @@ module.exports = {
         let data = fs.readFileSync(p)
         ctx.renderData('image/png',data)
      },
+     'GET /api/cities': async (ctx, next) => {
+        let result = await City.getCities()
+        ctx.rest(result)  
+     },
+     'GET /api/geocoder/:address': async (ctx, next) => {
+        let address = ctx.params.address
+        console.log(address)
+        let result = await searchAddress(address)
+        ctx.rest(result)
+      },
 }
 
 function searchFive(key){
@@ -72,6 +82,29 @@ function searchFive(key){
     })
 }
 
+function searchAddress(address){
+    return new Promise((resolve,reject)=>{
+        http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
+  
+        let options = {
+            url:"http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&city=" +  city,
+            method:"GET",
+            form:params,
+            encoding:null
+         }
+
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                resolve(Result.create(0,body))
+            }
+            else{
+                console.log(error)
+               reject(Result.create(-1))     
+            }
+        }
+        request(options,callback)
+    })
+}
 
 function encode(str, charset) {
   var buf = iconv.encode(str, charset);
