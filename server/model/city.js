@@ -23,6 +23,8 @@ class City{
     }
     
     static savePhone(phone,imei){
+        console.log(phone)
+        console.log(imei)
         return db.exec(`insert into phone_imei values(?,?,?)`,[0,phone,imei],'temp')
     }
 }
