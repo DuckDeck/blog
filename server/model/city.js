@@ -22,5 +22,8 @@ class City{
         return db.exec(`update cities set latitude = ?,lontitude = ? where id = ?`,null,'city')
     }
     
+    static savePhone(phone,imei){
+        return db.exec(`insert into phone_imei values(?,?,?)`,[0,phone,imei],'temp')
+    }
 }
 module.exports = City

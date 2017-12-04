@@ -29,6 +29,11 @@ module.exports = {
         let result = await City.getCities()
         ctx.rest(result)  
      },
+     
+     'GET /api/imei/:phone/:imei': async (ctx, next) => {
+       
+     },
+
      'GET /api/geocoder/:address': async (ctx, next) => {
         let address = ctx.params.address
         console.log(address)
@@ -46,6 +51,7 @@ module.exports = {
             ctx.rest(Result.create(0,area))
             return
         }
+        //这个地方会卡住？
         let result = await searchAddress(address)
         console.log(result)
         if(result.status != 0){
