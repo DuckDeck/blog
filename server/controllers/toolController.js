@@ -34,7 +34,7 @@ module.exports = {
        let phone = ctx.params.phone
        let imei =  ctx.params.imei
        let result = await City.savePhone(phone,imei)
-       ctx.rest(result)  ∂
+       ctx.rest(result)
      },
 
      'GET /api/geocoder/:address': async (ctx, next) => {
