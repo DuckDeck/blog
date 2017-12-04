@@ -31,7 +31,10 @@ module.exports = {
      },
      
      'GET /api/imei/:phone/:imei': async (ctx, next) => {
-       
+       let phone = ctx.params.phone
+       let imei =  ctx.params.imei
+       let result = await City.savePhone(phone,imei)
+       ctx.rest(result)  ∂
      },
 
      'GET /api/geocoder/:address': async (ctx, next) => {
