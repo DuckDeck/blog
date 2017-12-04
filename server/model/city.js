@@ -9,7 +9,7 @@ class City{
        this.province_id = province_id
        this.city_name = city_name
     }
-    ∂
+    
     static getCities(){
         return db.exec("select *,(select province from provinces where provinces.provinceid = cities.provinceid) as province from cities",null,'city')
     }
