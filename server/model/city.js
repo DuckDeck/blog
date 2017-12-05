@@ -19,7 +19,7 @@ class City{
     }
 
     static saveCityCoordinate(city){
-        return db.exec(`update cities set latitude = ?,lontitude = ? where id = ?`,null,'city')
+        return db.exec(`update cities set latitude = ?,longitude = ? where id = ?`,[city.latitude,city.lontitude,city.id],'city')
     }
     
     static savePhone(phone,imei){

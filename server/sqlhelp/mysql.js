@@ -60,7 +60,11 @@ db.exec = function(sql,data,db_name='blog'){
         }
         else if (db_name == 'city'){
             poolCity.query(sql,data, function(err, rows, fields) {  
-                if (err) { 
+                if (err) {
+                    console.log(err)
+                    pool.query('insert into blog_error values(0,?,?,?,?,?,?)',
+                    [err.errno,err.name,err.code,err.message,err.toString(),new Date().getTime()],(err,rows,fields)=>{
+                    })
                     reject(result.create(-50))
                     return;    
                   }
@@ -79,7 +83,11 @@ db.exec = function(sql,data,db_name='blog'){
         }
         else if (db_name == 'temp'){
             poolTemp.query(sql,data, function(err, rows, fields) {  
-                if (err) { 
+                if (err) {
+                    console.log(err)
+                    pool.query('insert into blog_error values(0,?,?,?,?,?,?)',
+                    [err.errno,err.name,err.code,err.message,err.toString(),new Date().getTime()],(err,rows,fields)=>{
+                    })
                     reject(result.create(-50))
                     return;    
                   }

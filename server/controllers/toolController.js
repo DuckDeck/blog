@@ -2,8 +2,6 @@ const Result = require('../model/result.js')
 const cheerio = require('cheerio')
 const request = require('request')
 const iconv = require('iconv-lite');
-const NodeCache = require( "node-cache" );
-const myCache = new NodeCache();
 const fs = require("fs")
 const path = require('path')
 const City = require('../model/city')
@@ -59,20 +57,21 @@ module.exports = {
             ctx.rest(Result.create(0,area))
             return
         }
+
+
+
         //这个地方会卡住？
         let result = await searchAddress(address)
-        console.log(result)
-        if(result.status != 0){
-            ctx.rest(Result.create(8))
+        if(result.code != 0){
+            ctx.rest(result)
             return
         }
-        console.log('first area')
-        console.log(area)
-        area.latitude = result.result.location.lat
-        area.lontitude = result.result.location.lng
-        console.log('last area')
-        console.log(area)
+
+        area.latitude = result.data.result.location.lat
+        area.lontitude = result.data.result.location.lng
+        
         await City.saveCityCoordinate(area)
+        console.log(area)
         ctx.rest(Result.create(area))
       },
 }
@@ -125,22 +124,22 @@ function searchFive(key){
 }
 
 function searchAddress(address){
-    return new Promise((resolve,reject)=>{
+  
         //http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
   
-        return new Promise((resolve,reject)=>{
-            axios.get('http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=' + encodeURI(address)).then(function(res){
-                if(res.status == 200){
-                    resolve(Result.create(0,res.data))
-                }
-                else{
-                    reject(Result.create(8))    
-                }
-    
-            })
+    return new Promise((resolve,reject)=>{
+        axios.get('http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=' + encodeURI(address)).then(function(res){
+            if(res.status == 200){
+                resolve(Result.create(0,res.data))
+            }
+            else{
+                reject(Result.create(8))    
+            }
+
         })
-       
     })
+       
+    
 }
 
 function encode(str, charset) {
