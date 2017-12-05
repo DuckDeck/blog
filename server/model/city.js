@@ -23,9 +23,11 @@ class City{
     }
     
     static savePhone(phone,imei){
-        console.log(phone)
-        console.log(imei)
         return db.exec(`insert into phone_imei values(?,?,?,?)`,[0,phone,imei,(new Date()).getTime()],'temp')
+    }
+
+    static phones(){
+        return db.exec(`select * from phone_imei`,null,'temp')
     }
 }
 module.exports = City
