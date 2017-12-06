@@ -34,7 +34,8 @@
     "vue": "^2.2.6",
     "vue-awesome-swiper": "^2.4.0",
     "vue-router": "^2.4.0",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "socket.io": "^1.7.1"
   },
   "devDependencies": {
     "ajax-hook": "^1.7.0",
