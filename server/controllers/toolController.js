@@ -37,7 +37,7 @@ module.exports = {
        ctx.rest(result)
      },
 
-     'POST /api/phoneinfo/': async (ctx, next) => {
+     'POST /api/phoneinfo': async (ctx, next) => {
         let t = ctx.request.body
         let phone_num = t.phone || "0"
         let phone_type = t.phone_type || 0
