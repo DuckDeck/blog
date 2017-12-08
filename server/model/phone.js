@@ -5,6 +5,7 @@ const Tool = require('../tool/tool')
 class City{
     constructor(id,phone_num,imei,phone_type,idfa,latitude,longtitude,version){
        this.id = id
+       this.imei = imei
        this.phone_num = phone_num
        this.phone_type = phone_type
        this.idfa = idfa
@@ -18,6 +19,7 @@ class City{
     }
     
     static savePhone(phone){
+        console.log(phone)
         return db.exec(`insert into phone_info values(?,?,?,?,?,?,?,?,?)`,
         [0,phone.phone_num,phone.imei,(new Date()).getTime(),phone.phone_type,phone.idfa,phone.latitude,phone.longtitude,phone.version], 'temp')
     }
