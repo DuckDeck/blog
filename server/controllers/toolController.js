@@ -5,6 +5,7 @@ const iconv = require('iconv-lite');
 const fs = require("fs")
 const path = require('path')
 const City = require('../model/city')
+const Phone = require('../model/phone')
 const axios = require('axios')
 
 module.exports = {
@@ -29,14 +30,29 @@ module.exports = {
      },
      
      'GET /api/imei/:phone/:imei': async (ctx, next) => {
-       let phone = ctx.params.phone
+       let phone_num = ctx.params.phone
        let imei =  ctx.params.imei
-       let result = await City.savePhone(phone,imei)
+       let s = new Phone(0,phone_num,imei,0,0,0.0,0.0,'0.0')
+       let result = await Phone.savePhone(s)
        ctx.rest(result)
      },
 
+     'POST /api/phoneinfo/': async (ctx, next) => {
+        let t = ctx.request.body
+        let phone_num = t.phone || "0"
+        let phone_type = t.phone_type || 0
+        let phone_imei = t.imei || "0"
+        let phone_idfa = t.idfa  || "0"
+        let latitude = t.latitude || 0.0
+        let longtitude = t.longtitude || 0.0
+        let version = t.version || "0.0"
+        let p = new Phone(0,phone_num,phone_imei,phone_type,phone_idfa,latitude,longtitude,version)
+        let result = await Phone.savePhone(p)
+        ctx.rest(result)
+      },
+
      'GET /api/imeis': async (ctx, next) => {
-        let result = await City.phones()
+        let result = await Phone.phones()
         ctx.rest(result)
       },
 
