@@ -12,6 +12,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 console.log("当前环境：" + isProduction ? "正式":"测试")
 const actions = require('./sqlhelp/createTable')
 
+// const IO = require( 'koa-socket' )
+
+// const io = new IO()
+
+var chatServer = require('./lib/chat_server')
 
 //actions.createDB()
 actions.createTbs()
@@ -77,6 +82,10 @@ app.use(rest.restify());
 
 // add controllers:
 app.use(controller());
+
+// io.attach(app)
+
+chatServer.listen(app)
 
 app.listen(3000);
 console.log('app started at port 3000...');

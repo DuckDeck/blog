@@ -20,6 +20,7 @@
     "koa-body": "^2.0.0",
     "koa-cors": "0.0.16",
     "koa-router": "7.0.0",
+    "koa-socket": "^4.4.0",
     "log4js": "^1.1.1",
     "mavon-editor": "^1.5.4",
     "mime": "1.3.4",
@@ -30,12 +31,12 @@
     "nunjucks": "2.4.3",
     "qs": "^6.4.0",
     "showdown": "^1.6.4",
+    "socket.io": "^1.7.1",
     "to-markdown": "^3.0.4",
     "vue": "^2.2.6",
     "vue-awesome-swiper": "^2.4.0",
     "vue-router": "^2.4.0",
-    "vuex": "^2.3.1",
-    "socket.io": "^1.7.1"
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "ajax-hook": "^1.7.0",
