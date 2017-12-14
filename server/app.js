@@ -12,9 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 console.log("当前环境：" + isProduction ? "正式":"测试")
 const actions = require('./sqlhelp/createTable')
 
-// const IO = require( 'koa-socket' )
-
-// const io = new IO()
+const server = require('http').Server(app.callback());
 
 var chatServer = require('./lib/chat_server')
 
@@ -85,7 +83,11 @@ app.use(controller());
 
 // io.attach(app)
 
-chatServer.listen(app)
+chatServer.listen(server)
 
-app.listen(3000);
+
+
+server.listen(3000,function(){
+    console.log('Server listening on port 3000.')
+});
 console.log('app started at port 3000...');
