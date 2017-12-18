@@ -7,7 +7,7 @@ const path = require('path')
 const City = require('../model/city')
 const Phone = require('../model/phone')
 const axios = require('axios')
-
+const PhoneRequest = require('../model/phoneRequest')
 module.exports = {
     'GET /api/tool/five/:key': async (ctx, next) => {
         let key = ctx.params.key
@@ -18,7 +18,8 @@ module.exports = {
         }
         let result = await searchFive(key)
         ctx.rest(result)
-     },
+    },
+
      'GET /api/tool/fiveqrcode': async (ctx, next) => {
         let p = path.join(__dirname,'../../static/img/qrcode.png' )
         let data = fs.readFileSync(p)
@@ -35,7 +36,7 @@ module.exports = {
        let s = new Phone(0,phone_num,imei,0,0,0.0,0.0,'0.0')
        let result = await Phone.savePhone(s)
        ctx.rest(result)
-     },
+    },
 
      'POST /api/phoneinfo': async (ctx, next) => {
         let t = ctx.request.body
@@ -48,6 +49,22 @@ module.exports = {
         let version = t.version || "0.0"
         let p = new Phone(0,phone_num,phone_imei,phone_type,phone_idfa,latitude,longtitude,version)
         let result = await Phone.savePhone(p)
+        ctx.rest(result)
+      },
+
+      'POST /api/easylog': async (ctx, next) => {
+        let t = ctx.request.body
+        let phone_num = t.phone || "0"
+        let phone_type = t.phone_type || 0
+        let phone_imei = t.imei || "0"
+        let phone_idfa = t.idfa  || "0"
+        let latitude = t.latitude || 0.0
+        let longtitude = t.longtitude || 0.0
+        let version = t.version || "0.0"
+        // let p = new Phone(0,phone_num,phone_imei,phone_type,phone_idfa,latitude,longtitude,version)
+        // let result = await Phone.savePhone(p)
+        let p = new PhoneRequest(0,phone_num,phone_type,phone_imei,phone_idfa,latitude,longtitude,version)
+        let result = await PhoneRequest.savePhoneRequest(p)
         ctx.rest(result)
       },
 
@@ -145,9 +162,7 @@ function searchFive(key){
 }
 
 function searchAddress(address){
-  
         //http://api.map.baidu.com/geocoder/v2/?address=北京市海淀区上地十街10号&output=json&ak=您的ak&callback=showLocation
-  
     return new Promise((resolve,reject)=>{
         axios.get('http://api.map.baidu.com/geocoder/v2/?&output=json&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&address=' + encodeURI(address)).then(function(res){
             if(res.status == 200){
@@ -159,8 +174,20 @@ function searchAddress(address){
 
         })
     })
-       
-    
+}
+http://api.map.baidu.com/geocoder/v2/?output=json&pois=0&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&location=39.934,116.329
+function searchCoor(coor){
+    return new Promise((resolve,reject)=>{
+        axios.get('http://api.map.baidu.com/geocoder/v2/?output=json&pois=0&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&location=' + coor.latitude+','+coor.longtitude).then(function(res){
+            if(res.status == 200){
+                resolve(Result.create(0,res.data))
+            }
+            else{
+                reject(Result.create(8))    
+            }
+
+        })
+    })
 }
 
 function encode(str, charset) {
