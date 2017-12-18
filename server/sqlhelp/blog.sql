@@ -505,3 +505,20 @@ comment_content,commenter_user_id,comment_time, 0 as 'comment_type',  0 as 'comm
 SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope,delete_flag FROM 
 user_sub_comment 
+
+
+------------------------------
+-- create chat_message
+------------------------------
+
+
+CREATE TABLE `blog`.`chat_message` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `chat_type` INT NOT NULL,
+  `sender_id` INT NOT NULL,
+  `receive_id` INT NOT NULL,
+  `time` BIGINT(20) NOT NULL,
+  `chat_id` INT NOT NULL,
+  `send_status` INT NOT NULL,
+  `chat_content` LONGTEXT NULL,
+  PRIMARY KEY (`id`));

@@ -20,8 +20,8 @@ class City{
     
     static savePhone(phone){
         console.log(phone)
-        return db.exec(`insert into phone_info values(?,?,?,?,?,?,?,?,?)`,
-        [0,phone.phone_num,phone.imei,(new Date()).getTime(),phone.phone_type,phone.idfa,phone.latitude,phone.longtitude,phone.version], 'temp')
+        return db.exec(`insert into phone_info values(?,?,?,?,?,?,?,?,?,?)`,
+        [0,phone.phone_num,phone.imei,(new Date()).getTime(),(new Date()).toString(),phone.phone_type,phone.idfa,phone.latitude,phone.longtitude,phone.version], 'temp')
     }
 
     

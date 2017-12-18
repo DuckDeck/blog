@@ -56,6 +56,11 @@ module.exports = {
         ctx.rest(result)
       },
 
+      'GET /api/imei/phoneNum': async (ctx, next) => {
+        let result = await Phone.phones()
+        ctx.rest(result)
+      },
+
      'GET /api/geocoder/:address': async (ctx, next) => {
         let address = ctx.params.address
         console.log(address)

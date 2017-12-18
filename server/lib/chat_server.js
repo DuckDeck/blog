@@ -106,7 +106,7 @@ function handleRoomJoining(socket) {
 function handleClientDisconnection(socket) {
     socket.on('disconnect',function () {
         var nameIndex = namesUsed.indexOf(nickNames[socket.id])
-        // delete namesUsed
-        // delete nickNames[socket.id]
+         namesUsed = []
+         nickNames[socket.id] = null
      })
 }
