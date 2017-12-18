@@ -1,7 +1,6 @@
 
 const db = require('../sqlhelp/mysql') 
 const Tool = require('../tool/tool')
-
 class PhoneRequest{
     constructor(id,phone_num,phone_type,imei,idfa,latitude,longtitude,version){
        this.id = id
@@ -22,7 +21,7 @@ class PhoneRequest{
         return db.exec(`insert into easy_log values(?,?,?,?,?,?,?,?,?,?,?)`,
         [0,phone.phone_num,phone.phone_type,
             (new Date()).getTime(),
-            (new Date()).toString(),
+            Tool.formatTime(new Date()),
             phone.imei,
             phone.idfa,
             phone.latitude,

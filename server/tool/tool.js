@@ -21,6 +21,34 @@ class Tool{
         return Object.prototype.toString.call(data).slice(8, -1);
      }
 
+    static formatTime(date,format){
+        if(!(date instanceof Date)){
+            return date
+        }
+        if (format == undefined){
+            format = "yyyy-MM-dd hh:mm"
+        }
+        var dt = {
+              "M+": date.getMonth() + 1,
+              "d+": date.getDate(),
+              "h+": date.getHours(),
+              "m+": date.getMinutes(),
+              "s+": date.getSeconds(),
+              "q+": Math.floor((date.getMonth() + 3) / 3),
+              "S+": date.getMilliseconds()
+       };
+       if (/(y+)/i.test(format)) {
+              format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+       }
+       for (var k in dt) {
+              if (new RegExp("(" + k + ")").test(format)) {
+                     format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? dt[k] : ("00" + dt[k]).substr(("" + dt[k]).length));
+              }
+       }
+       return format;
+    }
+
     static convertResultData(result){
         if(result.data.length > 0){
            result.data = result.data[0]
