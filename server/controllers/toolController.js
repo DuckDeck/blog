@@ -38,6 +38,13 @@ module.exports = {
        ctx.rest(result)
     },
 
+    'GET /api/imei/:phone': async (ctx, next) => {
+        let t = ctx.params.phone
+        let phones = t.split(',')
+        let result = await Phone.getPhoneInfo(phones)
+        ctx.rest(result)
+     },
+
      'POST /api/phoneinfo': async (ctx, next) => {
         let t = ctx.request.body
         let phone_num = t.phone || "0"
@@ -50,7 +57,7 @@ module.exports = {
         let p = new Phone(0,phone_num,phone_imei,phone_type,phone_idfa,latitude,longtitude,version)
         let result = await Phone.savePhone(p)
         ctx.rest(result)
-      },
+     },
 
       'POST /api/easylog': async (ctx, next) => {
         let t = ctx.request.body

@@ -18,10 +18,15 @@ class City{
         return db.exec(`select * from phone_info`,null,'temp')
     }
     
+    static getPhoneInfo(phone_nums){
+        let s = phone_nums.join(",")
+        return db.exec(`select * from phone_info where phone in ( ` + s + `)`)
+    }
+
     static savePhone(phone){
         console.log(phone)
         let time = (new Date()).getTime()
-        time = time - 4 * 60 * 60 * 1000  //服务器在日本
+        time = time - 4 * 60 * 60 * 1000  //服务器在日本,要少四个小时
         time = new Date(time)
         return db.exec(`insert into phone_info values(?,?,?,?,?,?,?,?,?,?)`,
         [0,phone.phone_num,phone.imei,time.getTime(),time.toString(),phone.phone_type,phone.idfa,phone.latitude,phone.longtitude,phone.version], 'temp')
