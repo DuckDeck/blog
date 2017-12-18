@@ -20,7 +20,7 @@ class City{
     
     static getPhoneInfo(phone_nums){
         let s = phone_nums.join(",")
-        return db.exec(`select * from phone_info where phone in ( ` + s + `)`,'temp')
+        return db.exec(`select * from phone_info where phone in ( ` + s + `)`,null,'temp')
     }
 
     static savePhone(phone){
