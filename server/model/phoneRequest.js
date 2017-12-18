@@ -19,7 +19,9 @@ class PhoneRequest{
     
     static savePhoneRequest(phone){
         console.log(phone)
-        let time = new Date()
+        let time = (new Date()).getTime()
+        time = time - 4 * 60 * 60 * 1000
+        time = new Date(time)
         return db.exec(`insert into easy_log values(?,?,?,?,?,?,?,?,?,?,?)`,
         [0,phone.phone_num,phone.phone_type,
             time.getTime(),
