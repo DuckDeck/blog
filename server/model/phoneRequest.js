@@ -3,7 +3,7 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 
 class PhoneRequest{
-    constructor(id,phone_num,phone_type,imei,idfa,latitude,longtitude,version){
+    constructor(id,phone_num,phone_type,imei,idfa,latitude,longtitude,version,url){
        this.id = id
        this.imei = imei
        this.phone_num = phone_num
@@ -13,6 +13,7 @@ class PhoneRequest{
        this.longtitude = longtitude
        this.version = version
        this.address = ""
+       this.url = url
     }
     
    
@@ -22,7 +23,7 @@ class PhoneRequest{
         let time = (new Date()).getTime()
         time = time - 4 * 60 * 60 * 1000
         time = new Date(time)
-        return db.exec(`insert into easy_log values(?,?,?,?,?,?,?,?,?,?,?)`,
+        return db.exec(`insert into easy_log values(?,?,?,?,?,?,?,?,?,?,?,?)`,
         [0,phone.phone_num,phone.phone_type,
             time.getTime(),
             time.toLocaleString(),
@@ -31,7 +32,8 @@ class PhoneRequest{
             phone.latitude,
             phone.longtitude,
             phone.address,
-            phone.version], 'temp')
+            phone.version,
+            phone.url], 'temp')
     }    
 
 }
