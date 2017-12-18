@@ -61,8 +61,6 @@ module.exports = {
         let latitude = t.latitude || 0.0
         let longtitude = t.longtitude || 0.0
         let version = t.version || "0.0"
-        // let p = new Phone(0,phone_num,phone_imei,phone_type,phone_idfa,latitude,longtitude,version)
-        // let result = await Phone.savePhone(p)
         let p = new PhoneRequest(0,phone_num,phone_type,phone_imei,phone_idfa,latitude,longtitude,version)
         let result = await PhoneRequest.savePhoneRequest(p)
         ctx.rest(result)
@@ -175,7 +173,7 @@ function searchAddress(address){
         })
     })
 }
-http://api.map.baidu.com/geocoder/v2/?output=json&pois=0&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&location=39.934,116.329
+//http://api.map.baidu.com/geocoder/v2/?output=json&pois=0&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&location=39.934,116.329
 function searchCoor(coor){
     return new Promise((resolve,reject)=>{
         axios.get('http://api.map.baidu.com/geocoder/v2/?output=json&pois=0&ak=GmgLlkoB8sqMU3HFHuztPezuo2Zpp1mi&location=' + coor.latitude+','+coor.longtitude).then(function(res){
