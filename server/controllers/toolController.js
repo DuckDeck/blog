@@ -69,9 +69,16 @@ module.exports = {
         let longtitude = t.longtitude || 0.0
         let version = t.version || "0.0"
         let url = t.url || ""
-        let p = new PhoneRequest(0,phone_num,phone_type,phone_imei,phone_idfa,latitude,longtitude,version,url)
-        let result = await PhoneRequest.savePhoneRequest(p)
-        ctx.rest(result)
+        let log = t.log || ""
+        console.log(log)
+        let logJs = JSON.parse(log)
+        console.log(logJs)
+        let log0 = JSON.parse(logJs[0])
+       
+        //let p = new PhoneRequest(0,phone_num,phone_type,phone_imei,phone_idfa,latitude,longtitude,version,url,log)
+        //let result = await PhoneRequest.savePhoneRequest(p)
+        //ctx.rest(result)
+        ctx.rest(Result.create(0))
       },
 
      'GET /api/imeis': async (ctx, next) => {
