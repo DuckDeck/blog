@@ -19,7 +19,7 @@
                            {{art.article_name}}
                        </div>
                        <div class="articleAuthor">
-                            <span class="articleAuthorName" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> 
+                            <span class="articleAuthorName" v-if="art.userInfo != null" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> 
                             <span style="color: mediumblue">{{art.article_sort_name}}</span>  <span>{{art.comment_count}} 条评论</span> 
                        </div>
                    </div>
@@ -57,7 +57,7 @@
                        <span>最新评论</span>
                    </div>
                     <div class="articleRightContent">
-                        <div style="display: flex;margin-bottom: 5px;" v-for="com in newComment" @click="gotoUserInfo(com)">
+                        <div style="display: flex;margin-bottom: 5px;cursor:pointer" v-for="com in newComment" @click="gotoUserInfo(com)">
                             <img class="userHead" :src="com.user_image_url" alt="">
                             <div>
                                 <div class="userRealName"  >
@@ -75,7 +75,7 @@
                        <span>推荐作者</span>
                    </div>
                     <div class="articleRightContent">
-                      <div  style="display: flex" v-for="author in authors" @click="gotoUserInfo(author)">
+                      <div  style="display: flex;" v-for="author in authors" @click="gotoUserInfo(author)">
                             <img class="userHead" :src="author.user_image_url" alt="">
                             <div>
                                 <div class="userRealName">

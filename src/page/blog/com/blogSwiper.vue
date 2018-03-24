@@ -12,7 +12,6 @@
                         {{art.article_brief.slice(0,50)}}...
                     </div>
                 </div>
-         </img> 
        </div>
             
         </swiper-slide>
@@ -62,7 +61,17 @@
     height: 100%;
     background: rgba(1, 1, 1, 0.5)
 }*/
-
+.swiper-wrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+}
 .swiperArticleInfo{
     position: absolute;
     left: 0;
