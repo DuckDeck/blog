@@ -3,11 +3,12 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 
 class PhoneRequest{
-    constructor(id,phone_num,phone_type,imei,idfa,latitude,longtitude,version,url,log){
+    constructor(id,phone_num,phone_type,time,imei,idfa,latitude,longtitude,version,url,log){
        this.id = id
        this.imei = imei
        this.phone_num = phone_num
        this.phone_type = phone_type
+       this.time = time
        this.idfa = idfa
        this.latitude = latitude
        this.longtitude = longtitude
