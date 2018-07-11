@@ -4,6 +4,9 @@ class Result{
         this.msg = msg
         this.cMsg = cMsg
         this.data = data
+        this.needCache = false
+        this.count = -1
+        this.pageIndex = -1
     }
 
     static create(code,data){
