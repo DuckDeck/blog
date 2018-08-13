@@ -1,8 +1,8 @@
 
 <template>
-    <swiper class="swiperArticle" :options="swiperOption" >
-        <swiper-slide v-for="art in articles">
-         <div>
+    <el-carousel class="swiperArticle" autoplay="true" height="5rem">
+        <el-carousel-item v-for="art in articles">
+         <div >
                <img :src="art.article_main_img" alt="" class="swiperImg">
                 <div class="swiperArticleInfo">
                     <div class="swiperArticleTitle" @click="gotoArticle(art)">
@@ -14,23 +14,15 @@
                 </div>
        </div>
             
-        </swiper-slide>
-        <div class="swiper-pagination"  slot="pagination"></div>
-    </swiper>
+        </el-carousel-item>
+       
+    </el-carousel>
 </template>
 
 <script>
     export default {
         data() {
             return{
-              swiperOption: {
-                autoplay: 3500,
-                setWrapperSize :true,
-                pagination : '.swiper-pagination',
-                paginationClickable :true,
-                mousewheelControl : true,
-                observeParents:true,
-              },
             }
         },
         props:{  
@@ -89,7 +81,7 @@
     cursor: pointer
 }
 .swiperArticleBrief{
-    font-size: 0.22rem;
+    font-size: 0.3rem;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;
