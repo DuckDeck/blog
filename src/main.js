@@ -76,7 +76,7 @@ Vue.use(Vuex)
 
 import ElementUI from 'element-ui';
 Vue.use(ElementUI);
-import 'element-ui/lib/theme-default/index.css'; 
+//import 'element-ui/lib/theme-default/index.css'; 
 
 
 
