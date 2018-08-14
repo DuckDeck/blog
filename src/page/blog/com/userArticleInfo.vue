@@ -79,7 +79,7 @@
 .comArticleReleaseTime{
     font-size: 14px;
     color: #aaa;
-    margin-top: 3px;
+    margin-top: 6px;
 }
 .comArticleReleaseTime span{
     margin-right: 4px;

@@ -20,7 +20,7 @@
      font-size: 18px;
      height: 50px;
      color: deepskyblue;
-     margin: 20px 0px;
+     margin: 30px 0px;
 
  }
   .blogFoot span:hover{

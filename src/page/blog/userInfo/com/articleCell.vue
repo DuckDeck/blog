@@ -79,7 +79,7 @@
     width: 150px;
     height: 140px;
     margin-left: 10px;
-    object-fit: contain;
+    object-fit: cover;
 }
 .articleCellUserInfo{
     font-size: 14px;

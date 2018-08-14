@@ -194,6 +194,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
     font-size: 16px;
     padding-bottom: 50px;
     margin-top: 50px;
+    color: #666666;
 }
 
 .articleComments{

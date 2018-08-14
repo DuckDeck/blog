@@ -117,5 +117,6 @@ import comment from './com/comment.vue'
 .articleContentClass{
     margin-top: 20px;
     font-size: 20px;
+    color: #666666;
 }
 </style>

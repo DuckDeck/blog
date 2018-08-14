@@ -6,8 +6,13 @@
          </div>
          <div class="rightMenu">
              
-            <el-input  class="searchInput" placeholder="搜索" icon="search" v-model="keyword"
-             :on-icon-click="handleIconClick" @keyup.enter="handleIconClick"> </el-input>
+            <el-input  class="searchInput" placeholder="搜索"  v-model="keyword"
+             :on-icon-click="handleIconClick" @keyup.enter="handleIconClick"> <i
+    class="el-icon-search el-input__icon"
+    slot="suffix"
+    @click="handleIconClick">
+  </i> 
+  </el-input>
             <div   class="rightMenuLogin" v-show="!isLogin" >
                 <span @click="login" >登录</span>
                 <span @click="register">注册</span>
@@ -137,7 +142,7 @@
     display: inline-block;
 }
   .rightMenu{
-    
+      height: 30px;
       width: 360px;
       display: flex;
       justify-content: space-around

@@ -30,9 +30,8 @@
 	 height: 50px;
 	 font-size: 40px;
 	 left: 20px;
-	 bottom: 20px;
 	 color: deepskyblue;
-	 
+	 bottom: 0px;
  }
  .uptoTop:hover{
 	 cursor: pointer
