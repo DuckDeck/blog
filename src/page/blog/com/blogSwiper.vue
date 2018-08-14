@@ -1,6 +1,6 @@
 
 <template>
-    <el-carousel class="swiperArticle" autoplay="true" height="5rem">
+    <el-carousel class="swiperArticle"  height="5rem">
         <el-carousel-item v-for="art in articles">
          <div >
                <img :src="art.article_main_img" alt="" class="swiperImg">

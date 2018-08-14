@@ -576,9 +576,6 @@ div.el-upload{
     display: flex;
     align-items: center;
 }
-.el-input{
-    width: 300px;
-}
 .emailValidated{
     font-size: 14px;
     color: #666;
@@ -644,6 +641,13 @@ display: inline-block;
 .userdesciption{
     max-width: 600px;
 }
+
+
+    .user_input{
+        width: 300px;
+    }
+ 
+
  @media (max-width:500px){
 
     .basicInfoForm{

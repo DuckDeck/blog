@@ -379,6 +379,10 @@ module.exports = {
           ctx.rest(res)
           return
        }
+       if(res.data.length == 0){
+          ctx.rest(Result.create(500))
+          return
+       }
        let userInfo = res.data[0]
        if(!userInfo.article_count){
            userInfo.article_count = 0

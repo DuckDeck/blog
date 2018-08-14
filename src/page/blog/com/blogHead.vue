@@ -14,10 +14,10 @@
             </div>
             <div class="userInfoDiv" v-show="isLogin">
                 <el-dropdown trigger="click" @command="handleCommand">
-                <span class="userInfoSpan el-dropdown-link" >
-                    <img  :src="userInfo.user_image_url">
-                    {{userInfo.user_real_name}}
-                </span>
+                <div style="display:flex" class="el-dropdown-link" >
+                    <img class="userheadimg" :src="userInfo.user_image_url">
+                    <span style="align-self:center">{{userInfo.user_real_name}}</span>
+                </div>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
                     <el-dropdown-item command="write">写文章</el-dropdown-item>
@@ -148,26 +148,8 @@
         display: none;
     }
 } 
-@media (min-width:1200px){
-    .blogheader{
-        padding: 7px 100px;
-    }
-} 
-@media (min-width:1400px){
-    .blogheader{
-        padding: 7px 200px;
-    }
-} 
-@media (min-width:1600px){
-    .blogheader{
-        padding: 7px 300px;
-    }
-} 
-@media (min-width:1800px){
-    .blogheader{
-        padding: 7px 400px;
-    }
-} 
+
+
 .rightMenuLogin{
     line-height: 35px;
 }
@@ -182,9 +164,9 @@
 .userInfoDiv:hover{
     cursor: pointer;
 }
-.userInfoSpan img{
-    width: 35px;
-    height: 35px;
+.userheadimg{
+    width: 40px;
+    height: 40px;
     border-radius: 15px;
     margin-right: 10px;
 }
