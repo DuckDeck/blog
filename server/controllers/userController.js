@@ -546,8 +546,6 @@ module.exports = {
                 
             }
        }
-
-
        ctx.rest(Result.createCount(0,count,dynamics))
      },
 
@@ -629,10 +627,159 @@ module.exports = {
        ctx.rest(Result.createCount(0,count,comments))
      },
 
+     'GET /api/userlike/:userId/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let id = ctx.params.userId
+        let sql = `select count(like_id) as count from like_article where user_id = ?`
+        let res = await DB.exec(sql,[id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select article_id from like_article where user_id = ? order by like_time desc limit ?,?",[id,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let comments = res.data
+        let articleIds = comments.map(s=>{
+            if(s.comment_scope == 0){
+                return s.article_id
+            }
+            else{
+                return 0
+            }
+        })
+        sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        //注意，这进而是有被删除的文章的，因为我没有完全删除。
+        //所以如果喜欢的文章被删除的话，这里就要产品来判断还要不要返回给已经设为喜欢的文章的用户了
+        //这里我就直接返回了
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        res.rest(Result.createCount(0,count,res.data))    
+      },
 
+     'GET /api/usercollect/:userId/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let id = ctx.params.userId
+        let sql = `select count(collect_id) as count from collect_article where user_id = ?`
+        let res = await DB.exec(sql,[id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select article_id from collect_article where user_id = ? order by collect_time desc limit ?,?",[id,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let comments = res.data
+        let articleIds = comments.map(s=>{
+            if(s.comment_scope == 0){
+                return s.article_id
+            }
+            else{
+                return 0
+            }
+        })
+        sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        //注意，这进而是有被删除的文章的，因为我没有完全删除。
+        //所以如果收藏的文章被删除的话，这里就要产品来判断还要不要返回给已经设为收藏的文章的用户了
+        //这里我就直接返回了
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        res.rest(Result.createCount(0,count,res.data))    
+      },
+  
 
-  
-  
+    'GET /api/usersetcollect/:userId/:articleId/:isCollect': async (ctx, next) => {
+        var  t = ctx.request.body
+        let checkResult = Check.checkNum(t,'userId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'articleId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'isCollect')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+       let isCollect = ctx.params.isCollect
+       let id = ctx.params.userId
+       let articleId =  ctx.params.articleId
+       let sql = ''
+       let res = null
+       if(isCollect == 0){
+          sql = 'delete from collect_article where user_id = ? and article_id = ?'
+          res =  await DB.exec(sql,[id,articleId])
+       }
+       else{
+         sql = 'insert into  collect_article (collect_id,user_id,article_id,collect_time) values (0,?,?,?)'
+         res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+       }
+       ctx.rest(res || Result.create(-50))
+    },
+
+    'GET /api/usersetlike/:userId/:articleId/:isLike': async (ctx, next) => {
+        var  t = ctx.request.body
+        let checkResult = Check.checkNum(t,'userId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'articleId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'isLike')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+       let isLike = ctx.params.isLike
+       let id = ctx.params.userId
+       let articleId =  ctx.params.articleId
+       let sql = ''
+       let res = null
+       if(isLike == 0){
+          sql = 'delete from like_article where user_id = ? and article_id = ?'
+          res =  await DB.exec(sql,[id,articleId])
+       }
+       else{
+         sql = 'insert into  like_article (like_id,user_id,article_id,like_time) values (0,?,?,?)'
+         res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+       }
+       ctx.rest(res || Result.create(-50))
+    },
+
     'POST /api/user/updatebasic': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(t,'user_id')

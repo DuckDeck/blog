@@ -462,8 +462,25 @@ CREATE TABLE  IF NOT EXISTS blog_error (
  PRIMARY KEY (error_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
+------------------------------
+-- collect_article 用户收藏文章
+------------------------------
+CREATE TABLE   IF NOT EXISTS `blog`.`collect_article` (
+  `collect_id` INT NOT NULL,
+  `user_id` INT NOT NULL DEFAULT 0 COMMENT '用户id',
+  `article_id` INT NOT NULL DEFAULT 0 COMMENT '文章id',
+  `collect_time` BIGINT(15) NULL COMMENT '收藏时间',
+  PRIMARY KEY (`collect_id`));
 
-
+------------------------------
+-- collect_article 用户喜欢文章
+------------------------------
+CREATE TABLE   IF NOT EXISTS `blog`.`like_article` (
+  `like_id` INT NOT NULL,
+  `user_id` INT NOT NULL DEFAULT 0 COMMENT '用户id',
+  `article_id` INT NOT NULL DEFAULT 0 COMMENT '文章id',
+  `like_time` BIGINT(15) NULL COMMENT '收藏时间',
+  PRIMARY KEY (`like_id`));
 
 
 ------------------------------
@@ -506,6 +523,44 @@ SELECT comment_id,comment_target_user_id,comment_target_id,
 comment_content,commenter_user_id,comment_time,comment_type,comment_scope,delete_flag FROM 
 user_sub_comment 
 
+
+
+------------------------------
+-- create 文章相关信息的View
+------------------------------
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `article_related_info` AS
+    SELECT 
+        `article`.`article_id` AS `article_id`,
+        `article`.`article_name` AS `article_name`,
+        `article`.`article_release_time` AS `article_release_time`,
+        `article`.`article_brief` AS `article_brief`,
+        `article`.`article_click` AS `article_click`,
+        `article`.`user_id` AS `user_id`,
+        `article`.`article_main_img` AS `article_main_img`,
+        `article`.`delete_flag` AS `delete_flag`,
+        (SELECT 
+                COUNT(`user_comment`.`comment_id`)
+            FROM
+                `user_comment`
+            WHERE
+                (`article`.`article_id` = `user_comment`.`comment_target_id`)) AS `comment_count`,
+        (SELECT 
+                COUNT(`like_article`.`like_id`)
+            FROM
+                `like_article`
+            WHERE
+                (`like_article`.`article_id` = `like_article`.`article_id`)) AS `like_count`,
+        `user_info`.`user_real_name` AS `user_real_name`,
+        `user_info`.`user_image_url` AS `user_image_url`
+    FROM
+        (`article`
+        JOIN `user_info` ON ((`article`.`user_id` = `user_info`.`user_id`)))
+    WHERE
+        (`article`.`article_status` = 1)
 
 ------------------------------
 -- create chat_message
