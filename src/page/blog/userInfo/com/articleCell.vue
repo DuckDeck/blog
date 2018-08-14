@@ -76,9 +76,10 @@
 
 }
 .articleCellContenImg{
-    width: auto;
+    width: 150px;
     height: 140px;
     margin-left: 10px;
+    object-fit: contain;
 }
 .articleCellUserInfo{
     font-size: 14px;
