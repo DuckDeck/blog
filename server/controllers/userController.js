@@ -351,7 +351,9 @@ module.exports = {
        }
        let id = ctx.params.userId
        let token = ctx.params.token
-       let  t = ctx.request.body.files.file
+       console.log("ctx.request.body.files")
+       console.log(ctx.request.files)
+       let  t = ctx.request.files.file
        let oldPath = t.path
        if (!fs.existsSync(oldPath)){
            ctx.rest(Result.create(9))

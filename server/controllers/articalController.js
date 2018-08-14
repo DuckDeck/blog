@@ -445,7 +445,7 @@ module.exports = {
         }
        let id = ctx.params.userId
        let token = ctx.params.token
-       let  t = ctx.request.body.files.image
+       let  t = ctx.request.files.image
        let oldPath = t.path
        if (!fs.existsSync(oldPath)){
            ctx.rest(Result.create(9))
