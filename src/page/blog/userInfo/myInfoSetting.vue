@@ -117,7 +117,56 @@
                                         <el-button class="saveBasicInfoButton" type="primary" @click="changePassword" >保存</el-button> 
                                 </el-form> 
                         </el-tab-pane>
-                        
+                        <el-tab-pane  name="like">
+                            <span slot="label"><i class="fa fa-like-o"></i> 喜欢的文章 </span>
+                              <el-form   >
+                               <el-form-item  >
+                                <span class="infoTitleClass">性别</span> 
+                                 <el-radio-group v-model="gender" @change = "genderChange">
+                                    <el-radio :label='1'>男</el-radio>
+                                    <el-radio :label="2">女</el-radio>
+                                    <el-radio :label="4">保密</el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                               <el-form-item >
+                                 <span class="infoTitleClass">常用编辑器</span> 
+                                 <el-radio-group  v-model="editor_type" @change = "editorTypeChange">
+                                    <el-radio :label='0'>富文本</el-radio>
+                                    <el-radio :label="1">Markdown</el-radio>
+                                    
+                                </el-radio-group>
+                              </el-form-item>
+                            <el-form-item >
+                              <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
+                                    v-model="birthday"
+                                    type="date" class="birthdayClass"
+                                    placeholder="选择日期"  >
+                                    </el-date-picker>
+                            </el-form-item>
+                            <el-form-item  >
+                              <span class="infoTitleClass birthdayTitleClass">我的网站</span> 
+                              <div style="display: inline-block">
+                                  <div style="max-width: 800px;display: block">
+                                    <el-input class="myLinkInput" placeholder="http://个人网站" v-model="mainLink.link_url" ></el-input>
+                                    <el-input style="width: 30%;margin-left: 10px;"  placeholder="网站名称" v-model="mainLink.link_name" ></el-input>
+                                    <i class="fa fa-plus-circle addNewLink" @click="addNewLinkClick"></i>
+                                </div>
+                                <addLink v-for="link in otherLinks" @deleteLink="deleteLink"  :linkInfo="link"></addLink>
+                              </div>
+                            </el-form-item>
+                            <el-form-item>
+                                  <span class="infoTitleClass">自我描述</span> 
+                                   <el-input class="userdesciption"  :rows="6"   type="textarea" v-model="userInfo.user_description"
+                                        placeholder="请输入内容" ></el-input>
+                            </el-form-item>
+                             <el-form-item>
+                                  <span class="infoTitleClass">个人语录</span> 
+                                   <el-input   :rows="6"   type="textarea"  class="userdesciption" v-model="userInfo.user_says"
+                                        placeholder="请输入内容" ></el-input>
+                            </el-form-item>
+                            <el-button class="saveBasicInfoButton" type="primary" @click="saveInfo" >保存</el-button> 
+                           </el-form>   
+                        </el-tab-pane>
                     </el-tabs>
 
          </div>

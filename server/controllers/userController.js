@@ -31,7 +31,7 @@ module.exports = {
        let res = await DB.exec(sqlUser,[index * size,size])
        ctx.rest(res)
      },
-
+     //管理员获取用户信息
     'GET /api/manage/userinfo/:userId/:mId/:token': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
         if(tokenResult.code != 0){
@@ -57,7 +57,7 @@ module.exports = {
         }
         ctx.rest(res)
      },
-
+     //用户登录
     'POST /api/login': async (ctx, next) => {
        var
             t = ctx.request.body,
@@ -116,7 +116,7 @@ module.exports = {
        let result = Result.create(0,{token:token,user_id:user.user_id})
        ctx.rest(result)      
       },
-
+    //用户注册
     'POST /api/register': async (ctx, next) => {
         let  t = ctx.request.body
         if (!t.nickname || !t.nickname.trim()) {
@@ -183,7 +183,7 @@ module.exports = {
         DB.exec(sql,[user_id])
         ctx.rest(Result.create(0))
       },
-
+      //用户检查邮箱
     'POST /api/checkemail': async (ctx, next) => {
         var  t = ctx.request.body
         if (!t.email || !t.email.trim()) {
@@ -211,7 +211,7 @@ module.exports = {
         }
 
       },
-
+      //检查用户名合法
     'POST /api/checkusername': async (ctx, next) => {
         var  t = ctx.request.body
         if (!t.user_name || !t.user_name.trim()) {
@@ -251,7 +251,7 @@ module.exports = {
      },
      //上传用户头像
    
-    
+    //获取重设码
     'POST /api/resetcode': async (ctx, next) => {
         var  t = ctx.request.body
         if (!t.email || !t.email.trim()) {
@@ -285,7 +285,7 @@ module.exports = {
         let mailResult = await Tool.sendEmailToReset(user_real_name, reset_code, t.email)
         ctx.rest(Result.create(0))
       },
-   
+   //重设密码
     'POST /api/resetpassword': async (ctx, next) => {
         var  t = ctx.request.body
         let emailResult = Check.regexCheck(t.email,'email')
@@ -341,7 +341,7 @@ module.exports = {
         res = await DB.exec(sql,[Tool.md5(password),user_id])
         ctx.rest(res)
       },
-
+    //上传头像
     'POST /api/user/uploadHead/:userId/:token': async (ctx, next) => {
         //因为上传图片要很多时间，所以这埋在的checkToken时间就不够，就会有问题
        let result0 = await Check.checkToken(ctx,999999)
@@ -911,7 +911,7 @@ module.exports = {
         ctx.rest(Result.create(0))
       },
 
-
+      
     'POST /api/user/updatepassword': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(t,'user_id')

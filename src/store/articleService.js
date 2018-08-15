@@ -1,7 +1,3 @@
-import axios from 'axios'
-import {getUrl} from  '../tool/urlTool'
-import qs from 'qs'
-import {tool} from '../tool/tool'
 import {baseUrl} from '../config/env'
 import {setpromisePost,setpromiseGet,setpromiseDelete,setpromisePut} from './conf'
 const HostName = baseUrl
@@ -24,6 +20,11 @@ export const articlebroswer = function(id){
 
 export const articlesByUser = function(user_id,index = 0,size = 10){
     const url = HostName +  'articlewithuser/'  + user_id  +  '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
+export const likedArticlesByUser = function(user_id,index = 0,size = 10){
+    const url = HostName +  'userlike/'  + user_id  +  '/' + index + '/' + size
     return setpromiseGet(url)
 }
 

@@ -41,7 +41,13 @@
                                 <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                             </div>
                         </el-tab-pane>
-                        
+                        <el-tab-pane  name="like">
+                            <span slot="label"><i class="fa fa-heart-o"></i> 喜欢的文章 </span>
+                            <articleCell v-for="art in likeArticles" :articleInfo = "art"></articleCell>
+                            <div v-show="comments.length < commentsCount" class="loadMoreDiv">
+                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
+                            </div>
+                        </el-tab-pane>
                     </el-tabs>
                 </div>
                 <div class="articleUserInfoRight">
@@ -80,7 +86,7 @@
 </template>
 
 <script>
-import {getUserInfo,getDynamics,getUserComments,articlesByUser} from '../../../store/service'
+import {getUserInfo,getDynamics,getUserComments,articlesByUser,likedArticlesByUser} from '../../../store/service'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
@@ -97,6 +103,8 @@ import userCommentCell from './com/userCommentCell.vue'
           dynamicsCount:0,
           comments:[],
           commentsCount:0,
+          likeArticles:[],
+          likeArticlesCount:0,
           activeName:'articles',
           isLoadingArticle:false,
           isLoadingDynamic:false,
