@@ -14,7 +14,7 @@
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
                      <div class="articleLiked">
-                        <likeArticle></likeArticle>
+                        <likeArticle :likeCount = 12 :isLike = true></likeArticle>
                     </div>
                     <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
