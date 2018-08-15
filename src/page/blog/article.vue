@@ -13,7 +13,10 @@
                        </header>
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
-                        <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
+                     <div class="articleLiked">
+                        <likeArticle></likeArticle>
+                    </div>
+                    <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
                     <div class="articleComments">
                         <div class="articleCommentsCount">
@@ -25,6 +28,8 @@
                         <el-button :loading="isLoadingMore" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                     </div>
                     </div>
+
+                   
                 </div>
            <upToTop></upToTop>
            <blogFoot></blogFoot>
@@ -39,6 +44,7 @@ import userComment from './com/userComment.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import userArtileInfo from './com/userArticleInfo.vue'
+import likeArticle from './com/likeArticle.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -127,7 +133,7 @@ import userArtileInfo from './com/userArticleInfo.vue'
         }
     },
     components:{
-        blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo
+        blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo,likeArticle
     },
     computed:{
         releaseDate(){
@@ -192,11 +198,14 @@ import userArtileInfo from './com/userArticleInfo.vue'
 .articleContentClass{
     margin:20px;
     font-size: 16px;
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     margin-top: 50px;
     color: #666666;
 }
-
+.articleLiked{
+    display: flex;
+    padding: 30px 20px;
+}
 .articleComments{
     padding:25px;
     padding-bottom: 0px;

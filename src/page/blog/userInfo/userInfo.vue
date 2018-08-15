@@ -44,8 +44,8 @@
                         <el-tab-pane  name="like">
                             <span slot="label"><i class="fa fa-heart-o"></i> 喜欢的文章 </span>
                             <articleCell v-for="art in likeArticles" :articleInfo = "art"></articleCell>
-                            <div v-show="comments.length < commentsCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
+                            <div v-show="likeArticles.length < likeArticlesCount" class="loadMoreDiv">
+                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多文章...</el-button>
                             </div>
                         </el-tab-pane>
                     </el-tabs>
@@ -161,7 +161,18 @@ import userCommentCell from './com/userCommentCell.vue'
                   s.user_info = self.userInfo
                   return s
               }))
-             
+           }
+       },
+       async getLikedArticles(id){
+           this.isLoadingComment = true
+           let res = await likedArticlesByUser(this.userInfo.user_id,this.likeArticles.length / 10,10)
+           this.isLoadingComment = false
+           if(res.code == 0){
+               this.likeArticlesCount = res.count
+               this.likeArticles = this.likeArticles.concat(res.data.map(s=>{
+                  s.user_info = this.userInfo
+                  return s
+              }))
            }
        },
        writeArticle(){
@@ -177,6 +188,11 @@ import userCommentCell from './com/userCommentCell.vue'
             case "2":
                 if(isEmpty(this.comments)){
                     this.getComments(this.userId)
+               }
+            break;
+            case "3":
+                if(isEmpty(this.likeArticles)){
+                    this.getLikedArticles(this.userId)
                }
             break;
           }       
