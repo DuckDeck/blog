@@ -14,7 +14,7 @@
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
                      <div class="articleLiked">
-                        <likeArticle :likeCount = 12 :isLike = true></likeArticle>
+                        <likeArticle :likeCount = 12 :isLike = false @setLike = "setLike"></likeArticle>
                     </div>
                     <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
@@ -130,6 +130,9 @@ import likeArticle from './com/likeArticle.vue'
                     this.article.comments.splice(index,1,res.data)
                 }
             }   
+        },
+        setLike(isLike){
+            console.log(isLike)
         }
     },
     components:{
