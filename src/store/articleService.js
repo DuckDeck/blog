@@ -58,7 +58,8 @@ export const articleListWithSort = function(sortId,index = 0,size = 10){
 
 
 export const articleById = function(article_id){
-    const url = HostName +  'article/' + article_id
+    let id = userId() || 0
+    const url = HostName +  'article/' + article_id + '/' + id + '/' + createToken()
     return setpromiseGet(url)
 }
 
@@ -70,6 +71,7 @@ export const tempArticle = function(){
     const url = HostName +  'temparticle/' +  userId() + '/' + createToken()
     return setpromiseGet(url)
 }
+
 
 
 

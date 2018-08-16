@@ -146,15 +146,32 @@ module.exports = {
        ctx.rest(Result.create(0))
      },
 
-    'GET /api/article/:articleId': async (ctx, next) => {
+    'GET /api/article/:articleId/:userId/:token': async (ctx, next) => {
+        let result = await Check.checkNum(ctx.params,"articleId")
+        if(result){
+            ctx.rest(result)
+            return
+        }
        let id = ctx.params.articleId
+       result = await Check.checkNum(ctx.params,"userId")
+        if(result){
+            ctx.rest(result)
+            return
+        }
+       let userId = ctx.params.userId
+       if(userId != 0){
+          result = await Check.checkToken(ctx)
+          if(result.code != 0){
+             ctx.rest(result)
+             return
+         }
+       }
        let resArticle = await Article.articalById(id)
        if(resArticle.code != 0){
             ctx.rest(resArticle)
             return
        }
        
-
        let resTags =await Tag.articleTagByArticleId(id)
        if(resTags.code != 0){
             ctx.rest(resTags)
@@ -165,6 +182,18 @@ module.exports = {
            ctx.rest(resMainCom)
            return
        }
+       let resLikeCount =await DB.exec('select count(like_id) as count from like_article where article_id = ?',[id])
+       if(resLikeCount.code != 0){
+           ctx.rest(resLikeCount)
+           return
+       }
+       
+       let resCollectCount = await DB.exec('select count(collect_id) as count  from collect_article where article_id = ?',[id])
+       if(resCollectCount.code != 0){
+            ctx.rest(resCollectCount)
+            return
+        }
+        console.log(resCollectCount)
        let article = resArticle.data[0]
        article.tags = resTags.data
        let user_id = article.user_id
@@ -173,6 +202,26 @@ module.exports = {
             ctx.rest(resUser)
             return
        }
+       article.like_count = resCollectCount.data[0]['count'] 
+       article.collect_count = resCollectCount.data[0]['count'] 
+       let isUserLike = null
+       let isUserCollect = null
+       if(userId != 0){
+           let res = await DB.exec('select count(like_id) from like_article where article_id = ? and user_id = ?',[id,userId])
+           if(res.code != 0){
+               ctx.rest(res)
+               return
+           }
+           isUserLike = res.data == 1
+           res = await DB.exec('select count(collect_id) from collect_article where article_id = ? and user_id = ?',[id,userId])
+           if(res.code != 0){
+               ctx.rest(res)
+               return
+           }
+           isUserCollect = res.data == 1
+       }
+       article.is_user_like = isUserLike
+       article.is_user_collect = isUserCollect
        article.userInfo = resUser.data[0]
        ctx.rest(Result.create(0,article))
      },

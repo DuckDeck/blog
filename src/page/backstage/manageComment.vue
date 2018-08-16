@@ -6,7 +6,7 @@
 
         <el-table :data="tableData" border style="width: 100%">
             <el-table-column  label="标题" >
-                <template scope="scope">
+                <template slot-scope="scope">
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.article_name}}</a>
                 </template>
             </el-table-column>
@@ -17,7 +17,7 @@
             <el-table-column prop="newComment.comment_content"  label="最新评论">
             </el-table-column>
             <el-table-column label="操作" width="100">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-button size="small" @click = "checkComment(scope.row)">查看</el-button>
                     
                 </template>

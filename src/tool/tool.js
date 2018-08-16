@@ -131,10 +131,12 @@ global.clearStoreExcept = (except)=>{
         }
     }
 }
+global.isLogin = getStore('userInfo') != null
 global.userId = function(){ return getStore('token') == null ?  null : getStore('token').user_id}
 global.manageId = function(){ return getStore('m_token') == null ?  null : getStore('m_token').m_id}
 
 global.createToken = function(){
+    console.log("createToken")
     let date = Date.parse(new Date())
     if(getStore('token') == null){
         return '0'
@@ -142,6 +144,7 @@ global.createToken = function(){
     let to = getStore('token').token
     let criptDa = Tool.encrypt(key,iv,to + '=' + date)
     criptDa = encodeURIComponent(criptDa)
+    console.log(criptDa)
     return criptDa
 }
 global.createMtoken = function(){

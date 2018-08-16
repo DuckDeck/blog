@@ -720,7 +720,7 @@ module.exports = {
       },
   
 
-    'GET /api/usersetcollect/:userId/:articleId/:isCollect': async (ctx, next) => {
+    'GET /api/usersetcollect/:articleId/:isCollect/:userId/:token': async (ctx, next) => {
         var  t = ctx.request.body
         let checkResult = Check.checkNum(t,'userId')
         if(checkResult){
@@ -734,6 +734,11 @@ module.exports = {
         if(checkResult){
             ctx.rest(checkResult)
         }
+        checkResult = await Check.checkToken(ctx)
+       if(checkResult.code != 0){
+            ctx.rest(checkResult)
+            return
+       }
        let isCollect = ctx.params.isCollect
        let id = ctx.params.userId
        let articleId =  ctx.params.articleId
@@ -750,7 +755,7 @@ module.exports = {
        ctx.rest(res || Result.create(-50))
     },
 
-    'GET /api/usersetlike/:userId/:articleId/:isLike': async (ctx, next) => {
+    'GET /api/usersetlike/:articleId/:isLike/:userId/:token': async (ctx, next) => {
         var  t = ctx.request.body
         let checkResult = Check.checkNum(t,'userId')
         if(checkResult){
@@ -764,6 +769,11 @@ module.exports = {
         if(checkResult){
             ctx.rest(checkResult)
         }
+       checkResult = await Check.checkToken(ctx)
+       if(checkResult.code != 0){
+            ctx.rest(checkResult)
+            return
+       }
        let isLike = ctx.params.isLike
        let id = ctx.params.userId
        let articleId =  ctx.params.articleId

@@ -166,3 +166,10 @@ export const updateUserInfo = function(type,data){
     const url = HostName + 'user/' +   type
     return setpromisePost(url,data)
 }
+// /api/usersetlike/:userId/:articleId/:isLike
+
+export const userLikeArticle = function(article_id,isLike){
+    let l = isLike ? 1 : 0
+    const url = HostName + 'usersetlike/' +   article_id + '/' + l + '/' +  userId() + '/' + createToken()
+    return setpromiseGet(url)
+}

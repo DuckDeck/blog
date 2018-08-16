@@ -6,12 +6,12 @@
         
         <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
             <el-table-column width="100"   type="selection" >
-                <template scope="scope">
+                <template slot-scope="scope">
                    <el-checkbox v-model="scope.row.isSelect" ></el-checkbox>
                 </template>
             </el-table-column>
             <el-table-column  label="用户名" >
-                <template scope="scope">
+                <template slot-scope="scope">
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.user_name}}</a>
                 </template>
             </el-table-column>
@@ -20,7 +20,7 @@
             <el-table-column prop="user_isValidate" label="是否验证"  width="140">
             </el-table-column>
             <el-table-column label="操作" width="150">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-button size="small" @click = "editUserInfo(scope.row)">管理</el-button>
                     
                 </template>

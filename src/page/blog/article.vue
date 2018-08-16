@@ -14,7 +14,8 @@
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
                      <div class="articleLiked">
-                        <likeArticle :likeCount = 12 :isLike = false @setLike = "setLike"></likeArticle>
+                        <likeArticle :likeCount = article.like_count :isLike = article.is_user_like @setLike = "setLike"></likeArticle>
+                        <collectArticle :collectCount = article.collect_count :isCollect = article.is_user_collect></collectArticle>
                     </div>
                     <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer} from '../../store/service'
+import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
@@ -45,6 +46,7 @@ import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import userArtileInfo from './com/userArticleInfo.vue'
 import likeArticle from './com/likeArticle.vue'
+import collectArticle from './com/collectArticle.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -131,12 +133,26 @@ import likeArticle from './com/likeArticle.vue'
                 }
             }   
         },
-        setLike(isLike){
-            console.log(isLike)
+        async setLike(isLike){
+            if(!isLogin){
+                toast(this,'请先登录再评论')
+                return
+            }
+            let res = await userLikeArticle(this.article.article_id,isLike)
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+            this.article.isLike = !this.article.isLike
+            if(this.article.isLike){
+                this.article.like_count = this.article.like_count + 1
+            }
+            else{
+                this.article.like_count = this.article.like_count + 1
+            }
         }
     },
     components:{
-        blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo,likeArticle
+        blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo,likeArticle,collectArticle
     },
     computed:{
         releaseDate(){
@@ -207,7 +223,8 @@ import likeArticle from './com/likeArticle.vue'
 }
 .articleLiked{
     display: flex;
-    padding: 30px 20px;
+    padding: 30px 30px;
+    justify-content: space-between
 }
 .articleComments{
     padding:25px;
