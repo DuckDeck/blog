@@ -28,9 +28,7 @@
                this.$emit("setLike",!this.isLike);
            }
         },
-        computed:{
-           
-        }
+        
     }
 </script>
 <style scoped>

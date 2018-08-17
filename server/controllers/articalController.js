@@ -182,7 +182,7 @@ module.exports = {
            ctx.rest(resMainCom)
            return
        }
-       let resLikeCount =await DB.exec('select count(like_id) as count from like_article where article_id = ?',[id])
+       let resLikeCount = await DB.exec('select count(like_id) as count from like_article where article_id = ?',[id])
        if(resLikeCount.code != 0){
            ctx.rest(resLikeCount)
            return
@@ -193,7 +193,7 @@ module.exports = {
             ctx.rest(resCollectCount)
             return
         }
-        console.log(resCollectCount)
+        console.log(resLikeCount)
        let article = resArticle.data[0]
        article.tags = resTags.data
        let user_id = article.user_id
@@ -202,23 +202,23 @@ module.exports = {
             ctx.rest(resUser)
             return
        }
-       article.like_count = resCollectCount.data[0]['count'] 
+       article.like_count = resLikeCount.data[0]['count'] 
        article.collect_count = resCollectCount.data[0]['count'] 
        let isUserLike = null
        let isUserCollect = null
        if(userId != 0){
-           let res = await DB.exec('select count(like_id) from like_article where article_id = ? and user_id = ?',[id,userId])
+           let res = await DB.exec('select count(like_id) as count from like_article where article_id = ? and user_id = ?',[id,userId])
            if(res.code != 0){
                ctx.rest(res)
                return
            }
-           isUserLike = res.data == 1
-           res = await DB.exec('select count(collect_id) from collect_article where article_id = ? and user_id = ?',[id,userId])
+           isUserLike = res.data[0]['count'] == 1
+           res = await DB.exec('select count(collect_id) as count from collect_article where article_id = ? and user_id = ?',[id,userId])
            if(res.code != 0){
                ctx.rest(res)
                return
            }
-           isUserCollect = res.data == 1
+           isUserCollect = res.data[0]['count'] == 1
        }
        article.is_user_like = isUserLike
        article.is_user_collect = isUserCollect

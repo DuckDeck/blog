@@ -466,7 +466,7 @@ CREATE TABLE  IF NOT EXISTS blog_error (
 -- collect_article 用户收藏文章
 ------------------------------
 CREATE TABLE   IF NOT EXISTS `blog`.`collect_article` (
-  `collect_id` INT NOT NULL,
+  `collect_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL DEFAULT 0 COMMENT '用户id',
   `article_id` INT NOT NULL DEFAULT 0 COMMENT '文章id',
   `collect_time` BIGINT(15) NULL COMMENT '收藏时间',
@@ -476,7 +476,7 @@ CREATE TABLE   IF NOT EXISTS `blog`.`collect_article` (
 -- collect_article 用户喜欢文章
 ------------------------------
 CREATE TABLE   IF NOT EXISTS `blog`.`like_article` (
-  `like_id` INT NOT NULL,
+  `like_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL DEFAULT 0 COMMENT '用户id',
   `article_id` INT NOT NULL DEFAULT 0 COMMENT '文章id',
   `like_time` BIGINT(15) NULL COMMENT '收藏时间',

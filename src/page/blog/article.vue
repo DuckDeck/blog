@@ -147,7 +147,7 @@ import collectArticle from './com/collectArticle.vue'
                 this.article.like_count = this.article.like_count + 1
             }
             else{
-                this.article.like_count = this.article.like_count + 1
+                this.article.like_count = this.article.like_count - 1
             }
         }
     },

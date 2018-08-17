@@ -721,7 +721,8 @@ module.exports = {
   
 
     'GET /api/usersetcollect/:articleId/:isCollect/:userId/:token': async (ctx, next) => {
-        var  t = ctx.request.body
+        var  t = ctx.params
+        console.log(t)
         let checkResult = Check.checkNum(t,'userId')
         if(checkResult){
             ctx.rest(checkResult)
@@ -756,7 +757,7 @@ module.exports = {
     },
 
     'GET /api/usersetlike/:articleId/:isLike/:userId/:token': async (ctx, next) => {
-        var  t = ctx.request.body
+        var  t = ctx.params
         let checkResult = Check.checkNum(t,'userId')
         if(checkResult){
             ctx.rest(checkResult)
