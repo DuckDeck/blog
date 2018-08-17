@@ -750,8 +750,13 @@ module.exports = {
           res =  await DB.exec(sql,[id,articleId])
        }
        else{
-         sql = 'insert into  collect_article (collect_id,user_id,article_id,collect_time) values (0,?,?,?)'
-         res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+        res = await DB.exec('select count(collect_id) as count from collect_article where article_id = ? and user_id = ?',[articleId,id])
+        if(res.data[0]['count'] == 0){
+            sql = 'insert into  collect_article (collect_id,user_id,article_id,collect_time) values (0,?,?,?)'
+            res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+        }
+        
+        
        }
        ctx.rest(res || Result.create(-50))
     },
@@ -785,8 +790,12 @@ module.exports = {
           res =  await DB.exec(sql,[id,articleId])
        }
        else{
-         sql = 'insert into  like_article (like_id,user_id,article_id,like_time) values (0,?,?,?)'
-         res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+        res = await DB.exec('select count(like_id) as count from like_article where article_id = ? and user_id = ?',[articleId,id])
+        let count = res.data[0]['count']
+        if(count == 0){
+            sql = 'insert into  like_article (like_id,user_id,article_id,like_time) values (0,?,?,?)'
+            res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+        } 
        }
        ctx.rest(res || Result.create(-50))
     },

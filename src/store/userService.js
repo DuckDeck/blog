@@ -173,3 +173,9 @@ export const userLikeArticle = function(article_id,isLike){
     const url = HostName + 'usersetlike/' +   article_id + '/' + l + '/' +  userId() + '/' + createToken()
     return setpromiseGet(url)
 }
+
+export const userCollectArticle = function(article_id,isCollect){
+    let l = isCollect ? 1 : 0
+    const url = HostName + 'usersetcollect/' +   article_id + '/' + l + '/' +  userId() + '/' + createToken()
+    return setpromiseGet(url)
+}

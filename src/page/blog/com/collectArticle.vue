@@ -24,7 +24,7 @@
         },
         methods:{
            setCollect(){
-               this.$emit("setCollect",!this.isCollect);
+               this.$emit("setCollect",this.isCollect);
            }
         },
         computed:{

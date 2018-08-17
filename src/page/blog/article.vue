@@ -14,8 +14,8 @@
                     <div class="articleSeperateLine"></div>
                     <article class="articleContentClass" v-html = "article.article_content"></article>
                      <div class="articleLiked">
-                        <likeArticle :likeCount = article.like_count :isLike = article.is_user_like @setLike = "setLike"></likeArticle>
-                        <collectArticle :collectCount = article.collect_count :isCollect = article.is_user_collect></collectArticle>
+                        <likeArticle :likeCount = likeCount :isLike = isUserLike @setLike = "setLike"></likeArticle>
+                        <collectArticle :collectCount = collectCount :isCollect = isUserCollect @setCollect = "setCollect"></collectArticle>
                     </div>
                     <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle} from '../../store/service'
+import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle,userCollectArticle} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
@@ -56,6 +56,10 @@ import collectArticle from './com/collectArticle.vue'
           comments:[],
           commentCount:0,
           isLoadingMore:false,
+          isUserLike:false,
+          isUserCollect:false,
+          likeCount:0,
+          collectCount:0,
       }
     },
     async mounted(){
@@ -68,6 +72,10 @@ import collectArticle from './com/collectArticle.vue'
             this.articleUserInfo.article_release_time = res.data.article_release_time
             this.articleUserInfo.browse = res.data.article_click
             this.articleUserInfo.article_id = res.data.article_id
+            this.isUserLike = res.data.is_user_like
+            this.isUserCollect = res.data.is_user_collect
+            this.likeCount = res.data.like_count
+            this.collectCount = res.data.collect_count
         }
         else{
             toast(this,res.cMsg)
@@ -135,21 +143,40 @@ import collectArticle from './com/collectArticle.vue'
         },
         async setLike(isLike){
             if(!isLogin){
-                toast(this,'请先登录再评论')
+                toast(this,'请先登录再点击喜欢该文章')
                 return
             }
-            let res = await userLikeArticle(this.article.article_id,isLike)
+            let res = await userLikeArticle(this.article.article_id,!isLike)
+          
             if(res.code != 0){
                 toast(this,res.cMsg)
             }
-            this.article.isLike = !this.article.isLike
-            if(this.article.isLike){
-                this.article.like_count = this.article.like_count + 1
+            this.isUserLike = !this.isUserLike
+            if(this.isUserLike){
+                this.likeCount = this.likeCount + 1
             }
             else{
-                this.article.like_count = this.article.like_count - 1
+                this.likeCount = this.likeCount - 1
+            }
+        },
+        async setCollect(isCollect){
+            if(!isLogin){
+                toast(this,'请先登录再收藏该文章')
+                return
+            }
+            let res = await userCollectArticle(this.article.article_id,!isCollect)
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+             this.isUserCollect = !this.isUserCollect
+            if(this.isUserCollect){
+                this.collectCount = this.collectCount + 1
+            }
+            else{
+                this.collectCount = this.collectCount - 1
             }
         }
+
     },
     components:{
         blogHeader,writeComment,userComment,upToTop,blogFoot,userArtileInfo,likeArticle,collectArticle

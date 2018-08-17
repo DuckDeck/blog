@@ -25,10 +25,9 @@
         },
         methods:{
            setLike(){
-               this.$emit("setLike",!this.isLike);
+               this.$emit("setLike",this.isLike);
            }
         },
-        
     }
 </script>
 <style scoped>
