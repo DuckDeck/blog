@@ -1,6 +1,8 @@
 **更新，目前网站和接口全面启用HTTPS,域名改成了bqbbq.com**
 
 **dev分支已经更新为支持Webpack4,很费劲，可能还有bug需要修复**
+
+**正在添加喜欢和收藏功能**
 ## Demo地址和使用
 
 https://bqbbq.com/#/
