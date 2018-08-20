@@ -670,7 +670,7 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        res.rest(Result.createCount(0,count,res.data))    
+        ctx.rest(Result.createCount(0,count,res.data))    
       },
 
      'GET /api/usercollect/:userId/:index/:size': async (ctx, next) => {

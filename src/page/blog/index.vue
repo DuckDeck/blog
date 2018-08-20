@@ -21,7 +21,7 @@
                        <div class="articleAuthor">
                             <span class="articleAuthorName" v-if="art.userInfo != null" @click="clickUser(art.userInfo)">{{art.userInfo.user_real_name}}</span> 
                             <span style="color: mediumblue;margin-left:5px">{{art.article_sort_name}}</span>  <span>{{art.comment_count}} 条评论</span> 
-                            <span style="color: gray;margin-left:5px"><i  class="fa-heart fa"></i></span>  <span>{{art.like_count}} 人喜欢</span>
+                            <span style="color: gray;margin-left:5px"><i  class="fa-heart fa"></i></span>  <span>{{art.like_count}}人喜欢</span>
                        </div>
                    </div>
                    <div style="text-align: center;margin-top: 17px;">

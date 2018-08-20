@@ -249,7 +249,8 @@ module.exports = {
        let sqlArticles = `select article_id,article_name,user_id,article_create_time,article_brief,article_main_img,article_click,article_status,
                 (select sort_article_name from article_sort where  article_sort.sort_article_id = article.article_sort_id) 
                  as article_sort_name , (select count(comment_id) from user_comment where user_comment.comment_target_id =
-                 article.article_id) as comment_count from article where user_id = ? and article_status = 1  order by article_create_time desc limit ?,?`
+                 article.article_id) as comment_count ,(select count(like_id) from like_article where like_article.article_id = article.article_id) 
+                 as like_count from article where user_id = ? and article_status = 1  order by article_create_time desc limit ?,?`
        let resArticles = await DB.exec(sqlArticles,[id,index * size,size])
        if(resArticles.code != 0)
        {

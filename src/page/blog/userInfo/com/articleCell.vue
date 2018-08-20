@@ -11,7 +11,9 @@
                <p style="margin-bottom: 0rem;margin-top: 10px;" v-html = "articleInfo.article_brief.slice(0,100)" ></p>
                <div class="articleTailInfo">
                 <span v-if="showSortname" class="articleTailSortName">{{articleInfo.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
-                    {{articleInfo.article_click}}  <i class="fa fa-comment"  aria-hidden="true"></i> {{articleInfo.comment_count}} 
+                    {{articleInfo.article_click}} 
+                     <i style="margin-left:2px" class="fa fa-comment"  aria-hidden="true"></i> {{articleInfo.comment_count}} 
+                     <i style="margin-left:2px" class="fa-heart fa"></i> {{articleInfo.like_count}}
                 </div>
             </div>
             <img class="articleCellContenImg" v-if="articleInfo.article_main_img.length > 0" :src="articleInfo.article_main_img" alt="">
