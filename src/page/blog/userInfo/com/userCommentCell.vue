@@ -2,9 +2,9 @@
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
             <img :src="commentInfo.user_info.user_image_url" alt="">
-            <span>{{commentInfo.user_info.user_real_name}}</span>
-            发表了评论
-            <span>{{createTime}}</span>
+            <span style="margin-left:10px">{{commentInfo.user_info.user_real_name}}</span>
+            <span>发表了评论</span>
+            <span style="margin-left:10px">{{createTime}}</span>
         </div>
         <div class="commentDetail" v-if = "commentInfo.comment_scope == 0">
            <div class="dynamicCommentContent">

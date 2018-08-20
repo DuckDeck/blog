@@ -101,10 +101,10 @@
                     this.$router.push('/writeArticle/0')
                 }
                 else if(command == 'mypage'){
-                    this.$router.push('/userInfo/' + this.userInfo.user_id)
+                    this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
                 }
                 else if(command == "like"){
-                     this.$router.push('/mytag/' + this.userInfo.user_id)
+                     this.$router.push('/userInfo/' + this.userInfo.user_id  + "/like")
                 }
                 else if(command == "collect"){
                      this.$router.push('/mytag/' + this.userInfo.user_id)

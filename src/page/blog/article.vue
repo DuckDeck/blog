@@ -142,7 +142,7 @@ import collectArticle from './com/collectArticle.vue'
             }   
         },
         async setLike(isLike){
-            if(!isLogin){
+            if(!isLogin()){
                 toast(this,'请先登录再点击喜欢该文章')
                 return
             }
@@ -160,7 +160,7 @@ import collectArticle from './com/collectArticle.vue'
             }
         },
         async setCollect(isCollect){
-            if(!isLogin){
+            if(!isLogin()){
                 toast(this,'请先登录再收藏该文章')
                 return
             }

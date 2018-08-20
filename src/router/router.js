@@ -86,7 +86,7 @@ export default [
       
     },
     {
-        path: '/userInfo/:userId',
+        path: '/userInfo/:userId/:tab',
         component: userInfo, 
     },
     {

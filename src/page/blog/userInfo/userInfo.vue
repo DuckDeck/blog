@@ -23,6 +23,7 @@
                         <el-tab-pane   name="articles">
                             <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
                             <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
+                             <emptyHint v-show="articlesCount == 0"></emptyHint>
                             <div v-show="articles.length < articlesCount" class="loadMoreDiv">
                                 <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
                             </div>
@@ -30,6 +31,7 @@
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
                             <dynamicCell @articleTitleClick="articleTitleClick" v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
+                             <emptyHint v-show="dynamicsCount == 0"></emptyHint>
                             <div v-show="dynamics.length < dynamicsCount" class="loadMoreDiv">
                                 <el-button :loading="isLoadingDynamic" @click="loadMoreDynamic" class="loadmoreButton">加载更多动态...</el-button>
                             </div>
@@ -37,13 +39,15 @@
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
                             <userCommentCell v-for="comment in comments" :commentInfo = "comment"></userCommentCell>
+                             <emptyHint v-show="commentsCount == 0"></emptyHint>
                             <div v-show="comments.length < commentsCount" class="loadMoreDiv">
                                 <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane  name="like">
                             <span slot="label"><i class="fa fa-heart-o"></i> 喜欢的文章 </span>
-                            <articleCell v-for="art in likeArticles" :articleInfo = "art"></articleCell>
+                            <articleCell @notLike="notLike" v-for="art in likeArticles" :articleInfo = "art"></articleCell>
+                            <emptyHint v-show="likeArticlesCount == 0"></emptyHint>
                             <div v-show="likeArticles.length < likeArticlesCount" class="loadMoreDiv">
                                 <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多文章...</el-button>
                             </div>
@@ -86,7 +90,7 @@
 </template>
 
 <script>
-import {getUserInfo,getDynamics,getUserComments,articlesByUser,likedArticlesByUser} from '../../../store/service'
+import {getUserInfo,getDynamics,getUserComments,articlesByUser,likedArticlesByUser,userLikeArticle} from '../../../store/service'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
@@ -115,11 +119,35 @@ import emptyHint from './../com/emptyHint.vue'
     },
     mounted(){
         let id = this.$route.params.userId
-        this.getTargetUserInfo(id)
-        this.getUserArticles(id)
         this.userId = id
+        this.activeName = this.$route.params.tab
+        console.log(this.activeName)
+        this.getTargetUserInfo(id)
+        switch (this.activeName) {
+            case 'articles':
+                this.getUserArticles(id)
+                break;
+             case 'dynamic':
+                this.getUserDynamics(id)
+                break;
+             case 'comment':
+                this.getComments(id)
+                break;
+             case 'like':
+                this.getLikedArticles(id)
+                break;
+           
+        }
+        
     },
     methods:{
+       async notLike(article){
+            let res = await userLikeArticle(article.article_id,false)
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+            article.isUserLiked = false
+       },
        async getTargetUserInfo(id){
            let res = await getUserInfo(id)
            if(res.code == 0){

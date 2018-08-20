@@ -2,9 +2,9 @@
     <div class="articleCellClass">
         <div class="articleCellUserInfo">
             <img :src="dynamicInfo.user_info.user_image_url" alt="">
-            <span>{{dynamicInfo.user_info.user_real_name}}</span>
+            <span style="margin-left:10px">{{dynamicInfo.user_info.user_real_name}}</span>
             <span>{{dynamicInfo.dynamic_type_name}}</span>
-            <span>{{createTime}}</span>
+            <span style="margin-left:10px">{{createTime}}</span>
         </div>
          <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 4">
            <div class="dynamicCommentContent">

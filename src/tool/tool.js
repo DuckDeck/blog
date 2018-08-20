@@ -131,7 +131,7 @@ global.clearStoreExcept = (except)=>{
         }
     }
 }
-global.isLogin = getStore('userInfo') != null
+global.isLogin = function(){ return getStore('userInfo') != null}
 global.userId = function(){ return getStore('token') == null ?  null : getStore('token').user_id}
 global.manageId = function(){ return getStore('m_token') == null ?  null : getStore('m_token').m_id}
 
