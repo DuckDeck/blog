@@ -14,6 +14,7 @@
                     {{articleInfo.article_click}} 
                      <i style="margin-left:2px" class="fa fa-comment"  aria-hidden="true"></i> {{articleInfo.comment_count}} 
                      <i style="margin-left:2px" class="fa-heart fa"></i> {{articleInfo.like_count}}
+                     <span @click="notLike" v-if="articleInfo.isUserLiked" class="noMoreLikeArticle">不再喜欢</span>
                 </div>
             </div>
             <img class="articleCellContenImg" v-if="articleInfo.article_main_img.length > 0" :src="articleInfo.article_main_img" alt="">
@@ -31,7 +32,8 @@
     props:{  
          articleInfo:{
              type:Object
-         }
+         },
+
     },
     methods:{
         togoArticle(){
@@ -39,6 +41,9 @@
         },
         userHeadClick(){
             this.$emit("userHeadClick",this.articleInfo.user_info)
+        },
+        notLike(){
+            this.$emit("notLike",this.articleInfo)
         }
     },
     computed:{
@@ -112,6 +117,14 @@
     border: 1px solid orangered;
     border-radius: 3px;
     margin-right: 5px;
+}
+.noMoreLikeArticle{
+    margin-left: 3px;
+    color: #666666
+}
+.noMoreLikeArticle:hover{
+    cursor: pointer;
+    color: orangered;
 }
  @media (max-width:900px){
      .articleCellContenImg{

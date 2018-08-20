@@ -537,6 +537,7 @@ VIEW `article_related_info` AS
         `article`.`article_id` AS `article_id`,
         `article`.`article_name` AS `article_name`,
         `article`.`article_release_time` AS `article_release_time`,
+        `article`.`article_create_time` AS `article_create_time`,
         `article`.`article_brief` AS `article_brief`,
         `article`.`article_click` AS `article_click`,
         `article`.`user_id` AS `user_id`,

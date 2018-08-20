@@ -156,12 +156,6 @@
       justify-content: space-around
   }
 
-@media (max-width:480px){
-    .bloglogo img {
-        display: none;
-    }
-} 
-
 
 .rightMenuLogin{
     line-height: 35px;

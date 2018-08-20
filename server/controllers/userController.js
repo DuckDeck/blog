@@ -652,14 +652,9 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        let comments = res.data
-        let articleIds = comments.map(s=>{
-            if(s.comment_scope == 0){
-                return s.article_id
-            }
-            else{
-                return 0
-            }
+        let articles = res.data
+        let articleIds = articles.map(s=>{
+            return s.article_id
         })
         sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
         //注意，这进而是有被删除的文章的，因为我没有完全删除。

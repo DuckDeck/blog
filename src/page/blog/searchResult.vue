@@ -39,7 +39,7 @@
                         </div>
 
                         <articleCell @userHeadClick="userHeadClick" v-for="art in articles" :articleInfo = "art"></articleCell>
-
+                        <emptyHint v-show="articleCount == 0" />
                         <div v-show="articles.length < articleCount" class="loadMoreDiv">
                             <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
                         </div>
@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
                         </div>
-
+                          <emptyHint v-show="userCount == 0" />
                         <div v-show="users.length < userCount" class="loadMoreDiv">
                             <el-button :loading="isLoadingArticle" @click="loadMoreUser" class="loadmoreButton">加载更多用户...</el-button>
                         </div>
@@ -77,6 +77,7 @@
                                  {{sort.sort_article_name}}
                             </el-button>      
                         </div>
+                         <emptyHint v-show="sortCount == 0" />
                         <div v-show="sorts.length < sortCount" class="loadMoreDiv">
                             <el-button :loading="isLoadingArticle" @click="loadMoreSort" class="loadmoreButton">加载更多分类...</el-button>
                         </div>
@@ -93,6 +94,7 @@ import {search,searchbase} from '../../store/service'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import articleCell from './userInfo/com/articleCell.vue'
+import emptyHint from './com/emptyHint.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -202,7 +204,7 @@ import articleCell from './userInfo/com/articleCell.vue'
         }
     },
     components:{
-        upToTop,blogFoot,articleCell
+        upToTop,blogFoot,articleCell,emptyHint
     },
     computed:{
         releaseDate(){

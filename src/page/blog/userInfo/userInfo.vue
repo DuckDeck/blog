@@ -92,6 +92,7 @@ import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
 import dynamicCell from './com/dynamicCell.vue'
 import userCommentCell from './com/userCommentCell.vue'
+import emptyHint from './../com/emptyHint.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -171,8 +172,10 @@ import userCommentCell from './com/userCommentCell.vue'
                this.likeArticlesCount = res.count
                this.likeArticles = this.likeArticles.concat(res.data.map(s=>{
                   s.user_info = this.userInfo
+                  s.isUserLiked = true
                   return s
               }))
+              console.log(this.likeArticles)
            }
        },
        writeArticle(){
@@ -215,7 +218,7 @@ import userCommentCell from './com/userCommentCell.vue'
        }
     },
     components:{
-        upToTop,blogFoot,articleCell,dynamicCell,userCommentCell
+        upToTop,blogFoot,articleCell,dynamicCell,userCommentCell,emptyHint
     },
     computed:{
         releaseDate(){
