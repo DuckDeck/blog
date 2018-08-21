@@ -421,8 +421,8 @@ module.exports = {
            return
        }
        if(res.data[0].count == 0){
-           return ctx.rest(Result.createCount(0,0,[]))
-           return
+          ctx.rest(Result.createCount(0,0,[]))
+          return
        }
        let count = res.data[0].count
        res = await Dynamic.userDynamic(id,index,size)
@@ -455,6 +455,12 @@ module.exports = {
            }
            return 0
        })
+       let sqlLikeArticles = dynamics.map(s=>{
+          if(s.dynamic_type_id == 12){
+             return s.dynamic_target_belong_id
+           }
+            return 0
+        })
        if(sqlSubCommendIds.length > 0){
             sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
                    comment_time,comment_type,comment_scope FROM user_sub_comment where comment_id in (` + sqlSubCommendIds.join(',') + `)`
@@ -542,6 +548,23 @@ module.exports = {
                     else{
                         day.selfObject = {}
                     }
+                }
+                
+            }
+       }
+       if(sqlLikeArticles.length > 0){
+            sql = `select * from article_related_info where  article_id in (` + sqlLikeArticles.join(',') + `)`
+            res = await DB.exec(sql)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+            for(var day of dynamics){
+                if(day.dynamic_type_id == 12){
+                    let art = res.data.find(s=>{
+                        return s.article_id == day.dynamic_target_belong_id && day.dynamic_type_id == 12
+                    })
+                    day.selfObject = art
                 }
                 
             }
@@ -790,7 +813,11 @@ module.exports = {
         if(count == 0){
             sql = 'insert into  like_article (like_id,user_id,article_id,like_time) values (0,?,?,?)'
             res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+            let likeId = res.data.id
+            let dynamic = new Dynamic(id,likeId,articleId,12,0)
+            await Dynamic.save(dynamic)
         } 
+      
        }
        ctx.rest(res || Result.create(-50))
     },
@@ -840,7 +867,7 @@ module.exports = {
         sql = 'update user_info set user_real_name = ? ' + conditionAddress + conditionPhone + conditionQQ + ' where user_id = ?'
         res = await DB.exec(sql,[user_real_name,user_id]) 
         ctx.rest(res)
-       },
+     },
 
 
     'POST /api/user/updateindividual': async (ctx, next) => {

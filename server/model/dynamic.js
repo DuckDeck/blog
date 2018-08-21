@@ -46,6 +46,12 @@ class Dynamic{
             case 11:
                 this.dynamic_type_name = '取消关注了'
                 break
+            case 12:
+                this.dynamic_type_name = '喜欢了文章'
+                break
+            case 13:
+                this.dynamic_type_name = '收藏了文章'
+                break
         }
         this.dynamic_oper_type = dynamic_oper_type
         

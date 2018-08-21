@@ -184,14 +184,14 @@ import blogFoot from './com/blogFoot.vue'
 
         },
         clickUser(user){
-            this.$router.push('userInfo/' + user.user_id)
+            this.$router.push('userInfo/' + user.user_id + '/articles')
         },
         gotoSort(sort){
             localStorage.sortId = sort.sort_id
             this.$router.push('sortArticleList/' + sort.user_id)
         },
         gotoUserInfo(com){
-             this.$router.push('userInfo/' + com.user_id)
+             this.$router.push('userInfo/' + com.user_id + '/articles')
         },
      
         async loadMore(){

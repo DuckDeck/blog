@@ -22,13 +22,13 @@
                </div>
              </div> 
            </div>
-           <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 1">
+           <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 1 || dynamicInfo.dynamic_type_id == 12">
             <div class="articleCellContent">
                 <div >
                 <span @click="togoArticle(dynamicInfo.selfObject.article_id)" class="articleCellContentTitle" v-html= "dynamicInfo.selfObject.article_name" ></span>
                 <p style="margin-bottom: 0rem;margin-top: 10px;" v-html = "dynamicInfo.selfObject.article_brief.slice(0,100)" ></p>
                 <div class="articleTailInfo">
-                    <span class="articleTailSortName">{{dynamicInfo.selfObject.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
+                    <span class="articleTailSortName" >{{dynamicInfo.selfObject.article_sort_name}}</span> <i class="fa fa-eye"  aria-hidden="true"></i>
                         {{dynamicInfo.selfObject.article_click}}  <i class="fa fa-comment"  aria-hidden="true"></i> {{dynamicInfo.selfObject.comment_count}} 
                     </div>
                 </div>
@@ -46,14 +46,8 @@
                     <div class="dynamicCommentArticlelTail">
                         <span >{{dynamicInfo.targetObject.user_real_name}}</span>发布于{{formaTime(dynamicInfo.targetObject.comment_time)}}
                     </div>  
-
-                </div> 
-                
-              </div>
-                
+                </div>     
             </div>
-           </div>
-        </div>
     </div>
 </template>
 <script>

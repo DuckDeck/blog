@@ -103,13 +103,13 @@ import emptyHint from './../com/emptyHint.vue'
       return {
           userInfo:{},
           articles:[],
-          articlesCount:0,
+          articlesCount:-1,
           dynamics:[],
-          dynamicsCount:0,
+          dynamicsCount:-1,
           comments:[],
-          commentsCount:0,
+          commentsCount:-1,
           likeArticles:[],
-          likeArticlesCount:0,
+          likeArticlesCount:-1,
           activeName:'articles',
           isLoadingArticle:false,
           isLoadingDynamic:false,
@@ -169,7 +169,7 @@ import emptyHint from './../com/emptyHint.vue'
        async getUserDynamics(id){
             let self = this
             this.isLoadingDynamic = true
-            let res = await getDynamics(this.userInfo.user_id,this.dynamics.length / 10,10)
+            let res = await getDynamics(id,this.dynamics.length / 10,10)
             this.isLoadingDynamic = false
             if(res.code == 0){
                 this.dynamicsCount = res.count
@@ -182,7 +182,7 @@ import emptyHint from './../com/emptyHint.vue'
        async getComments(id){
            let self = this
            this.isLoadingComment = true
-           let res = await getUserComments(this.userInfo.user_id,this.comments.length / 10,10)
+           let res = await getUserComments(id,this.comments.length / 10,10)
            this.isLoadingComment = false
            if(res.code == 0){
                this.commentsCount = res.count
@@ -194,7 +194,7 @@ import emptyHint from './../com/emptyHint.vue'
        },
        async getLikedArticles(id){
            this.isLoadingComment = true
-           let res = await likedArticlesByUser(this.userInfo.user_id,this.likeArticles.length / 10,10)
+           let res = await likedArticlesByUser(id,this.likeArticles.length / 10,10)
            this.isLoadingComment = false
            if(res.code == 0){
                this.likeArticlesCount = res.count

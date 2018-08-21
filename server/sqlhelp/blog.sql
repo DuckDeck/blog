@@ -437,6 +437,13 @@ this.dynamic_type_name = '关注了'
 case 11:
 this.dynamic_type_name = '取消关注了'
 
+case 12:
+this.dynamic_type_name = '喜欢了文章'
+
+case 13:
+this.dynamic_type_name = '收藏了文章'
+
+
 //关注专题 
 
 
@@ -554,7 +561,7 @@ VIEW `article_related_info` AS
             FROM
                 `like_article`
             WHERE
-                (`like_article`.`article_id` = `like_article`.`article_id`)) AS `like_count`,
+                (`like_article`.`article_id` = `article`.`article_id`)) AS `like_count`,
         `user_info`.`user_real_name` AS `user_real_name`,
         `user_info`.`user_image_url` AS `user_image_url`
     FROM
