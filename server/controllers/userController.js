@@ -456,7 +456,7 @@ module.exports = {
            return 0
        })
        let sqlLikeArticles = dynamics.map(s=>{
-          if(s.dynamic_type_id == 12){
+          if(s.dynamic_type_id == 12 || s.dynamic_type_id == 13){
              return s.dynamic_target_belong_id
            }
             return 0
@@ -553,16 +553,16 @@ module.exports = {
             }
        }
        if(sqlLikeArticles.length > 0){
-            sql = `select * from article_related_info where  article_id in (` + sqlLikeArticles.join(',') + `)`
+            sql = `select * from article_related_info  where  article_id in (` + sqlLikeArticles.join(',') + `)`
             res = await DB.exec(sql)
             if(res.code != 0){
                 ctx.rest(res)
                 return
             }
             for(var day of dynamics){
-                if(day.dynamic_type_id == 12){
+                if(day.dynamic_type_id == 12 || day.dynamic_type_id == 13){
                     let art = res.data.find(s=>{
-                        return s.article_id == day.dynamic_target_belong_id && day.dynamic_type_id == 12
+                        return s.article_id == day.dynamic_target_belong_id && (day.dynamic_type_id == 12 || day.dynamic_type_id == 13)
                     })
                     day.selfObject = art
                 }
@@ -772,6 +772,9 @@ module.exports = {
         if(res.data[0]['count'] == 0){
             sql = 'insert into  collect_article (collect_id,user_id,article_id,collect_time) values (0,?,?,?)'
             res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
+            let collectId = res.data.id
+            let dynamic = new Dynamic(id,collectId,articleId,13,0)
+            await Dynamic.save(dynamic)
         }
         
         

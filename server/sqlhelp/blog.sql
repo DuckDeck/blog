@@ -562,6 +562,12 @@ VIEW `article_related_info` AS
                 `like_article`
             WHERE
                 (`like_article`.`article_id` = `article`.`article_id`)) AS `like_count`,
+        (SELECT 
+                `article_sort`.`sort_article_name`
+            FROM
+                `article_sort`
+            WHERE
+                (`article_sort`.`sort_article_id` = `article`.`article_sort_id`)) AS `article_sort_name`,
         `user_info`.`user_real_name` AS `user_real_name`,
         `user_info`.`user_image_url` AS `user_image_url`
     FROM
@@ -569,7 +575,6 @@ VIEW `article_related_info` AS
         JOIN `user_info` ON ((`article`.`user_id` = `user_info`.`user_id`)))
     WHERE
         (`article`.`article_status` = 1)
-
 ------------------------------
 -- create chat_message
 ------------------------------
