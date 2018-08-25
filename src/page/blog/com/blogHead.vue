@@ -107,7 +107,7 @@
                      this.$router.push('/userInfo/' + this.userInfo.user_id  + "/like")
                 }
                 else if(command == "collect"){
-                     this.$router.push('/mytag/' + this.userInfo.user_id)
+                     this.$router.push('/mycollect/' + this.userInfo.user_id)
                 }
                 else if(command == "tag"){
                      this.$router.push('/mytag/' + this.userInfo.user_id)

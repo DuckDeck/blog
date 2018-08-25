@@ -15,7 +15,7 @@ const resetPassword = r => require.ensure([], () => r(require('../page/blog/rese
 const active = r => require.ensure([], () => r(require('../page/blog/active')), 'active')
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
-
+const collectedArticles = r => require.ensure([], () => r(require('../page/blog/userInfo/myCollectArticles')), 'collectedArticles')
 const myTag = r => require.ensure([], () => r(require('../page/blog/userInfo/myTag')), 'myTag')
 const mySetting = r => require.ensure([], () => r(require('../page/blog/userInfo/myInfoSetting')), 'mySetting')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
@@ -93,7 +93,10 @@ export default [
         path: '/mytag/:userId',
         component: myTag, 
     },
-    
+    {
+        path: '/mycollect/:userId',
+        component: collectedArticles, 
+    },
     {
         path: '/mysetting/:userId',
         component: mySetting, 

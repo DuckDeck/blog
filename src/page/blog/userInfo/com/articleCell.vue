@@ -15,6 +15,7 @@
                      <i style="margin-left:2px" class="fa fa-comment"  aria-hidden="true"></i> {{articleInfo.comment_count}} 
                      <i style="margin-left:2px" class="fa-heart fa"></i> {{articleInfo.like_count}}
                      <span @click="notLike(articleInfo)" v-if="articleInfo.isUserLiked" class="noMoreLikeArticle">不再喜欢</span>
+                     <span @click="notCollect(articleInfo)" v-if="articleInfo.isUserCollected" class="noMoreLikeArticle">不再收藏</span>
                 </div>
             </div>
             <img class="articleCellContenImg" v-if="articleInfo.article_main_img.length > 0" :src="articleInfo.article_main_img" alt="">
