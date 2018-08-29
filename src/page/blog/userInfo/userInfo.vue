@@ -136,9 +136,7 @@ import emptyHint from './../com/emptyHint.vue'
              case 'like':
                 this.getLikedArticles(id)
                 break;
-           
         }
-        
     },
     methods:{
        async notLike(article){

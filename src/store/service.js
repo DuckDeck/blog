@@ -8,7 +8,8 @@ import {index,indexMore,search,searchbase} from './indexService'
 import {submitComment,getComment,commentsByArticleId} from './commentService'
 
 
-import {articlesBySort,articlebroswer,articlesByUser,likedArticlesByUser,saveArticle,deleteAticle,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle} from './articleService'
+import {articlesBySort,articlebroswer,articlesByUser,likedArticlesByUser,saveArticle,collectedArticlesByUser,
+    deleteAticle,articleList,articleListWithSort,articleById,saveTempArticle,tempArticle} from './articleService'
 
 
 export {

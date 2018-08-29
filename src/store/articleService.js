@@ -28,6 +28,11 @@ export const likedArticlesByUser = function(user_id,index = 0,size = 10){
     return setpromiseGet(url)
 }
 
+export const collectedArticlesByUser = function(user_id,index = 0,size = 10){
+    const url = HostName +  'usercollect/'  + user_id  +  '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
 export const saveArticle = function(article,isNew){
     if(!isNew){
         const url = HostName +  'article/'+ article.articleId + '/'+ userId() + '/' + createToken()
