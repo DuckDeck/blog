@@ -650,7 +650,7 @@ module.exports = {
        ctx.rest(Result.createCount(0,count,comments))
      },
 
-     'GET /api/userlike/:userId/:index/:size': async (ctx, next) => {
+     'GET /api/userliked/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -691,7 +691,7 @@ module.exports = {
         ctx.rest(Result.createCount(0,count,res.data))    
       },
 
-     'GET /api/usercollect/:userId/:index/:size': async (ctx, next) => {
+     'GET /api/usercollected/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -731,7 +731,39 @@ module.exports = {
         }
         ctx.rest(Result.createCount(0,count,res.data))    
       },
-  
+      
+     'GET /api/userattentioned/:userId/:index/:size': async (ctx, next) => {
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let id = ctx.params.userId
+        let sql = `select count(a_id) as count from user_attention where user_id = ?`
+        let res = await DB.exec(sql,[id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select user_id from user_attention where user_id = ? order by attention_time desc limit ?,?",[id,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        //sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        //注意，这进而是有被删除的文章的，因为我没有完全删除。
+        //所以如果收藏的文章被删除的话，这里就要产品来判断还要不要返回给已经设为收藏的文章的用户了
+        //这里我就直接返回了
+       //
+        ctx.rest(Result.createCount(0,count,res.data))    
+      },
 
     'GET /api/usersetcollect/:articleId/:isCollect/:userId/:token': async (ctx, next) => {
         var  t = ctx.params
@@ -813,6 +845,51 @@ module.exports = {
             res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
             let likeId = res.data.id
             let dynamic = new Dynamic(id,likeId,articleId,12,0)
+            await Dynamic.save(dynamic)
+        } 
+      
+       }
+       ctx.rest(res || Result.create(-50))
+    },
+
+    'GET /api/usersetattention/:targetUserId/:isAttention/:userId/:token': async (ctx, next) => {
+        var  t = ctx.params
+        let checkResult = Check.checkNum(t,'userId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'targetUserId')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+        checkResult = Check.checkNum(t,'isAttention')
+        if(checkResult){
+            ctx.rest(checkResult)
+        }
+       checkResult = await Check.checkToken(ctx)
+       if(checkResult.code != 0){
+            ctx.rest(checkResult)
+            return
+       }
+       let isAttention = ctx.params.isAttention
+       let id = ctx.params.userId
+       let targetUserId =  ctx.params.targetUserId
+       let sql = ''
+       let res = null
+       if(isAttention == 0){
+          sql = 'delete from user_attention where user_id = ? and attention_id = ?'
+          res =  await DB.exec(sql,[id,articleId])
+          let dynamic = new Dynamic(id,0,targetUserId,11,0)
+           await Dynamic.save(dynamic)
+       }
+       else{
+        res = await DB.exec('select count(a_id) as count from user_attention where attention_id = ? and user_id = ?',[targetUserId,id])
+        let count = res.data[0]['count']
+        if(count == 0){
+            sql = 'insert into  user_attention (a_id,user_id,attention_id,attention_time) values (0,?,?,?)'
+            res =  await DB.exec(sql,[id,targetUserId,Date.parse(new Date())])
+            let aId = res.data.id
+            let dynamic = new Dynamic(id,aId,targetUserId,10,0)
             await Dynamic.save(dynamic)
         } 
       

@@ -24,12 +24,12 @@ export const articlesByUser = function(user_id,index = 0,size = 10){
 }
 
 export const likedArticlesByUser = function(user_id,index = 0,size = 10){
-    const url = HostName +  'userlike/'  + user_id  +  '/' + index + '/' + size
+    const url = HostName +  'userliked/'  + user_id  +  '/' + index + '/' + size
     return setpromiseGet(url)
 }
 
 export const collectedArticlesByUser = function(user_id,index = 0,size = 10){
-    const url = HostName +  'usercollect/'  + user_id  +  '/' + index + '/' + size
+    const url = HostName +  'usercollected/'  + user_id  +  '/' + index + '/' + size
     return setpromiseGet(url)
 }
 

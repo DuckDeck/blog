@@ -198,7 +198,7 @@ import emptyHint from './../com/emptyHint.vue'
                this.likeArticlesCount = res.count
                this.likeArticles = this.likeArticles.concat(res.data.map(s=>{
                   s.user_info = this.userInfo
-                  s.isUserLiked = true
+                  s.isUserLiked = userId() == id
                   return s
               }))
               console.log(this.likeArticles)

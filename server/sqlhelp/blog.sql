@@ -102,6 +102,7 @@ CREATE TABLE  IF NOT EXISTS user_attention (
  a_id smallint(5) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
  user_id mediumint(8) NOT NULL COMMENT '用户ID',
  attention_id mediumint(8) NOT NULL COMMENT '关注ID',
+ attention_time BIGINT(15) DEFAULT 0 COMMENT '关注时间',
  PRIMARY KEY (a_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
