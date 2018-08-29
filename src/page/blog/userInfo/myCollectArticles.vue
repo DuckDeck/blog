@@ -1,11 +1,11 @@
 <template>
-      <div style="text-align: center" class="container" >
+      <div  class="container" >
           <div class="main-page">
             <div class="collectTitle"> 
                 <i class="fa fa-bookmark" aria-hidden="true"></i>
                 收藏的文章
             </div>
-            <div >
+            <div class="collectedArticles" >
              <articleCell  v-for="art in collectedArticles" :articleInfo = "art"></articleCell>
                 <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
                 <div v-show="collectedArticles.length < collectedArticlesCount" class="loadMoreDiv">
@@ -34,11 +34,11 @@ import blogFoot from './../com/blogFoot.vue'
                 collectedArticlesCount:0,
             }
         },
-         mounted(){
+        async mounted(){
             let id = this.$route.params.userId
             this.userId = id
+            console.log(id)
             this.getCollctedArticles(id)
-                
         },
         methods:{
             async getCollctedArticles(id){
@@ -46,13 +46,13 @@ import blogFoot from './../com/blogFoot.vue'
                 let res = await collectedArticlesByUser(id,this.collectedArticles.length / 10,10)
                 this.isLoadinMore = false
                 if(res.code == 0){
+                    console.log(res.data)
                     this.collectedArticlesCount = res.count
                     this.collectedArticles = this.collectedArticles.concat(res.data.map(s=>{
-                        s.user_info = this.userInfo
                         s.isUserCollected = true
+                        s.user_info = {user_image_url:s.user_image_url,user_real_name:s.user_real_name}
                         return s
                     }))
-                    console.log(this.collectedArticles)
                 }
             }
         },
@@ -71,13 +71,19 @@ import blogFoot from './../com/blogFoot.vue'
 }
 .collectTitle{
     background-color: orangered;
-    width: 10rem;
+    width: 8rem;
     margin: 0 auto;
     color: azure;
     font-size: 0.5rem;
     padding-bottom: 0.3rem;
     padding-top: 0.3rem;
     margin-top: 10px;
+    text-align: center
 }
-
+.collectedArticles{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 </style>

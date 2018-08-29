@@ -36,7 +36,13 @@ html,body{
     font-family: 'Open Sans', sans-serif;
     overflow-y: scroll;
 }
-
+.container{
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1024px;
+ }
 .clear:after{
     content: '';
     display: block;

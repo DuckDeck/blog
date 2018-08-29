@@ -190,14 +190,7 @@ import collectArticle from './com/collectArticle.vue'
   }
 </script>
 <style >
-
-  .container{
-     padding-left: 15px;
-     padding-right: 15px;
-     margin-left: auto;
-     margin-right: auto;
-  }
-  .row{
+ .row{
     margin-left: -15px;
     margin-right: -15px;
   }
