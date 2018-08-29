@@ -8,9 +8,7 @@
                     <div class="swiperArticleTitle" @click="gotoArticle(art)">
                         {{art.article_name}}
                     </div>
-                    <div class="swiperArticleBrief" >
-                        {{art.article_brief.slice(0,50)}}...
-                    </div>
+                   
                 </div>
        </div>
             
@@ -75,7 +73,7 @@
     color: white;
     font-size: 0.42rem;
     text-align: center;
-    margin-top: 2.4rem;
+    margin-top: 3.5rem;
 }
 .swiperArticleTitle:hover{
     cursor: pointer

@@ -45,6 +45,9 @@
         },
         notLike(articleInfo){
             this.$emit("notLike",articleInfo)
+        },
+        notCollect(articleInfo){
+            this.$emit("notCollect",articleInfo)
         }
     },
     computed:{

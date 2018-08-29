@@ -6,7 +6,7 @@
                 收藏的文章
             </div>
             <div class="collectedArticles" >
-             <articleCell  v-for="art in collectedArticles" :articleInfo = "art"></articleCell>
+             <articleCell  v-for="art in collectedArticles" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
                 <div v-show="collectedArticles.length < collectedArticlesCount" class="loadMoreDiv">
                     <el-button :loading="isLoadinMore" @click="getCollctedArticles" class="loadmoreButton">加载更多收藏文章...</el-button>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {collectedArticlesByUser} from '../../../store/service'
+import {collectedArticlesByUser,userCollectArticle} from '../../../store/service'
 import articleCell from './com/articleCell.vue'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
@@ -54,6 +54,13 @@ import blogFoot from './../com/blogFoot.vue'
                         return s
                     }))
                 }
+            },
+            async notCollect(article){
+                let res = await userCollectArticle(article.article_id,false)
+                if(res.code != 0){
+                    toast(this,res.cMsg)
+                }
+                article.isUserCollected = false
             }
         },
         components:{
@@ -81,8 +88,8 @@ import blogFoot from './../com/blogFoot.vue'
     text-align: center
 }
 .collectedArticles{
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
     padding-top: 30px;
     padding-bottom: 30px;
 }
