@@ -1,9 +1,16 @@
 <template>
       <div  class="container" >
           <div class="main-page">
-            <div class="collectTitle"> 
-                <i class="fa fa-bookmark" aria-hidden="true"></i>
-                收藏的文章
+            <div class="myAttentions"> 
+                <div v-for="att in attentioned" v-bind:key="att.user_id">
+                   <img class="userHead" :src="att.user_image_url" alt="">
+                    <div>
+                        <div class="userRealName">
+                            {{att.user_real_name}}
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="collectedArticles" >
              <articleCell  v-for="art in collectedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
@@ -39,23 +46,17 @@ import blogFoot from './../com/blogFoot.vue'
             let id = this.$route.params.userId
             this.userId = id
             console.log(id)
-            this.getCollctedArticles(id)
+            this.getAttention(id)
         },
         methods:{
             async getAttention(id){
-                let res = await userSetAttentioned(id)
+                let res = await userAttentioned(id)
                 if(res.code == 0){
                     console.log(res.data)
                     this.attentioned = this.collectedArticles
                 }
             },
-            async notCollect(article){
-                let res = await userCollectArticle(article.article_id,false)
-                if(res.code != 0){
-                    toast(this,res.cMsg)
-                }
-                article.isUserCollected = false
-            }
+           
         },
         components:{
                 articleCell,emptyHint,upToTop,blogFoot,
@@ -65,26 +66,13 @@ import blogFoot from './../com/blogFoot.vue'
 
 <style scoped>
 .main-page{
-     background: white;
+    background: white;
     margin-top: 70px;
     border-top: 5px solid deepskyblue;
     min-height: 800px;
+    display: flex;
 }
-.collectTitle{
-    background-color: orangered;
-    width: 8rem;
-    margin: 0 auto;
-    color: azure;
-    font-size: 0.5rem;
-    padding-bottom: 0.3rem;
-    padding-top: 0.3rem;
-    margin-top: 10px;
-    text-align: center
-}
-.collectedArticles{
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
-    padding-top: 30px;
-    padding-bottom: 30px;
+.myAttentions{
+    width: 200px;
 }
 </style>

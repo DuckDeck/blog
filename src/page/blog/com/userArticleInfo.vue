@@ -3,7 +3,9 @@
         <img :src="userInfo.user_image_url"  @click="userheadClick" class="comUserArticleHead" alt="">
         <div class="comArticleUserDetail">
             <div>
-                <span @click="userheadClick" class="comArticleAuthorTag">作者</span> <span @click="userheadClick">{{userInfo.user_real_name}}</span>
+                <span @click="userheadClick" class="comArticleAuthorTag">作者</span>
+                 <span @click="userheadClick">{{userInfo.user_real_name}}</span>
+                 <span class="comAttentionedUser" @click="attentionUser"> <i class="fa fa-plus"></i> 关注 </span>
             </div>
             <div class="comArticleReleaseTime">
                 <span>发布于: {{articleReleaseTime}}  </span> <span>  文章 {{userInfo.article_count}}</span>
@@ -34,6 +36,9 @@
             },
             userheadClick(){
                  this.$emit("userHeadClick",this.userInfo)
+            },
+            attentionUser(){
+                
             }
         },
         computed:{
@@ -97,6 +102,31 @@
 }
 .comEditArticleButton:hover{
     cursor: pointer;
+}
+.comAttentionedUser{
+    background-color: forestgreen;
+    margin-left: 3px;
+    width: 40px;
+    color: white;
+    font-size: 12px;
+    padding: 2px 5px 2px 5px; 
+
+    border-radius: 10px;
+}
+.comNotAttentionedUser{
+    background-color: forestgreen;
+    margin-left: 3px;
+    width: 40px;
+    color: white;
+    font-size: 12px;
+    padding: 2px 5px 2px 5px; 
+    border-radius: 10px;
+}
+.comAttentionedUser:hover{
+    cursor: pointer;
+}
+.comNotAttentionedUser:hover{
+     cursor: pointer;
 }
  @media (max-width:500px){
     .comEditArticleButton{
