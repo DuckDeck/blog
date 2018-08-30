@@ -179,3 +179,15 @@ export const userCollectArticle = function(article_id,isCollect){
     const url = HostName + 'usersetcollect/' +   article_id + '/' + l + '/' +  userId() + '/' + createToken()
     return setpromiseGet(url)
 }
+
+
+export const userAttentioned = function(user_id){
+    const url = HostName + 'userattentioned/' +   user_id
+    return setpromiseGet(url)
+}
+
+export const userSetAttentioned = function(user_id,is_attention){
+    let l = is_attention ? 1 : 0
+    const url = HostName + 'usersetattention/' +   user_id + '/' + l + '/' + userId() + '/' + createToken()
+    return setpromiseGet(url)
+}

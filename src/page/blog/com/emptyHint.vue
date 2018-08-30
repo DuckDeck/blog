@@ -11,7 +11,11 @@
               
             }
         },
-
+         props:{  
+          hintMessage:{
+            type:String
+          },
+        },
         methods:{
            reload(){
 				this.$emit("reload")

@@ -6,10 +6,10 @@
                 收藏的文章
             </div>
             <div class="collectedArticles" >
-             <articleCell  v-for="art in collectedArticles" :articleInfo = "art" @notCollect="notCollect"></articleCell>
-                <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
-                <div v-show="collectedArticles.length < collectedArticlesCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadinMore" @click="getCollctedArticles" class="loadmoreButton">加载更多收藏文章...</el-button>
+             <articleCell  v-for="art in collectedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
+                
+                <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
+                    <el-button :loading="isLoadinMore" @click="getCollctedArticles" class="loadmoreButton">加载更多文章</el-button>
                 </div>
              </div>
           </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {collectedArticlesByUser,userCollectArticle} from '../../../store/service'
+import {userSetAttentioned,userAttentioned} from '../../../store/service'
 import articleCell from './com/articleCell.vue'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
@@ -29,9 +29,10 @@ import blogFoot from './../com/blogFoot.vue'
         data(){
             return {
                 userId:0,
-                collectedArticles:[],
+                attentioned:[],
+                attentionedUserArticles:[],
                 isLoadinMore:false,
-                collectedArticlesCount:0,
+                attentionedUserArticlesCount:0,
             }
         },
         async mounted(){
@@ -41,18 +42,11 @@ import blogFoot from './../com/blogFoot.vue'
             this.getCollctedArticles(id)
         },
         methods:{
-            async getCollctedArticles(id){
-                this.isLoadinMore = true
-                let res = await collectedArticlesByUser(id,this.collectedArticles.length / 10,10)
-                this.isLoadinMore = false
+            async getAttention(id){
+                let res = await userSetAttentioned(id)
                 if(res.code == 0){
                     console.log(res.data)
-                    this.collectedArticlesCount = res.count
-                    this.collectedArticles = this.collectedArticles.concat(res.data.map(s=>{
-                        s.isUserCollected = true
-                        s.user_info = {user_image_url:s.user_image_url,user_real_name:s.user_real_name}
-                        return s
-                    }))
+                    this.attentioned = this.collectedArticles
                 }
             },
             async notCollect(article){

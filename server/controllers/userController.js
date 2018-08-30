@@ -732,7 +732,7 @@ module.exports = {
         ctx.rest(Result.createCount(0,count,res.data))    
       },
       
-     'GET /api/userattentioned/:userId/:index/:size': async (ctx, next) => {
+    'GET /api/userattentioned/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -752,18 +752,42 @@ module.exports = {
             return
         }
         let count = res.data[0].count
-        res = await DB.exec("select user_id from user_attention where user_id = ? order by attention_time desc limit ?,?",[id,index*size,size])
+        res = await DB.exec("select * from user_attention where user_id = ? order by attention_time desc limit ?,?",[id,index*size,size])
         if(res.code != 0){
             ctx.rest(res)
             return
         }
-        //sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
-        //注意，这进而是有被删除的文章的，因为我没有完全删除。
-        //所以如果收藏的文章被删除的话，这里就要产品来判断还要不要返回给已经设为收藏的文章的用户了
-        //这里我就直接返回了
-       //
         ctx.rest(Result.createCount(0,count,res.data))    
-      },
+    },
+
+    'GET /api/userattentioned/:userId/': async (ctx, next) => {
+        let id = ctx.params.userId
+        let sql = `select count(a_id) as count from user_attention where user_id = ?`
+        let res = await DB.exec(sql,[id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select * from user_attention where user_id = ? order by attention_time desc",[id])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let userIds = res.data.map(s=>{
+            return s.attention_id
+        })
+        res = await DB.exec(`select user_id,user_real_name,user_image_url from user_info where user_id in (` + userIds.join(',') + `)`)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        ctx.rest(Result.createCount(0,count,res.data))    
+    },
 
     'GET /api/usersetcollect/:articleId/:isCollect/:userId/:token': async (ctx, next) => {
         var  t = ctx.params

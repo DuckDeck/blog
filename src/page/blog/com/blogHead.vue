@@ -28,6 +28,7 @@
                     <el-dropdown-item command="write">写文章</el-dropdown-item>
                     <el-dropdown-item command="collect">收藏的文章</el-dropdown-item>
                     <el-dropdown-item command="like">喜欢的文章</el-dropdown-item>
+                    <el-dropdown-item command="attention">我的关注</el-dropdown-item>
                     <el-dropdown-item command="tag">我的标签</el-dropdown-item>
                     <el-dropdown-item command="setting">个人设置</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
@@ -108,6 +109,9 @@
                 }
                 else if(command == "collect"){
                      this.$router.push('/mycollect/' + this.userInfo.user_id)
+                }
+                else if(command == "attention"){
+                     this.$router.push('/myattention/' + this.userInfo.user_id)
                 }
                 else if(command == "tag"){
                      this.$router.push('/mytag/' + this.userInfo.user_id)

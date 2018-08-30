@@ -1,6 +1,7 @@
 import {uploadImgConfig,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
 resetPassword,getUserInfo,getDynamics,getUserComments,getTags,addTag,deleteTag,getSorts,addSort,deleteSort,
-getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo,userLikeArticle,userCollectArticle} from './userService'
+getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo,userLikeArticle,userCollectArticle
+,userSetAttentioned,userAttentioned} from './userService'
 
 import {index,indexMore,search,searchbase} from './indexService'
 
@@ -16,7 +17,7 @@ export {
     uploadImgConfig,login,register,checkEmail,checkUserName,validateUser,ressendemail,resetPasswordCode,
     resetPassword,getUserInfo,getDynamics,getUserComments,getTags,addTag,deleteTag,getSorts,addSort,deleteSort,
     getUserLinks,updateUserLinks,updateFriendLinks,deleteLink,updateUserInfo,userLikeArticle,userCollectArticle,
-    index,indexMore,search,searchbase,collectedArticlesByUser,
+    index,indexMore,search,searchbase,collectedArticlesByUser,userSetAttentioned,userAttentioned,
     submitComment,getComment,commentsByArticleId,
     articlesBySort,articlebroswer,articlesByUser,saveArticle,deleteAticle,articleList,likedArticlesByUser,
     articleListWithSort,articleById,saveTempArticle,tempArticle,

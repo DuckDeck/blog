@@ -16,6 +16,7 @@ const active = r => require.ensure([], () => r(require('../page/blog/active')), 
 const atricleInfo = r => require.ensure([], () => r(require('../page/blog/article')), 'atricleInfo')
 const userInfo = r => require.ensure([], () => r(require('../page/blog/userInfo/userInfo')), 'userInfo')
 const collectedArticles = r => require.ensure([], () => r(require('../page/blog/userInfo/myCollectArticles')), 'collectedArticles')
+const myAttention = r => require.ensure([], () => r(require('../page/blog/userInfo/myAttention')), 'myAttention')
 const myTag = r => require.ensure([], () => r(require('../page/blog/userInfo/myTag')), 'myTag')
 const mySetting = r => require.ensure([], () => r(require('../page/blog/userInfo/myInfoSetting')), 'mySetting')
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
@@ -96,6 +97,10 @@ export default [
     {
         path: '/mycollect/:userId',
         component: collectedArticles, 
+    },
+    {
+        path: '/myattention/:userId',
+        component: myAttention, 
     },
     {
         path: '/mysetting/:userId',
