@@ -16,8 +16,13 @@
                             </span>
                         </div>
                             
+                        
                         </div>
                        <button v-show="isMine" @click="writeArticle" class="writeArticle">写文章</button>
+                       <!-- <div>
+                           <span v-show="showAttention"   @click="attentionUser"> 
+                            <i  class="fa-plus,fa" ></i> 关注 </span>
+                        </div> -->
                     </div>
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
@@ -241,6 +246,9 @@ import emptyHint from './../com/emptyHint.vue'
        gotoSort(sort){
            localStorage.sortId = sort.sort_article_id
            this.$router.push('/sortArticleList/' + sort.user_id)
+       },
+       attentionUser(){
+
        }
     },
     components:{
@@ -258,7 +266,9 @@ import emptyHint from './../com/emptyHint.vue'
             }
             return false
         },
-
+        showAttention(){
+              return true
+        }
     }
 
   }

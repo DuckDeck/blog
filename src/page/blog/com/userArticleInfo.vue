@@ -5,7 +5,7 @@
             <div>
                 <span @click="userheadClick" class="comArticleAuthorTag">作者</span>
                  <span @click="userheadClick">{{userInfo.user_real_name}}</span>
-                 <span v-bind:class="[userInfo.is_attention?'comAttentionedUser':'comNotAttentionedUser']" @click="attentionUser"> 
+                 <span v-show="showAttention"  v-bind:class="[userInfo.is_attention?'comAttentionedUser':'comNotAttentionedUser']" @click="attentionUser"> 
                      <i  v-bind:class="[userInfo.is_attention?'fa-check':'fa-plus','fa']" ></i> {{userInfo.is_attention ? "已关注" : "关注"}} </span>
             </div>
             <div class="comArticleReleaseTime">
@@ -53,6 +53,15 @@
                   }
                }
               return false
+           },
+           showAttention(){
+               if(!isLogin()){
+                   return true
+               }
+               if(userId() == this.userInfo.user_id){
+                   return false
+               }
+               return true
            }
         },
     }

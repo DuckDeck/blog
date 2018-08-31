@@ -2,7 +2,8 @@
       <div  class="container" >
           <div class="main-page">
             <div class="myAttentions"> 
-                <div v-for="att in attentioned" @click="getUserArticles" v-bind:key="att.user_id" class="attentionedUsers">
+                <div v-for="att in attentioned" @click="getUserArticles(att)" v-bind:key="att.user_id" 
+                v-bind:class="[selectedUserId == att.user_id?'attentionedUsersSelected':'attentionedUsers']">
                    <img class="userHead"  :src="att.user_image_url" alt="">
                  
                         <div style="align-self:center;font-size:16px;color:gray">
@@ -13,7 +14,7 @@
                 
             </div>
             <div class="myAttentionsArticles" >
-             <articleCell  v-for="art in pushedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
+             <articleCell  v-for="art in pushedArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
                 
                 <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
                     <el-button :loading="isLoadinMore" @click="getUserArticles" class="loadmoreButton">加载更多文章</el-button>
@@ -56,11 +57,14 @@ import blogFoot from './../com/blogFoot.vue'
                 if(res.code == 0){
                     console.log(res.data)
                     this.attentioned = res.data
-                    this.selectedUserId = this.attentioned[0].user_id
-                    this.getUserArticles()
+                    
+                    this.attentionedUserArticlesCount = res.count
+                    this.getUserArticles(this.attentioned[0])
                 }
             },
-            async getUserArticles(){
+            async getUserArticles(user){
+                this.pushedArticles = []
+                this.selectedUserId = user.user_id
                 let res = await articlesByUser(this.selectedUserId,this.pushedArticles.length / 10,10)
                 if(res.code != 0){
                     toast(this,res.cMsg)
@@ -85,18 +89,26 @@ import blogFoot from './../com/blogFoot.vue'
     display: flex;
 }
 .myAttentions{
-    width: 300px;
+    width: 400px;
+    border-right: 2px solid peru
 }
 .attentionedUsers{
     display: flex;
     padding: 10px 20px 10px 20px;
-    
+    margin-bottom: 2px;
+}
+.attentionedUsersSelected{
+    display: flex;
+    padding: 10px 20px 10px 20px;
+    background-color: #dddddddd;
+    margin-bottom: 2px;
 }
 .attentionedUsers:hover{
     cursor: pointer;
     background: #dddddddd;
 }
 .myAttentionsArticles{
-    padding: 0px 20px 0px 20px;
+    border-left: 2px solid peru;
+    padding: 0px 40px 0px 40px;
 }
 </style>

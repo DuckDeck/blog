@@ -1,6 +1,6 @@
 <template>
     <div class="articleCellClass">
-        <div class="articleCellUserInfo" @click="userHeadClick">
+        <div class="articleCellUserInfo" @click="userHeadClick" v-if="showUserHead">
             <img :src="articleInfo.user_info.user_image_url" alt="">
             <span class="articleCellUserName">{{articleInfo.user_info.user_real_name}}</span>
             <span>{{createTile}}</span>
@@ -34,7 +34,10 @@
          articleInfo:{
              type:Object
          },
-
+         showUserHead:{
+             type:Boolean,
+             default:true
+         }
     },
     methods:{
         togoArticle(){
