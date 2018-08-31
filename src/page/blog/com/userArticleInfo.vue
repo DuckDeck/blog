@@ -5,7 +5,8 @@
             <div>
                 <span @click="userheadClick" class="comArticleAuthorTag">作者</span>
                  <span @click="userheadClick">{{userInfo.user_real_name}}</span>
-                 <span class="comAttentionedUser" @click="attentionUser"> <i class="fa fa-plus"></i> 关注 </span>
+                 <span v-bind:class="[userInfo.is_attention?'comAttentionedUser':'comNotAttentionedUser']" @click="attentionUser"> 
+                     <i  v-bind:class="[userInfo.is_attention?'fa-check':'fa-plus','fa']" ></i> {{userInfo.is_attention ? "已关注" : "关注"}} </span>
             </div>
             <div class="comArticleReleaseTime">
                 <span>发布于: {{articleReleaseTime}}  </span> <span>  文章 {{userInfo.article_count}}</span>
@@ -38,7 +39,7 @@
                  this.$emit("userHeadClick",this.userInfo)
             },
             attentionUser(){
-                
+                this.$emit("userSetAttention",this.userInfo)
             }
         },
         computed:{
@@ -104,14 +105,14 @@
     cursor: pointer;
 }
 .comAttentionedUser{
-    background-color: forestgreen;
+    background-color: white;
     margin-left: 3px;
-    width: 40px;
-    color: white;
+    width: 50px;
+    color: gray;
     font-size: 12px;
     padding: 2px 5px 2px 5px; 
-
     border-radius: 10px;
+    border: 1px solid gray;
 }
 .comNotAttentionedUser{
     background-color: forestgreen;

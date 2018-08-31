@@ -12,11 +12,11 @@
                 </div>
                 
             </div>
-            <div class="collectedArticles" >
-             <articleCell  v-for="art in collectedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
+            <div  >
+             <articleCell  v-for="art in pushedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 
                 <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadinMore" @click="getCollctedArticles" class="loadmoreButton">加载更多文章</el-button>
+                    <el-button :loading="isLoadinMore" @click="getPushedArticles" class="loadmoreButton">加载更多文章</el-button>
                 </div>
              </div>
           </div>
@@ -40,6 +40,7 @@ import blogFoot from './../com/blogFoot.vue'
                 attentionedUserArticles:[],
                 isLoadinMore:false,
                 attentionedUserArticlesCount:0,
+                pushedArticles:[]
             }
         },
         async mounted(){
@@ -56,7 +57,9 @@ import blogFoot from './../com/blogFoot.vue'
                     this.attentioned = this.collectedArticles
                 }
             },
-           
+            getPushedArticles(){
+
+            }
         },
         components:{
                 articleCell,emptyHint,upToTop,blogFoot,

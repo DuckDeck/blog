@@ -6,9 +6,9 @@
                             <div  class="articleHeader" >
                                 {{article.article_name}}
                             </div>
-                            <userArtileInfo @userHeadClick="userHeadClick" class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
+                            <userArtileInfo @userHeadClick="userHeadClick" @userSetAttention="userSetAttention" class="userArtileInfo" :userInfo="articleUserInfo"></userArtileInfo>
                             <div  class="articleTagClass">
-                                  <el-tag  v-for="t in article.tags"   type="primary"  >{{t.tag_name}}</el-tag>
+                                  <el-tag  v-for="t in article.tags" v-bind:key="t.tag_id"  type="primary"  >{{t.tag_name}}</el-tag>
                             </div>
                        </header>
                     <div class="articleSeperateLine"></div>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle,userCollectArticle} from '../../store/service'
+import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle,userCollectArticle,userSetAttentioned} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
@@ -175,6 +175,17 @@ import collectArticle from './com/collectArticle.vue'
             else{
                 this.collectCount = this.collectCount - 1
             }
+        },
+        async userSetAttention(user_info){
+            if(!isLogin()){
+                toast(this,"请先登录再关注该作者")
+                return
+            }
+            let res = await userSetAttentioned(user_info.user_id,!user_info.is_attention)
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+            this.articleUserInfo.is_attention = !this.articleUserInfo.is_attention
         }
 
     },

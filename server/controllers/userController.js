@@ -902,9 +902,9 @@ module.exports = {
        let res = null
        if(isAttention == 0){
           sql = 'delete from user_attention where user_id = ? and attention_id = ?'
-          res =  await DB.exec(sql,[id,articleId])
+          res =  await DB.exec(sql,[id,targetUserId])
           let dynamic = new Dynamic(id,0,targetUserId,11,0)
-           await Dynamic.save(dynamic)
+          await Dynamic.save(dynamic)
        }
        else{
         res = await DB.exec('select count(a_id) as count from user_attention where attention_id = ? and user_id = ?',[targetUserId,id])

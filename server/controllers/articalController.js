@@ -193,7 +193,6 @@ module.exports = {
             ctx.rest(resCollectCount)
             return
         }
-        console.log(resLikeCount)
        let article = resArticle.data[0]
        article.tags = resTags.data
        let user_id = article.user_id
@@ -204,6 +203,8 @@ module.exports = {
        }
        article.like_count = resLikeCount.data[0]['count'] 
        article.collect_count = resCollectCount.data[0]['count'] 
+       article.userInfo = resUser.data[0]
+       article.userInfo.is_attention = false
        let isUserLike = null
        let isUserCollect = null
        if(userId != 0){
@@ -219,10 +220,15 @@ module.exports = {
                return
            }
            isUserCollect = res.data[0]['count'] == 1
+           res = await DB.exec('select a_id from user_attention where user_id = ? and attention_id = ?',[userId,user_id])
+           if(res.code == 0){
+              if(res.data.length > 0){
+                article.userInfo.is_attention = true
+              }
+           }
        }
        article.is_user_like = isUserLike
        article.is_user_collect = isUserCollect
-       article.userInfo = resUser.data[0]
        ctx.rest(Result.create(0,article))
      },
 
