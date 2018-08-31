@@ -2,21 +2,21 @@
       <div  class="container" >
           <div class="main-page">
             <div class="myAttentions"> 
-                <div v-for="att in attentioned" v-bind:key="att.user_id">
-                   <img class="userHead" :src="att.user_image_url" alt="">
-                    <div>
-                        <div class="userRealName">
+                <div v-for="att in attentioned" @click="getUserArticles" v-bind:key="att.user_id" class="attentionedUsers">
+                   <img class="userHead"  :src="att.user_image_url" alt="">
+                 
+                        <div style="align-self:center;font-size:16px;color:gray">
                             {{att.user_real_name}}
                         </div>
-                    </div>
+          
                 </div>
                 
             </div>
-            <div  >
+            <div class="myAttentionsArticles" >
              <articleCell  v-for="art in pushedArticles" :key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 
                 <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadinMore" @click="getPushedArticles" class="loadmoreButton">加载更多文章</el-button>
+                    <el-button :loading="isLoadinMore" @click="getUserArticles" class="loadmoreButton">加载更多文章</el-button>
                 </div>
              </div>
           </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {userSetAttentioned,userAttentioned} from '../../../store/service'
+import {userSetAttentioned,userAttentioned,articlesByUser} from '../../../store/service'
 import articleCell from './com/articleCell.vue'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
@@ -40,7 +40,8 @@ import blogFoot from './../com/blogFoot.vue'
                 attentionedUserArticles:[],
                 isLoadinMore:false,
                 attentionedUserArticlesCount:0,
-                pushedArticles:[]
+                pushedArticles:[],
+                selectedUserId:0
             }
         },
         async mounted(){
@@ -54,11 +55,19 @@ import blogFoot from './../com/blogFoot.vue'
                 let res = await userAttentioned(id)
                 if(res.code == 0){
                     console.log(res.data)
-                    this.attentioned = this.collectedArticles
+                    this.attentioned = res.data
+                    this.selectedUserId = this.attentioned[0].user_id
+                    this.getUserArticles()
                 }
             },
-            getPushedArticles(){
-
+            async getUserArticles(){
+                let res = await articlesByUser(this.selectedUserId,this.pushedArticles.length / 10,10)
+                if(res.code != 0){
+                    toast(this,res.cMsg)
+                    return
+                }
+                // this.attentionedUserArticlesCount = res.count
+                this.pushedArticles = res.data
             }
         },
         components:{
@@ -76,6 +85,18 @@ import blogFoot from './../com/blogFoot.vue'
     display: flex;
 }
 .myAttentions{
-    width: 200px;
+    width: 300px;
+}
+.attentionedUsers{
+    display: flex;
+    padding: 10px 20px 10px 20px;
+    
+}
+.attentionedUsers:hover{
+    cursor: pointer;
+    background: #dddddddd;
+}
+.myAttentionsArticles{
+    padding: 0px 20px 0px 20px;
 }
 </style>

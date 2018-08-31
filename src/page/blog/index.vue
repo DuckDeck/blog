@@ -311,14 +311,7 @@ import blogFoot from './com/blogFoot.vue'
 .articleRightContent div:hover{
     cursor: pointer;
 }
-.userHead{
-    width: 44px;
-    height: 44px;
-    border-radius: 22px;
-    border: 1px solid #aaa;
-    margin-right: 10px;
-    margin-left: -10px;
-}
+
 .userRealName{
     font-size: 15px;
 }
