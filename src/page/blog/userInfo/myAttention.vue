@@ -14,7 +14,7 @@
                 
             </div>
             <div class="myAttentionsArticles" >
-             <articleCell  v-for="art in pushedArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
+             <articleCell  v-for="art in attentionedUserArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
                 
                 <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
                     <el-button :loading="isLoadinMore" @click="getUserArticles" class="loadmoreButton">加载更多文章</el-button>
@@ -41,7 +41,6 @@ import blogFoot from './../com/blogFoot.vue'
                 attentionedUserArticles:[],
                 isLoadinMore:false,
                 attentionedUserArticlesCount:0,
-                pushedArticles:[],
                 selectedUserId:0
             }
         },
@@ -57,21 +56,25 @@ import blogFoot from './../com/blogFoot.vue'
                 if(res.code == 0){
                     console.log(res.data)
                     this.attentioned = res.data
-                    
-                    this.attentionedUserArticlesCount = res.count
+                    this.selectedUserId = this.attentioned[0].user_id
                     this.getUserArticles(this.attentioned[0])
                 }
             },
             async getUserArticles(user){
-                this.pushedArticles = []
-                this.selectedUserId = user.user_id
-                let res = await articlesByUser(this.selectedUserId,this.pushedArticles.length / 10,10)
+                
+                if(user.user_id){
+                    this.attentionedUserArticles = []
+                    this.selectedUserId = user.user_id
+                }
+                
+
+                let res = await articlesByUser(this.selectedUserId,this.attentionedUserArticles.length / 10,10)
                 if(res.code != 0){
                     toast(this,res.cMsg)
                     return
                 }
-                // this.attentionedUserArticlesCount = res.count
-                this.pushedArticles = res.data
+                this.attentionedUserArticlesCount = res.count
+                this.attentionedUserArticles = this.attentionedUserArticles.concat(res.data)  
             }
         },
         components:{

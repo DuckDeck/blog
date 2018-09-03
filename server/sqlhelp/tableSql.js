@@ -286,25 +286,53 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
 
 
 
+
+
+
+
+
+
+
+
    createMapArticleTagView:`create view article_tag_map_view as  select tag.* , 
    map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id`,
-   createUserInfoView:`
-    CREATE VIEW user_detail AS
-select 
- a.user_group_id ,
- a.user_name ,
- a.user_password ,
- a.user_token ,
- a.user_isSendEmail ,
- a.user_isValidate ,
- a.user_register_time ,
- a.user_register_ip ,
- a.user_login_times ,
- a.user_last_login_ip ,
- a.user_lock ,
- a.user_freeze ,
- a.user_auth ,b.*
- from user a join user_info b on a.user_id = b.user_id
+   createArticleRelatedView:`
+    CREATE VIEW article_related_info AS
+    SELECT 
+       article.article_id AS article_id,
+       article.article_name AS article_name,
+       article.article_release_time AS article_release_time,
+       article.article_create_time AS article_create_time,
+       article.article_brief AS article_brief,
+       article.article_click AS article_click,
+       article.user_id AS user_id,
+       article.article_main_img AS article_main_img,
+       article.delete_flag AS delete_flag,
+        (SELECT 
+                COUNT(user_comment.comment_id)
+            FROM
+                user_comment
+            WHERE
+                (article.article_id = user_comment.comment_target_id)) AS comment_count,
+        (SELECT 
+                COUNT(like_article.like_id)
+            FROM
+                like_article
+            WHERE
+                (like_article.article_id = article.article_id)) AS like_count,
+        (SELECT 
+                article_sort.sort_article_name
+            FROM
+                article_sort
+            WHERE
+                (article_sort.sort_article_id = article.article_sort_id)) AS article_sort_name,
+        user_info.user_real_name AS user_real_name,
+        user_info.user_image_url AS user_image_url
+    FROM
+        (article
+        JOIN user_info ON ((article.user_id = user_info.user_id)))
+    WHERE
+        (article.article_status = 1)
    `,
     createTagMapView:`create view article_tag_map_view as  select tag.* , 
 map.article_id from article_tag as tag left join article_tag_map as map on tag.tag_id = map.tag_id`,
