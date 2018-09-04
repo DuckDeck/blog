@@ -19,10 +19,9 @@
                         
                         </div>
                        <button v-show="isMine" @click="writeArticle" class="writeArticle">写文章</button>
-                       <!-- <div>
-                           <span v-show="showAttention"   @click="attentionUser"> 
-                            <i  class="fa-plus,fa" ></i> 关注 </span>
-                        </div> -->
+                       <button v-show="!isMine" @click="attentionUser" v-bind:class="[userInfo.is_attention?'attentionUser':'attentionedUser']">
+                           {{userInfo.is_attention?"已关注":"关注"}}</button>
+                     
                     </div>
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
@@ -95,7 +94,7 @@
 </template>
 
 <script>
-import {getUserInfo,getDynamics,getUserComments,articlesByUser,likedArticlesByUser,userLikeArticle} from '../../../store/service'
+import {getUserInfo,getDynamics,getUserComments,articlesByUser,likedArticlesByUser,userLikeArticle,userSetAttentioned} from '../../../store/service'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
@@ -247,8 +246,16 @@ import emptyHint from './../com/emptyHint.vue'
            localStorage.sortId = sort.sort_article_id
            this.$router.push('/sortArticleList/' + sort.user_id)
        },
-       attentionUser(){
-
+       async attentionUser(){
+            if(!isLogin()){
+                toast(this,"请先登录再关注该作者")
+                return
+            }
+            let res = await userSetAttentioned(this.userInfo.user_id,!this.userInfo.is_attention)
+            if(res.code != 0){
+                toast(this,res.cMsg)
+            }
+            this.userInfo.is_attention = !this.userInfo.is_attention
        }
     },
     components:{
@@ -266,9 +273,6 @@ import emptyHint from './../com/emptyHint.vue'
             }
             return false
         },
-        showAttention(){
-              return true
-        }
     }
 
   }
@@ -320,9 +324,37 @@ import emptyHint from './../com/emptyHint.vue'
     font-size: 16px;
     width: 90px;
     height: 40px;
-    margin-top: 20px;
+    align-self: center;
 }
 .writeArticle:hover{
+    cursor: pointer;
+}
+.attentionUser{
+    background: orangered;
+    color: white;
+    border: 0px;
+    padding: 8px;
+    font-size: 16px;
+    width: 90px;
+    height: 40px;
+    align-self: center;
+    margin-left: 1rem;
+}
+.attentionedUser{
+    background: orangered;
+    color: white;
+    border: 0px;
+    padding: 8px;
+    font-size: 16px;
+    width: 90px;
+    height: 40px;
+    align-self: center;
+    margin-left: 1rem;
+}
+.attentionedUser:hover{
+    cursor: pointer;
+}
+.attentionUser:hover{
     cursor: pointer;
 }
 .articleUserInfoRight{

@@ -83,7 +83,8 @@ export const resetPassword = function(dict){
 }
 
 export const getUserInfo = function(user_id){
-    const url = HostName +  'user/' + user_id 
+    let id = userId() || 0
+    const url = HostName +  'user/' + user_id + '/' + id + '/' + createToken()
     return setpromiseGet(url)
 }
 

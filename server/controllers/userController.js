@@ -372,11 +372,20 @@ module.exports = {
        res.data = {url:urlPath}
        ctx.rest(res)
      },
-    
-    'GET /api/user/:userId': async (ctx, next) => {
-       let id = ctx.params.userId
-       //获取个人信息
-       let res = await User.userInfoById(id)
+    //获取个人信息
+    'GET /api/user/:targetUserId/:userId/:token': async (ctx, next) => {
+        //因为上传图片要很多时间，所以这埋在的checkToken时间就不够，就会有问题
+        if (ctx.params.userId == 0){
+            let res = await Check.checkToken(ctx,999999)
+            if(res.code != 0){
+                ctx.rest(res)
+                return
+            }
+        }
+       let targetUserId = ctx.params.targetUserId
+       let userId =  ctx.params.userId
+       //获取用户信息
+       let res = await User.userInfoById(targetUserId)
        if(res.code != 0){
           ctx.rest(res)
           return
@@ -389,19 +398,33 @@ module.exports = {
        if(!userInfo.article_count){
            userInfo.article_count = 0
        }
-       res = await Link.userLinks(id)
+       //获取用户链接
+       res = await Link.userLinks(targetUserId)
        if(res.code != 0){
           ctx.rest(res)
           return
        }
        userInfo.links = res.data
-       
-       res = await Sort.sorts(id)
+       //获取分类
+       res = await Sort.sorts(targetUserId)
        if(res.code != 0){
           ctx.rest(res)
           return
        }
        userInfo.sorts = res.data
+       userInfo.is_attention = false
+       //获取是否关注
+       if(userId >0){
+           res = await DB.exec('select count(a_id) from user_attention where user_id = ? and attention_id = ?',[userId,targetUserId])
+           if(res.code == 0){
+               if(res.data.count == 0){
+                    userInfo.is_attention = false
+               }
+               else{
+                  userInfo.is_attention = true
+               }
+           }
+       }
        ctx.rest(Result.create(0,userInfo))
      },
     

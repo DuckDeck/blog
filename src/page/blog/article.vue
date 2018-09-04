@@ -98,7 +98,7 @@ import collectArticle from './com/collectArticle.vue'
             }
         },
         userHeadClick(userInfo){
-             this.$router.push('/userInfo/' + userInfo.user_id)
+             this.$router.push('/userInfo/' + userInfo.user_id + "/articles")
         },
         async submitComment(com){
            if(com == ''){

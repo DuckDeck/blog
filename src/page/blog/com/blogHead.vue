@@ -102,6 +102,8 @@
                     this.$router.push('/writeArticle/0')
                 }
                 else if(command == 'mypage'){
+                    let last = this.$router
+                    console.log(last)
                     this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
                 }
                 else if(command == "like"){
