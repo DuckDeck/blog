@@ -14,7 +14,7 @@
 
           <div class="uploadedContainer">
               <div v-for="f in files" class="uploadedContent">
-                  <img :src="f.file_url" alt="">
+                  <img  :src="f.file_url" alt="">
                   <span class="uploadedFileName">{{f.file_name}}</span>
                    <el-button size="small" @click = "deleteFile(f)">删除</el-button>
               </div>
@@ -83,6 +83,7 @@ import {getStoredFiles,deleteFile}  from '../../store/manageService'
         height:160px;
         border-radius: 5px;
         margin-bottom: 10px;
+        object-fit: cover;
     }
     .uploadedFileName{
         display: block;

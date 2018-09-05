@@ -4,6 +4,8 @@
             <img :src="dynamicInfo.user_info.user_image_url" alt="">
             <span style="margin-left:10px">{{dynamicInfo.user_info.user_real_name}}</span>
             <span>{{dynamicInfo.dynamic_type_name}}</span>
+            <span class="userAttentionedUser" style="margin-left:10px" 
+            v-show="dynamicInfo.dynamic_type_id == 10 || dynamicInfo.dynamic_type_id == 11">{{dynamicInfo.selfObject.user_real_name}}</span>
             <span style="margin-left:10px">{{createTime}}</span>
         </div>
          <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 4">
@@ -22,6 +24,7 @@
                </div>
              </div> 
            </div>
+
            <div class="dynamicComment" v-if = "dynamicInfo.dynamic_type_id == 1 || dynamicInfo.dynamic_type_id == 12 || dynamicInfo.dynamic_type_id == 13">
             <div class="articleCellContent">
                 <div >
@@ -68,7 +71,8 @@
         },
         formaTime(time){
              return moment(time)
-        }
+        },
+        
     },
     computed:{
         createTime(){
@@ -100,5 +104,8 @@
      border-left: 5px solid #999;
     margin-top: 10px;
     padding-left: 20px;
+}
+.userAttentionedUser{
+    color: orangered
 }
 </style>

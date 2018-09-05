@@ -444,6 +444,7 @@ display: inline-block;
     width: 128px;
     height: 128px;
     display: block;
+    object-fit: cover
   }
   .headinfoManageTitleClass{
        color: white;

@@ -163,7 +163,6 @@ module.exports = {
         let mailResult = await Tool.sendEmailToActive(m.nickName,m.email,config.emailPath + "#/active/"+id+"/" + activityCode)
         ctx.rest(Result.create(0))
       },
-    
     //todo active route need change add the user id to tell the active is need or not
     'GET /api/active/:code': async (ctx, next) => {
         let code = ctx.params.code
@@ -427,7 +426,7 @@ module.exports = {
        }
        ctx.rest(Result.create(0,userInfo))
      },
-    
+    //获取用户动态
     'GET /api/userdynamic/:userId/:index/:size': async (ctx, next) => {
        let pageResult = Check.checkPage(ctx)
        if(pageResult){
@@ -483,6 +482,12 @@ module.exports = {
              return s.dynamic_target_belong_id
            }
             return 0
+        })
+        let sqlAttentionUsers = dynamics.map(s=>{
+            if(s.dynamic_type_id == 10 || s.dynamic_type_id == 11){
+               return s.dynamic_target_belong_id
+             }
+             return 0
         })
        if(sqlSubCommendIds.length > 0){
             sql =  `select comment_id,comment_target_user_id,comment_target_id,comment_content,commenter_user_id,
@@ -589,13 +594,27 @@ module.exports = {
                     })
                     day.selfObject = art
                 }
-                
             }
+       }
+       if(sqlAttentionUsers.length > 0){
+          sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + sqlAttentionUsers.join(',') + `)`
+          res =  res = await DB.exec(sql)
+          if(res.code != 0){
+              ctx.rest(res)
+              return
+          }
+          for(var day of dynamics){
+            if(day.dynamic_type_id == 10 || day.dynamic_type_id == 11){
+                let user = res.data.find(s=>{
+                    return s.user_id == day.dynamic_target_belong_id && (day.dynamic_type_id == 10 || day.dynamic_type_id == 11)
+                })
+                day.selfObject = user
+            }
+        }
        }
        ctx.rest(Result.createCount(0,count,dynamics))
      },
-
-
+    //获取用户评论
     'GET /api/usercomment/:userId/:index/:size': async (ctx, next) => {
        let pageResult = Check.checkPage(ctx)
        if(pageResult){
@@ -672,8 +691,8 @@ module.exports = {
        }
        ctx.rest(Result.createCount(0,count,comments))
      },
-
-     'GET /api/userliked/:userId/:index/:size': async (ctx, next) => {
+     //获取用户喜欢的文章
+    'GET /api/userliked/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -713,8 +732,8 @@ module.exports = {
         }
         ctx.rest(Result.createCount(0,count,res.data))    
       },
-
-     'GET /api/usercollected/:userId/:index/:size': async (ctx, next) => {
+     //获取用户收藏的文章 
+    'GET /api/usercollected/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
             ctx.rest(pageResult)
@@ -754,7 +773,7 @@ module.exports = {
         }
         ctx.rest(Result.createCount(0,count,res.data))    
       },
-      
+    //获取用户关注的人  
     'GET /api/userattentioned/:userId/:index/:size': async (ctx, next) => {
         let pageResult = Check.checkPage(ctx)
         if(pageResult){
@@ -782,7 +801,7 @@ module.exports = {
         }
         ctx.rest(Result.createCount(0,count,res.data))    
     },
-
+    //获取用户关注的人  
     'GET /api/userattentioned/:userId/': async (ctx, next) => {
         let id = ctx.params.userId
         let sql = `select count(a_id) as count from user_attention where user_id = ?`
@@ -811,7 +830,7 @@ module.exports = {
         }
         ctx.rest(Result.createCount(0,count,res.data))    
     },
-
+    //用户收藏文章
     'GET /api/usersetcollect/:articleId/:isCollect/:userId/:token': async (ctx, next) => {
         var  t = ctx.params
         console.log(t)
@@ -855,7 +874,7 @@ module.exports = {
        }
        ctx.rest(res || Result.create(-50))
     },
-
+    //用户喜欢文章
     'GET /api/usersetlike/:articleId/:isLike/:userId/:token': async (ctx, next) => {
         var  t = ctx.params
         let checkResult = Check.checkNum(t,'userId')
@@ -898,7 +917,7 @@ module.exports = {
        }
        ctx.rest(res || Result.create(-50))
     },
-
+    //用户关注某人
     'GET /api/usersetattention/:targetUserId/:isAttention/:userId/:token': async (ctx, next) => {
         var  t = ctx.params
         let checkResult = Check.checkNum(t,'userId')
@@ -943,7 +962,7 @@ module.exports = {
        }
        ctx.rest(res || Result.create(-50))
     },
-
+    //用户更新基本信息
     'POST /api/user/updatebasic': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(t,'user_id')
@@ -990,8 +1009,7 @@ module.exports = {
         res = await DB.exec(sql,[user_real_name,user_id]) 
         ctx.rest(res)
      },
-
-
+     //用户更新个人信息
     'POST /api/user/updateindividual': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(t,'user_id')
@@ -1074,8 +1092,7 @@ module.exports = {
         
         ctx.rest(Result.create(0))
       },
-
-      
+      //用户更新密码
     'POST /api/user/updatepassword': async (ctx, next) => {
         var  t = ctx.request.body
         let userIdResult = Check.checkNum(t,'user_id')

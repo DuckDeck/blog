@@ -101,9 +101,7 @@ import {articlesNewComment} from '../../store/manageService'
 .el-dialog__headerbtn{
 display:  none;
 }
-.table td, .table th{
-    padding: 0rem;
-}
+
 .table thead th{
     vertical-align: middle;
     text-align: center;

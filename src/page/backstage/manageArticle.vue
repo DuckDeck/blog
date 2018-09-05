@@ -168,9 +168,6 @@ import {allArticle,releaseArticle,deleteAticleByManage} from  '../../store/manag
 .el-dialog__headerbtn{
 display:  none;
 }
-.table td, .table th{
-    padding: 0rem;
-}
 .table thead th{
     vertical-align: middle;
     text-align: center;

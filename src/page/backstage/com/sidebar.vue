@@ -17,7 +17,7 @@
                 <i class="el-icon-picture"> </i>文件管理
             </el-menu-item>
             <el-menu-item index="systemSetting">
-                <i class="el-icon-setting"> </i>系统设计
+                <i class="el-icon-setting"> </i>系统设置
             </el-menu-item>
             <el-menu-item index="managerSetting">
                 <i class="el-icon-setting"> </i>管理员管理
