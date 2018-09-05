@@ -591,3 +591,16 @@ CREATE TABLE `blog`.`chat_message` (
   `send_status` INT NOT NULL,
   `chat_content` LONGTEXT NULL,
   PRIMARY KEY (`id`));
+
+
+目前这里定为5种信息
+1 评论
+2 喜欢和赞
+3 关注
+4 私信
+5 系统通知
+6 用户动态
+7 消息 （用于即时通信）
+8 其他
+下面是弄表
+
