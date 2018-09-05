@@ -375,7 +375,7 @@ module.exports = {
     //获取个人信息
     'GET /api/user/:targetUserId/:userId/:token': async (ctx, next) => {
         //因为上传图片要很多时间，所以这埋在的checkToken时间就不够，就会有问题
-        if (ctx.params.userId == 0){
+        if (ctx.params.userId != 0){
             let res = await Check.checkToken(ctx,999999)
             if(res.code != 0){
                 ctx.rest(res)
@@ -415,9 +415,9 @@ module.exports = {
        userInfo.is_attention = false
        //获取是否关注
        if(userId >0){
-           res = await DB.exec('select count(a_id) from user_attention where user_id = ? and attention_id = ?',[userId,targetUserId])
+           res = await DB.exec('select count(a_id) as count from user_attention where user_id = ? and attention_id = ?',[userId,targetUserId])
            if(res.code == 0){
-               if(res.data.count == 0){
+               if(res.data[0].count == 0){
                     userInfo.is_attention = false
                }
                else{

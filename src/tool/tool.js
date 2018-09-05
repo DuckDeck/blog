@@ -250,11 +250,23 @@ global.register = function(){
   
 }
 
-global.toast = function(vue,message){
+global.toast = function(vue,message,type='normal'){
     if(globalVue != vue){
         globalVue = vue
     }
-    vue.$message(message);
+    if(type == 'error'){
+        vue.$message.error(message);
+    }
+    else if (type == "normal"){
+        vue.$message(message);
+    }
+    else{
+        vue.$message({
+            message:message,
+            type:type
+        });
+    }
+   
 }
 
 global.callBack = function(result){

@@ -13,9 +13,9 @@
                 </div>
                 
             </div>
-            <div class="myAttentionsArticles" >
+            <div class="myAttentionsArticles" v-loading="loading">
              <articleCell  v-for="art in attentionedUserArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
-                
+                 <emptyHint v-show="attentionedUserArticlesCount == 0"></emptyHint>
                 <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
                     <el-button :loading="isLoadinMore" @click="getUserArticles" class="loadmoreButton">加载更多文章</el-button>
                 </div>
@@ -41,7 +41,8 @@ import blogFoot from './../com/blogFoot.vue'
                 attentionedUserArticles:[],
                 isLoadinMore:false,
                 attentionedUserArticlesCount:0,
-                selectedUserId:0
+                selectedUserId:0,
+                loading:false,
             }
         },
         async mounted(){
@@ -61,14 +62,13 @@ import blogFoot from './../com/blogFoot.vue'
                 }
             },
             async getUserArticles(user){
-                
                 if(user.user_id){
                     this.attentionedUserArticles = []
                     this.selectedUserId = user.user_id
                 }
-                
-
+                this.loading = true
                 let res = await articlesByUser(this.selectedUserId,this.attentionedUserArticles.length / 10,10)
+                this.loading = false
                 if(res.code != 0){
                     toast(this,res.cMsg)
                     return
@@ -92,7 +92,7 @@ import blogFoot from './../com/blogFoot.vue'
     display: flex;
 }
 .myAttentions{
-    width: 400px;
+    min-width: 200px;
     border-right: 2px solid peru
 }
 .attentionedUsers{
@@ -113,5 +113,6 @@ import blogFoot from './../com/blogFoot.vue'
 .myAttentionsArticles{
     border-left: 2px solid peru;
     padding: 0px 40px 0px 40px;
+    width: 100%
 }
 </style>

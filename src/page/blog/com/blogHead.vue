@@ -104,7 +104,7 @@
                 else if(command == 'mypage'){
                     let last = this.$router
                     console.log(last)
-                    //这个不好解决，同一个页面不能被PUSH，这是个严重的问题
+                    //ISSUE1 这个不好解决，同一个页面不能被PUSH，这是个严重的问题
                     //暂时放着吧
                     this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
                 }
@@ -182,7 +182,7 @@
 .userheadimg{
     width: 40px;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 20px;
     margin-right: 10px;
 }
 .el-dropdown-menu__item{
