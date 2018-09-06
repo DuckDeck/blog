@@ -40,7 +40,7 @@
 
                         <articleCell @userHeadClick="userHeadClick" v-for="art in articles" :articleInfo = "art"></articleCell>
                         <emptyHint v-show="articleCount == 0" />
-                        <div v-show="articles.length < articleCount" class="loadMoreDiv">
+                        <div v-show="articles.length < articleCount" class="loadMore">
                             <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
                         </div>
                         

@@ -45,7 +45,7 @@
                     </div>
                     <div class="completeFeatureDiv">
                         已完成功能
-                        <el-checkbox style="margin-left: 15px;" checked label="注册，登录" ></el-checkbox>
+                        <el-checkbox style="margin-left: 30px;" checked label="注册，登录" ></el-checkbox>
                         <el-checkbox checked label="搜索文章，作者，分类功能" ></el-checkbox>
                         <el-checkbox checked label="发送邮箱验证用户和重设密码" ></el-checkbox>
                         <el-checkbox checked label="文章标签和分类功能" ></el-checkbox>
@@ -57,16 +57,16 @@
                     </div>
                     <div class="unCompletedFeatureDiv">
                         存在问题
-                        <el-checkbox style="margin-left: 15px;"  label="富文本不能上传图片到server" ></el-checkbox>
+                        <el-checkbox style="margin-left: 30px;"  label="富文本不能上传图片到server" ></el-checkbox>
                         <el-checkbox  label="富文本和Markdown不能完全正确转换" ></el-checkbox>
                         <el-checkbox  label="Markdown编辑器存在一些Bug，比如会重新刷新页面" ></el-checkbox>
                     </div>
                     <div class="unCompletedFeatureDiv">
                         未完成功能
-                        <el-checkbox  style="margin-left: 15px;" label="修改评论" ></el-checkbox>
+                        <el-checkbox  style="margin-left: 30px" label="修改评论" ></el-checkbox>
                         <el-checkbox  label="网站HTTPS支持" ></el-checkbox>
-                        <el-checkbox  label="关注其他作者，粉丝功能" ></el-checkbox>
-                        <el-checkbox  label="收藏文章,点赞文章" ></el-checkbox>
+                        <el-checkbox  checked label="关注其他作者，粉丝功能" ></el-checkbox>
+                        <el-checkbox  checked label="收藏文章,点赞文章" ></el-checkbox>
                         <el-checkbox  label="用户相册功能" ></el-checkbox>
                         <el-checkbox  label="用户之间私信功能和系统通知功能" ></el-checkbox>
                         <el-checkbox  label="其他更多......" ></el-checkbox>
@@ -76,7 +76,7 @@
                 </div>
                
             </div>
-            <div class="aboutAuthor">
+            <div class="aboutBlogTitle">
                 网络开发者Stan
             </div>
             <div class="contactAuthor">
@@ -89,7 +89,7 @@
                     </li>
                 </ul>
             </div>
-             <div class="aboutRight">
+             <div class="aboutBlogTitle">
                 版权声明
             </div>
             <div class="rightDetail">
@@ -148,9 +148,11 @@ import blogLogo from './com/blogLogo.vue'
 }
 .completeFeatureDiv{
     padding: 10px;
+   
 }
 .completeFeatureDiv label{
     display: block;
+    margin-top: 8px;
 }
 .unCompletedFeatureDiv{
  padding: 10px;
@@ -158,19 +160,12 @@ import blogLogo from './com/blogLogo.vue'
 
 .unCompletedFeatureDiv label{
     display: block;
+    margin-top: 8px;
 }
-.aboutAuthor{
-    padding: 20px;
-    font-size: 18px;
-}
+
 .contactAuthor{
      font-size: 18px;
 }
-.aboutRight{
-      padding: 20px;
-    font-size: 18px;
-}
-
 .rightDetail{
      padding: 20px;
     padding-bottom: 50px;

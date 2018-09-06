@@ -25,7 +25,7 @@
                         </div>
                         <userComment @userHeadClick="userHeadClick" v-for="com in comments" :comment="com" ></userComment>
                     </div>
-                    <div v-show="comments.length < commentCount" class="loadMoreDiv">
+                    <div v-show="comments.length < commentCount" class="loadMore">
                         <el-button :loading="isLoadingMore" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
                     </div>
                     </div>

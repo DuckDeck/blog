@@ -4,7 +4,8 @@
        <blogSwiper class="blogSwiper" :articles = "top"></blogSwiper>
        <div class="blogContent">
            <div class="articlesList">
-               <div style="position: relative;margin-top: 20px;margin-bottom: 10px;padding-bottom: 20px;" v-for="art in articles">
+               <div style="position: relative;margin-top: 20px;margin-bottom: 10px;padding-bottom: 20px;" 
+               v-for="art in articles" v-bind:key="art.article_id">
                    <div class="releaseDate">
                        <div style="font-size: 15px;margin-top: 2px;">
                           {{getMonth(art.article_release_time)}}
@@ -38,9 +39,7 @@
                   
                </div>
                <!--这里面以添加加载细节-->
-               <div class="loadMore" @click="loadMore" v-show="articles.length < articlesCount">
-                   {{loadMoreWord}}
-               </div>
+               <loadMore :isLoading="isLoading" v-show="articles.length < articlesCount"  @loadmore="loadMore"></loadMore>
            </div>
            <div class="articlesNews">
                <div class="articleSort">
@@ -49,7 +48,7 @@
                        
                    </div>
                    <div class="articleRightContent">
-                       <div v-for = "sort in sorts" @click="gotoSort(sort)"  >{{sort.sort_name}}</div>
+                       <div v-for = "sort in sorts" @click="gotoSort(sort)" v-bind:key="sort.sort_id"  >{{sort.sort_name}}</div>
                    </div>
                </div>
 
@@ -58,7 +57,7 @@
                        <span>最新评论</span>
                    </div>
                     <div class="articleRightContent">
-                        <div style="display: flex;margin-bottom: 5px;cursor:pointer" v-for="com in newComment" @click="gotoUserInfo(com)">
+                        <div style="display: flex;margin-bottom: 5px;cursor:pointer" v-for="com in newComment" v-bind:key="com.comment_id" @click="gotoUserInfo(com)">
                             <img class="userHead" :src="com.user_image_url" alt="">
                             <div>
                                 <div class="userRealName"  >
@@ -76,7 +75,7 @@
                        <span>推荐作者</span>
                    </div>
                     <div class="articleRightContent">
-                      <div  style="display: flex;" v-for="author in authors" @click="gotoUserInfo(author)">
+                      <div  style="display: flex;" v-for="author in authors" v-bind:key="author.user_id" @click="gotoUserInfo(author)">
                             <img class="userHead" :src="author.user_image_url" alt="">
                             <div>
                                 <div class="userRealName">
@@ -102,6 +101,7 @@ import blogLogo from './com/blogLogo.vue'
 import blogSwiper from './com/blogSwiper.vue'
 import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
+import loadMore from './com/loadMore.vue'
   export default {
     data() {
       return {
@@ -113,7 +113,7 @@ import blogFoot from './com/blogFoot.vue'
             authors:[],
             pageIndex:0,
             articlesCount:0,
-            loadMoreWord:'加载更多...',
+            isLoading:false,
             swiperOption: {
                 pagination: '.swiper-pagination',
                 slidesPerView: 1,
@@ -154,7 +154,7 @@ import blogFoot from './com/blogFoot.vue'
         
     },
     components:{
-        blogLogo,blogSwiper,upToTop,blogFoot
+        blogLogo,blogSwiper,upToTop,blogFoot,loadMore
     },
     methods:{
        
@@ -195,15 +195,14 @@ import blogFoot from './com/blogFoot.vue'
         },
      
         async loadMore(){
-            this.loadMoreWord = '正在加载...'
+            this.isLoading = true
             let res = await indexMore(this.pageIndex)
-
+            this.isLoading = false
             if(res.code == 0){
                 if(res.data.length == 0){
                     toast(this,'已经全部加载完') 
                 }
                 else{
-                    this.loadMoreWord = '加载更多...'
                     this.articles =  this.articles.concat(Array.from(res.data))
                     this.pageIndex ++
                 }
