@@ -57,6 +57,146 @@ module.exports = {
         }
         ctx.rest(res)
      },
+     //管理员获取用户喜欢的文章列表
+     'GET /api/manage/userlikearticle/:userId/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = parseInt(ctx.params.userId)
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let sql = `select count(like_id) as count from like_article where user_id = ?`
+        let res = await DB.exec(sql,[userId])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select article_id from like_article where user_id = ? order by like_time desc limit ?,?",[userId,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        let articles = res.data
+        let articleIds = articles.map(s=>{
+            return s.article_id
+        })
+        sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        //注意，这进而是有被删除的文章的，因为我没有完全删除。
+        //所以如果喜欢的文章被删除的话，这里就要产品来判断还要不要返回给已经设为喜欢的文章的用户了
+        //这里我就直接返回了
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        ctx.rest(Result.createCount(0,count,res.data))
+     },
+     //管理员获取用户收藏的文章列表
+     'GET /api/manage/usercollectarticle/:userId/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = parseInt(ctx.params.userId)
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let sql = `select count(collect_id) as count from collect_article where user_id = ?`
+        let res = await DB.exec(sql,[userId])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select article_id from collect_article where user_id = ? order by collect_time desc limit ?,?",[userId,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+
+        let articleIds = res.data.map(s=>{
+            return s.article_id
+        })
+        sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        //注意，这进而是有被删除的文章的，因为我没有完全删除。
+        //所以如果收藏的文章被删除的话，这里就要产品来判断还要不要返回给已经设为收藏的文章的用户了
+        //这里我就直接返回了
+        res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        ctx.rest(Result.createCount(0,count,res.data))  
+     },
+     //管理员获取用户关注的人
+     'GET /api/manage/userattentioned/:userId/:mId/:token/:index/:size': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let pageResult = Check.checkPage(ctx)
+        if(pageResult){
+            ctx.rest(pageResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = parseInt(ctx.params.userId)
+        let index = parseInt(ctx.params.index)
+        let size = parseInt(ctx.params.size)
+        let sql = `select count(a_id) as count from user_attention where user_id = ?`
+        let res = await DB.exec(sql,[userId])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+        res = await DB.exec("select * from user_attention where user_id = ? order by attention_time desc limit ?,?",[userId,index*size,size])
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        ctx.rest(Result.createCount(0,count,res.data))    
+     },
      //用户登录
     'POST /api/login': async (ctx, next) => {
        var

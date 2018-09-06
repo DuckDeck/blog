@@ -8,7 +8,7 @@
                    
          </div>
 
-         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+         <el-tabs v-model="activeName" type="card" @tab-click="handleClick" style="font-size:20px">
             <el-tab-pane label="个人详情" name="userInfo">
                  <div class="userInfoManageClass"> 
                     <div class="basicInfoManageClass" >

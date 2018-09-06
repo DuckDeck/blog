@@ -226,7 +226,7 @@ import emptyHint from './com/emptyHint.vue'
 .searchResultHint{
     background: white;
     font-size: 20px;
-    padding: 10px;
+    padding: 25px;
     color: #666;
 }
 .searchCount{
