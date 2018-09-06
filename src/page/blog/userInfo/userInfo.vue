@@ -26,64 +26,58 @@
                      <el-tabs v-model="activeName" class="userInfoTab" type="border-card" @tab-click="handleClick">
                         <el-tab-pane   name="articles">
                             <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
-                            <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
-                             <emptyHint v-show="articlesCount == 0"></emptyHint>
-                            <div v-show="articles.length < articlesCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
-                            </div>
+                            <articleCell v-for="art in articles" v-bind:key="art.article_id" :articleInfo = "art"></articleCell>
+                            <emptyHint v-show="articlesCount == 0"></emptyHint>
+                            <loadMore :isLoading="isLoading" v-show="articles.length < articlesCount"  @loadmore="loadMoreArticle"></loadMore>
                          </el-tab-pane>
                         <el-tab-pane  name="dynamic">
                             <span slot="label"><i class="el-icon-date"></i> 动态 </span>
-                            <dynamicCell @articleTitleClick="articleTitleClick" v-for="dynamic in dynamics" :dynamicInfo = "dynamic"></dynamicCell>
+                            <dynamicCell @articleTitleClick="articleTitleClick" v-for="dynamic in dynamics" v-bind:key="dynamic.dynamic_id" :dynamicInfo = "dynamic"></dynamicCell>
                              <emptyHint v-show="dynamicsCount == 0"></emptyHint>
-                            <div v-show="dynamics.length < dynamicsCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingDynamic" @click="loadMoreDynamic" class="loadmoreButton">加载更多动态...</el-button>
-                            </div>
+                            <loadMore :isLoading="isLoading" v-show="dynamics.length < dynamicsCount"  @loadmore="loadMoreDynamic"></loadMore>
                         </el-tab-pane>
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 评论 </span>
-                            <userCommentCell v-for="comment in comments" :commentInfo = "comment"></userCommentCell>
+                            <userCommentCell v-for="comment in comments" :commentInfo = "comment" v-bind:key="comment.comment_id"></userCommentCell>
                              <emptyHint v-show="commentsCount == 0"></emptyHint>
-                            <div v-show="comments.length < commentsCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多评论...</el-button>
-                            </div>
+                            <loadMore :isLoading="isLoading" v-show="comments.length < commentsCount"  @loadmore="loadMoreComment"></loadMore>
+
                         </el-tab-pane>
                         <el-tab-pane  name="like">
                             <span slot="label"><i class="fa fa-heart-o"></i> 喜欢的文章 </span>
-                            <articleCell @notLike="notLike" v-for="art in likeArticles" :articleInfo = "art"></articleCell>
+                            <articleCell @notLike="notLike" v-for="art in likeArticles" v-bind:key="art.article_id" :articleInfo = "art"></articleCell>
                             <emptyHint v-show="likeArticlesCount == 0"></emptyHint>
-                            <div v-show="likeArticles.length < likeArticlesCount" class="loadMoreDiv">
-                                <el-button :loading="isLoadingComment" @click="loadMoreComment" class="loadmoreButton">加载更多文章...</el-button>
-                            </div>
+                            <loadMore :isLoading="isLoading" v-show="likeArticles.length < likeArticlesCount"  @loadmore="loadMoreLikeArticles"></loadMore>
                         </el-tab-pane>
                     </el-tabs>
                 </div>
                 <div class="articleUserInfoRight">
                     <div>
-                        <div style="color: #888">
+                        <div class="littleProjectTitle">
                             作者个人介绍
                         </div>
-                        <div>
+                        <div style="margin-left:5px">
                             {{userInfo.user_description}}
                         </div>
                     </div>
                     <div class="userLinks">
-                         <div style="color: #888">
+                         <div class="littleProjectTitle">
                             {{isMine == true ? '我' : '他'}}的网站
                         </div>
-                        <div>
+                        <div style="margin-left:5px">
                             <a class="mylink" :href="link.link_url" v-for="link in userInfo.links" >{{link.link_name}}</a> 
                         </div>
                         
                     </div>
                     <div class="mySorts">
-                        <div style="color: #888">
+                        <div class="littleProjectTitle">
                             {{isMine == true ? '我' : '他'}}的分类
                         </div>
                         <div class="mySortsList">
-                            <div v-for="sort in userInfo.sorts" @click="gotoSort(sort)">
-                                {{sort.sort_article_name}}
-                            </div>
+                            <el-tag :key="sort.sort_id" v-for="sort in userInfo.sorts" type='primary'
+                             :close-transition="false" >
+                            <span  class="clickSpan" > {{sort.sort_article_name}}</span>
+                        </el-tag>
                         </div>
                     </div>
                 </div>
@@ -101,6 +95,7 @@ import articleCell from './com/articleCell.vue'
 import dynamicCell from './com/dynamicCell.vue'
 import userCommentCell from './com/userCommentCell.vue'
 import emptyHint from './../com/emptyHint.vue'
+import loadMore from './../com/loadMore.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -115,9 +110,7 @@ import emptyHint from './../com/emptyHint.vue'
           likeArticles:[],
           likeArticlesCount:-1,
           activeName:'articles',
-          isLoadingArticle:false,
-          isLoadingDynamic:false,
-          isLoadingComment:false,
+          isLoading:false,
           userId:0,
       }
     },
@@ -160,9 +153,9 @@ import emptyHint from './../com/emptyHint.vue'
            }
        },
        async getUserArticles(id){
-            this.isLoadingArticle = true
+            this.isLoading = true
             let res = await articlesByUser(id,this.articles.length / 10,10)
-            this.isLoadingArticle = false
+            this.isLoading = false
             if(res.code == 0){
                 this.articlesCount = res.count
                 this.articles = this.articles.concat(res.data)
@@ -170,9 +163,9 @@ import emptyHint from './../com/emptyHint.vue'
        },
        async getUserDynamics(id){
             let self = this
-            this.isLoadingDynamic = true
+            this.isLoading = true
             let res = await getDynamics(id,this.dynamics.length / 10,10)
-            this.isLoadingDynamic = false
+            this.isLoading = false
             if(res.code == 0){
                 this.dynamicsCount = res.count
                 this.dynamics = this.dynamics.concat(res.data.map(s=>{
@@ -183,9 +176,9 @@ import emptyHint from './../com/emptyHint.vue'
        },
        async getComments(id){
            let self = this
-           this.isLoadingComment = true
+           this.isLoading = true
            let res = await getUserComments(id,this.comments.length / 10,10)
-           this.isLoadingComment = false
+           this.isLoading = false
            if(res.code == 0){
                this.commentsCount = res.count
                this.comments = this.comments.concat(res.data.map(s=>{
@@ -195,9 +188,9 @@ import emptyHint from './../com/emptyHint.vue'
            }
        },
        async getLikedArticles(id){
-           this.isLoadingComment = true
+           this.isLoading = true
            let res = await likedArticlesByUser(id,this.likeArticles.length / 10,10)
-           this.isLoadingComment = false
+           this.isLoading = false
            if(res.code == 0){
                this.likeArticlesCount = res.count
                this.likeArticles = this.likeArticles.concat(res.data.map(s=>{
@@ -239,8 +232,11 @@ import emptyHint from './../com/emptyHint.vue'
         loadMoreDynamic(){
          this.getUserDynamics(this.userId)
        },
-        loadMoreComment(){
+       loadMoreComment(){
          this.getComments(this.userId)
+       },
+       loadMoreLikeArticles(){
+          this.getLikedArticles(this.userId)
        },
        gotoSort(sort){
            localStorage.sortId = sort.sort_article_id
@@ -259,7 +255,7 @@ import emptyHint from './../com/emptyHint.vue'
        }
     },
     components:{
-        upToTop,blogFoot,articleCell,dynamicCell,userCommentCell,emptyHint
+        upToTop,blogFoot,articleCell,dynamicCell,userCommentCell,emptyHint,loadMore
     },
     computed:{
         releaseDate(){
@@ -379,10 +375,17 @@ import emptyHint from './../com/emptyHint.vue'
     border-top: 1px sol
 }
 .mySortsList{
-margin-top: 10px;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
 }
-.mySortsList div:hover{
+.mySortsList span{
+    margin-bottom: 8px;
+}
+.mySortsList span:hover{
 cursor: pointer;
+
 }
  @media (max-width:900px){
      .userMainPage{

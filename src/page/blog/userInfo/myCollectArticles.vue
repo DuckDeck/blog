@@ -78,14 +78,15 @@ import blogFoot from './../com/blogFoot.vue'
 }
 .collectTitle{
     background-color: orangered;
-    width: 8rem;
+    width: 22rem;
     margin: 0 auto;
     color: azure;
-    font-size: 0.5rem;
-    padding-bottom: 0.3rem;
-    padding-top: 0.3rem;
-    margin-top: 10px;
-    text-align: center
+    font-size: 2rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 0.6rem;
 }
 .collectedArticles{
     padding-left: 1.6rem;

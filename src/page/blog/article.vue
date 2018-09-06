@@ -230,6 +230,8 @@ import collectArticle from './com/collectArticle.vue'
     text-align: center;
     margin-top: 30px;
     font-weight: bold;
+    padding: 2rem;
+    text-align: left;
 }
 .articleInfoClass{
     font-size: 20px;

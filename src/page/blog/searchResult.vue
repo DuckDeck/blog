@@ -12,7 +12,7 @@
                                 <div class="usersSearchResultTitle">
                                     相关用户
                                 </div>
-                                <div v-for="user in briefUsers" class="usersSearchResultLists" @click="gotoUser(user)">
+                                <div v-for="user in briefUsers" v-bind:key="user.user_id" class="usersSearchResultLists" @click="gotoUser(user)">
                                     <img class="usersSearchResultUserHead" :src="user.user_image_url" alt="">
                                     <div>
                                         <div>
@@ -28,7 +28,7 @@
                                 <div>
                                     相关分类
                                 </div>
-                                <div v-for="sort in briefSorts">
+                                <div v-for="sort in briefSorts" v-bind:key="sort.sort_id">
                                     
                                 </div>
                             </div>
@@ -38,19 +38,16 @@
                             共搜索出<span class="countResult">{{articleCount}}</span>篇文章
                         </div>
 
-                        <articleCell @userHeadClick="userHeadClick" v-for="art in articles" :articleInfo = "art"></articleCell>
+                        <articleCell @userHeadClick="userHeadClick" v-for="art in articles" v-bind:key="art.article_id" :articleInfo = "art"></articleCell>
                         <emptyHint v-show="articleCount == 0" />
-                        <div v-show="articles.length < articleCount" class="loadMore">
-                            <el-button :loading="isLoadingArticle" @click="loadMoreArticle" class="loadmoreButton">加载更多文章...</el-button>
-                        </div>
-                        
+                        <loadMore :isLoading="isLoadingArticle" v-show="articles.length < articleCount"  @loadmore="loadMoreArticle"></loadMore>
                         </el-tab-pane>
                      <el-tab-pane  name="users">
                         <span slot="label"><i class="fa fa-user-circle"></i> 用户 </span>
                         <div class="searchCount">
                             共搜索出<span class="countResult">{{userCount}}</span>个用户
                         </div>
-                        <div v-for="user in users" class="searchResultUsers" @click="gotoUser(user)">
+                        <div v-for="user in users" v-bind:key="user.user_id" class="searchResultUsers" @click="gotoUser(user)">
                             <img class="usersSearchResultUserHead" :src="user.user_image_url" alt="">
                                     <div>
                                         <div>
@@ -62,10 +59,7 @@
                                     </div>
                         </div>
                           <emptyHint v-show="userCount == 0" />
-                        <div v-show="users.length < userCount" class="loadMoreDiv">
-                            <el-button :loading="isLoadingArticle" @click="loadMoreUser" class="loadmoreButton">加载更多用户...</el-button>
-                        </div>
-
+                         <loadMore :isLoading="isLoadingArticle" v-show="users.length < userCount"  @loadmore="loadMoreUser"></loadMore>
                     </el-tab-pane>
                     <el-tab-pane  name="sorts">
                         <span slot="label"><i class="el-icon-menu"></i> 分类 </span>
@@ -73,14 +67,12 @@
                             共搜索出<span class="countResult">{{sortCount}}</span>个分类
                         </div>
                         <div  class="searchResultSorts">
-                            <el-button   v-for="sort in sorts"   @click="selectSort(sort)" >
+                            <el-button   v-for="sort in sorts" v-bind:key="sort.sort_id"   @click="selectSort(sort)" >
                                  {{sort.sort_article_name}}
                             </el-button>      
                         </div>
                          <emptyHint v-show="sortCount == 0" />
-                        <div v-show="sorts.length < sortCount" class="loadMoreDiv">
-                            <el-button :loading="isLoadingArticle" @click="loadMoreSort" class="loadmoreButton">加载更多分类...</el-button>
-                        </div>
+                        <loadMore :isLoading="isLoadingArticle" v-show="sorts.length < sortCount"  @loadmore="loadMoreSort"></loadMore>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -95,6 +87,7 @@ import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import articleCell from './userInfo/com/articleCell.vue'
 import emptyHint from './com/emptyHint.vue'
+import loadMore from './com/loadMore.vue'
 //todo comment sort feature
   export default {
     data() {
@@ -204,7 +197,7 @@ import emptyHint from './com/emptyHint.vue'
         }
     },
     components:{
-        upToTop,blogFoot,articleCell,emptyHint
+        upToTop,blogFoot,articleCell,emptyHint,loadMore
     },
     computed:{
         releaseDate(){

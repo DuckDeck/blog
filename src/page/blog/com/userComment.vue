@@ -26,7 +26,7 @@
                </div> 
                <div>
                    <span class="subCommentTime">{{formatData(subCom.comment_time)}}</span>
-                   <a class="subCommentReplay" @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i>回复</a>
+                   <a class="subCommentReplay" @click="writeSubComment(subCom)"><i class="fa fa-comment-o"></i> 回复</a>
                </div>
            </div>
        </div>
