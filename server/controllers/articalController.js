@@ -335,6 +335,9 @@ module.exports = {
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
                 }
+                if(m.articleMainImage.substr(0,3) == "src"){
+                    m.articleMainImage = m.articleMainImage.replace("src=","").replace(">","")
+                }
             }
         let resultArticle = {}
         let articleId = 0
@@ -387,6 +390,9 @@ module.exports = {
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
                 }
+                if(m.articleMainImage.substr(0,3) == "src"){
+                    m.articleMainImage = m.articleMainImage.replace("src=","").replace(">","")
+                }
             }
             let result2 = await Article.updateAtricle(m)
             if(result2.code != 0)
@@ -415,6 +421,9 @@ module.exports = {
                 let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
                 if(url && url.length > 0){
                     m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
+                }
+                if(m.articleMainImage.substr(0,3) == "src"){
+                    m.articleMainImage = m.articleMainImage.replace("src=","").replace(">","")
                 }
             }
             let result2 = await Article.save(m)
@@ -467,7 +476,17 @@ module.exports = {
         m.userId = id
         m.articalStatus = 1
         m.articleBrief = t.articleBrief
-        m.articleMainImage = t.articelImage
+        m.articleMainImage = ''
+        let imgTag = m.content.match(/<img.*?(?:>|\/>)/gi)
+        if(imgTag && imgTag.length  > 0){
+                let url = imgTag[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)
+                if(url && url.length > 0){
+                    m.articleMainImage = url[0].replace("src=\"","").replace("\"","")
+                }
+                if(m.articleMainImage.substr(0,3) == "src"){
+                    m.articleMainImage = m.articleMainImage.replace("src=","").replace(">","")
+                }
+            }
         let result2 = await Article.updateAtricle(m)
         if(result2.code != 0)
         {

@@ -42,7 +42,7 @@
                <loadMore :isLoading="isLoading" v-show="articles.length < articlesCount"  @loadmore="loadMore"></loadMore>
            </div>
            <div class="articlesNews">
-               <div class="articleSort">
+               <!-- <div class="articleSort"> 这个目前没什么用，因为每个人分类都不一样
                    <div class="articleRightTitle">
                        <span>文章分类</span>
                        
@@ -50,7 +50,7 @@
                    <div class="articleRightContent">
                        <div v-for = "sort in sorts" @click="gotoSort(sort)" v-bind:key="sort.sort_id"  >{{sort.sort_name}}</div>
                    </div>
-               </div>
+               </div> -->
 
                <div style="margin-top: 25px;">
                    <div class="articleRightTitle">
