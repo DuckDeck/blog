@@ -61,7 +61,7 @@ import loadMore from './../com/loadMore.vue'
                 }
             },
             async getUserArticles(user){
-                if(user.user_id){
+                if(user&&user.user_id){
                     this.attentionedUserArticles = []
                     this.selectedUserId = user.user_id
                 }

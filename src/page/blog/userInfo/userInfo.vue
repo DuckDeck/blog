@@ -12,7 +12,8 @@
                             </div>
                         <div>
                             <span>
-                                <span>发表的文章:{{userInfo.article_count}}</span>
+                                <span>发表的文章:{{userInfo.article_count}}</span> 
+                                <span>收获的喜欢:{{userInfo.articles_be_liked_count}}</span>
                             </span>
                         </div>
                             
@@ -294,9 +295,10 @@ import loadMore from './../com/loadMore.vue'
     width: 80px;
     height: 80px;
     border-radius: 40px;
+    object-fit: cover
 }
 .articleUserDetail{
-    font-size: 18px;
+    font-size: 16px;
     margin-left: 20px;
     margin-top: 15px;
     width: 70%;

@@ -58,7 +58,7 @@ import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle} fr
 import blogFoot from './com/blogFoot.vue'
 import { mavonEditor } from 'mavon-editor'
 import  toMarkdown  from 'to-markdown'
-
+import 'mavon-editor/dist/css/index.css'
 //wait to do auto save feature
     export default {
         data: function(){

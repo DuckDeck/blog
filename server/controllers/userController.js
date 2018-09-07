@@ -9,8 +9,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
-const imgPath = require('../../config/pathConfig')
-
+const config = require('../../config/pathConfig')
 
 module.exports = {
     //管理用户
@@ -296,7 +295,7 @@ module.exports = {
             return
         }
         let id = res.data.id
-        let img_path = imgPath.imgPath + "static/system/tra.png"
+        let img_path = config.imgPath + "static/system/tra.png"
         let sql = "insert into user_info (user_id,user_real_name,user_email,user_image_url) values (?,?,?,?)"
         res = await DB.exec(sql,[id,m.nickName,m.email,img_path])
         //todo. switch the domain
@@ -502,7 +501,7 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath.imgPath +  "static/myimg/" + newFileName
+       let urlPath = config.imgPath +  "static/myimg/" + newFileName
        let userInsert = {
            user_id:id,
            user_image_url:urlPath
@@ -554,7 +553,7 @@ module.exports = {
        userInfo.is_attention = false
        //获取用户的文章得的喜欢数
        userInfo.articles_be_liked_count = 0
-       res = await DB.exec('select count(like_id) as count from like_article where article_id in (select article_id from article where user_id = 1 and article_status = 1)',[targetUserId])
+       res = await DB.exec('select count(like_id) as count from like_article where article_id in (select article_id from article where user_id = ? and article_status = 1)',[targetUserId])
        if (res.code == 0){
           userInfo.articles_be_liked_count = res.data[0].count
        }
