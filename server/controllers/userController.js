@@ -552,6 +552,12 @@ module.exports = {
        }
        userInfo.sorts = res.data
        userInfo.is_attention = false
+       //获取用户的文章得的喜欢数
+       userInfo.articles_be_liked_count = 0
+       res = await DB.exec('select count(like_id) as count from like_article where article_id in (select article_id from article where user_id = 1 and article_status = 1)',[targetUserId])
+       if (res.code == 0){
+          userInfo.articles_be_liked_count = res.data[0].count
+       }
        //获取是否关注
        if(userId >0){
            res = await DB.exec('select count(a_id) as count from user_attention where user_id = ? and attention_id = ?',[userId,targetUserId])
