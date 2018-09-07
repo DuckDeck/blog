@@ -6,15 +6,14 @@
                     <userHead class="sortArticleUserHead" :userInfo = "userInfo"></userHead>
                 </div>
                <el-button   :class="[{selectedSortClass:selectedSort.sort_article_id == sort.sort_article_id},'sortCellClass']" v-for="sort in sorts"
-                  @click="selectSort(sort)" >
+                  @click="selectSort(sort)" v-bind:key="sort.sort_id" >
                       {{sort.sort_article_name}}
                </el-button>
             </div>
             <div class="blogSortArticleList">
-                 <articleCell v-for="art in articles" :articleInfo = "art"></articleCell>
-                 <div v-show="articles.length < articleCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadingArticles" @click="loadMoreArticle(false)" class="loadmoreButton">加载更多文章...</el-button>
-                </div>
+                 <articleCell v-for="art in articles" :articleInfo = "art" v-bind:key="art.article_id"></articleCell>
+                <loadMore :isLoading="isLoadingArticles" v-show="articles.length < articleCount"  @loadmore="loadMoreArticle(false)"></loadMore>
+
             </div>
         </div>
        <upToTop></upToTop>
@@ -28,6 +27,7 @@ import upToTop from './com/upToTop.vue'
 import blogFoot from './com/blogFoot.vue'
 import userHead from './com/userHeadInfo.vue'
 import articleCell from './userInfo/com/articleCell.vue'
+import loadMore from './com/loadMore.vue'
   export default {
     data() {
       return {
@@ -76,7 +76,7 @@ import articleCell from './userInfo/com/articleCell.vue'
 
     },
     components:{
-        upToTop,blogFoot,userHead,articleCell
+        upToTop,blogFoot,userHead,articleCell,loadMore
     },
     methods:{
        async selectSort(sort){

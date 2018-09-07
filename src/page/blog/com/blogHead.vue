@@ -184,6 +184,7 @@
     height: 40px;
     border-radius: 20px;
     margin-right: 10px;
+    object-fit: cover;
 }
 .el-dropdown-menu__item{
         text-align: center;

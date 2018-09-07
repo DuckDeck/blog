@@ -12,7 +12,7 @@
                             </div>
                         <div>
                             <span>
-                                <span>文章:{{userInfo.article_count}}</span>
+                                <span>发表的文章:{{userInfo.article_count}}</span>
                             </span>
                         </div>
                             
@@ -296,7 +296,7 @@ import loadMore from './../com/loadMore.vue'
     border-radius: 40px;
 }
 .articleUserDetail{
-    font-size: 20px;
+    font-size: 18px;
     margin-left: 20px;
     margin-top: 15px;
     width: 70%;

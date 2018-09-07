@@ -6,11 +6,10 @@
                 收藏的文章
             </div>
             <div class="collectedArticles" >
-             <articleCell  v-for="art in collectedArticles" :articleInfo = "art" @notCollect="notCollect"></articleCell>
+             <articleCell  v-for="art in collectedArticles" v-bind:key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
-                <div v-show="collectedArticles.length < collectedArticlesCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadinMore" @click="getCollctedArticles" class="loadmoreButton">加载更多收藏文章...</el-button>
-                </div>
+                 <loadMore :isLoading="isLoadinMore" v-show="collectedArticles.length < collectedArticlesCount"
+                    @loadmore="getCollctedArticles"></loadMore>
              </div>
           </div>
           <upToTop></upToTop>
@@ -24,7 +23,7 @@ import articleCell from './com/articleCell.vue'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
-
+import loadMore from './../com/loadMore.vue'
     export default {
         data(){
             return {
@@ -64,7 +63,7 @@ import blogFoot from './../com/blogFoot.vue'
             }
         },
         components:{
-                articleCell,emptyHint,upToTop,blogFoot,
+                articleCell,emptyHint,upToTop,blogFoot,loadMore
         },
     }
 </script>

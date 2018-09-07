@@ -299,15 +299,7 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
    createArticleRelatedView:`
     CREATE VIEW article_related_info AS
     SELECT 
-       article.article_id AS article_id,
-       article.article_name AS article_name,
-       article.article_release_time AS article_release_time,
-       article.article_create_time AS article_create_time,
-       article.article_brief AS article_brief,
-       article.article_click AS article_click,
-       article.user_id AS user_id,
-       article.article_main_img AS article_main_img,
-       article.delete_flag AS delete_flag,
+       article.*,
         (SELECT 
                 COUNT(user_comment.comment_id)
             FROM

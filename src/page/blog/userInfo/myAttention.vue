@@ -16,9 +16,8 @@
             <div class="myAttentionsArticles" v-loading="loading">
              <articleCell  v-for="art in attentionedUserArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
                  <emptyHint v-show="attentionedUserArticlesCount == 0"></emptyHint>
-                <div v-show="attentionedUserArticles.length < attentionedUserArticlesCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadinMore" @click="getUserArticles" class="loadmoreButton">加载更多文章</el-button>
-                </div>
+                 <loadMore :isLoading="isLoadinMore" v-show="attentionedUserArticles.length < attentionedUserArticlesCount"
+                    @loadmore="getUserArticles"></loadMore>
              </div>
           </div>
           <upToTop></upToTop>
@@ -32,7 +31,7 @@ import articleCell from './com/articleCell.vue'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
-
+import loadMore from './../com/loadMore.vue'
     export default {
         data(){
             return {
@@ -78,7 +77,7 @@ import blogFoot from './../com/blogFoot.vue'
             }
         },
         components:{
-                articleCell,emptyHint,upToTop,blogFoot,
+                articleCell,emptyHint,upToTop,blogFoot,loadMore
         },
     }
 </script>

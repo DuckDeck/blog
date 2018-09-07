@@ -9,52 +9,44 @@
             </div>
             <div class="tagSortClass"> 
                 <div class="sortClass" >
-                    <div class="sortTitleClass">
-                        分类管理
-                    </div>
+                    <div class="sortTitleClass">    分类管理  </div>
                     <div class="sortsClass">
-                        <el-tag :key="sort" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.sort_article_id == selectedSort.sort_article_id}"
+                        <el-tag :key="sort.sort_id" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.sort_article_id == selectedSort.sort_article_id}"
                           :closable="sort.sort_article_id > 0"   :close-transition="false"  @close="handleSortClose(sort)">
                         <span class="clickSpan"  @click="clickSort(sort)">{{sort.sort_article_name}}</span>
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleSort" v-model="inputValueSort" ref="saveSortInput" size="mini" 
-                        @keyup.enter.native="handleSortInputConfirm"@blur="handleSortInputConfirm"
-                        >
+                        @keyup.enter.native="handleSortInputConfirm" @blur="handleSortInputConfirm"    >
                         </el-input>
                         <el-button style="height: 28px;" v-else class="button-new-tag" size="small" @click="showSortInput">+ 新分类</el-button>
                     </div>
                 </div>
 
                 <div class="tagClass">
-                    <div class="tagTitleClass">
-                        标签管理
-                    </div>
+                    <div class="tagTitleClass">    标签管理   </div>
                     <div class="tagssClass">
-                        <el-tag :key="tag" v-for="tag in tags" type='primary' :class="{tagSelected:tag.isSelected}"
+                        <el-tag :key="tag.tag_id" v-for="tag in tags" type='primary' :class="{tagSelected:tag.isSelected}"
                          :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
                          <span  class="clickSpan" @click="clickTag(tag)"> {{tag.tag_name}}</span>
-                       
                         </el-tag>
                         <el-input style="width: 80px;" v-if="inputVisibleTag" v-model="inputValueTag" ref="saveTagInput" size="mini" 
-                        @keyup.enter.native="handleTagInputConfirm"@blur="handleTagInputConfirm"
-                        >
+                        @keyup.enter.native="handleTagInputConfirm" @blur="handleTagInputConfirm" >
                         </el-input>
                         <el-button v-else style="height: 28px;" class="button-new-tag" size="small" @click="showTagInput">+ 新标签</el-button>
                     </div>
                 </div>
             </div>
 
-            <div>
-                <articleCell :articleInfo = "article" v-for="article in articles "></articleCell>
-                 <div v-show="articles.length < articleCount" class="loadMoreDiv">
-                    <el-button :loading="isLoadingArticles" @click="loadMoreArticle(false)" class="loadmoreButton">加载更多文章...</el-button>
-                </div>
+            <div v-loading="isLoadingArticles">
+                <articleCell :articleInfo = "article" v-for="article in articles " v-bind:key="article.article_id"></articleCell>
+                <emptyHint v-show="articleCount == 0"></emptyHint>
+                <loadMore :isLoading="isLoadingArticles" v-show="articles.length < articleCount"  @loadmore="loadMoreArticle(false)"></loadMore>
             </div>
 
         </div>
         <upToTop></upToTop>
         <blogFoot></blogFoot>
-         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
+         <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
             <span>{{deleteMessage}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -70,6 +62,8 @@ import userHead from './../com/userHeadInfo.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
 import articleCell from './com/articleCell.vue'
+import emptyHint from './../com/emptyHint.vue'
+import loadMore from './../com/loadMore.vue'
     export default {
         data: function(){
             return {
@@ -291,35 +285,41 @@ import articleCell from './com/articleCell.vue'
                 if(this.deleteType == 0){
                      let self = this
                      deleteSort(this.currentDeleteSort).then(res=>{
-                        toast(self,res.cMsg)
                         if(res.code == 0){
                             let index = self.sorts.indexOf(self.currentDeleteSort)
                             if(index >=0){
                                  self.sorts.splice(index,1)
                             } 
+                            toast(self,res.cMsg,"success")
+                        }
+                        else{
+                            toast(self,res.cMsg)
                         }
                     }).catch(err=>{
-                        toast(self,err.cMsg)
+                        toast(self,err.cMsg,"error")
                     })
                 }
                 else{
                     let self = this
                     deleteTag(this.currentDeleteTag).then(res=>{
-                        toast(self,res.cMsg)
                         if(res.code == 0){
                             let index = self.tags.indexOf(self.currentDeleteTag)
                             if(index >=0){
                                  self.tags.splice(index,1)
-                            } 
+                            }
+                            toast(self,res.cMsg,"success") 
+                        }
+                        else{
+                            toast(self,res.cMsg)
                         }
                     }).catch(err=>{
-                        toast(self,err.cMsg)
+                        toast(self,err.cMsg,"error")
                     })
                 }
             }
         },
         components:{
-          userHead, upToTop,blogFoot,articleCell
+          userHead, upToTop,blogFoot,articleCell,emptyHint,loadMore
         }
        }
 </script>
