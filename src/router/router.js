@@ -39,6 +39,8 @@ const manageUserInfo =  r => require.ensure([], () => r(require('../page/backsta
 
 const manageUserArticleRelated =  r => require.ensure([], () => r(require('../page/backstage/manageUserArticleRelated')), 'manageUserArticleRelated')
 
+const manageUserAttention =  r => require.ensure([], () => r(require('../page/backstage/manageUserAttention')), 'manageUserAttention')
+
 const manageArticle =  r => require.ensure([], () => r(require('../page/backstage/manageArticle')), 'manageArticle')
 
 const manageArticleDetail =  r => require.ensure([], () => r(require('../page/backstage/detailArticle')), 'manageArticleDetail')
@@ -157,9 +159,14 @@ export default [
                 component:manageUserInfo
             },
             {
-                path: 'manageUserInfo/articleRelated/:userId/',
+                path: 'manageUserInfo/articleRelated/:userId/:tab',
                 component: manageUserArticleRelated, 
             }, 
+            {
+                path: 'manageUserInfo/attention/:userId/',
+                component: manageUserAttention, 
+            }, 
+            
             {
                 path:'manageArticle',
                 component:manageArticle

@@ -4,8 +4,8 @@
           查看用户相关信息
         </div>
         <div style="padding:20px">
-            <el-button :type="selectType == 0 ? 'primary':'default'" plain @click="selectType(0)">喜欢的文章</el-button>
-            <el-button :type="selectType == 1 ? 'primary':'default'" plain @click="selectType(1)">收藏的文章</el-button>
+            <el-button :type="selectedType == 0 ? 'primary':'default'" plain @click="selectType(0)">喜欢的文章</el-button>
+            <el-button :type="selectedType == 1 ? 'primary':'default'" plain @click="selectType(1)">收藏的文章</el-button>
         </div>
         <el-table :data="tableData" border style="width: 100%"  >
             <el-table-column  label="标题" >
@@ -42,7 +42,7 @@ import {managerGetUserLikeArticlesById,managerGetUserCollectArticlesById} from  
         data() {
             return {
                 userId:0,
-                selectType:0,
+                selectedType:0,
                 tableData: [],
                 dialogVisible:false,
                 count:0,
@@ -51,26 +51,43 @@ import {managerGetUserLikeArticlesById,managerGetUserCollectArticlesById} from  
         },
         mounted(){
             this.userId = this.$route.params.userId
+            this.selectedType = this.$route.params.tab
             this.loadData() 
         },
         methods: {
             async loadData(){
-                let res = await  managerGetUserLikeArticlesById(this.userId,this.index,10)
-                if(res.code == 0){
-                    this.tableData = res.data.map(s=>{
-                        s.isSelect = false
-                        return s
-                    })
-                    this.count = res.count
-                    
+                if (this.selectedType == 0){
+                    let res = await  managerGetUserLikeArticlesById(this.userId,this.index,10)
+                    if(res.code == 0){
+                        this.tableData = res.data
+                        this.count = res.count
+                    }
+                    else{
+                        toast(this,res.cMsg)
+                    }
                 }
                 else{
-                    toast(this,res.cMsg)
+                    let res = await  managerGetUserCollectArticlesById(this.userId,this.index,10)
+                    if(res.code == 0){
+                        this.tableData = res.data
+                        this.count = res.count
+                    }
+                    else{
+                        toast(this,res.cMsg)
+                    }
                 }
             },
             async handleCurrentChange(val){
                 this.index = val
                 this.loadData()
+            },
+            selectType(type){
+                if(type != this.selectedType){
+                    this.selectedType = type
+                    this.count = 0
+                    this.tableData = []
+                    this.loadData()
+                }                
             },
             formatter(row, column) {
                 if(column.label == "日期"){

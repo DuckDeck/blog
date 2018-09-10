@@ -194,6 +194,21 @@ module.exports = {
             ctx.rest(res)
             return
         }
+        let attentions = res.data
+        let userIds = res.data.map(s=>{
+            return s.attention_id
+        })
+        res = await DB.exec(`select user_id,user_real_name,user_image_url from user_info where user_id in (` + userIds.join(',') + `)`)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        res.data.map(s=>{
+            let item =  attentions.find(d=>{
+                return d.attention_id == s.user_id
+             })
+            s.attention_time = item.attention_time
+        })
         ctx.rest(Result.createCount(0,count,res.data))    
      },
      //用户登录

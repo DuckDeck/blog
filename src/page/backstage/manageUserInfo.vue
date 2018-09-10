@@ -49,9 +49,9 @@
                     <div class="basicInfoManageClass"  >
                         <div class="headinfoManageTitleClass" style="background-color:orangered">   用户喜欢和收藏  </div>
                         <div style="display:flex;justify-content:space-evenly;height:110px">
-                            <el-button style="align-self:center" type="primary" @click="userCollectedArticle" >他收藏的文章</el-button>
-                            <el-button style="align-self:center" type="primary" @click="userLikedArticle" >他喜欢的文章</el-button>
-                            <el-button style="align-self:center" type="primary" @click="userConcernArticle">他关注的作者</el-button>
+                            <el-button style="align-self:center" type="primary" @click="userCollectedArticle" >他喜欢的文章</el-button>
+                            <el-button style="align-self:center" type="primary" @click="userLikedArticle" >他收藏的文章</el-button>
+                            <el-button style="align-self:center" type="primary" @click="userAttention">他关注的作者</el-button>
                         </div>
                     </div>
 
@@ -160,8 +160,7 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks,
-managerGetUserAttentionById} from '../../store/service'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
 import {userInfoById} from '../../store/manageService'
 import {imgPath} from '../../../config/pathConfig'
     export default {
@@ -231,7 +230,13 @@ import {imgPath} from '../../../config/pathConfig'
                 
             },
             userCollectedArticle(){
-                this.$router.push('/manage/manageUserInfo/articleRelated/' + this.userInfo.user_id)
+                this.$router.push('/manage/manageUserInfo/articleRelated/' + this.userInfo.user_id + "/0")
+            },
+            userLikedArticle(){
+                this.$router.push('/manage/manageUserInfo/articleRelated/' + this.userInfo.user_id + "/1")
+            },
+            userAttention(){
+                this.$router.push('/manage/manageUserInfo/attention/' + this.userInfo.user_id)
             },
             handleTagClose(tag) {
                 let self = this
