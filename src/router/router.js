@@ -37,6 +37,8 @@ const manageUser =  r => require.ensure([], () => r(require('../page/backstage/m
 
 const manageUserInfo =  r => require.ensure([], () => r(require('../page/backstage/manageUserInfo')), 'manageUserInfo')
 
+const manageUserArticleRelated =  r => require.ensure([], () => r(require('../page/backstage/manageUserArticleRelated')), 'manageUserArticleRelated')
+
 const manageArticle =  r => require.ensure([], () => r(require('../page/backstage/manageArticle')), 'manageArticle')
 
 const manageArticleDetail =  r => require.ensure([], () => r(require('../page/backstage/detailArticle')), 'manageArticleDetail')
@@ -90,6 +92,7 @@ export default [
         path: '/userInfo/:userId/:tab',
         component: userInfo, 
     },
+   
     {
         path: '/mytag/:userId',
         component: myTag, 
@@ -152,6 +155,10 @@ export default [
             {
                 path:'manageUserInfo/:id',
                 component:manageUserInfo
+            },
+            {
+                path: 'manageUserInfo/articleRelated/:userId/',
+                component: manageUserArticleRelated, 
             }, 
             {
                 path:'manageArticle',

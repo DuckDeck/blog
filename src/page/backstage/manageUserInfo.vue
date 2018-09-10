@@ -45,6 +45,16 @@
                         </el-form>
                         </div>
                     </div>
+
+                    <div class="basicInfoManageClass"  >
+                        <div class="headinfoManageTitleClass" style="background-color:orangered">   用户喜欢和收藏  </div>
+                        <div style="display:flex;justify-content:space-evenly;height:110px">
+                            <el-button style="align-self:center" type="primary" @click="userCollectedArticle" >他收藏的文章</el-button>
+                            <el-button style="align-self:center" type="primary" @click="userLikedArticle" >他喜欢的文章</el-button>
+                            <el-button style="align-self:center" type="primary" @click="userConcernArticle">他关注的作者</el-button>
+                        </div>
+                    </div>
+
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
@@ -65,7 +75,7 @@
                                     <span class="infoTitleClass">自我描述</span> 
                                     <el-input
                                         type="textarea"
-                                        :rows="2" v-model="userInfo.user_description"
+                                        :rows="4" v-model="userInfo.user_description"
                                         placeholder="请输入内容">
                                         </el-input>
                                     </el-form-item>
@@ -73,7 +83,7 @@
                                     <span class="infoTitleClass">个人语录</span>
                                      <el-input
                                         type="textarea" v-model = "userInfo.user_says"
-                                        :rows="2"
+                                        :rows="4"
                                         placeholder="请输入内容">
                                         </el-input>
                                     </el-form-item>
@@ -151,7 +161,7 @@
 
 <script>
 import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks,
-managerGetUserLikeArticlesById,managerGetUserCollectArticlesById,managerGetUserAttentionById} from '../../store/service'
+managerGetUserAttentionById} from '../../store/service'
 import {userInfoById} from '../../store/manageService'
 import {imgPath} from '../../../config/pathConfig'
     export default {
@@ -219,6 +229,9 @@ import {imgPath} from '../../../config/pathConfig'
             },
             handleClick(tab,event){
                 
+            },
+            userCollectedArticle(){
+                this.$router.push('/manage/manageUserInfo/articleRelated/' + this.userInfo.user_id)
             },
             handleTagClose(tag) {
                 let self = this

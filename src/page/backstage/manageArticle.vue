@@ -151,7 +151,6 @@ import {allArticle,releaseArticle,deleteAticleByManage} from  '../../store/manag
              async handleCurrentChange(val){
                 this.pageIndex = val
                 this.loadData(this.pageIndex - 1,10)
-                
             }
         }
     }
@@ -182,6 +181,6 @@ display:  none;
     margin-bottom: 0px;
 }
 .itchManageArticle{
-    padding: 10px;
+    padding: 20px;
 }
 </style>
