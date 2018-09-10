@@ -15,8 +15,8 @@
             </div>
             <div class="myAttentionsArticles" v-loading="loading">
              <articleCell  v-for="art in attentionedUserArticles" :key="art.article_id" :articleInfo = "art"  :showUserHead = "false"></articleCell>
-                 <emptyHint v-show="attentionedUserArticlesCount == 0"></emptyHint>
-                 <loadMore :isLoading="isLoadinMore" v-show="attentionedUserArticles.length < attentionedUserArticlesCount"
+                 <emptyHint v-show="attentionedUserArticlesCount == 0 && !loading"></emptyHint>
+                 <loadMore :isLoading="isLoadinMore" v-show="attentionedUserArticles.length < attentionedUserArticlesCount && attentionedUserArticlesCount != 0"
                     @loadmore="getUserArticles"></loadMore>
              </div>
           </div>
@@ -61,11 +61,13 @@ import loadMore from './../com/loadMore.vue'
                 }
             },
             async getUserArticles(user){
+                this.loading = true
                 if(user&&user.user_id){
                     this.attentionedUserArticles = []
+                    this.attentionedUserArticlesCount = 0
                     this.selectedUserId = user.user_id
                 }
-                this.loading = true
+                
                 let res = await articlesByUser(this.selectedUserId,this.attentionedUserArticles.length / 10,10)
                 this.loading = false
                 if(res.code != 0){

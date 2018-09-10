@@ -207,6 +207,11 @@ import loadMore from './../com/loadMore.vue'
        },
        handleClick(tab,event){
           switch(tab.index){
+            case "0":
+               if(isEmpty(this.articles)){
+                    this.getUserArticles(this.userId)
+               }
+            break;
             case "1":
                if(isEmpty(this.dynamics)){
                     this.getUserDynamics(this.userId)

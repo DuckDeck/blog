@@ -150,7 +150,8 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks,
+managerGetUserLikeArticlesById,managerGetUserCollectArticlesById,managerGetUserAttentionById} from '../../store/service'
 import {userInfoById} from '../../store/manageService'
 import {imgPath} from '../../../config/pathConfig'
     export default {

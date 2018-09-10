@@ -181,4 +181,7 @@ display:  none;
 .el-checkbox{
     margin-bottom: 0px;
 }
+.itchManageArticle{
+    padding: 10px;
+}
 </style>

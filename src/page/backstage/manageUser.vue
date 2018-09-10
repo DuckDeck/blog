@@ -21,8 +21,8 @@
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
-                    <el-button size="small" @click = "editUserInfo(scope.row)">管理</el-button>
-                    
+                    <el-button size="small" type="primary" @click = "editUserInfo(scope.row)">管理</el-button>
+                     <el-button size="small" type="primary" @click = "editUserInfo(scope.row)">查看</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -63,6 +63,9 @@ import {allUser} from '../../store/manageService'
                 this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
             },
             handleSelectionChange(val){
+
+            },
+            checkUserInfo(userInfo){
 
             },
             formatter(row, column) {

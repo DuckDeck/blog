@@ -92,5 +92,19 @@ export const updateManagerPass = function(oldPass,newPass){
 }
 
 
+export const managerGetUserLikeArticlesById = function(userId,index = 0,size = 10){
+    const url = HostName +  'manage/userlikearticle/' + userId + '/' + manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
 
+export const managerGetUserCollectArticlesById = function(userId,index = 0,size = 10){
+    const url = HostName +  'manage/usercollectarticle/' + userId + '/' + manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
+
+export const managerGetUserAttentionById = function(userId,index = 0,size = 10){
+    const url = HostName +  'manage/userattentioned/' + userId + '/' + manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
 
