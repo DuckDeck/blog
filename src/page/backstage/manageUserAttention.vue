@@ -11,14 +11,13 @@
             </el-table-column>
              <el-table-column  label="作者"  width="120">
                  <template scope="scope">
-                  <img :src="scope.row.user_image_url" alt="">
+                  <img class="attentionUserHead" :src="scope.row.user_image_url" alt="">
                 </template>
             </el-table-column>
             <el-table-column prop="attention_time" label="日期" sortable width="160" :formatter="formatter">
             </el-table-column>
            
-            <el-table-column prop="article_sort_name"  width="100" label="所属类型" >
-            </el-table-column>
+         
          
         </el-table>
         <div class="pagination">
@@ -70,12 +69,15 @@ import {managerGetUserAttentionById} from  '../../store/manageService'
             
             formatter(row, column) {
                 if(column.label == "日期"){
-                    return formatTime(new Date(row.article_create_time))
+                    return formatTime(new Date(row.attention_time))
                 }
             },
         }
     }
 </script>
 <style>
-
+.attentionUserHead{
+    width: 50px;
+    height: 50px;
+}
 </style>

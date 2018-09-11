@@ -89,6 +89,10 @@ import {managerGetUserLikeArticlesById,managerGetUserCollectArticlesById} from  
                     this.loadData()
                 }                
             },
+            gotoArticleDetail(article){
+                setStore('article' + article.article_id ,article)
+                this.$router.push('/manage/article/' + article.article_id);
+            },
             formatter(row, column) {
                 if(column.label == "日期"){
                     return formatTime(new Date(row.article_create_time))

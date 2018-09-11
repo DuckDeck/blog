@@ -96,15 +96,7 @@ const sqls = {
  PRIMARY KEY (secret_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 `,
-    createSystemMessageTb:`CREATE TABLE  IF NOT EXISTS system_message (
- system_id mediumint(8) NOT NULL AUTO_INCREMENT COMMENT '系统通知ID',
- send_id mediumint(8) NOT NULL COMMENT '接受者ID',
- group_id tinyint(3) NOT NULL COMMENT '用户组ID',
- send_default mediumint(8) NOT NULL COMMENT '1时发送所有用户，0时则不采用',
- system_topic varchar(60) NOT NULL COMMENT '通知内容',
- system_content varchar(255) NOT NULL COMMENT '通知内容',
- PRIMARY KEY (system_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
+
     createFriendLinkTb:`CREATE TABLE  IF NOT EXISTS friendly_link (
  link_id smallint(5) NOT NULL AUTO_INCREMENT COMMENT '友情链接自增ID',
  link_user_id smallint(8) NOT NULL DEFAULT 0 COMMENT '友情链接的所属用户',
