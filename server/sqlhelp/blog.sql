@@ -542,7 +542,7 @@ VIEW `article_related_info` AS
     WHERE
         (`article`.`article_status` = 1)
 ------------------------------
--- create chat_message
+-- create chat_message 这个用于聊天？
 ------------------------------
 
 
@@ -555,17 +555,34 @@ CREATE TABLE `blog`.`chat_message` (
   `chat_id` INT NOT NULL,
   `send_status` INT NOT NULL,
   `chat_content` LONGTEXT NULL,
-  PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`)
+  );
 
 
-目前这里定为5种信息
+第一种情况一般是系统发的
+目前这里定为6种信息
+这种设计其实效率很低，如果你关注的人很多或者写了很多文章，那么数据量会特别多
+所以，可以这里面某些消息可以用订阅的方式，
+不过如果移除关注有话数据量会少很多
 1 评论
 2 喜欢和赞
-3 关注
-4 私信
-5 系统通知
-6 用户动态
-7 消息 （用于即时通信）
-8 其他
-下面是弄表
+3 有人关注了你
+4 系统通知  一般是广告之类的或者新闻
+5 其他
+//这里一般来说发送者都是系统
+一般来说是点对点的
+//对于分组发送，还是有难度的，目前没这个需求
 
+------------------------------
+-- create zoe_message 这个用于7种信息
+------------------------------
+CREATE TABLE `blog`.`zoe_message` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `message_type` INT NOT NULL,
+  `sender_id` INT NOT NULL,
+  `receive_id` INT NOT NULL,
+  `time` BIGINT(20) NOT NULL,
+  `read_status` INT NOT NULL,
+  `target_id` INT NULL,
+  `content` LONGTEXT NULL,
+  PRIMARY KEY (`id`));

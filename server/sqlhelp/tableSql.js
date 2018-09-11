@@ -277,7 +277,18 @@ CREATE TABLE  IF NOT EXISTS user_sub_comment (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;`,
 
 
-
+createZoeMessage:`
+CREATE TABLE blog.zoe_message (
+    id INT NOT NULL AUTO_INCREMENT,
+    message_type INT NOT NULL,
+    sender_id INT NOT NULL,
+    receive_id INT NOT NULL,
+    time BIGINT(20) NOT NULL,
+    read_status INT NOT NULL,
+    target_id INT NULL,
+    content LONGTEXT NULL,
+    PRIMARY KEY (id));
+  `
 
 
 

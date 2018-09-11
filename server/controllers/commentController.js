@@ -207,12 +207,14 @@ module.exports = {
             let res = await Comment.insertSubComment(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_scope,7,0)
             await Dynamic.save(dynamic)
+            //加入消息
             ctx.rest(res)
         }
         else{
             let res = await Comment.insertMainComment(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_target_id,4,0)
             await Dynamic.save(dynamic)
+            //加入消息
             ctx.rest(res)
         }
         
