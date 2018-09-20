@@ -288,7 +288,7 @@ CREATE TABLE blog.zoe_message (
     target_id INT NULL,
     content LONGTEXT NULL,
     PRIMARY KEY (id));
-  `
+  `,
 
 
 
