@@ -17,7 +17,7 @@ const server = require('http').Server(app.callback());
 var chatServer = require('./lib/chat_server')
 
 //actions.createDB()
-actions.createTbs()
+//actions.createTbs()
 // const tool = require('./tool/tool')
 // let crt = tool.encrypt('751f621ea5c8f930','2624750004598718','123456')
 // console.log(crt)
