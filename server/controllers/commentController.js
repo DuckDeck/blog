@@ -6,7 +6,7 @@ const User = require('../model/user')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
-const Message = require('../model/message')
+
 module.exports = {
     'GET /api/articleComment/:articleId/:index/:size': async (ctx, next) => {
         let paraCheckResult = Check.checkNum(ctx.params,'articleId')
@@ -206,10 +206,23 @@ module.exports = {
             }
             com.comment_scope = t.commentScope
             let res = await Comment.insertSubComment(com)
+            let commitedId = res.data.id
             let dynamic = new Dynamic(id,res.data.id,com.comment_scope,7,0)
             await Dynamic.save(dynamic)
-            let message = new Message(1,0,com.comment_scope,(new Date().getTime()),0,res.data.id,t.commentContent)
-            await Message.insertMesage(message)
+            //获取该文章的作者
+            //评论的ID res.data.id
+            //父评论的ID com.comment_scope
+            //父评论的发布者ID t.commentTargetUserId
+            res = await DB.exec('select user_id,article_name,article_id from article where article_id in (select  comment_target_id from '+
+               'user_comment where comment_id = ?)',[t.commentScope])
+
+            let user_id = res.data[0].user_id
+            let article_name =   res.data[0].article_name
+            let article_id = res.data[0].article_id
+            res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?)',
+            [user_id,id,article_id,article_name,(new Date().getTime()),
+                t.commentContent,0,commitedId,com.comment_scope,t.commentTargetUserId])
+
             //加入消息
             ctx.rest(res)
         }
@@ -217,10 +230,11 @@ module.exports = {
             let res = await Comment.insertMainComment(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_target_id,4,0)
             await Dynamic.save(dynamic)
-            res = await DB.exec('select user_id from article where article_id = ?',[com.comment_target_id])
-            let user_id = res.date[0].user_id
-            let message = new Message(2,0,user_id,(new Date().getTime()),0,res.data.id,t.commentContent)
-            await Message.insertMesage(message)
+            res = await DB.exec('select user_id,article_name from article where article_id = ?',[com.comment_target_id])
+            let user_id = res.data[0].user_id
+            res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?)',
+            [user_id,parseInt(id),parseInt(com.comment_target_id),res.data[0].article_name,
+            (new Date().getTime()),t.commentContent,0,0,0,0])
             //加入消息
             ctx.rest(res)
         }
