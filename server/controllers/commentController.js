@@ -6,6 +6,7 @@ const User = require('../model/user')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
+const Message = require('../model/message')
 module.exports = {
     'GET /api/articleComment/:articleId/:index/:size': async (ctx, next) => {
         let paraCheckResult = Check.checkNum(ctx.params,'articleId')
@@ -207,6 +208,8 @@ module.exports = {
             let res = await Comment.insertSubComment(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_scope,7,0)
             await Dynamic.save(dynamic)
+            let message = new Message(1,0,com.comment_scope,(new Date().getTime()),0,res.data.id,t.commentContent)
+            await Message.insertMesage(message)
             //加入消息
             ctx.rest(res)
         }
@@ -214,6 +217,10 @@ module.exports = {
             let res = await Comment.insertMainComment(com)
             let dynamic = new Dynamic(id,res.data.id,com.comment_target_id,4,0)
             await Dynamic.save(dynamic)
+            res = await DB.exec('select user_id from article where article_id = ?',[com.comment_target_id])
+            let user_id = res.date[0].user_id
+            let message = new Message(2,0,user_id,(new Date().getTime()),0,res.data.id,t.commentContent)
+            await Message.insertMesage(message)
             //加入消息
             ctx.rest(res)
         }

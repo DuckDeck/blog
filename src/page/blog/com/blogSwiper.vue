@@ -1,6 +1,6 @@
 
 <template>
-    <el-carousel class="swiperArticle"  height="15rem">
+    <el-carousel class="swiperArticle"  height="25rem">
         <el-carousel-item v-for="art in articles">
          <div >
                <img :src="art.article_main_img" alt="" class="swiperImg">
@@ -37,7 +37,7 @@
 </script>
 <style scoped>
 .swiperArticle{
-    height: 15rem;
+    height: 25rem;
 }
 .swiperImg{
     width: 100%;
@@ -73,7 +73,7 @@
     color: white;
     font-size: 1.5rem;
     text-align: center;
-    margin-top: 8rem;
+    margin-top: 11rem;
 }
 .swiperArticleTitle:hover{
     cursor: pointer

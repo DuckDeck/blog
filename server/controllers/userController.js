@@ -10,7 +10,7 @@ const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
 const config = require('../../config/pathConfig')
-
+const Message = require('../model/message')
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -1071,7 +1071,11 @@ module.exports = {
             res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
             let likeId = res.data.id
             let dynamic = new Dynamic(id,likeId,articleId,12,0)
+            res = await DB.exec('select user_id from article where article_id = ?',[articleId])
+            let receive_user_id = res.date[0].user_id
             await Dynamic.save(dynamic)
+            // let message = new Message(3,0,receive_user_id,(new Date().getTime()),0,id,t.commentContent)
+            // await Message.insertMesage(message)
         } 
       
        }
