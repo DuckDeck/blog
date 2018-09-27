@@ -602,7 +602,7 @@ CREATE TABLE `message_like` (
   `sender_id` int(11) NOT NULL COMMENT '谁作出来的操作',
   `comment_project_id` int(11) DEFAULT NULL COMMENT '喜欢的项目ID',
   `comment_project_title` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '喜欢的项目标题',
-  `message_time` bigint(15) NOT NULL COMMENT '喜欢时间',
+  `message_time` BIGINT(15) NOT NULL COMMENT '喜欢时间',
   `like_message_type` int(11) NOT NULL COMMENT '1是文章，2 是评论',
   `like_status` int(11) NOT NULL COMMENT '喜欢和踩，1 是喜欢，2 是踩',
   `read_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '有没有读',
@@ -614,7 +614,7 @@ CREATE TABLE `message_attention` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `receive_id` int(11) NOT NULL COMMENT '收这条信息的人',
   `sender_id` int(11) NOT NULL COMMENT '谁作出来的操作',
-  `message_time` bit(15) NOT NULL,
+  `message_time` BIGINT(15) NOT NULL,
   `read_status` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -624,7 +624,7 @@ CREATE TABLE `message_notice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `receive_id` int(11) NOT NULL COMMENT '收这条信息的人',
   `sender_id` int(11) NOT NULL COMMENT '谁作出来的操作',
-  `message_time` bit(15) NOT NULL,
+  `message_time` BIGINT(15) NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci COMMENT '内容',
   `read_status` tinyint(4) NOT NULL,
   `message_group` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息分组，一般用于私信',

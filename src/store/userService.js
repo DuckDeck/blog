@@ -192,3 +192,8 @@ export const userSetAttentioned = function(user_id,is_attention){
     const url = HostName + 'usersetattention/' +   user_id + '/' + l + '/' + userId() + '/' + createToken()
     return setpromiseGet(url)
 }
+
+export const userGetUndreaMessageCount = function(){
+    const url = HostName + 'message/newmessagecount/' +   userId() + '/' + createToken()
+    return setpromiseGet(url)
+}

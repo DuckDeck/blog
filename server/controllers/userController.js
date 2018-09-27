@@ -1071,15 +1071,11 @@ module.exports = {
             let likeId = res.data.id
             let dynamic = new Dynamic(id,likeId,articleId,12,0)
             await Dynamic.save(dynamic)
-            res = await DB.exec('select user_id,articel_name from article where article_id = ?',[articleId])
-            let receive_user_id = res.date[0].user_id
-            res = await DB.exec('insert into message_like values(0,?,?,?,?,?,?,?,?,?)',
-            [receive_user_id,parseInt(id),parseInt(articleId),res.date[0].article_name,
-            (new Date().getTime()),t.commentContent,1,1,0])
-            //加入消息
-  
-            // let message = new Message(3,0,receive_user_id,(new Date().getTime()),0,id,t.commentContent)
-            // await Message.insertMesage(message)
+            res = await DB.exec('select user_id,article_name from article where article_id = ?',[articleId])
+            let receive_user_id = res.data[0].user_id
+            res = await DB.exec('insert into message_like values(0,?,?,?,?,?,?,?,?)',
+            [receive_user_id,parseInt(id),parseInt(articleId),res.data[0].article_name,
+            (new Date().getTime()),1,1,0])
         } 
       
        }
@@ -1125,7 +1121,7 @@ module.exports = {
             let aId = res.data.id
             let dynamic = new Dynamic(id,aId,targetUserId,10,0)
             await Dynamic.save(dynamic)
-            res = await DB.exec('insert into message_attention values(0,?,?,?,?)',[targetUserId,id, (new Date().getTime()),t.commentContent,0])
+            res = await DB.exec('insert into message_attention values(0,?,?,?,?)',[targetUserId,id, (new Date().getTime()),0])
         } 
       
        }

@@ -18,22 +18,27 @@
                 <span @click="register">注册</span>
             </div>
             <div class="userInfoDiv" v-show="isLogin">
-                <el-dropdown trigger="click" @command="handleCommand">
-                <div style="display:flex" class="el-dropdown-link" >
-                    <img class="userheadimg" :src="userInfo.user_image_url">
-                    <span style="align-self:center">{{userInfo.user_real_name}}</span>
-                </div>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
-                    <el-dropdown-item command="write">写文章</el-dropdown-item>
-                    <el-dropdown-item command="collect">收藏的文章</el-dropdown-item>
-                    <el-dropdown-item command="like">喜欢的文章</el-dropdown-item>
-                    <el-dropdown-item command="attention">我的关注</el-dropdown-item>
-                    <el-dropdown-item command="tag">我的标签</el-dropdown-item>
-                    <el-dropdown-item command="setting">个人设置</el-dropdown-item>
-                    <el-dropdown-item command="loginout">退出</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+                
+                    <el-dropdown trigger="click" @command="handleCommand">
+                    <div style="display:flex" class="el-dropdown-link" >
+                        <el-badge is-dot :hidden = "unreadMessageCount == 0" :max="99" class="item">
+                        <img class="userheadimg" :src="userInfo.user_image_url">
+                           </el-badge>
+                        <span style="align-self:center">{{userInfo.user_real_name}}</span>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
+                        <el-dropdown-item command="write">写文章</el-dropdown-item>
+                        <el-dropdown-item command="collect">收藏的文章</el-dropdown-item>
+                        <el-dropdown-item command="like">喜欢的文章</el-dropdown-item>
+                        <el-dropdown-item command="attention">我的关注</el-dropdown-item>
+                        <el-dropdown-item command="tag">我的标签</el-dropdown-item>
+                        <el-dropdown-item command="setting">个人设置</el-dropdown-item>
+                        <el-dropdown-item command="loginout">退出</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+             
+              
             </div>
         </div>
     
@@ -41,11 +46,13 @@
 </template>
 
 <script>
+import {userGetUndreaMessageCount} from '../../../store/service'
     export default {
         data() {
             return{
                 userInfo:{},
-                keyword:''
+                keyword:'',
+                unreadMessageCount:0
             }
         },
         mounted(){
@@ -69,8 +76,8 @@
                        let u  = getStore('userInfo')
                        self.userInfo = u
                    }
-                
             });
+            this.getUnReadMessage()
         },
         methods:{
             login(){
@@ -126,6 +133,17 @@
            },
            toMain(){
                this.$router.push('/')
+           },
+           async getUnReadMessage(){
+               if(isLogin()){
+                   let res = await userGetUndreaMessageCount()
+                   if(res.code != 0){
+                       toast(this,res.cMsg)
+                       return
+                   }
+                   this.unreadMessageCount = res.count
+               }
+               
            }
       },
       computed:{
