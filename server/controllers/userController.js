@@ -10,7 +10,6 @@ const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
 const config = require('../../config/pathConfig')
-const Message = require('../model/message')
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -1071,9 +1070,14 @@ module.exports = {
             res =  await DB.exec(sql,[id,articleId,Date.parse(new Date())])
             let likeId = res.data.id
             let dynamic = new Dynamic(id,likeId,articleId,12,0)
-            res = await DB.exec('select user_id from article where article_id = ?',[articleId])
-            let receive_user_id = res.date[0].user_id
             await Dynamic.save(dynamic)
+            res = await DB.exec('select user_id,articel_name from article where article_id = ?',[articleId])
+            let receive_user_id = res.date[0].user_id
+            res = await DB.exec('insert into message_like values(0,?,?,?,?,?,?,?,?,?)',
+            [receive_user_id,parseInt(id),parseInt(articleId),res.date[0].article_name,
+            (new Date().getTime()),t.commentContent,1,1,0])
+            //加入消息
+  
             // let message = new Message(3,0,receive_user_id,(new Date().getTime()),0,id,t.commentContent)
             // await Message.insertMesage(message)
         } 
@@ -1121,6 +1125,7 @@ module.exports = {
             let aId = res.data.id
             let dynamic = new Dynamic(id,aId,targetUserId,10,0)
             await Dynamic.save(dynamic)
+            res = await DB.exec('insert into message_attention values(0,?,?,?,?)',[targetUserId,id, (new Date().getTime()),t.commentContent,0])
         } 
       
        }
