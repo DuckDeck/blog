@@ -28,6 +28,8 @@
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
+                        <el-dropdown-item command="mymessage">
+                             <el-badge :value="unreadMessageCount" :hidden = "unreadMessageCount == 0" :max="99" class="item">我的消息</el-badge></el-dropdown-item>
                         <el-dropdown-item command="write">写文章</el-dropdown-item>
                         <el-dropdown-item command="collect">收藏的文章</el-dropdown-item>
                         <el-dropdown-item command="like">喜欢的文章</el-dropdown-item>
@@ -114,6 +116,9 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                     //ISSUE1 这个不好解决，同一个页面不能被PUSH，这是个严重的问题
                     //暂时放着吧
                     this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
+                }
+                else if(command == 'mymessage'){
+                    this.$router.push('/mymessage/' + this.userInfo.user_id)
                 }
                 else if(command == "like"){
                      this.$router.push('/userInfo/' + this.userInfo.user_id  + "/like")

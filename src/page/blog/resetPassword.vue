@@ -209,7 +209,7 @@ import { Loading } from 'element-ui'
 }
 .hintDiv{
     display: flex;
-   
+   justify-content: space-between
 }
 .resetHint{
     width: 210px;
@@ -221,9 +221,8 @@ import { Loading } from 'element-ui'
      margin-right: 10px;
 }
 .resetButtonClass{
-    float: right;
     margin-top: 20px;
-    width: 100px;
+    width: 120px;
 }
 .resetOption{
     margin-top: 20px;
