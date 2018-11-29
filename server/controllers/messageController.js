@@ -5,7 +5,7 @@ const Tool = require('../tool/tool')
 const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 module.exports = {
-    //管理用户
+    //新消息个数
     'GET /api/message/newmessagecount/:userId/:token': async (ctx, next) => {
         let result = await Check.checkToken(ctx)
         if(result.code != 0){

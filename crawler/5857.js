@@ -1,7 +1,7 @@
 
 var cheerio = require('cheerio')
 const axios = require('axios')
-var url = "http://www.5857.com/sjbz/68300.html"
+var url = "http://www.5857.com/sjbz/63482.html"
 var fs = require('fs')
 var request = require("request")
 var imagePages = []

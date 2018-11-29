@@ -29,7 +29,8 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="mypage">我的主页</el-dropdown-item>
                         <el-dropdown-item command="mymessage">
-                             <el-badge :value="unreadMessageCount" :hidden = "unreadMessageCount == 0" :max="99" class="item">我的消息</el-badge></el-dropdown-item>
+                        <el-badge v-show = "false" :value="unreadMessageCount" :hidden = "unreadMessageCount == 0" 
+                        :max="99" class="item">我的消息</el-badge></el-dropdown-item>
                         <el-dropdown-item command="write">写文章</el-dropdown-item>
                         <el-dropdown-item command="collect">收藏的文章</el-dropdown-item>
                         <el-dropdown-item command="like">喜欢的文章</el-dropdown-item>

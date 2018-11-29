@@ -576,6 +576,7 @@ CREATE TABLE `blog`.`chat_message` (
 
 //其实可以建多个表，评论  喜欢， 私信和通知 关注 其他
 ，这样更节省资源
+//有人评论了后产生的消息
 CREATE TABLE `blog`.`message_comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `receive_id` INT NOT NULL COMMENT '接收这个信息的ID，一般是用户ID',
