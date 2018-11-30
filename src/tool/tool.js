@@ -166,7 +166,7 @@ global.createPasswordEnctypt = function(password){
     let t = new Date()
     let standartTime = Date.parse(t) + t.getTimezoneOffset() * 60000
   
-    return Tool.encrypt(key,iv,password + '=' + standartTime)
+    return Tool.encrypt(key,iv,password + '=' + Date.parse(t))
 
 }
 

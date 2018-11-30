@@ -5,10 +5,10 @@
                 <i class="fa fa-bookmark" aria-hidden="true"></i>
                 收藏的文章
             </div>
-            <div class="collectedArticles" >
+            <div v-loading="loading" class="collectedArticles" >
              <articleCell  v-for="art in collectedArticles" v-bind:key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
-                 <loadMore :isLoading="isLoadinMore" v-show="collectedArticles.length < collectedArticlesCount"
+                <loadMore :isLoading="isLoadinMore" v-show="collectedArticles.length < collectedArticlesCount"
                     @loadmore="getCollctedArticles"></loadMore>
              </div>
           </div>
@@ -27,10 +27,11 @@ import loadMore from './../com/loadMore.vue'
     export default {
         data(){
             return {
+                loading:false,
                 userId:0,
                 collectedArticles:[],
                 isLoadinMore:false,
-                collectedArticlesCount:0,
+                collectedArticlesCount:-1,
             }
         },
         async mounted(){
@@ -41,9 +42,15 @@ import loadMore from './../com/loadMore.vue'
         },
         methods:{
             async getCollctedArticles(id){
-                this.isLoadinMore = true
+                if(id == 0){
+                    this.loading = true
+                }
+                else{
+                    this.isLoadinMore = true
+                }
                 let res = await collectedArticlesByUser(id,this.collectedArticles.length / 10,10)
                 this.isLoadinMore = false
+                this.loading = false
                 if(res.code == 0){
                     console.log(res.data)
                     this.collectedArticlesCount = res.count

@@ -39,7 +39,7 @@ import loadMore from './../com/loadMore.vue'
                 attentioned:[],
                 attentionedUserArticles:[],
                 isLoadinMore:false,
-                attentionedUserArticlesCount:0,
+                attentionedUserArticlesCount:-1,
                 selectedUserId:0,
                 loading:false,
             }
