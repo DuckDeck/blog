@@ -474,23 +474,43 @@ map.article_id from article_tag as tag left join article_tag_map as map on tag.t
 -- create user_detail view
 ------------------------------
 
-CREATE VIEW user_detail AS
-select 
- a.user_group_id ,
- a.user_name ,
- a.user_password ,
- a.user_token ,
- a.user_isSendEmail ,
- a.user_isValidate ,
- a.user_register_time ,
- a.user_register_ip ,
- a.user_login_times ,
- a.user_last_login_ip ,
- a.user_lock ,
- a.user_freeze ,
- a.user_auth ,b.*
- from user a join user_info b on a.user_id = b.user_id
-
+CREATE 
+    ALGORITHM = UNDEFINED 
+     DEFINER = `stan`@`%`  --这里要根据数据库不一样而修改
+    SQL SECURITY DEFINER
+VIEW `user_detail` AS
+    SELECT 
+        `a`.`user_group_id` AS `user_group_id`,
+        `a`.`user_name` AS `user_name`,
+        `a`.`user_password` AS `user_password`,
+        `a`.`user_token` AS `user_token`,
+        `a`.`user_isSendEmail` AS `user_isSendEmail`,
+        `a`.`user_isValidate` AS `user_isValidate`,
+        `a`.`user_register_time` AS `user_register_time`,
+        `a`.`user_register_ip` AS `user_register_ip`,
+        `a`.`user_login_times` AS `user_login_times`,
+        `a`.`user_last_login_ip` AS `user_last_login_ip`,
+        `a`.`user_lock` AS `user_lock`,
+        `a`.`user_freeze` AS `user_freeze`,
+        `a`.`user_auth` AS `user_auth`,
+        `b`.`user_id` AS `user_id`,
+        `b`.`user_real_name` AS `user_real_name`,
+        `b`.`user_phone` AS `user_phone`,
+        `b`.`user_gender` AS `user_gender`,
+        `b`.`user_qq` AS `user_qq`,
+        `b`.`user_email` AS `user_email`,
+        `b`.`user_address` AS `user_address`,
+        `b`.`user_editor_type` AS `user_editor_type`,
+        `b`.`user_mark` AS `user_mark`,
+        `b`.`user_rank_id` AS `user_rank_id`,
+        `b`.`user_birthday` AS `user_birthday`,
+        `b`.`user_description` AS `user_description`,
+        `b`.`user_image_url` AS `user_image_url`,
+        `b`.`user_last_update_time` AS `user_last_update_time`,
+        `b`.`user_says` AS `user_says`
+    FROM
+        (`user` `a`
+        JOIN `user_info` `b` ON ((`a`.`user_id` = `b`.`user_id`)))
 
 
 ------------------------------

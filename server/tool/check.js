@@ -191,6 +191,7 @@ class Check{
             return ""
         }
         let t = Tool.decrypt(key,iv,pass)
+        console.log("decryPass:" + t)
         let para = t.split('=')
         if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
             return para[0]
