@@ -85,7 +85,7 @@ class Check{
        return null
       } 
 
-    static  async checkManageToken(req,outTime = 5000){
+    static  async checkManageToken(req,outTime = 10000){
         return new Promise((resolve,reject)=>{
             if(req == undefined){
                  resolve(Result.create(9))
@@ -100,6 +100,8 @@ class Check{
             }
             let t = Tool.decrypt(key,iv,token)
             let para = t.split('=')
+            console.log(Date.parse(new Date()))
+            console.log(t)
             if(Date.parse(new Date()) - parseInt(para[1]) < outTime){
                 let value =  myCache.get('managerKey' + id)
                 if(value == undefined){
@@ -133,7 +135,7 @@ class Check{
         })
      }
 
-    static async checkToken(req,outTime = 5000){ 
+    static async checkToken(req,outTime = 10000){ 
        return new Promise((resolve,reject)=>{
            if(req == undefined){
                 resolve(Result.create(9))

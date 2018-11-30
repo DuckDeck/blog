@@ -30,7 +30,7 @@
                         <!--使用这个vue-html5-editor确实无解了，无法变成url会让上传的图片都不知道是谁，所以要么用别的组件，要么hook 这个ajax请求，更改url-->
                         <!--搞定，使用Js 拦截全局ajax请求并更改url的方法完全解决-->
                         <vue-html5-editor class="editor" v-show="editMode" :content="content" @change="updateData" ></vue-html5-editor>
-                        <mavonEditor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
+                        <mavon-editor @change="updateMarkdownData" @save="saveMarkdownData" class="editor" v-show="!editMode" v-model="markDownContent"/>
                         <div class="handleArticleClass">
                             <el-button class="editor-btn" type="primary"  @click="save('article',1)">发布文章</el-button>
                             <el-button class="editor-btn" type="primary" v-show="isNew" @click="tempSave(false)">保存草稿</el-button>
@@ -56,7 +56,7 @@
 <script>
 import {getTags,getSorts,saveArticle,tempArticle,articleById,saveTempArticle} from '../../store/service'
 import blogFoot from './com/blogFoot.vue'
-import { mavonEditor } from 'mavon-editor'
+
 import  toMarkdown  from 'to-markdown'
 
 //wait to do auto save feature
@@ -302,7 +302,7 @@ import  toMarkdown  from 'to-markdown'
             },
         },
         components:{
-            blogFoot,mavonEditor
+            blogFoot
         },
         beforeDestroy(){
              this.tempSave()
