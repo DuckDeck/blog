@@ -196,6 +196,7 @@ class Check{
         //因为本地和服务器时间不一样，所以要考虑时区问题
         let date = new Date()
         let standartTime = Date.parse(date) + date.getTimezoneOffset() * 60000
+        console.log('standart time:' + standartTime)
         if(standartTime - parseInt(para[1]) < 5000){
             return para[0]
         }
