@@ -193,13 +193,18 @@ class Check{
         let t = Tool.decrypt(key,iv,pass)
         console.log("decryPass:" + t)
         let para = t.split('=')
-        if(Date.parse(new Date()) - parseInt(para[1]) < 5000){
+        //因为本地和服务器时间不一样，所以要考虑时区问题
+        let date = new Date()
+        let standartTime = Date.parse(date) + date.getTimezoneOffset() * 60000
+        if(standartTime - parseInt(para[1]) < 5000){
             return para[0]
         }
         else{
             return ""
         }
      }
+
+     
 }
 module.exports = Check
 
