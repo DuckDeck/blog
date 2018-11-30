@@ -17,7 +17,7 @@
                    <a   class="loginAction">忘记密码？ 请联系网站作者</a>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')" >登录</el-button>
+                    <el-button v-loading="loginLoading" type="primary" @click="submitForm('ruleForm')" >登录</el-button>
                 </div>
             </el-form>
         </div>
@@ -34,6 +34,7 @@ import {login} from '../../store/manageService'
                     username: '',
                     password: ''
                 },
+                loginLoading:false,
                 rules: {
                     username: [
                         { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -49,7 +50,9 @@ import {login} from '../../store/manageService'
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
+                        self.loginLoading = true
                         login(self.ruleForm.username, createPasswordEnctypt(self.ruleForm.password)).then(function(data){
+                            self.loginLoading = false
                             if(data.code == 0){
                                 clearStore()
                                 setStore('m_token',data.data)    
@@ -59,6 +62,7 @@ import {login} from '../../store/manageService'
                                  toast(self,data.cMsg)
                             }
                         },function(err){
+                            self.loginLoading = false
                             toast(self,err.cMsg)
                         })
                     }
