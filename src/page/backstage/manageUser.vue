@@ -4,7 +4,7 @@
           管理用户
         </div>
         
-        <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
             <el-table-column width="100"   type="selection" >
                 <template slot-scope="scope">
                    <el-checkbox v-model="scope.row.isSelect" ></el-checkbox>
@@ -43,6 +43,7 @@ import {allUser} from '../../store/manageService'
                 tableData: [],
                 dialogVisible:false,
                 deleteMessage:'',
+                loading:false
             }
         },
         mounted(){
@@ -50,7 +51,9 @@ import {allUser} from '../../store/manageService'
         },
         methods:{
             async loadData(index = 0,size = 10){
+                this.loading = true
                 let res = await allUser(index,size)
+                 this.loading = false
                 if(res.code == 0){
                     this.tableData = res.data
                 }

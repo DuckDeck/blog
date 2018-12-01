@@ -9,7 +9,7 @@
          </div>
 
          <el-tabs v-model="activeName" type="card" @tab-click="handleClick" style="font-size:20px">
-            <el-tab-pane label="个人详情" name="userInfo">
+            <el-tab-pane label="个人详情" name="userInfo">
                  <div class="userInfoManageClass"> 
                     <div class="basicInfoManageClass" >
                         <div class="basicInfoManageTitleClass">
@@ -36,7 +36,7 @@
                                 <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
                             </el-form-item>
                             <el-form-item >
-                             <span class="infoTitleClass">生日</span>  <el-date-picker
+                             <span class="infoTitleClass">生日</span>  <el-date-picker
                                     v-model="userInfo.user_birthday"
                                     type="date"
                                     placeholder="选择日期"  >

@@ -4,7 +4,7 @@
           管理留言
         </div>
 
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table v-loading="loading"  :data="tableData" border style="width: 100%">
             <el-table-column  label="标题" >
                 <template slot-scope="scope">
                     <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.article_name}}</a>
@@ -46,7 +46,8 @@ import {articlesNewComment} from '../../store/manageService'
                 tableData: [],
                 count:0,
                 selectedData:[],
-                pageIndex:1
+                pageIndex:1,
+                loading:false
             }
         },
          async mounted(){
@@ -56,7 +57,9 @@ import {articlesNewComment} from '../../store/manageService'
         methods: {
             async loadData(index,size){
                 let self = this
+                this.loading = true
                 let resArticle = await  articlesNewComment(index,size)
+                 this.loading = false
                 if(resArticle.code == 0){
                     this.tableData = resArticle.data
                     self.count = resArticle.count

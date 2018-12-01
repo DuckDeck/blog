@@ -10,7 +10,7 @@
             <div class="tagSortClass"> 
                 <div class="sortClass" >
                     <div class="sortTitleClass">    分类管理  </div>
-                    <div class="sortsClass">
+                    <div class="sortsClass" v-loading="loadingSort">
                         <el-tag :key="sort.sort_id" v-for="sort in sorts" type='primary' :class="{tagSelected:sort.sort_article_id == selectedSort.sort_article_id}"
                           :closable="sort.sort_article_id > 0"   :close-transition="false"  @close="handleSortClose(sort)">
                         <span class="clickSpan"  @click="clickSort(sort)">{{sort.sort_article_name}}</span>
@@ -24,7 +24,7 @@
 
                 <div class="tagClass">
                     <div class="tagTitleClass">    标签管理   </div>
-                    <div class="tagssClass">
+                    <div class="tagssClass" v-loading="loadingTag">
                         <el-tag :key="tag.tag_id" v-for="tag in tags" type='primary' :class="{tagSelected:tag.isSelected}"
                          :closable="tag.tag_id > 0" :close-transition="false" @close="handleTagClose(tag)">
                          <span  class="clickSpan" @click="clickTag(tag)"> {{tag.tag_name}}</span>
@@ -37,9 +37,9 @@
                 </div>
             </div>
 
-            <div v-loading="isLoadingArticles">
+            <div v-loading="loadingArticles" style="min-height:200px">
                 <articleCell :articleInfo = "article" v-for="article in articles " v-bind:key="article.article_id"></articleCell>
-                <emptyHint v-show="articleCount == 0"></emptyHint>
+                <emptyHint v-show="articleCount == 0 && !loadingArticles"></emptyHint>
                 <loadMore :isLoading="isLoadingArticles" v-show="articles.length < articleCount"  @loadmore="loadMoreArticle(false)"></loadMore>
             </div>
 
@@ -82,18 +82,23 @@ import loadMore from './../com/loadMore.vue'
                 articles:[],
                 currentSort:"",
                 currentTag:"",
-                articleCount:0,
+                articleCount:-1,
                 isLoadingArticles:false,
                 deleteMessage:'',
                 dialogVisible:false,
                 currentDeleteSort:{},
                 currentDeleteTag:{},
-                deleteType:0
+                deleteType:0,
+                loadingSort:false,
+                loadingTag:false,
+                loadingArticles:false
             }
         },
        async mounted(){
             this.userId = this.$route.params.userId
+            this.loadingTag = true
             let resTag = await getTags(this.userId)
+            this.loadingTag = false
             if(resTag.code == 0){
                 let tmp =  resTag.data.map(s=>{
                      s.isSelected = false
@@ -118,7 +123,9 @@ import loadMore from './../com/loadMore.vue'
             else{
                 toast(this,resTag.cMsg)
             }
+            this.loadingSort = true
             let resSort = await getSorts(this.userId)
+            this.loadingSort = false
             if(resSort.code == 0){
                 let tmp = resSort.data.map(s=>{
                      s.isSelected = false
@@ -157,24 +164,34 @@ import loadMore from './../com/loadMore.vue'
 
 
        methods:{
+
            async articlesBySortTag(sort,tag,index,page){
+               if(index == 0){
+                   this.loadingArticles = true
+               }
+               else{
+                    this.isLoadingArticles = true
+               }
+               
                 let resArticle =   await articlesBySort(this.userId,sort,tag,index,page)
-                    if(resArticle.code == 0){
-                        this.articleCount = resArticle.count
-                        let self = this
-                        if(index == 0){
-                            this.articles = resArticle.data.map(s=>{
-                                s.user_info = self.userInfo
-                                return s
-                            })
-                        }
-                        else{
-                            this.articles = this.articles.concat(resArticle.data.map(s=>{
-                                s.user_info = self.userInfo
-                                return s
-                            }))
-                        }
+                this.loadingArticles = false
+                this.isLoadingArticles = false
+                if(resArticle.code == 0){
+                    this.articleCount = resArticle.count
+                    let self = this
+                    if(index == 0){
+                        this.articles = resArticle.data.map(s=>{
+                            s.user_info = self.userInfo
+                            return s
+                        })
                     }
+                    else{
+                        this.articles = this.articles.concat(resArticle.data.map(s=>{
+                            s.user_info = self.userInfo
+                            return s
+                        }))
+                    }
+                }
             },
             handleSortClose(sort) {
                 this.deleteMessage = "你确定要删除分类 " + sort.sort_article_name + " 吗?"
@@ -276,9 +293,9 @@ import loadMore from './../com/loadMore.vue'
                 this.articlesBySortTag(this.currentSort,this.currentTag,0,10)
             },
             loadMoreArticle(){
-                this.isLoadingArticles = true
+                
                 this.articlesBySortTag(this.currentSort,this.currentTag,this.articles.length / 10,10)
-                this.isLoadingArticles = false
+              
             },
             deleteArticleConfirm(){
                 this.dialogVisible = false

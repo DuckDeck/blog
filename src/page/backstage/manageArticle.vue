@@ -4,10 +4,10 @@
           管理文章
         </div>
         <div class="itchManageArticle">
-            <el-button type="primary" @click="releaseArticle(1)">发布文章</el-button>
-            <el-button type="primary" @click="releaseArticle(0)">不发布文章</el-button>
+            <el-button type="primary" @click="releaseArticle(1)">发布文章</el-button>
+            <el-button type="primary" @click="releaseArticle(0)">不发布文章</el-button>
         </div>
-        <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
             <el-table-column width="80"   type="selection" >
             </el-table-column>
             <el-table-column  label="标题" >
@@ -72,7 +72,8 @@ import {allArticle,releaseArticle,deleteAticleByManage} from  '../../store/manag
                 deleteArticle:{},
                 count:0,
                 selectedData:[],
-                pageIndex:1
+                pageIndex:1,
+                loading:false
             }
         },
         mounted(){
@@ -81,7 +82,9 @@ import {allArticle,releaseArticle,deleteAticleByManage} from  '../../store/manag
         methods: {
            async loadData(index = 0,size = 10){
                 let self = this
+                this.loading = true
                 let res = await  allArticle(index,size)
+                this.loading = false
                 if(res.code == 0){
                     self.tableData = res.data.map(s=>{
                         s.isSelect = false

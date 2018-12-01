@@ -1,7 +1,7 @@
 <template>
 
       <div class="login-body">
-          <div class="ms-login">
+          <div class="ms-login" v-loading="loginLoading">
               <div class="blog-login-title">
                   ZOE Blog后台
               </div>
@@ -14,10 +14,11 @@
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <el-form-item  style="margin-bottom: 10px;height: 50px;">
-                   <a   class="loginAction">忘记密码？ 请联系网站作者</a>
+                    <el-button @click="contactAuthor"  type="text" >忘记密码？ 请联系网站作者</el-button>
+                   
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button v-loading="loginLoading" type="primary" @click="submitForm('ruleForm')" >登录</el-button>
+                    <el-button  type="primary" @click="submitForm('ruleForm')" >登录</el-button>
                 </div>
             </el-form>
         </div>
@@ -71,7 +72,10 @@ import {login} from '../../store/manageService'
             },
             close(e){
                 if(e.target!=e.currentTarget) return;
-               
+            },
+            contactAuthor(){
+            
+                toast(this,"请联系QQ：3421902")
             }
         }
 
