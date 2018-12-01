@@ -11,7 +11,7 @@
         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>{{displayMessage}}</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">重新验证</el-button>
+                <el-button @click="dialogVisible = false">重新验证</el-button>
                 <el-button type="primary" @click="reSendMail">重新发邮件</el-button>
             </span>
         </el-dialog>

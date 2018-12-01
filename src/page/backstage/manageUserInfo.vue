@@ -58,7 +58,7 @@
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
-                              <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                             <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                         :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                         <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
@@ -71,8 +71,8 @@
                         </div>
                         <div class="basicInfoEditManageClass">
                             <el-form> 
-                                <el-form-item >                 
-                                    <span class="infoTitleClass">自我描述</span> 
+                                <el-form-item >                 
+                                    <span class="infoTitleClass">自我描述</span>
                                     <el-input
                                         type="textarea"
                                         :rows="4" v-model="userInfo.user_description"
@@ -80,8 +80,8 @@
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item >     
-                                    <span class="infoTitleClass">个人语录</span>
-                                     <el-input
+                                    <span class="infoTitleClass">个人语录</span>
+                                     <el-input
                                         type="textarea" v-model = "userInfo.user_says"
                                         :rows="4"
                                         placeholder="请输入内容">
@@ -93,7 +93,7 @@
 
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="标签/分类" name="tag">
+            <el-tab-pane label="标签/分类" name="tag">
                      <div class="tagSortManageClass"> 
                         <div class="sortManageClass" >
                             <div class="sortManageTitleClass">
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="友情链接" name="link">
+                <el-tab-pane label="友情链接" name="link">
                       <div class="table">
                         <el-table :data="tableData" border style="width: 100%">
                             <el-table-column prop="link_name" label="链接名称" sortable width="160" >
@@ -141,7 +141,7 @@
                             </el-table-column>
                             <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
                             </el-table-column>
-                            <el-table-column prop="show_order"  label="链接排序,默认为0" >
+                            <el-table-column prop="show_order"  label="链接排序,默认为0" >
                             </el-table-column>
                         </el-table>
                         <div class="pagination">

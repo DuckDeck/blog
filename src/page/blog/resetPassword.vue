@@ -16,7 +16,7 @@
                    </div>
                 </el-form-item>
                 <el-form-item  prop='resetCode'>
-                     <el-input   placeholder="重设码" v-model="ruleForm.resetCode" 
+                     <el-input   placeholder="重设码" v-model="ruleForm.resetCode" 
                     @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <el-form-item prop="pass" >

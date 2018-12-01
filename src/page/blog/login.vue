@@ -24,7 +24,7 @@
         <el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>该用户尚未验证，请验证后登录</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">现在去验证</el-button>
+                <el-button @click="dialogVisible = false">现在去验证</el-button>
                 <el-button type="primary" @click="reSendMail">重新发邮件</el-button>
             </span>
         </el-dialog>

@@ -30,7 +30,7 @@
                                 <span class="infoTitleClass">地址</span>  <el-input v-model="userInfo.user_addreddss" ></el-input>
                             </el-form-item>
                             <el-form-item >
-                             <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
+                             <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
                                     v-model="userInfo.user_birthday"
                                     type="date" class="birthdayClass"
                                     placeholder="选择日期"  >
@@ -42,7 +42,7 @@
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
-                              <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                              <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                         :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                         <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
@@ -55,8 +55,8 @@
                         </div>
                         <div class="basicInfoEditManageClass">
                             <el-form> 
-                                <el-form-item >                 
-                                    <span class="infoTitleClass">自我描述</span> 
+                                <el-form-item >                 
+                                    <span class="infoTitleClass">自我描述</span>
                                     <el-input
                                         type="textarea"
                                         :rows="2" v-model="userInfo.user_description"
@@ -64,8 +64,8 @@
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item >     
-                                    <span class="infoTitleClass">个人语录</span>
-                                     <el-input
+                                    <span class="infoTitleClass">个人语录</span>
+                                     <el-input
                                         type="textarea" v-model = "userInfo.user_says"
                                         :rows="2"
                                         placeholder="请输入内容">

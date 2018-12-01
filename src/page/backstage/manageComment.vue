@@ -14,7 +14,7 @@
             </el-table-column>
             <el-table-column prop="comment_count"  width="100" label="评论个数" >
             </el-table-column>
-            <el-table-column prop="newComment.comment_content"  label="最新评论">
+            <el-table-column prop="newComment.comment_content"  label="最新评论">
             </el-table-column>
             <el-table-column label="操作" width="100">
                 <template slot-scope="scope">

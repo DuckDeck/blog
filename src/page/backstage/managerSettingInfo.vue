@@ -8,7 +8,7 @@
              <div class="basicInfoManageClass" >
                 <div class="headinfoManageTitleClass">  管理员头像  </div>
                 <div class="basicInfoEditManageClass">
-                         <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                         <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                 <img v-if="manageInfo.m_head.length > 10" :src="manageInfo.m_head" class="avatar"> 
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
@@ -21,23 +21,23 @@
                 </div>
                 <div class="basicInfoEditManageClass">
                      <el-form :model="pass" :rules="rules" ref="pass"> 
-                          <el-form-item prop="old" >                 
-                             <span class="infoTitleClass">旧密码</span> 
+                          <el-form-item prop="old" >                 
+                             <span class="infoTitleClass">旧密码</span>
                              <el-input
                               type = 'password' v-model="pass.old" 
                                 placeholder="请输入原密码">
                                 </el-input>
                             </el-form-item>
                               <el-form-item prop="new"  >     
-                            <span class="infoTitleClass">新密码</span>
-                              <el-input 
+                            <span class="infoTitleClass">新密码</span>
+                              <el-input 
                              type = 'password' v-model="pass.new" 
                                 placeholder="请输入新密码">
                                 </el-input>
                             </el-form-item>
                               <el-form-item prop="again"  >     
                             <span class="infoTitleClass">确认</span>
-                              <el-input
+                              <el-input
                              type = 'password' v-model="pass.again" 
                                 placeholder="请输入新密码">
                                 </el-input>

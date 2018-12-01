@@ -13,7 +13,7 @@
             </el-table-column>
             <el-table-column prop="link_logo" label="链接LOGO" sortable width="150">
             </el-table-column>
-            <el-table-column prop="show_order"  label="链接排序,默认为0" >
+            <el-table-column prop="show_order"  label="链接排序,默认为0" >
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">

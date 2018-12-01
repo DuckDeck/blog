@@ -66,14 +66,14 @@
                                 </el-radio-group>
                               </el-form-item>
                             <el-form-item >
-                              <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
+                              <span class="infoTitleClass birthdayTitleClass">生日</span>  <el-date-picker
                                     v-model="birthday"
                                     type="date" class="birthdayClass"
                                     placeholder="选择日期"  >
                                     </el-date-picker>
                             </el-form-item>
                             <el-form-item  >
-                              <span class="infoTitleClass birthdayTitleClass">我的网站</span> 
+                              <span class="infoTitleClass birthdayTitleClass">我的网站</span> 
                               <div style="display: inline-block">
                                   <div style="max-width: 800px;display: block">
                                     <el-input class="myLinkInput" placeholder="http://个人网站" v-model="mainLink.link_url" ></el-input>
@@ -99,19 +99,19 @@
                         <el-tab-pane  name="comment">
                             <span slot="label"><i class="fa fa-comment-o"></i> 修改密码 </span>
                                 <el-form :model="pass" :rules="rulePass" ref="pass" style="min-height: 650px" > 
-                                    <el-form-item prop="old" >                 
-                                        <span style="margin-left: -5px" class="infoTitleClass">旧密码</span> 
+                                    <el-form-item prop="old" >                 
+                                        <span style="margin-left: -5px" class="infoTitleClass">旧密码</span>
                                         <el-input  class="user_input" style="margin-left: 5px;"  type = 'password' v-model="pass.old"      placeholder="请输入原密码">
                                             </el-input>
                                         </el-form-item>
                                         <el-form-item prop="new"  >     
-                                        <span class="infoTitleClass">新密码</span>
-                                         <el-input  class="user_input"  type = 'password' v-model="pass.new"     placeholder="请输入新密码">
+                                        <span class="infoTitleClass">新密码</span>
+                                         <el-input  class="user_input"  type = 'password' v-model="pass.new"     placeholder="请输入新密码">
                                             </el-input>
                                         </el-form-item>
                                         <el-form-item prop="again"  >     
                                         <span class="infoTitleClass">确认</span>
-                                         <el-input class="user_input" type = 'password' v-model="pass.again" placeholder="请输入新密码">
+                                         <el-input class="user_input" type = 'password' v-model="pass.again" placeholder="请输入新密码">
                                             </el-input>
                                         </el-form-item>
                                         <el-button class="saveBasicInfoButton" type="primary" @click="changePassword" >保存</el-button> 

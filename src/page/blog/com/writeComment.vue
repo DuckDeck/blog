@@ -1,7 +1,7 @@
 <template>
     <div class="commentArticle">
         <el-input v-show = "canComment"  class="LoginComment" type="textarea" :rows="5" :placeholder=placeHolder  v-model="comment"> </el-input>
-        <div class="notLoginComment" v-show = "!canComment">
+        <div class="notLoginComment" v-show = "!canComment">
              <el-button  type="primary" @click="LoginToComment">登录</el-button> <span class="loginToComment">后发表评论</span>
         </div>
         <el-button  v-show = "canComment" class="buttonSubmitArticle" type="primary" @click="submitComment">提交</el-button>

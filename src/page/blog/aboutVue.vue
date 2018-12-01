@@ -57,7 +57,7 @@
                     </div>
                     <div class="unCompletedFeatureDiv">
                         存在问题
-                        <el-checkbox style="margin-left: 30px;"  label="富文本不能上传图片到server" ></el-checkbox>
+                        <el-checkbox style="margin-left: 30px;"  label="富文本不能上传图片到server" ></el-checkbox>
                         <el-checkbox  label="富文本和Markdown不能完全正确转换" ></el-checkbox>
                         <el-checkbox  label="Markdown编辑器存在一些Bug，比如会重新刷新页面" ></el-checkbox>
                     </div>
