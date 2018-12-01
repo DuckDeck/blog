@@ -2,7 +2,7 @@
   <div class="container">      
        <blogLogo ></blogLogo>
        <blogSwiper class="blogSwiper" :articles = "top"></blogSwiper>
-       <div class="blogContent">
+       <div class="blogContent" v-loading="loading">
            <div class="articlesList">
                <div style="position: relative;margin-top: 20px;margin-bottom: 10px;padding-bottom: 20px;" 
                v-for="art in articles" v-bind:key="art.article_id">
@@ -113,6 +113,7 @@ import loadMore from './com/loadMore.vue'
             authors:[],
             pageIndex:0,
             articlesCount:0,
+            loading:false,
             isLoading:false,
             swiperOption: {
                 pagination: '.swiper-pagination',
@@ -135,7 +136,9 @@ import loadMore from './com/loadMore.vue'
                 this.getUserInfo(user_id)
             }
         }
+        this.loading = true
         index().then(res=>{
+            this.loading = false
             if(res.code == 0){
                 self.top = res.data.top
                 self.articles = res.data.articles
@@ -149,6 +152,7 @@ import loadMore from './com/loadMore.vue'
                 toast(self,res.cMsg)
             }
         }).catch(err=>{
+              this.loading = false
             toast(self,err.cMsg)
         })
         

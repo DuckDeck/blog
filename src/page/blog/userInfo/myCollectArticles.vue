@@ -5,7 +5,7 @@
                 <i class="fa fa-bookmark" aria-hidden="true"></i>
                 收藏的文章
             </div>
-            <div v-loading="loading" class="collectedArticles" >
+            <div v-loading="loading" class="collectedArticles" style="min-height:200px" >
              <articleCell  v-for="art in collectedArticles" v-bind:key="art.article_id" :articleInfo = "art" @notCollect="notCollect"></articleCell>
                 <emptyHint v-show="collectedArticlesCount == 0"></emptyHint>
                 <loadMore :isLoading="isLoadinMore" v-show="collectedArticles.length < collectedArticlesCount"
@@ -42,7 +42,7 @@ import loadMore from './../com/loadMore.vue'
         },
         methods:{
             async getCollctedArticles(id){
-                if(id == 0){
+                if(this.collectedArticles.length / 10 == 0){
                     this.loading = true
                 }
                 else{

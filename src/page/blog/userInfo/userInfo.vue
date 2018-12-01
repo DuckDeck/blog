@@ -75,7 +75,7 @@
                             {{isMine == true ? '我' : '他'}}的分类
                         </div>
                         <div class="mySortsList">
-                            <el-tag :key="sort.sort_id" v-for="sort in userInfo.sorts" type='primary'
+                            <el-tag :key="sort.sort_id" v-for="sort in userInfo.sorts" type='primary'  style="text-align:center"
                              :close-transition="false" >
                             <span  class="clickSpan" > {{sort.sort_article_name}}</span>
                         </el-tag>

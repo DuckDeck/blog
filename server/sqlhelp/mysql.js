@@ -3,7 +3,7 @@ var mysql = require('mysql');
 const result = require('../model/result')
 var pool  = mysql.createPool({  
   connectionLimit : 10,  
-  host            : 'localhost',  
+  host            : 'bqbbq.com',  
   user            : 'test',  
   password        : '123456',  
   database        : 'blog' ,
@@ -11,7 +11,7 @@ var pool  = mysql.createPool({
 
 var poolCity  = mysql.createPool({  
     connectionLimit : 10,  
-    host            : 'localhost',  
+    host            : 'bqbbq.com',  
     user            : 'test',  
     password        : '123456',  
     database        : 'city' ,

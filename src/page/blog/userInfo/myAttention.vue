@@ -1,7 +1,7 @@
 <template>
       <div  class="container" >
           <div class="main-page">
-            <div class="myAttentions"> 
+            <div class="myAttentions" v-loading="loadingUser"> 
                 <div v-for="att in attentioned" @click="getUserArticles(att)" v-bind:key="att.user_id" 
                 v-bind:class="[selectedUserId == att.user_id?'attentionedUsersSelected':'attentionedUsers']">
                    <img class="userHead"  :src="att.user_image_url" alt="">
@@ -42,17 +42,22 @@ import loadMore from './../com/loadMore.vue'
                 attentionedUserArticlesCount:-1,
                 selectedUserId:0,
                 loading:false,
+                loadingUser:false
             }
         },
         async mounted(){
             let id = this.$route.params.userId
             this.userId = id
             console.log(id)
+            
             this.getAttention(id)
+            
         },
         methods:{
             async getAttention(id){
+                this.loadingUser = true
                 let res = await userAttentioned(id)
+                this.loadingUser = false
                 if(res.code == 0){
                     console.log(res.data)
                     this.attentioned = res.data

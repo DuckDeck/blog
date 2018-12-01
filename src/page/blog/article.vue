@@ -1,7 +1,7 @@
 <template>
      <div class="container">   
             <div class="main-page">          
-                    <div class=" article-content">
+                    <div class=" article-content" v-loading="loading">
                        <header>
                             <div  class="articleHeader" >
                                 {{article.article_name}}
@@ -52,6 +52,7 @@ import collectArticle from './com/collectArticle.vue'
     data() {
       return {
           article:{},
+          loading:false,
           articleUserInfo:{},
           comments:[],
           commentCount:0,
@@ -65,7 +66,9 @@ import collectArticle from './com/collectArticle.vue'
     async mounted(){
         let self= this
         let id = this.$route.params.articleId
+        this.loading = true
         let res = await articleById(id)
+        this.loading = false
         if(res.code == 0){
             this.article = res.data
             this.articleUserInfo = res.data.userInfo

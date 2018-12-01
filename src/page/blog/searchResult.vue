@@ -2,9 +2,9 @@
      <div class="container">    
             <div class="searchResult">   
                 <div class="searchResultHint">
-                    "{{keyword}}" 的搜索结果
+                   "<span style="color:red">{{keyword}}</span>"的搜索结果
                 </div>       
-                <el-tabs v-model="activeName" class="searchResultTab" type="border-card" @tab-click="handleClick">
+                <el-tabs v-loading="loading" v-model="activeName" class="searchResultTab" type="border-card" @tab-click="handleClick">
                     <el-tab-pane   name="articles">
                         <span slot="label"><i class="fa fa-file-text"></i> 文章 </span>
                         <div v-if="briefUsers.length > 0 || briefSorts.length > 0"  class="usersSearchResult">
@@ -39,7 +39,7 @@
                         </div>
 
                         <articleCell @userHeadClick="userHeadClick" v-for="art in articles" v-bind:key="art.article_id" :articleInfo = "art"></articleCell>
-                        <emptyHint v-show="articleCount == 0" />
+                        <emptyHint v-show="articleCount == 0 && !loading" />
                         <loadMore :isLoading="isLoadingArticle" v-show="articles.length < articleCount"  @loadmore="loadMoreArticle"></loadMore>
                         </el-tab-pane>
                      <el-tab-pane  name="users">
@@ -58,7 +58,7 @@
                                         </div>
                                     </div>
                         </div>
-                          <emptyHint v-show="userCount == 0" />
+                          <emptyHint v-show="userCount == 0 && !loading" />
                          <loadMore :isLoading="isLoadingArticle" v-show="users.length < userCount"  @loadmore="loadMoreUser"></loadMore>
                     </el-tab-pane>
                     <el-tab-pane  name="sorts">
@@ -71,7 +71,7 @@
                                  {{sort.sort_article_name}}
                             </el-button>      
                         </div>
-                         <emptyHint v-show="sortCount == 0" />
+                         <emptyHint v-show="sortCount == 0 && !loading" />
                         <loadMore :isLoading="isLoadingArticle" v-show="sorts.length < sortCount"  @loadmore="loadMoreSort"></loadMore>
                     </el-tab-pane>
                 </el-tabs>
@@ -92,6 +92,7 @@ import loadMore from './com/loadMore.vue'
   export default {
     data() {
       return {
+          loading:false,
           activeName:'articles',
           briefUsers:[],
           briefSorts:[],
@@ -110,9 +111,10 @@ import loadMore from './com/loadMore.vue'
     mounted(){
         let keyword = this.$route.params.keyword
         this.keyword = keyword
+        this.loading = true
         this.searchBaseResult(keyword)
         this.searchResult(keyword,'article',0,10)
-        
+         this.loading = false
     },
     methods:{
         async searchBaseResult(keyword){
