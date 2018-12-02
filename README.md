@@ -7,7 +7,7 @@
 
 ## Demo地址和使用
 
-https://bqbbq.com/#/
+http://bqbbq.com/#/
 
 测试号1： test1  密码: 123456
 
@@ -15,7 +15,7 @@ https://bqbbq.com/#/
 
 博客后台管理登录
 
-https://bqbbq.com/#/manage
+http://bqbbq.com/#/manage
 
 测试号1： admin密码: 123456
 
