@@ -7,7 +7,7 @@
 
 ## Demo地址和使用
 
-http://bqbbq.com/#/
+http://bqbbq.com/
 
 测试号1： test1  密码: 123456
 
