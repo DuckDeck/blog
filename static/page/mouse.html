@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>超级绚丽的html5的页面</title>
+    <script type="text/javascript">
+        window.onload = function () {
+
+    C = Math.cos;
+    S = Math.sin;
+    U = 0;
+    canvas = document.getElementById("myCanvas");
+    c = canvas.getContext("2d");
+    var W = canvas.width = window.innerWidth;
+    var H = canvas.height = window.innerHeight;
+    c.fillRect(0, 0, W, H); // resize <canvas> and draw black rect (default)  
+    c.globalCompositeOperation = "lighter "; // switch to additive color application  
+    c.lineWidth = 0.3; //设置画笔的大小 
+    c.lineCap = "round"; //设置圆滑  
+    var bool = 0,
+    t = 0; // theta 
+    var id = 0;
+    canvas.addEventListener('touchmove', function(event) {
+   // 如果这个元素的位置内只有一个手指的话
+  	 if (event.targetTouches.length == 1) {
+    	 var touch = event.targetTouches[0];
+   		 // 把元素放在手指所在的位置
+   		 clearInterval(id);
+        if (window.T) {
+            if (D == 9) {
+                D = Math.random() * 15;
+                f(1);
+            }
+            clearTimeout(T);
+        }
+        X = touch.pageX; // grab mouse pixel coords 
+        Y = touch.pageY;
+        a = 0;
+        b = 0;
+        A = X,
+        // original 
+        B = Y; // original
+        R = (touch.pageX / W * 999 >> 0) / 999;
+        r = (touch.pageY / H * 999 >> 0) / 999;
+        U = touch.pageX / H * 360 >> 0;
+        D = 9;
+        g = 360 * Math.PI / 180;
+        T = setInterval(f = function(e) {
+            c.save();
+            c.globalCompositeOperation = "source-over";
+            if (e != 1) {
+                c.fillStyle = "rgba(0,0,0,0.02)";
+                c.fillRect(0, 0, W, H);
+            }
+            c.restore();
+            i = 25;
+            while (i-->0  ) {
+                c.beginPath();
+                if (D > 20 || bool) {
+                    // decrease diameter 
+                    if (!bool) { // has hit maximum 
+                        bool = 1;
+                    }
+                    if (D < 0.1) { // has hit minimum  
+                        bool = 0;
+                    }
+                    t -= g; // decrease theta 
+                    D -= 0.1; // decrease size  
+                }
+                if (!bool) {
+                    t += g; // increase theta 
+                    D += 0.1; // increase size  
+                }
+                q = (R / r - 1) * t;
+                x = (R - r) * C(t) + D * C(q) + (A + (X - A) * (i / 25)) + (r - R);
+                // center on xy coords  
+                y = (R - r) * S(t) - D * S(q) + (B + (Y - B) * (i / 25));
+                if (a) {c.moveTo(a, b);c.lineTo(x, y) }
+                c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)";
+                // draw rainbow hypotrochoid 
+                c.stroke();
+                a = x;
+                b = y;
+                // set previous coord.y  
+            }
+            U -= 0.5;
+            // increment hue 
+            A = X; // set original 
+            B = Y; // set original coord.y 
+        },
+
+        16);
+        id = setInterval("c.fillRect(0, 0, " + canvas.width + ", " + canvas.height + ")", 1500);
+ 	  }
+	}, false);
+    canvas.onmousemove = function (e) {
+        clearInterval(id);
+        if (window.T) {
+            if (D == 9) {
+                D = Math.random() * 15;
+                f(1);
+            }
+            clearTimeout(T);
+        }
+        X = e.pageX; // grab mouse pixel coords 
+        Y = e.pageY;
+        a = 0;
+        b = 0;
+        A = X,
+        // original 
+        B = Y; // original
+        R = (e.pageX / W * 999 >> 0) / 999;
+        r = (e.pageY / H * 999 >> 0) / 999;
+        U = e.pageX / H * 360 >> 0;
+        D = 9;
+        g = 360 * Math.PI / 180;
+        T = setInterval(f = function(e) {
+            c.save();
+            c.globalCompositeOperation = "source-over";
+            if (e != 1) {
+                c.fillStyle = "rgba(0,0,0,0.02)";
+                c.fillRect(0, 0, W, H);
+            }
+            c.restore();
+            i = 25;
+            while (i-->0  ) {
+                c.beginPath();
+                if (D > 20 || bool) {
+                    // decrease diameter 
+                    if (!bool) { // has hit maximum 
+                        bool = 1;
+                    }
+                    if (D < 0.1) { // has hit minimum  
+                        bool = 0;
+                    }
+                    t -= g; // decrease theta 
+                    D -= 0.1; // decrease size  
+                }
+                if (!bool) {
+                    t += g; // increase theta 
+                    D += 0.1; // increase size  
+                }
+                q = (R / r - 1) * t;
+                x = (R - r) * C(t) + D * C(q) + (A + (X - A) * (i / 25)) + (r - R);
+                // center on xy coords  
+                y = (R - r) * S(t) - D * S(q) + (B + (Y - B) * (i / 25));
+                if (a) {c.moveTo(a, b);c.lineTo(x, y) }
+                c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)";
+                // draw rainbow hypotrochoid 
+                c.stroke();
+                a = x;
+                b = y;
+                // set previous coord.y  
+            }
+            U -= 0.5;
+            // increment hue 
+            A = X; // set original 
+            B = Y; // set original coord.y 
+        },
+
+        16);
+        id = setInterval("c.fillRect(0, 0, " + canvas.width + ", " + canvas.height + ")", 1500);
+
+    }
+    document.onkeydown = function(e) {
+        a = b = 0;
+        R += 0.05
+    }
+//    canvas.onmousemove({
+//        pageX: 300,
+//        pageY: 290
+//    })
+}
+
+  </script>
+</head>
+<body style="margin: 0px; padding: 0px; width: 100%; height: 100%; overflow: hidden; ">
+    <canvas id="myCanvas" style=" border:1px solid red">
+    </canvas>
+</body>
+</html>

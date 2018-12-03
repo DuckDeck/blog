@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+<style type="text/css">
+@font-face {
+    font-family: digit;
+    src: url('digital-7_mono.ttf') format("truetype");
+}
+</style>
+
+<link href="css/css.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/garden.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+ <style type="text/css" media="screen">
+
+        img { display: none; }
+        body { overflow: hidden; }
+        #canvas { position: absolute; top: 0px; left: 0px; }
+
+    </style>
+
+  <script type="text/javascript" src="js/rain.js"></script>
+ <script type="text/javascript">
+
+
+        function demo() {
+        var engine = new RainyDay('canvas','demo1', window.innerWidth, window.innerHeight);
+        engine.gravity = engine.GRAVITY_NON_LINEAR;
+        engine.trail = engine.TRAIL_DROPS;
+        engine.rain([
+            engine.preset(0, 2, 500)
+        ]);
+        engine.rain([
+            engine.preset(3, 3, 0.88),
+            engine.preset(5, 5, 0.9),
+            engine.preset(6, 2, 1),
+        ], 100);
+        }
+
+    </script>
+</head>
+
+<body onload="demo();" style="margin:0;padding:0;font-size:12px;overflow:auto;background-image:url(image/1.jpg);background-repeat: no-repeat;background-size:100% 100%;
+background-color: #000000;"  >
+<img id="demo1" src="image/1.jpg" width="540px" height="auto"></img>
+<embed width="0" height="0"  autostart="true" controls="ControlPanel" src="music/7AND5 - Crossroads.mp3" />
+
+<div id="mainDiv" style="background-color: rgba(0,0,0,0.5);">
+    <div id="content">
+         <canvas id="c" style="left:90px" ></canvas>
+        <div id="loveHeart" style="margin:0 auto;">
+            <canvas id="garden"></canvas>
+        </div>
+    </div>
+   
+  
+</div>
+<div style="background-color: rgba(0,0,0,0.5);font-size:40px;color:white;height:500px">
+    <div id = "type" style="clear:both;position: relative;top:-480px;width:600px;margin: 0 auto;height:300px"> 
+  <span>这个页面是用于情人节礼物.</span> <br/>
+ <span>研究了一段时间才搞出来.</span><br/>
+  <span>可惜一直没有用上.</span> 
+    <!-- <span>同时我还想说: </span> 
+          <span>I MISS YOU.</span> 
+    </div> -->
+       
+      
+</div>
+<script type="text/javascript">
+var offsetX = $("#loveHeart").width() / 2;
+var offsetY = $("#loveHeart").height() / 2 - 55;
+
+
+if (!document.createElement('canvas').getContext) {
+    var msg = document.createElement("div");
+    msg.id = "errorMsg";
+    msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+    document.body.appendChild(msg);
+    $("#code").css("display", "none")
+    $("#copyright").css("position", "absolute");
+    $("#copyright").css("bottom", "10px");
+    document.execCommand("stop");
+} else {
+    setTimeout(function () {
+        startHeartAnimation();
+    }, 5);
+    $("#type").typewriter();
+    adjustCodePosition();
+ }
+</script>
+
+ <script>
+
+
+        var b = document.body;
+        var c = document.getElementById('c');
+        var a = c.getContext('2d');
+        
+           
+        with(m = Math) C = cos, S = sin, P = pow, R = random;
+        c.width = c.height = f = 500;
+        h = -250;
+
+        function p(a, b, c) {
+            if (c > 60) return [S(a * 7) * (13 + 5 / (.2 + P(b * 4, 4))) - S(b) * 50, b * f + 50, 625 + C(a * 7) * (13 + 5 / (.2 + P(b * 4, 4))) + b * 400, a * 1 - b / 2, a];
+            A = a * 2 - 1;
+            B = b * 2 - 1;
+            if (A * A + B * B < 1) {
+                if (c > 37) {
+                    n = (j = c & 1) ? 6 : 4;
+                    o = .5 / (a + .01) + C(b * 125) * 3 - a * 300;
+                    w = b * h;
+                    return [o * C(n) + w * S(n) + j * 610 - 390, o * S(n) - w * C(n) + 550 - j * 350, 1180 + C(B + A) * 99 - j * 300, .4 - a * .1 + P(1 - B * B, -h * 6) * .15 - a * b * .4 + C(a + b) / 5 + P(C((o * (a + 1) + (B > 0 ? w : -w)) / 25), 30) * .1 * (1 - B * B), o / 1e3 + .7 - o * w * 3e-6]
+                }
+                if (c > 32) {
+                    c = c * 1.16 - .15;
+                    o = a * 45 - 20;
+                    w = b * b * h;
+                    z = o * S(c) + w * C(c) + 620;
+                    return [o * C(c) - w * S(c), 28 + C(B * .5) * 99 - b * b * b * 60 - z / 2 - h, z, (b * b * .3 + P((1 - (A * A)), 7) * .15 + .3) * b, b * .7]
+                }
+                o = A * (2 - b) * (80 - c * 2);
+                w = 99 - C(A) * 120 - C(b) * (-h - c * 4.9) + C(P(1 - b, 7)) * 50 + c * 2;
+                z = o * S(c) + w * C(c) + 700;
+                return [o * C(c) - w * S(c), B * 99 - C(P(b, 7)) * 50 - c / 3 - z / 1.35 + 450, z, (1 - b / 1.2) * .9 + a * .1, P((1 - b), 20) / 4 + .05]
+            }
+        }
+
+     window.setTimeout("s()",1000);
+
+    function s()
+    {
+        setInterval('for(i=0;i<1e4;i++)if(s=p(R(),R(),i%46/.74)){z=s[2];x=~~(s[0]*f/z-h);y=~~(s[1]*f/z-h);if(!m[q=y*f+x]|m[q]>z)m[q]=z,a.fillStyle="rgb("+~(s[3]*h)+","+~(s[4]*h)+","+~(s[3]*s[3]*-80)+")",a.fillRect(x,y,1,1)}', 0);
+    }
+    </script>
+
+</body>
+</html>
