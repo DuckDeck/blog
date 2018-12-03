@@ -85,7 +85,7 @@ class Check{
        return null
       } 
 
-    static  async checkManageToken(req,outTime = 10000){
+    static  async checkManageToken(req,outTime = 50000){
         return new Promise((resolve,reject)=>{
             if(req == undefined){
                  resolve(Result.create(9))
@@ -135,7 +135,7 @@ class Check{
         })
      }
 
-    static async checkToken(req,outTime = 10000){ 
+    static async checkToken(req,outTime = 50000){ 
        return new Promise((resolve,reject)=>{
            if(req == undefined){
                 resolve(Result.create(9))
@@ -202,7 +202,7 @@ class Check{
         console.log("localTime:" + Date.parse(date))
         console.log("oddsetTime:"+date.getTimezoneOffset() * 60000)
         console.log('standart time:' + standartTime)
-        if(Date.parse(date) - parseInt(para[1]) < 10000){
+        if(Date.parse(date) - parseInt(para[1]) < 50000){
             return para[0]
         }
         else{

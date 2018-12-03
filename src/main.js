@@ -10,7 +10,7 @@ import {uploadImgConfig,upImgCb} from './store/service'
 import VueHtml5Editor from 'vue-html5-editor'
 import {baseUrl} from './config/env'
 import  mavonEditor  from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+//import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 Vue.use(VueHtml5Editor,{
      image: {
