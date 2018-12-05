@@ -4,7 +4,8 @@
         <div class="chatContent"></div>
         <div class="chatSender">
             <div style="padding:5px;font-size:20px;color:#c71585;border-top:1px solid #c71585"><i class="fa fa-smile-o"></i> <i class="fa fa-file-image-o"></i></div>
-            <div style="display:flex;padding:5px"> <el-input></el-input>  <el-button style="margin-left:20px">发送</el-button></div>
+            <div style="display:flex;padding:5px"> <el-input v-model="msg"></el-input> 
+             <el-button @click="sendMsg" style="margin-left:20px">发送</el-button></div>
            
         </div>
      </div> 
@@ -22,6 +23,7 @@ import io from 'socket.io-client';
           userId:0,
           chat:null,
           socket:null,
+          msg:''
       }
     },
     async mounted(){
@@ -31,16 +33,29 @@ import io from 'socket.io-client';
         
          this.userId = this.$route.params.id
          this.getTargetUserInfo(this.userId)
-        this.socket.on('connect',function (soc) {
+         this.socket.on('connect',function (soc) {
             console.log('socket connect success')
-        })
+         })
         // this.socket.on('disconnect',function (soc) {
         //     console.log('socket connect success')
         // })
-         this.socket.on('joinResult',function (result) {
+        this.socket.emit('chat_info',{id1:getStore('userInfo').user_id,id2:this.userId})
+        this.socket.on('joinResult',function (result) {
             //$('#room').text(result.room) //这应该写错了
-            console.log(result)
+           console.log('show result')
+           //console.log(result)
         }) 
+        setInterval(()=> {
+            this.socket.emit('rooms')
+        },10000)
+        this.socket.on('rooms',function (rooms) {
+           console.log('show rooms')
+           console.log(rooms)
+        })
+        this.socket.on('message',(msg)=>{
+            console.log('receive new message')
+            console.log(msg)
+        })
     },
     methods:{
         async getTargetUserInfo(id){
@@ -54,6 +69,9 @@ import io from 'socket.io-client';
        },
        goBack(){
            this.$router.go(-1)
+       },
+       sendMsg(){
+            this.socket.emit('message',{room:getStore('userInfo').user_id + '-' + this.userId,text:this.msg})
        }
     },
 

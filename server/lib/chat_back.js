@@ -12,11 +12,14 @@ exports.listen = function(server){
         getChatInfo(socket)
         joinRoom(socket,currentRoom[socket.id])
         handleMessageBroadCasting(socket,nickNames)
+       
+        
+        handleRoomJoining(socket)
         //这里是用于心跳包
         socket.on('rooms',function(){
             socket.emit('rooms',io.sockets.adapter.rooms)
         })
-        handleClientDisconnection(socket)
+        handleClientDisconnection(socket,nickNames,namesUsed)
     })
 
 }
@@ -55,10 +58,21 @@ function joinRoom(socket,room) {
       }
 }
 
+
+
+
 function handleMessageBroadCasting(socket) {
     socket.on('message',function (message) {
-        console.log('receive message:'+message.room)
+        console.log('receive message:'+message.text)
         socket.broadcast.to(message.room).emit('message',{text:nickNames[socket.id]+':'+message.text})
+    })
+}
+function handleRoomJoining(socket) {
+    socket.on('join',function (room) {
+        console.log('receive new room')
+        console.log(room)
+        socket.leave(currentRoom[socket.id])
+        joinRoom(socket,room.newRoom)
     })
 }
     
