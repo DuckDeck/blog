@@ -25,6 +25,8 @@ const sortArticleList = r => require.ensure([], () => r(require('../page/blog/so
 
 const writeArticle =  r => require.ensure([], () => r(require('../page/blog/writeArticle')), 'writeArticle')
 
+const chat =  r => require.ensure([], () => r(require('../page/blog/chat')), 'chat')
+
 const aboutVue =  r => require.ensure([], () => r(require('../page/blog/aboutVue')), 'aboutVue')
 
 const notFoundPage =  r => require.ensure([], () => r(require('../page/blog/404')), 'notFoundPage')
@@ -58,6 +60,9 @@ const systemSetting =  r => require.ensure([], () => r(require('../page/backstag
 const managerSetting =  r => require.ensure([], () => r(require('../page/backstage/managerSetting')), 'managerSetting')
 
 const managerSettingInfo =  r => require.ensure([], () => r(require('../page/backstage/managerSettingInfo')), 'managerSettingInfo')
+
+
+
 
 export default [
     {
@@ -134,7 +139,10 @@ export default [
         path:'/aboutVue',
         component:aboutVue
     },   
-   
+    {
+        path:'/chat/:id',
+        component:chat
+    },  
     {
         path:'*',
         component: notFoundPage,

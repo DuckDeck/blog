@@ -3,7 +3,7 @@ var mysql = require('mysql');
 const result = require('../model/result')
 var pool  = mysql.createPool({  
   connectionLimit : 10,  
-  host            : 'bqbbq.com',  
+  host            : 'localhost',  
   user            : 'test',  
   password        : '123456',  
   database        : 'blog' ,
@@ -11,11 +11,12 @@ var pool  = mysql.createPool({
 
 var poolCity  = mysql.createPool({  
     connectionLimit : 10,  
-    host            : 'bqbbq.com',  
+    host            : 'localhost',  
     user            : 'test',  
     password        : '123456',  
     database        : 'city' ,
   });
+  //host            : 'bqbbq.com',  
 //Issue Point there is a bug in the mysql pool system, it looks like it can cache some query when the sql is the some and the 
 //request result will not change, this is not looks
 //it's not a bug ,it's my issue
