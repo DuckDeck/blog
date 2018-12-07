@@ -2,6 +2,14 @@
 let globalVue = {}
 
 global.formatTime = function(date,format){
+        if(getType(date) == 'String'){
+            date = parseInt(date)
+            date = new Date(date)
+        }
+        if(getType(date) == 'Number'){
+            date = new Date(date)
+        }
+        
         if(!(date instanceof Date)){
             return date
         }

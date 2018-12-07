@@ -3,7 +3,7 @@
         <div class="chatHeader"> <el-button @click="goBack">返回</el-button> <div style="display:inline-block;text-align:center;width:75%">{{userInfo.user_real_name}}</div></div>
         <div class="chatContent">
             <div v-for="msg in messages" v-bind:key="msg.time">
-
+                <div style="padding:5px;text-align:center" v-show="msg.showTime">{{formatDate(msg.time)}}</div>
                  <div  v-show="msg.sender_id == userInfo.user_id" style="display:flex;padding:10px">
                      <img class="head_img" :src="userInfo.user_image_url" alt="">
                     <div style="align-self:center;margin-right:10px">
@@ -86,6 +86,7 @@ import { clearInterval } from 'timers';
         this.socket.on('message',(msg)=> {
             console.log('receive new message')
             console.log(msg)
+            this.calculateShowTime(msg)
             this.messages.push(msg)
         })
     },
@@ -102,16 +103,45 @@ import { clearInterval } from 'timers';
        goBack(){
            this.$router.go(-1)
        },
+       calculateShowTime(msg){
+
+            if(this.messages.length == 0){
+                msg.showTime = true
+            }
+            else{
+                let index = this.messages.length - 1
+                while(index >= 0){
+                    let item = this.messages[index]//上一条消息时间是不是在一分钟内
+                    console.log(item)
+                     if((msg.time -  item.time) > 60000){ //如果不在一分钟内
+                         msg.showTime = true
+                         break
+                     }
+                     else{ //如果在一分钟内
+                         if(item.showTime){
+
+                         }
+                     }
+                     index--
+                }
+            }
+       },
+       formatDate(time){
+           return formatTime(time,'hh:mm')
+       },
        sendMsg(){
             let msg = {room:this.roomId,sender_id:getStore('userInfo').user_id,
             text:this.msg,type:1,time:(new Date()).getTime()}
             this.socket.emit('message',msg)
+            this.calculateShowTime(msg)
             this.messages.push(msg)
             this.msg = ''
        }
+
     },
 
-    computed:{    
+    computed:{ 
+       
     },
     beforeDestroy(){
         console.log(this.heart)
@@ -125,7 +155,7 @@ import { clearInterval } from 'timers';
 .chatHeader{
      background: #eeeeee;
     font-size: 20px;
-    padding: 20px;
+    padding: 10px;
     margin-top: 60px;
     border-top: 5px solid #c71585
 }
