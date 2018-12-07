@@ -28,7 +28,7 @@ import io from 'socket.io-client';
     },
     async mounted(){
        
-         this.socket = io.connect('http://127.0.0.1:3000')
+         this.socket = io.connect('http://127.0.0.1:3000/no1')
          this.chat =new Chat(this.socket)
         
          this.userId = this.$route.params.id

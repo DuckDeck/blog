@@ -8,9 +8,12 @@ exports.listen = function(server){
     io = socketio.listen(server)
     io.set('log level',1)
     io.sockets.on('connection',function(socket){
-        console.log(io.sockets.adapter.rooms)
-        getChatInfo(socket)
-        joinRoom(socket,currentRoom[socket.id])
+        console.log('a connection occor,the socket id=' + socket.id)
+        console.log(socket.handshake.query)
+        let room = socket.handshake.query.room_id
+        currentRoom[socket.id] = room
+       
+        joinRoom(socket,room)
         handleMessageBroadCasting(socket,nickNames)
         //这里是用于心跳包
         socket.on('rooms',function(){
@@ -20,14 +23,6 @@ exports.listen = function(server){
     })
 
 }
-
-function getChatInfo(socket){
-    socket.on('chat_info',msg=>{
-        let roomName = msg.id1 + '-' + msg.id2
-        currentRoom[socket.id] = roomName
-    })
-}
-
 
 
 function joinRoom(socket,room) {
