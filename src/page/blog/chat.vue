@@ -1,11 +1,29 @@
 <template>
      <div class="container" style="width:600px">   
-        <div class="chatHeader"> <el-button @click="goBack">返回</el-button> {{userInfo.user_real_name}}</div>
-        <div class="chatContent"></div>
+        <div class="chatHeader"> <el-button @click="goBack">返回</el-button> <div style="display:inline-block;text-align:center;width:75%">{{userInfo.user_real_name}}</div></div>
+        <div class="chatContent">
+            <div v-for="msg in messages" v-bind:key="msg.time">
+
+                 <div  v-show="msg.sender_id == userInfo.user_id" style="display:flex;padding:10px">
+                     <img class="head_img" :src="userInfo.user_image_url" alt="">
+                    <div style="align-self:center;margin-right:10px">
+                        <div style="font-size:12px">{{userInfo.user_real_name}}</div>
+                        <div style="background-color:#eeeeeeee;margin-right:50px;padding:5px;margin-top:3px">{{msg.text}}</div>
+                    </div>
+                </div>
+                <div  v-show="msg.sender_id == myUserInfo.user_id" style="display:flex;padding:10px;flex-direction:row-reverse">
+                     <img class="head_img" :src="myUserInfo.user_image_url" alt="">
+                    <div style="align-self:center;margin-right:10px">
+                        <div style="font-size:12px;text-align:right">{{myUserInfo.user_real_name}}</div>
+                        <div style="background-color:#eeeeeeee;margin-left:50px;padding:5px;margin-top:3px">{{msg.text}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="chatSender">
             <div style="padding:5px;font-size:20px;color:#c71585;border-top:1px solid #c71585"><i class="fa fa-smile-o"></i> <i class="fa fa-file-image-o"></i></div>
-            <div style="display:flex;padding:5px"> <el-input v-model="msg"></el-input> 
-             <el-button @click="sendMsg" style="margin-left:20px">发送</el-button></div>
+            <div style="display:flex;padding:5px"> <el-input v-model="msg" type="textarea" rows="3"></el-input> 
+             <el-button @click="sendMsg" height="20px" style="margin-left:20px;margin-top:35px" type="primary">发送</el-button></div>
            
         </div>
      </div> 
@@ -15,46 +33,60 @@
 import {getUserInfo} from '../../store/service'
 import {Chat} from '../../tool/chat'
 import io from 'socket.io-client';
+import { clearInterval } from 'timers';
 //todo comment sort feature
   export default {
     data() {
       return {
+          myUserInfo:{},
           userInfo:{},
           userId:0,
           chat:null,
           socket:null,
-          msg:''
+          msg:'',
+          roomId:'',
+          heart:null,
+          messages:[],
       }
     },
     async mounted(){
-       
-         this.socket = io.connect('http://127.0.0.1:3000/no1')
-         this.chat =new Chat(this.socket)
-        
          this.userId = this.$route.params.id
          this.getTargetUserInfo(this.userId)
+         this.myUserInfo = getStore('userInfo')
+         let id1 = getStore('userInfo').user_id
+         let id2 = this.userId
+         if(id1 > id2){
+            [id1,id2] = [id2,id1]
+         }
+         console.log('id1:' + id1+'-----id2:'+id2)
+         this.roomId = id1 + '_' + id2
+         this.socket = io.connect('http://127.0.0.1:3000?room_id=' + id1 + '_' + id2)
+         
+         this.chat =new Chat(this.socket)
          this.socket.on('connect',function (soc) {
             console.log('socket connect success')
          })
         // this.socket.on('disconnect',function (soc) {
         //     console.log('socket connect success')
         // })
-        this.socket.emit('chat_info',{id1:getStore('userInfo').user_id,id2:this.userId})
+        
+        this.socket.emit('chat_info',{id1:id1,id2:id2})
         this.socket.on('joinResult',function (result) {
             //$('#room').text(result.room) //这应该写错了
            console.log('show result')
-           //console.log(result)
+           console.log(result)
         }) 
-        setInterval(()=> {
+        this.heart =  setInterval(()=> {
             this.socket.emit('rooms')
         },10000)
         this.socket.on('rooms',function (rooms) {
            console.log('show rooms')
            console.log(rooms)
         })
-        this.socket.on('message',(msg)=>{
+        this.socket.on('message',(msg)=> {
             console.log('receive new message')
             console.log(msg)
+            this.messages.push(msg)
         })
     },
     methods:{
@@ -71,14 +103,21 @@ import io from 'socket.io-client';
            this.$router.go(-1)
        },
        sendMsg(){
-            this.socket.emit('message',{room:getStore('userInfo').user_id + '-' + this.userId,text:this.msg})
+            let msg = {room:this.roomId,sender_id:getStore('userInfo').user_id,
+            text:this.msg,type:1,time:(new Date()).getTime()}
+            this.socket.emit('message',msg)
+            this.messages.push(msg)
+            this.msg = ''
        }
     },
 
     computed:{    
     },
-    destroyed(){
-        
+    beforeDestroy(){
+        console.log(this.heart)
+        console.log('Chat vue distroy')
+        this.socket.disconnect()
+        window.clearInterval(this.heart)
     }
   }
 </script>
@@ -99,5 +138,11 @@ import io from 'socket.io-client';
 }
 .chatSender div i {
     cursor: pointer;
+}
+.head_img{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    object-fit: cover;
 }
 </style>

@@ -264,10 +264,14 @@ module.exports = {
            ctx.rest(Result.create(503,{user_id:user.user_id}))
            return
         }
-      let token = Tool.md5(Math.random().toString())
+       let token = Tool.md5(Math.random().toString())
        await User.saveToken(token,user.user_id)
-       let result = Result.create(0,{token:token,user_id:user.user_id})
-       ctx.rest(result)      
+       res = await DB.exec(`select  user_id , user_name, user_real_name , 
+       user_phone , user_gender , user_image_url from user_detail where user_id = ? `,[user.user_id])
+       let info = res.data[0]
+       info.token =  token
+       res = Result.create(0,info)
+       ctx.rest(res)      
       },
     //用户注册
     'POST /api/register': async (ctx, next) => {
