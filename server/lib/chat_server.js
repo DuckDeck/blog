@@ -34,16 +34,26 @@ function joinRoom(socket,room) {
 
 async function handleMessageBroadCasting(socket) {
     socket.on('message',async function (message) {
-        console.log('receive message:'+message.room)
-        let newMsg = {room:message.room,sender_id:message.sender_id,text:message.text,type:1,time:(new Date()).getTime()}
-        let receive_status = 0
-        if(currentRoom[newMsg.room].length >1){ //对面有收到
-            receive_status = 1
+         //id,chat_type,sender_id,receive_id,time,chat_id,send_status,chat_content
+        console.log('receive message:'+message)
+        let newMsg = {id:null,chat_type:message.chat_type,
+            sender_id:message.sender_id,
+            receive_id:message.receive_id,
+            time:(new Date()).getTime(),
+            chat_id:message.chat_id,
+            send_status:0,
+            chat_content:message.chat_content
         }
-        let chatInfo = new Chat(0,1,newMsg.sender_id,message.receive_id,newMsg.time,newMsg.room,receive_status,newMsg.text)
+       
+        if(currentRoom[newMsg.chat_id].length >1){ //对面有收到
+            newMsg.send_status = 1
+        }
+        let chatInfo = new Chat(0,newMsg.chat_type,newMsg.sender_id,newMsg.receive_id,newMsg.time,
+            newMsg.chat_id,newMsg.send_status,newMsg.chat_content)
         let id =  await Chat.save(chatInfo)
-        
-        socket.broadcast.to(message.room).emit('message',newMsg)
+        console.log(id)
+        newMsg.id = id.data.id
+        socket.broadcast.to(message.chat_id).emit('message',newMsg)
     })
 }
     

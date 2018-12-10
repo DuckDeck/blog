@@ -10,8 +10,8 @@ module.exports = {
             ctx.rest(tokenResult)
             return
         }
-        let res = Check.checkNum(ctx,'id')
-        if(res.code != 0){
+        let res = Check.checkNum(ctx.params,'id')
+        if(res){
             ctx.rest(res)
             return
         }

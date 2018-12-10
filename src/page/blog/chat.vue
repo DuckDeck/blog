@@ -8,14 +8,14 @@
                      <img class="head_img" :src="userInfo.user_image_url" alt="">
                     <div style="align-self:center;margin-right:10px">
                         <div style="font-size:12px">{{userInfo.user_real_name}}</div>
-                        <div style="background-color:#eeeeeeee;margin-right:50px;padding:5px;margin-top:3px">{{msg.text}}</div>
+                        <div style="background-color:#eeeeeeee;margin-right:50px;padding:5px;margin-top:3px">{{msg.chat_content}}</div>
                     </div>
                 </div>
                 <div  v-show="msg.sender_id == myUserInfo.user_id" style="display:flex;padding:10px;flex-direction:row-reverse">
                      <img class="head_img" :src="myUserInfo.user_image_url" alt="">
                     <div style="align-self:center;margin-right:10px">
                         <div style="font-size:12px;text-align:right">{{myUserInfo.user_real_name}}</div>
-                        <div style="background-color:#eeeeeeee;margin-left:50px;padding:5px;margin-top:3px">{{msg.text}}</div>
+                        <div style="background-color:#eeeeeeee;margin-left:50px;padding:5px;margin-top:3px">{{msg.chat_content}}</div>
                     </div>
                 </div>
             </div>
@@ -34,6 +34,7 @@ import {getUserInfo,userGetChat} from '../../store/service'
 import {Chat} from '../../tool/chat'
 import io from 'socket.io-client';
 import { clearInterval } from 'timers';
+import { throws } from 'assert';
 //todo comment sort feature
   export default {
     data() {
@@ -53,6 +54,7 @@ import { clearInterval } from 'timers';
     async mounted(){
          this.userId = this.$route.params.id
          this.getTargetUserInfo(this.userId)
+        
          this.myUserInfo = getStore('userInfo')
          let id1 = getStore('userInfo').user_id
          let id2 = this.userId
@@ -61,6 +63,7 @@ import { clearInterval } from 'timers';
          }
          console.log('id1:' + id1+'-----id2:'+id2)
          this.roomId = id1 + '_' + id2
+         this.getChatMessages()
          this.socket = io.connect('http://127.0.0.1:3000?room_id=' + id1 + '_' + id2)
          
          this.chat =new Chat(this.socket)
@@ -101,7 +104,7 @@ import { clearInterval } from 'timers';
                toast(this,res.cMsg)
            }
        },
-       async getChat(){
+       async getChatMessages(){
            let id = 0
            if(this.messages.length > 0){
                let i = 0
@@ -110,16 +113,37 @@ import { clearInterval } from 'timers';
                }
                id = this.messages[i].id
            }
-           let res = await getChat(id,this.roomId)
-           if(res.code==0){
-
+           let res = await userGetChat(id,this.roomId)
+           if(res.code==0&&res.data.length>0){
+               this.calculateBatchShowTime(res.data)
+               console.log(res.data)
+               this.messages = res.data.concat(this.messages)
+           }
+           else{
+               toast(this,res.cMsg)
            }
        },
        goBack(){
            this.$router.go(-1)
        },
+       calculateBatchShowTime(msgs){
+            if(msgs.length == 1){
+                msgs[0].showTime = true
+            }
+            let index = msgs.length - 2
+            while(index >= 0){
+                if((msgs[index + 1].time -  msgs[index].time) > 60000){ //如果不在一分钟内
+                    msgs[index].showTime = true
+                    break
+                }
+                else{ //如果在一分钟内
+              
+                }
+                index--
+            }
+        
+       },
        calculateShowTime(msg){
-
             if(this.messages.length == 0){
                 msg.showTime = true
             }
@@ -146,13 +170,15 @@ import { clearInterval } from 'timers';
        },
        sendMsg(){
            //id,chat_type,sender_id,receive_id,time,chat_id,send_status,chat_content
-
             let msg = {id:null,chat_type:1, sender_id:getStore('userInfo').user_id,receive_id:this.userId,
             time:(new Date()).getTime(),chat_id:this.roomId,send_status:0, chat_content:this.msg}
             this.socket.emit('message',msg)
             this.calculateShowTime(msg)
             this.messages.push(msg)
             this.msg = ''
+       },
+       scrollToBottom(){
+           
        }
 
     },
@@ -177,8 +203,9 @@ import { clearInterval } from 'timers';
     border-top: 5px solid #c71585
 }
 .chatContent{
-    min-height: 500px;
-    background-color: white
+    height: 500px;
+    background-color: white;
+    overflow: auto
 }
 .chatSender{
      background-color: white

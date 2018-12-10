@@ -199,6 +199,6 @@ export const userGetUndreaMessageCount = function(){
 }
 
 export const userGetChat = function(id,chat_id){
-    const url = HostName + 'chat/unread/' + id+ +'/' +chat_id+ '/'+ userId() + '/' + createToken()
+    const url = HostName + 'chat/unread/' + id+ '/' +chat_id+ '/'+ userId() + '/' + createToken()
     return setpromiseGet(url)
 }
