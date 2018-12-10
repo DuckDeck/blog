@@ -130,7 +130,7 @@ import { clearInterval } from 'timers';
            return formatTime(time,'hh:mm')
        },
        sendMsg(){
-            let msg = {room:this.roomId,sender_id:getStore('userInfo').user_id,
+            let msg = {room:this.roomId,sender_id:getStore('userInfo').user_id,receive_id:this.userId,
             text:this.msg,type:1,time:(new Date()).getTime()}
             this.socket.emit('message',msg)
             this.calculateShowTime(msg)

@@ -19,3 +19,23 @@ function searchAddress(address){
 // searchAddress("北京市").then(res=>{
 //     console.log(res.data)
 // })
+
+
+let s = {}
+s['zzz'] = []
+s['zzz'].push('111')
+s['zzz'].push('222')
+s['xxx'] = []
+s['xxx'].push('333')
+s['xxx'].push('444')
+for(item in s){
+    console.log(s[item])
+    let j = s[item].findIndex(t=>{
+        return t == '111'
+    })
+    if(j>=0){
+        s[item].splice(j,1)
+        console.log(s[item])
+        break
+    }
+}
