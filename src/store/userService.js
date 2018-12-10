@@ -197,3 +197,8 @@ export const userGetUndreaMessageCount = function(){
     const url = HostName + 'message/newmessagecount/' +   userId() + '/' + createToken()
     return setpromiseGet(url)
 }
+
+export const userGetChat = function(id,chat_id){
+    const url = HostName + 'chat/unread/' + id+ +'/' +chat_id+ '/'+ userId() + '/' + createToken()
+    return setpromiseGet(url)
+}

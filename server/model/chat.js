@@ -2,7 +2,7 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 const sqls = {
    insert:`insert into chat_message values(?,?,?,?,?,?,?,?)`,
-   sorts:`select * from article_sort where user_id = ?`,
+   getChat:`select * from chat_message where id > ? and chat_id = ? limit 20`,
    deleteSort:`delete from article_sort where sort_article_id = ?`,
 }
 class ChatInfo{
@@ -19,6 +19,10 @@ class ChatInfo{
 
     static save(chat){
        return db.exec(sqls.insert,[chat.id, chat.chat_type,chat.sender_id,chat.receive_id,chat.time,chat.chat_id,chat.send_status,chat.chat_content])
+    }
+
+    static getChat(id,chat_id){
+        return db.exec(sqls.getChat,[id,chat_id])
     }
  
 

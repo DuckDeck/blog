@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {getUserInfo} from '../../store/service'
+import {getUserInfo,userGetChat} from '../../store/service'
 import {Chat} from '../../tool/chat'
 import io from 'socket.io-client';
 import { clearInterval } from 'timers';
@@ -47,6 +47,7 @@ import { clearInterval } from 'timers';
           roomId:'',
           heart:null,
           messages:[],
+          
       }
     },
     async mounted(){
@@ -100,6 +101,20 @@ import { clearInterval } from 'timers';
                toast(this,res.cMsg)
            }
        },
+       async getChat(){
+           let id = 0
+           if(this.messages.length > 0){
+               let i = 0
+               while(this.messages[i].id == null){
+                   i++
+               }
+               id = this.messages[i].id
+           }
+           let res = await getChat(id,this.roomId)
+           if(res.code==0){
+
+           }
+       },
        goBack(){
            this.$router.go(-1)
        },
@@ -130,8 +145,10 @@ import { clearInterval } from 'timers';
            return formatTime(time,'hh:mm')
        },
        sendMsg(){
-            let msg = {room:this.roomId,sender_id:getStore('userInfo').user_id,receive_id:this.userId,
-            text:this.msg,type:1,time:(new Date()).getTime()}
+           //id,chat_type,sender_id,receive_id,time,chat_id,send_status,chat_content
+
+            let msg = {id:null,chat_type:1, sender_id:getStore('userInfo').user_id,receive_id:this.userId,
+            time:(new Date()).getTime(),chat_id:this.roomId,send_status:0, chat_content:this.msg}
             this.socket.emit('message',msg)
             this.calculateShowTime(msg)
             this.messages.push(msg)

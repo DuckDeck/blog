@@ -32,8 +32,8 @@ function joinRoom(socket,room) {
       socket.emit('joinResult',{room:room})
 }
 
-function handleMessageBroadCasting(socket) {
-    socket.on('message',function (message) {
+async function handleMessageBroadCasting(socket) {
+    socket.on('message',async function (message) {
         console.log('receive message:'+message.room)
         let newMsg = {room:message.room,sender_id:message.sender_id,text:message.text,type:1,time:(new Date()).getTime()}
         let receive_status = 0
@@ -41,7 +41,8 @@ function handleMessageBroadCasting(socket) {
             receive_status = 1
         }
         let chatInfo = new Chat(0,1,newMsg.sender_id,message.receive_id,newMsg.time,newMsg.room,receive_status,newMsg.text)
-        Chat.save(chatInfo)
+        let id =  await Chat.save(chatInfo)
+        
         socket.broadcast.to(message.room).emit('message',newMsg)
     })
 }
@@ -49,7 +50,7 @@ function handleMessageBroadCasting(socket) {
 function handleClientDisconnection(socket) {
     socket.on('disconnect',function () {
          console.log('socket disconnect')
-         for(key in currentRoom){
+         for(let key in currentRoom){
              let index = currentRoom[key].findIndex(t=>{
                  return t == socket.id
              })
