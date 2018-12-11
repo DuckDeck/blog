@@ -2,6 +2,7 @@
      <div class="container" style="width:600px">   
         <div class="chatHeader"> <el-button @click="goBack">返回</el-button> <div style="display:inline-block;text-align:center;width:75%">{{userInfo.user_real_name}}</div></div>
         <div class="chatContent">
+            <div style="height:20px" v-loading = 'loading' element-loading-spinner="el-icon-loading"></div>
             <div v-for="msg in messages" v-bind:key="msg.time">
                 <div style="padding:5px;text-align:center" v-show="msg.showTime">{{formatDate(msg.time)}}</div>
                  <div  v-show="msg.sender_id == userInfo.user_id" style="display:flex;padding:10px">
@@ -48,7 +49,9 @@ import { throws } from 'assert';
           roomId:'',
           heart:null,
           messages:[],
-          
+          scroll:null,
+          isLoadAll:false,
+          loading:false
       }
     },
     async mounted(){
@@ -93,6 +96,25 @@ import { throws } from 'assert';
             this.calculateShowTime(msg)
             this.messages.push(msg)
         })
+        this.$nextTick(()=>{
+            this.scroll = document.querySelector('.chatContent')
+            console.log(this.scroll)
+            this.scroll.onscroll = (e)=>{
+                console.log(this.scroll.scrollHeight)
+                console.log(this.scroll.scrollTop)
+                console.log(this.scroll.clientHeight)//外面的高度
+                if(this.loading){
+                    return
+                }
+                if(this.scroll.scrollTop <= 10){
+                    this.loading = true
+                    if(!this.isLoadAll){
+                        this.getChatMessages()
+                    }
+                    
+                }
+            }
+        })
     },
     methods:{
         async getTargetUserInfo(id){
@@ -113,13 +135,21 @@ import { throws } from 'assert';
                }
                id = this.messages[i].id
            }
+           console.log('id' + id)
            let res = await userGetChat(id,this.roomId)
+           this.loading = false
            if(res.code==0&&res.data.length>0){
                this.calculateBatchShowTime(res.data)
                console.log(res.data)
                this.messages = res.data.concat(this.messages)
+               this.scrollToBottom()
+           }
+           else if(res.data.length==0){
+               this.isLoadAll = true
+               
            }
            else{
+               this.isLoadAll = true
                toast(this,res.cMsg)
            }
        },
@@ -178,6 +208,7 @@ import { throws } from 'assert';
             this.msg = ''
        },
        scrollToBottom(){
+           this.scroll.scrollTop = this.scroll.scrollHeight - this.scroll.clientHeight
            
        }
 

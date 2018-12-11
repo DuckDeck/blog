@@ -651,3 +651,7 @@ CREATE TABLE `message_notice` (
   `message_group` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息分组，一般用于私信',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+//修正字符串问题
+ALTER TABLE chat_message CHANGE chat_content chat_content LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
