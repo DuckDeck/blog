@@ -1,5 +1,5 @@
 <template>
-     <div class="container" style="width:600px">   
+     <div class="container" style="max-width:600px">   
         <div class="chatHeader"> <el-button @click="goBack">返回</el-button> <div style="display:inline-block;text-align:center;width:75%">{{userInfo.user_real_name}}</div></div>
         <div class="chatContent">
             <div  v-loading = 'loading' element-loading-text="加载中..." element-loading-spinner="el-icon-loading"></div>
@@ -7,16 +7,16 @@
                 <div style="padding:5px;text-align:center;font-size:12px;color:#bbbbbb" v-show="msg.showTime">{{formatDate(msg.time)}}</div>
                  <div  v-show="msg.sender_id == userInfo.user_id" style="display:flex;padding:10px">
                      <img class="head_img" :src="userInfo.user_image_url" alt="">
-                    <div style="align-self:center;margin-right:10px">
+                    <div style="align-self:center;margin-left:10px">
                         <div style="font-size:12px">{{userInfo.user_real_name}}</div>
-                        <div style="background-color:#eeeeeeee;margin-right:50px;padding:5px;margin-top:3px">{{msg.chat_content}}</div>
+                        <div class="chat_text" style="margin-right:50px">{{msg.chat_content}}</div>
                     </div>
                 </div>
                 <div  v-show="msg.sender_id == myUserInfo.user_id" style="display:flex;padding:10px;flex-direction:row-reverse">
                      <img class="head_img" :src="myUserInfo.user_image_url" alt="">
                     <div style="align-self:center;margin-right:10px">
                         <div style="font-size:12px;text-align:right">{{myUserInfo.user_real_name}}</div>
-                        <div style="background-color:#eeeeeeee;margin-left:50px;padding:5px;margin-top:3px">{{msg.chat_content}}</div>
+                        <div class="chat_text" style="margin-left:50px">{{msg.chat_content}}</div>
                     </div>
                 </div>
             </div>
@@ -139,14 +139,15 @@ import { throws } from 'assert';
                id = this.messages[i].id
            }
            console.log(this.messages)
-           console.log('id' + id)
            let res = await userGetChat(id,this.roomId)
            this.loading = false
            if(res.code==0&&res.data.length>0){
                this.calculateBatchShowTime(res.data)
                console.log(res.data)
                this.messages = res.data.concat(this.messages)
-               this.scrollToBottom()
+               if(id == 0){ //第一次进来要到最下面
+                   this.scrollToBottom()
+               }
            }
            else if(res.data.length==0){
                this.isLoadAll = true
@@ -164,17 +165,24 @@ import { throws } from 'assert';
             if(msgs.length == 1){
                 msgs[0].showTime = true
             }
-            let index = msgs.length - 2
+            let index = msgs.length - 1
+            let upper = 0
             while(index >= 0){
-                if((msgs[index + 1].time -  msgs[index].time) > 60000){ //如果不在一分钟内
-                    msgs[index].showTime = true
-                    break
+                if(upper == 0){
+                   let sec =  (new Date(msgs[index].time)).getSeconds()
+                   upper = msgs[index].time - sec * 1000
                 }
-                else{ //如果在一分钟内
-              
+                else{
+                    console.log(msgs[index])
+                    if(msgs[index].time < upper){
+                        msgs[index].showTime = true
+                        let sec =  (new Date(msgs[index].time)).getSeconds()
+                        upper = msgs[index].time - sec
+                    }
                 }
                 index--
             }
+           
         
        },
        //重新改变显示，一分钟之类的信息都显示
@@ -183,20 +191,9 @@ import { throws } from 'assert';
                 msg.showTime = true
             }
             else{
-                let index = this.messages.length - 1
-                while(index >= 0){
-                    let item = this.messages[index]//上一条消息时间是不是在一分钟内
-                    console.log(item)
-                     if((msg.time -  item.time) > 60000){ //如果不在一分钟内
-                         msg.showTime = true
-                         break
-                     }
-                     else{ //如果在一分钟内
-                         if(item.showTime){
-
-                         }
-                     }
-                     index--
+                let item = this.messages[this.messages.length - 1]//上一条消息时间是不是在一分钟内
+                if((msg.time -  item.time) > 60000){ //如果不在一分钟内
+                    msg.showTime = true
                 }
             }
        },
@@ -209,13 +206,11 @@ import { throws } from 'assert';
                 return formatTime(time,'hh:mm')
             }
             else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDay() == date.getDay()){
-                return 'Yesterday' + formatTime(time,'hh:mm')
+                return 'Yesterday ' + formatTime(time,'hh:mm')
             }
             else{
                 return formatTime(time,'mm月-hh:mm')
             }
-
-          
        },
        sendMsg(){
            //id,chat_type,sender_id,receive_id,time,chat_id,send_status,chat_content
@@ -259,7 +254,8 @@ import { throws } from 'assert';
 .chatContent{
     height: 500px;
     background-color: white;
-    overflow: auto
+    overflow: auto;
+    padding-bottom: 10px;
 }
 .chatSender{
      background-color: white
@@ -272,5 +268,11 @@ import { throws } from 'assert';
     height: 40px;
     border-radius: 20px;
     object-fit: cover;
+}
+.chat_text{
+    background-color:#eeeeeeee;
+    padding:5px;
+    margin-top:3px;
+    border-radius: 8px;
 }
 </style>
