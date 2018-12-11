@@ -2,9 +2,9 @@
      <div class="container" style="width:600px">   
         <div class="chatHeader"> <el-button @click="goBack">返回</el-button> <div style="display:inline-block;text-align:center;width:75%">{{userInfo.user_real_name}}</div></div>
         <div class="chatContent">
-            <div style="height:20px" v-loading = 'loading' element-loading-spinner="el-icon-loading"></div>
+            <div  v-loading = 'loading' element-loading-text="加载中..." element-loading-spinner="el-icon-loading"></div>
             <div v-for="msg in messages" v-bind:key="msg.time">
-                <div style="padding:5px;text-align:center" v-show="msg.showTime">{{formatDate(msg.time)}}</div>
+                <div style="padding:5px;text-align:center;font-size:12px;color:#bbbbbb" v-show="msg.showTime">{{formatDate(msg.time)}}</div>
                  <div  v-show="msg.sender_id == userInfo.user_id" style="display:flex;padding:10px">
                      <img class="head_img" :src="userInfo.user_image_url" alt="">
                     <div style="align-self:center;margin-right:10px">
@@ -68,7 +68,7 @@ import { throws } from 'assert';
          this.roomId = id1 + '_' + id2
          this.getChatMessages()
          this.socket = io.connect('http://127.0.0.1:3000?room_id=' + id1 + '_' + id2)
-         
+         console.log("132123123121313")
          this.chat =new Chat(this.socket)
          this.socket.on('connect',function (soc) {
             console.log('socket connect success')
@@ -95,20 +95,22 @@ import { throws } from 'assert';
             console.log(msg)
             this.calculateShowTime(msg)
             this.messages.push(msg)
+            this.scrollToBottom()
         })
         this.$nextTick(()=>{
             this.scroll = document.querySelector('.chatContent')
             console.log(this.scroll)
             this.scroll.onscroll = (e)=>{
-                console.log(this.scroll.scrollHeight)
-                console.log(this.scroll.scrollTop)
-                console.log(this.scroll.clientHeight)//外面的高度
+                // console.log(this.scroll.scrollHeight)
+                // console.log(this.scroll.scrollTop)
+                // console.log(this.scroll.clientHeight)//外面的高度
                 if(this.loading){
                     return
                 }
                 if(this.scroll.scrollTop <= 10){
-                    this.loading = true
+                    console.log('加载记录')
                     if(!this.isLoadAll){
+                         this.loading = true
                         this.getChatMessages()
                     }
                     
@@ -133,8 +135,10 @@ import { throws } from 'assert';
                while(this.messages[i].id == null){
                    i++
                }
+               console.log('i is :' +i)
                id = this.messages[i].id
            }
+           console.log(this.messages)
            console.log('id' + id)
            let res = await userGetChat(id,this.roomId)
            this.loading = false
@@ -173,6 +177,7 @@ import { throws } from 'assert';
             }
         
        },
+       //重新改变显示，一分钟之类的信息都显示
        calculateShowTime(msg){
             if(this.messages.length == 0){
                 msg.showTime = true
@@ -196,7 +201,21 @@ import { throws } from 'assert';
             }
        },
        formatDate(time){
-           return formatTime(time,'hh:mm')
+            let date = parseInt(time)
+            date = new Date(date)
+            let now = new Date()
+            let prev = new Date(now.getTime() - 1000 * 60 * 60 * 24)
+            if(now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDay() == date.getDay()){
+                return formatTime(time,'hh:mm')
+            }
+            else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDay() == date.getDay()){
+                return 'Yesterday' + formatTime(time,'hh:mm')
+            }
+            else{
+                return formatTime(time,'mm月-hh:mm')
+            }
+
+          
        },
        sendMsg(){
            //id,chat_type,sender_id,receive_id,time,chat_id,send_status,chat_content
@@ -205,10 +224,14 @@ import { throws } from 'assert';
             this.socket.emit('message',msg)
             this.calculateShowTime(msg)
             this.messages.push(msg)
+            this.scrollToBottom()
             this.msg = ''
        },
        scrollToBottom(){
-           this.scroll.scrollTop = this.scroll.scrollHeight - this.scroll.clientHeight
+          this.$nextTick(()=>{
+               let offset = this.scroll.scrollHeight - this.scroll.clientHeight
+               this.scroll.scrollTop = offset
+          })
            
        }
 

@@ -19,6 +19,11 @@ module.exports = {
         let chatId = ctx.params.chatId
         //一般取出20条信息
         res = await Chat.getChat(id,chatId)
+        if(res.code == 0){
+            res.data = res.data.sort((a,b)=>{
+                return a.time - b.time
+            })
+        }
         ctx.rest(res)
     },
     

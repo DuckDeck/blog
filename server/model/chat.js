@@ -2,8 +2,8 @@ const db = require('../sqlhelp/mysql')
 const Tool = require('../tool/tool')
 const sqls = {
    insert:`insert into chat_message values(?,?,?,?,?,?,?,?)`,
-   getChat:`select * from chat_message where id < ? and chat_id = ? limit 20`,
-   getLastChat:`select * from chat_message where  chat_id = ? order by time desc limit 20`,
+   getChat:`select * from chat_message where id < ? and chat_id = ? order by time desc limit 10`,
+   getLastChat:`select * from chat_message where  chat_id = ? order by time desc limit 10`,
    deleteSort:`delete from article_sort where sort_article_id = ?`,
 }
 class ChatInfo{
