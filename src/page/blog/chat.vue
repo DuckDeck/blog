@@ -209,7 +209,7 @@ import { throws } from 'assert';
                 return 'Yesterday ' + formatTime(time,'hh:mm')
             }
             else{
-                return formatTime(time,'mm月-hh:mm')
+                return formatTime(time,'MM dd  hh:mm')
             }
        },
        sendMsg(){
