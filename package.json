@@ -29,6 +29,7 @@
     "to-markdown": "^3.1.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vuejs-emoji": "^0.1.8",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
