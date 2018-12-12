@@ -22,7 +22,24 @@
             </div>
         </div>
         <div class="chatSender">
-            <div style="padding:5px;font-size:20px;color:#c71585;border-top:1px solid #c71585"><i class="fa fa-smile-o"></i> <i class="fa fa-file-image-o"></i></div>
+            <div style="padding:5px;font-size:20px;color:#c71585;border-top:1px solid #c71585">
+                <i class="fa fa-smile-o" @click="showEmoji = !showEmoji"></i>
+                 <i class="fa fa-file-image-o"></i></div>
+             <transition name="fade" mode="">
+                <div class="emoji-box" v-if="showEmoji" >
+                <el-button 
+                    class="pop-close" 
+                    :plain="true" 
+                    type="danger" 
+                    size="mini" 
+                    icon="close"
+                    @click="showEmoji = false"></el-button>
+                    <vue-emoji
+                    @select="selectEmoji">
+                    </vue-emoji>
+                <span class="pop-arrow arrow"></span>
+                </div>       
+            </transition>
             <div style="display:flex;padding:5px"> <el-input v-model="msg" type="textarea" rows="3"></el-input> 
              <el-button @click="sendMsg" height="20px" style="margin-left:20px;margin-top:35px" type="primary">发送</el-button></div>
            
@@ -51,7 +68,8 @@ import { throws } from 'assert';
           messages:[],
           scroll:null,
           isLoadAll:false,
-          loading:false
+          loading:false,
+          showEmoji: false,
       }
     },
     async mounted(){
@@ -197,6 +215,10 @@ import { throws } from 'assert';
                 }
             }
        },
+       selectEmoji (code) {
+            this.showEmoji = false
+            console.log(code)
+        },
        formatDate(time){
             let date = parseInt(time)
             date = new Date(date)
@@ -233,6 +255,9 @@ import { throws } from 'assert';
     },
 
     computed:{ 
+       
+    },
+    components:{
        
     },
     beforeDestroy(){
