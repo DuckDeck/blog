@@ -39,6 +39,7 @@ import {Chat} from '../../tool/chat'
 import io from 'socket.io-client';
 import { clearInterval } from 'timers';
 import { throws } from 'assert';
+import { baseDomain } from '../../config/env';
 //todo comment sort feature
   export default {
     data() {
@@ -71,8 +72,7 @@ import { throws } from 'assert';
          console.log('id1:' + id1+'-----id2:'+id2)
          this.roomId = id1 + '_' + id2
          this.getChatMessages()
-         this.socket = io.connect('http://127.0.0.1:3000?room_id=' + id1 + '_' + id2)
-         console.log("132123123121313")
+         this.socket = io.connect(baseDomain+ '?room_id=' + id1 + '_' + id2)
          this.chat =new Chat(this.socket)
          this.socket.on('connect',function (soc) {
             console.log('socket connect success')
