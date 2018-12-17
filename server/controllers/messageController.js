@@ -31,7 +31,7 @@ module.exports = {
         ctx.rest(Result.createCount(0,count,c))
     },
 
-   
+    //根据类型获取新的消息列表 
     'GET /api/message/listbytype/:type/:userId/:token/:index/:size': async (ctx, next) => {
         let result = await Check.checkToken(ctx)
         if(result.code != 0){
@@ -74,26 +74,32 @@ module.exports = {
             default:
                 break;
         }
-        
+        let ids = null
         if(type != 1){
-            let ids = result.data.map(s=>{
+            ids = result.data.map(s=>{
                 return s.sender_id
             })
-            if(ids.length > 0){
-                let tmp = new Set(ids)
-                ids = [...tmp].join(',')
-                sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + ids + `)`
-                let res = await DB.exec(sql)
-                result.data = result.data.map(s=>{
-                    let info = res.data.find(k=>{
-                        return k.user_id == s.sender_id
-                    })
-                    if(info != null){
-                        s.user_info = info
-                    }
-                    return s
+            
+        }
+        else{
+            ids = result.data.map(s=>{
+                return s.commenter_id
+            })
+        }
+        if(ids.length > 0){
+            let tmp = new Set(ids)
+            ids = [...tmp].join(',')
+            sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + ids + `)`
+            let res = await DB.exec(sql)
+            result.data = result.data.map(s=>{
+                let info = res.data.find(k=>{
+                    return k.user_id == s.sender_id || k.user_id == s.commenter_id
                 })
-            }
+                if(info != null){
+                    s.user_info = info
+                }
+                return s
+            })
         }
         console.log(result)
         //这里要设计一下已读信息

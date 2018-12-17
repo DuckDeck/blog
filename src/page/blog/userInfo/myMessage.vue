@@ -2,21 +2,90 @@
       <div  class="container" >
           <div class="main-page">
             <div class="message_item" > 
-               <div> 
+               <div @click="selectType(1)"> 
                    <i class="fa fa-commenting"></i> 评论
                </div>
-                <div> 
+                <div @click="selectType(2)"> 
                    <i class="fa fa-heart"></i> 喜欢和赞
                </div>
-               <div> 
+               <div @click="selectType(3)"> 
                    <i class="fa fa-user-plus"></i> 关注
                </div>
-               <div> 
+               <div @click="selectType(4)"> 
                    <i class="fa fa-wechat"></i> 私信
                </div>
             </div>
             <div class="message_content" v-loading="loading">
-            
+                <div v-if="type==1" style="width:100%" >
+                     收到的评论
+                    <div  v-for="item in comments" v-bind:key="item.id">
+                        <hr>
+                        <div style="display:flex">
+                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
+                                 <div style="align-self:center;margin-left:10px;width:100%">
+                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>评论了你的文章 
+                                 <a href="">《{{item.comment_project_title}}》</a></div>
+                                 <div class="message_time" >
+                                     <div>{{item.message_time}}</div><div >查看对话</div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div style="font-size:16px;margin-top:10px;color:#333333">
+                            {{item.content}}
+                        </div>
+                    </div>
+                </div>
+                 <div v-if="type==2" style="width:100%" >
+                     收到的喜欢和赞
+                    <div  v-for="item in comments" v-bind:key="item.id">
+                        <hr>
+                        <div style="display:flex">
+                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
+                                 <div style="align-self:center;margin-left:10px;width:100%">
+                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>喜欢了你的文章 
+                                 <a href="">《{{item.comment_project_title}}》</a></div>
+                                 <div class="message_time" >
+                                     <div>{{item.message_time}}</div>
+                                 </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                 <div v-if="type==3" style="width:100%" >
+                     全部关注
+                    <div  v-for="item in comments" v-bind:key="item.id">
+                        <hr>
+                        <div style="display:flex">
+                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
+                                 <div style="align-self:center;margin-left:10px;width:100%">
+                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>关注了你
+                                 </div>
+                                 <div class="message_time" >
+                                     <div>{{item.message_time}}</div>
+                                 </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div v-if="type==4" style="width:100%" >
+                     收到的信息
+                    <div  v-for="item in comments" v-bind:key="item.id">
+                        <hr>
+                        <div style="display:flex">
+                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
+                                 <div style="align-self:center;margin-left:10px;width:100%">
+                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>
+                                 </div>
+                                 <div class="message_time" >
+                                     <div>{{item.message_time}}</div>
+                                 </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
             </div>
           </div>
           <upToTop></upToTop>
@@ -35,9 +104,13 @@ import loadMore from './../com/loadMore.vue'
             return {
                 userId:0,
                 isLoadinMore:false,
-                type:2,
+                type:1,
                 loading:false,
-                itemCount:0
+                itemCount:0,
+                comments:[],
+                likes:[],
+                attentions:[],
+                chats:[]
             }
         },
         async mounted(){
@@ -49,9 +122,29 @@ import loadMore from './../com/loadMore.vue'
         methods:{
            async getMessagesWithType(){
                this.loading = true
-              let res =  await userGetUndreaMessage(this.type)
-                this.loading = false
-                console.log(res)
+               let res =  await userGetUndreaMessage(this.type)
+               this.loading = false
+               if(res.code != 0){
+                   toast(self,res.cMsg)
+                   return
+               }
+               switch (this.type) {
+                   case 1:
+                       this.comments = res.data
+                       break;
+                    case 2:
+                       this.likes = res.data
+                       break;
+                   default:
+                       break;
+               } 
+           },
+           selectType(type){
+               if(this.type != type){
+                   this.type = type
+                   this.getMessagesWithType()
+               }
+               
            }
         },
         components:{
@@ -76,6 +169,7 @@ import loadMore from './../com/loadMore.vue'
     display: flex;
     padding: 10px 20px 10px 20px;
     margin-bottom: 2px;
+    width: 100%;
 }
 .message_item div{
 
@@ -89,16 +183,17 @@ import loadMore from './../com/loadMore.vue'
 .message_item div i{
     color: orangered;
     margin-right: 5px;
-    font-size: 23px;
+    font-size: 20px;
 }
 
 .attentionedUsers:hover{
     cursor: pointer;
     background: #dddddddd;
 }
-.myAttentionsArticles{
-    border-left: 2px solid peru;
-    padding: 0px 40px 0px 40px;
-    width: 100%
+.message_time{
+   font-size:12.5px;color:#666666;display:flex;justify-content:space-between
+}
+.message_time:last-child{
+    cursor: pointer;
 }
 </style>
