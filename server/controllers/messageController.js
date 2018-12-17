@@ -23,9 +23,12 @@ module.exports = {
         res = await DB.exec('select count(id) as count from message_attention where receive_id = ? and read_status = 0',[id])
         console.log(res)
         c.attention_unread_count = res.data[0].count
-        res = await DB.exec('select count(id) as count from message_notice where receive_id = ? and read_status = 0',[id])
-        console.log(res)
+        // res = await DB.exec('select count(id) as count from chat_message where receive_id = ? and read_status = 0',[id])
+        // console.log(res)
 
+        // c.notice_unread_count = res.data[0].count
+        //换成聊天未读信息
+        res = await DB.exec('select count(id) as count from chat_message where receive_id = ? and send_status = 0',[id])
         c.notice_unread_count = res.data[0].count
         let count = c.comment_unread_count + c.like_unread_count + c.attention_unread_count + c.notice_unread_count
         ctx.rest(Result.createCount(0,count,c))
@@ -52,7 +55,7 @@ module.exports = {
         let size = parseInt(ctx.params.size)
         let user_id = ctx.params.userId
         let type = ctx.params.type
-        result = await Message.messageByReceiveIdWithType(user_id,type,index,size)
+        
         ctx.rest(result)
     },
 

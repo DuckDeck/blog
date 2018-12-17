@@ -198,6 +198,13 @@ export const userGetUndreaMessageCount = function(){
     return setpromiseGet(url)
 }
 
+
+
+export const userGetUndreaMessage = function(type,index = 0,size = 10){
+    const url = HostName + 'message/listbytype/' +type +'/' +   userId() + '/' + createToken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
 export const userGetChat = function(id,chat_id){
     const url = HostName + 'chat/unread/' + id+ '/' +chat_id+ '/'+ userId() + '/' + createToken()
     return setpromiseGet(url)

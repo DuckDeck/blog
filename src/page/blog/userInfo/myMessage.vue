@@ -7,7 +7,7 @@
             </div>
             <div class="myAttentionsArticles" v-loading="loading">
             
-             </div>
+            </div>
           </div>
           <upToTop></upToTop>
           <blogFoot></blogFoot>
@@ -15,8 +15,7 @@
 </template>
 
 <script>
-import {userSetAttentioned,userAttentioned,articlesByUser} from '../../../store/service'
-import articleCell from './com/articleCell.vue'
+import {userGetUndreaMessage} from '../../../store/service'
 import emptyHint from './../com/emptyHint.vue'
 import upToTop from './../com/upToTop.vue'
 import blogFoot from './../com/blogFoot.vue'
@@ -25,25 +24,29 @@ import loadMore from './../com/loadMore.vue'
         data(){
             return {
                 userId:0,
-                attentioned:[],
-                attentionedUserArticles:[],
+              
                 isLoadinMore:false,
                 attentionedUserArticlesCount:0,
-                selectedUserId:0,
+                type:0,
                 loading:false,
             }
         },
         async mounted(){
             let id = this.$route.params.userId
             this.userId = id
-            console.log(id)
-            this.getAttention(id)
-        },
-        methods:{
+            this.getMessagesWithType()
            
         },
+        methods:{
+           async getMessagesWithType(){
+               this.loading = true
+              let res =  await userGetUndreaMessage(this.type)
+                this.loading = false
+                console.log(res)
+           }
+        },
         components:{
-                articleCell,emptyHint,upToTop,blogFoot,loadMore
+               emptyHint,upToTop,blogFoot,loadMore
         },
     }
 </script>
