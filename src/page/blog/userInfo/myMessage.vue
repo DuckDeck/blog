@@ -54,7 +54,7 @@
                 </div>
                  <div v-if="type==3" style="width:100%" >
                      全部关注
-                    <div  v-for="item in comments" v-bind:key="item.id">
+                    <div  v-for="item in attentions" v-bind:key="item.id">
                         <hr>
                         <div style="display:flex">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
@@ -71,15 +71,15 @@
                 </div>
                 <div v-if="type==4" style="width:100%" >
                      收到的信息
-                    <div  v-for="item in comments" v-bind:key="item.id">
+                    <div  v-for="item in chats" v-bind:key="item.id">
                         <hr>
                         <div style="display:flex">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
-                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>
+                                 <div style="font-size:14px;color:#333333;display:flex;align-items:center;justify-content:space-between"> <div>{{item.user_info.user_real_name}}</div> <div>{{item.chat_info.time}}</div>
                                  </div>
-                                 <div class="message_time" >
-                                     <div>{{item.message_time}}</div>
+                                 <div  >
+                                     {{item.chat_info.chat_content}}
                                  </div>
                             </div>
                         </div>
@@ -135,6 +135,12 @@ import loadMore from './../com/loadMore.vue'
                     case 2:
                        this.likes = res.data
                        break;
+                    case 3:
+                        this.attentions = res.data
+                        break;
+                    case 4:
+                        this.chats = res.data;
+                        break
                    default:
                        break;
                } 

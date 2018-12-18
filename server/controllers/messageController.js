@@ -63,12 +63,12 @@ module.exports = {
                 sql = 'select * from message_like where receive_id = ? order by message_time desc limit ?,?'
                 result = await DB.exec(sql,[user_id,index,size])
                 break;
-            case 3: //用户喜欢信息
+            case 3: //全部的关注
                 sql = 'select * from message_attention where receive_id = ? order by message_time desc limit ?,?'
                 result = await DB.exec(sql,[user_id,index,size])
 
                 break;
-            case 4:
+            case 4: //全部最新的聊天 信息
                 sql = 'SELECT sender_id,count(id) as count FROM chat_message where receive_id = ? group by  sender_id limit ?,?'
                 result = await DB.exec(sql,[user_id,index,size])
             default:
@@ -97,6 +97,19 @@ module.exports = {
                 })
                 if(info != null){
                     s.user_info = info
+                }
+                return s
+            })
+        }
+        if (type == 4) { //这里有优化的空间，应该不需要二次查询
+            sql = `select id,sender_id,chat_content,time,chat_id from chat_message where id in (select max(id) from chat_message where sender_id in (` + ids +`) group by sender_id)` 
+            let res = await DB.exec(sql)
+            result.data = result.data.map(s=>{
+                let chat = res.data.find(k=>{
+                    return k.sender_id == s.sender_id
+                })
+                if(chat != null){
+                    s.chat_info = chat
                 }
                 return s
             })
