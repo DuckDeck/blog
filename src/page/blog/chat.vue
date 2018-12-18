@@ -215,8 +215,11 @@ import { baseDomain } from '../../config/env';
             else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDay() == date.getDay()){
                 return 'Yesterday ' + formatTime(time,'hh:mm')
             }
-            else{
+            else if(prev.getFullYear() == date.getFullYear()){
                 return formatTime(time,'MM dd  hh:mm')
+            }
+            else{
+                return formatTime(time,'yyyy MM dd  hh:mm')
             }
        },
        sendMsg(){

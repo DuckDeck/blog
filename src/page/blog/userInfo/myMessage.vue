@@ -23,10 +23,11 @@
                         <div style="display:flex">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
-                                 <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>评论了你的文章 
-                                 <a href="">《{{item.comment_project_title}}》</a></div>
+                                 <div style="font-size:14px;color:#333333"> 你的文章  <a :href="gotoArticle(item)" >
+                                     《{{item.comment_project_title}}》</a> 下有一条来自<span>{{item.user_info.user_real_name}}</span>的新评论
+                                </div>
                                  <div class="message_time" >
-                                     <div>{{item.message_time}}</div><div >查看对话</div>
+                                     <div>{{formatDate(item.message_time)}}</div><div @click="gotoArticleToComment(item)" >查看对话</div>
                                  </div>
                             </div>
                         </div>
@@ -45,7 +46,7 @@
                                  <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>喜欢了你的文章 
                                  <a href="">《{{item.comment_project_title}}》</a></div>
                                  <div class="message_time" >
-                                     <div>{{item.message_time}}</div>
+                                     <div>{{formatDate(item.message_time)}}</div>
                                  </div>
                             </div>
                         </div>
@@ -62,11 +63,10 @@
                                  <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>关注了你
                                  </div>
                                  <div class="message_time" >
-                                     <div>{{item.message_time}}</div>
+                                     <div>{{formatDate(item.message_time)}}</div>
                                  </div>
                             </div>
                         </div>
-                       
                     </div>
                 </div>
                 <div v-if="type==4" style="width:100%" >
@@ -76,7 +76,8 @@
                         <div style="display:flex">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
-                                 <div style="font-size:14px;color:#333333;display:flex;align-items:center;justify-content:space-between"> <div>{{item.user_info.user_real_name}}</div> <div>{{item.chat_info.time}}</div>
+                                 <div style="font-size:14px;color:#333333;display:flex;align-items:center;justify-content:space-between"> 
+                                     <div>{{item.user_info.user_real_name}}</div> <div>{{formatDate(item.chat_info.time)}}</div>
                                  </div>
                                  <div  >
                                      {{item.chat_info.chat_content}}
@@ -151,7 +152,33 @@ import loadMore from './../com/loadMore.vue'
                    this.getMessagesWithType()
                }
                
-           }
+           },
+           formatDate(time){
+                let date = parseInt(time)
+                date = new Date(date)
+                let now = new Date()
+                let prev = new Date(now.getTime() - 1000 * 60 * 60 * 24)
+                if(now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDay() == date.getDay()){
+                    return formatTime(time,'hh:mm')
+                }
+                else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDay() == date.getDay()){
+                    return 'Yesterday ' + formatTime(time,'hh:mm')
+                }
+                else if(prev.getFullYear() == date.getFullYear()){
+                    return formatTime(time,'MM dd  hh:mm')
+                }
+                else{
+                    return formatTime(time,'yyyy MM dd  hh:mm')
+                }
+          },
+          gotoArticle(item){
+              return '#/article/' + item.comment_project_id
+          },
+          gotoArticleToComment(item){
+            //    '#/article/' + item.comment_project_id + '#comment'
+              this.$router.push('/article/'+item.comment_project_id + '/comment')
+          }
+
         },
         components:{
                emptyHint,upToTop,blogFoot,loadMore

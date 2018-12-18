@@ -95,7 +95,10 @@ export default [
     {
         path: '/article/:articleId',
         component: atricleInfo, 
-      
+    },
+    {
+        path:'/article/:articleId/comment',
+        component:atricleInfo
     },
     {
         path: '/userInfo/:userId/:tab',

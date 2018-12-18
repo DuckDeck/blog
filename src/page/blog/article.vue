@@ -19,7 +19,7 @@
                     </div>
                     <writeComment ref="mainWriteComment" @submitComment="submitComment"  @refreshComment = "refreshComment"></writeComment>
                         
-                    <div class="articleComments">
+                    <div class="articleComments" >
                         <div class="articleCommentsCount">
                             {{commentCount}}条评论  
                         </div>
@@ -61,11 +61,15 @@ import collectArticle from './com/collectArticle.vue'
           isUserCollect:false,
           likeCount:0,
           collectCount:0,
+          isScrollToComment:false
       }
     },
     async mounted(){
         let self= this
         let id = this.$route.params.articleId
+        if(this.$route.path.indexOf('comment') > 0){
+            this.isScrollToComment = true
+        }
         this.loading = true
         let res = await articleById(id)
         this.loading = false
@@ -89,7 +93,10 @@ import collectArticle from './com/collectArticle.vue'
             this.commentCount = res.count
         }
         articlebroswer(id)
-        
+        if(this.isScrollToComment){
+            let ele = document.querySelector('.articleCommentsCount')
+             document.documentElement.scrollTop = ele.offsetTop
+        }
     },
     methods:{
         headAction(action){
