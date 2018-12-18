@@ -1038,6 +1038,7 @@ module.exports = {
        ctx.rest(res || Result.create(-50))
     },
     //用户喜欢文章
+    //自己可以喜欢自己的文章 ，但是在消息里要排除自己
     'GET /api/usersetlike/:articleId/:isLike/:userId/:token': async (ctx, next) => {
         var  t = ctx.params
         let checkResult = Check.checkNum(t,'userId')
@@ -1077,9 +1078,12 @@ module.exports = {
             await Dynamic.save(dynamic)
             res = await DB.exec('select user_id,article_name from article where article_id = ?',[articleId])
             let receive_user_id = res.data[0].user_id
-            res = await DB.exec('insert into message_like values(0,?,?,?,?,?,?,?,?)',
-            [receive_user_id,parseInt(id),parseInt(articleId),res.data[0].article_name,
-            (new Date().getTime()),1,1,0])
+            if(parseInt(id) != receive_user_id){ //自己喜欢自己的文章不加入信息
+                res = await DB.exec('insert into message_like values(0,?,?,?,?,?,?,?,?)',
+                [receive_user_id,parseInt(id),parseInt(articleId),res.data[0].article_name,
+                (new Date().getTime()),1,1,0])
+            }
+            
         } 
       
        }

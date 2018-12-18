@@ -147,6 +147,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                        toast(this,res.cMsg)
                        return
                    }
+                   setStore('message_count',res.data)
                    this.unreadMessageCount = res.count
                }
                

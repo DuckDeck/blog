@@ -2,7 +2,10 @@
 		<transition name="router-fade" mode="out-in">
 			<div style="overflow: hidden">
 				<blogHeader v-show="needShow" ></blogHeader>
-				<router-view></router-view>
+                <keep-alive> 
+                    <router-view  v-if="$route.meta.keepAlive"></router-view>
+                </keep-alive>
+				<router-view v-if="!$route.meta.keepAlive"></router-view>
 			</div>
     	</transition>
 </template>

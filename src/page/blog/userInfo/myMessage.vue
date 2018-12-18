@@ -27,7 +27,7 @@
                                      《{{item.comment_project_title}}》</a> 下有一条来自<span>{{item.user_info.user_real_name}}</span>的新评论
                                 </div>
                                  <div class="message_time" >
-                                     <div>{{formatDate(item.message_time)}}</div><div @click="gotoArticleToComment(item)" >查看对话</div>
+                                     <div>{{formatDate(item.message_time)}}</div><div @click="gotoArticleToComment(item)" style="cursor:pointer" >查看对话</div>
                                  </div>
                             </div>
                         </div>
@@ -35,6 +35,7 @@
                             {{item.content}}
                         </div>
                     </div>
+                    <emptyHint v-show="comments.length == 0 && !loading"></emptyHint>
                 </div>
                  <div v-if="type==2" style="width:100%" >
                      收到的喜欢和赞
@@ -44,7 +45,7 @@
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
                                  <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>喜欢了你的文章 
-                                 <a href="">《{{item.comment_project_title}}》</a></div>
+                                 <a :href="gotoArticle(item)">《{{item.comment_project_title}}》</a></div>
                                  <div class="message_time" >
                                      <div>{{formatDate(item.message_time)}}</div>
                                  </div>
@@ -52,13 +53,15 @@
                         </div>
                        
                     </div>
+                    <emptyHint v-show="likes.length == 0 && !loading"></emptyHint>
                 </div>
                  <div v-if="type==3" style="width:100%" >
                      全部关注
                     <div  v-for="item in attentions" v-bind:key="item.id">
                         <hr>
                         <div style="display:flex">
-                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
+                                 <img style="height:40px;width:40px;object-fit:cover;border-radius:20px;cursor:pointer"
+                                 @click="gotoUserInfo(item)"  :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
                                  <div style="font-size:14px;color:#333333"> <span>{{item.user_info.user_real_name}}</span>关注了你
                                  </div>
@@ -68,28 +71,30 @@
                             </div>
                         </div>
                     </div>
+                     <emptyHint v-show="attentions.length == 0 && !loading"></emptyHint>
                 </div>
                 <div v-if="type==4" style="width:100%" >
                      收到的信息
                     <div  v-for="item in chats" v-bind:key="item.id">
                         <hr>
-                        <div style="display:flex">
+                        <div style="display:flex;cursor:pointer" @click="gotoChat(item)">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
                                  <div style="align-self:center;margin-left:10px;width:100%">
                                  <div style="font-size:14px;color:#333333;display:flex;align-items:center;justify-content:space-between"> 
                                      <div>{{item.user_info.user_real_name}}</div> <div>{{formatDate(item.chat_info.time)}}</div>
                                  </div>
-                                 <div  >
+                                 <div  style="font-size:14px;margin-top:5px;color:#555555" >
                                      {{item.chat_info.chat_content}}
                                  </div>
                             </div>
                         </div>
                        
                     </div>
+                     <emptyHint v-show="chats.length == 0 && !loading"></emptyHint>
                 </div>
             </div>
           </div>
-          <upToTop></upToTop>
+       
           <blogFoot></blogFoot>
       </div>
 </template>
@@ -97,9 +102,9 @@
 <script>
 import {userGetUndreaMessage} from '../../../store/service'
 import emptyHint from './../com/emptyHint.vue'
-import upToTop from './../com/upToTop.vue'
-import blogFoot from './../com/blogFoot.vue'
 import loadMore from './../com/loadMore.vue'
+
+import blogFoot from './../com/blogFoot.vue'
     export default {
         data(){
             return {
@@ -108,6 +113,10 @@ import loadMore from './../com/loadMore.vue'
                 type:1,
                 loading:false,
                 itemCount:0,
+                comment_count:0,
+                like_count:0,
+                attention_count:0,
+                chats_count:0,
                 comments:[],
                 likes:[],
                 attentions:[],
@@ -115,10 +124,10 @@ import loadMore from './../com/loadMore.vue'
             }
         },
         async mounted(){
-            let id = this.$route.params.userId
-            this.userId = id
+            this.userId = this.$route.params.userId
             this.getMessagesWithType()
-           
+            let counts = getStore('message_count')
+            console.log(counts)
         },
         methods:{
            async getMessagesWithType(){
@@ -175,13 +184,18 @@ import loadMore from './../com/loadMore.vue'
               return '#/article/' + item.comment_project_id
           },
           gotoArticleToComment(item){
-            //    '#/article/' + item.comment_project_id + '#comment'
               this.$router.push('/article/'+item.comment_project_id + '/comment')
+          },
+          gotoUserInfo(item){
+               this.$router.push('/userInfo/' + item.sender_id + '/articles')
+          },
+          gotoChat(item){
+              
+              this.$router.push('/chat/'+item.sender_id)
           }
-
         },
         components:{
-               emptyHint,upToTop,blogFoot,loadMore
+               emptyHint,blogFoot,loadMore
         },
     }
 </script>
@@ -191,7 +205,7 @@ import loadMore from './../com/loadMore.vue'
     background: white;
     margin-top: 70px;
     border-top: 5px solid deepskyblue;
-    min-height: 800px;
+    min-height: 700px;
     display: flex;
 }
 .message_item{
@@ -226,7 +240,5 @@ import loadMore from './../com/loadMore.vue'
 .message_time{
    font-size:12.5px;color:#666666;display:flex;justify-content:space-between
 }
-.message_time:last-child{
-    cursor: pointer;
-}
+
 </style>

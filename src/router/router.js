@@ -120,6 +120,7 @@ export default [
     {
         path: '/mymessage/:userId',
         component: myMessage, 
+        meta:{keepAlive:true}
     },
     {
         path: '/mysetting/:userId',
