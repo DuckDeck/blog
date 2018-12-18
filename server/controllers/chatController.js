@@ -24,6 +24,13 @@ module.exports = {
                 return a.time - b.time
             })
         }
+        let ids = res.data.map(s=>{
+            return s.id
+        })
+        if(ids.length>0){
+            ids = ids.length == 1 ? ids : ids.join(',')
+            await DB.exec('update chat_message set send_status = 1 where id in (' + ids + ')')
+        }
         ctx.rest(res)
     },
     

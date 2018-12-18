@@ -75,10 +75,20 @@ import {userGetUndreaMessageCount} from '../../../store/service'
             let self = this
             window.addEventListener("afterSetItemEvent", function(e) {
                 // 检测是否为需要监听的key值
-                     if(getStore('userInfo')){
-                       let u  = getStore('userInfo')
-                       self.userInfo = u
-                   }
+                    console.log('localStorage 改变事件发生')
+                    let n = JSON.parse(e.newValue)
+                    console.log(n)
+                    if(n.comment_unread_count || n.comment_unread_count==0){
+                        self.unreadMessageCount = n.comment_unread_count + n.like_unread_count + n.notice_unread_count + n.attention_unread_count
+                        console.log(self.unreadMessageCount)
+                    }
+                    else{
+                        if(getStore('userInfo')){
+                            let u  = getStore('userInfo')
+                            self.userInfo = u
+                        }
+                    }
+
             });
             this.getUnReadMessage()
         },

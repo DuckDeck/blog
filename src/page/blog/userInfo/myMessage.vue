@@ -2,17 +2,17 @@
       <div  class="container" >
           <div class="main-page">
             <div class="message_item" > 
-               <div @click="selectType(1)"> 
-                   <i class="fa fa-commenting"></i> 评论
+               <div v-bind:class="[type == 1?'message_item_div_selected':'message_item_div']" @click="selectType(1)"> 
+                   <i class="fa fa-commenting"></i> 评论 <span v-show="comment_unread_count > 0">{{comment_unread_count}}</span>
+               </div> 
+                <div v-bind:class="[type == 2?'message_item_div_selected':'message_item_div']" @click="selectType(2)"> 
+                   <i class="fa fa-heart"></i> 喜欢和赞  <span v-show="like_unread_count > 0">{{like_unread_count}}</span>
                </div>
-                <div @click="selectType(2)"> 
-                   <i class="fa fa-heart"></i> 喜欢和赞
+               <div v-bind:class="[type == 3?'message_item_div_selected':'message_item_div']" @click="selectType(3)"> 
+                   <i class="fa fa-user-plus"></i> 关注  <span v-show="attention_unread_count > 0">{{attention_unread_count}}</span>
                </div>
-               <div @click="selectType(3)"> 
-                   <i class="fa fa-user-plus"></i> 关注
-               </div>
-               <div @click="selectType(4)"> 
-                   <i class="fa fa-wechat"></i> 私信
+               <div v-bind:class="[type == 4?'message_item_div_selected':'message_item_div']" @click="selectType(4)"> 
+                   <i class="fa fa-wechat"></i> 私信  <span v-show="chats_unread_count > 0">{{chats_unread_count}}</span>
                </div>
             </div>
             <div class="message_content" v-loading="loading">
@@ -39,7 +39,7 @@
                 </div>
                  <div v-if="type==2" style="width:100%" >
                      收到的喜欢和赞
-                    <div  v-for="item in comments" v-bind:key="item.id">
+                    <div  v-for="item in likes" v-bind:key="item.id">
                         <hr>
                         <div style="display:flex">
                                  <img style="height:40px;width:40px;object-fit:cover;border-radius:20px" :src="item.user_info.user_image_url" alt="">
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {userGetUndreaMessage} from '../../../store/service'
+import {userGetUndreaMessage,userGetUndreaMessageCount} from '../../../store/service'
 import emptyHint from './../com/emptyHint.vue'
 import loadMore from './../com/loadMore.vue'
 
@@ -113,10 +113,10 @@ import blogFoot from './../com/blogFoot.vue'
                 type:1,
                 loading:false,
                 itemCount:0,
-                comment_count:0,
-                like_count:0,
-                attention_count:0,
-                chats_count:0,
+                comment_unread_count:0,
+                like_unread_count:0,
+                attention_unread_count:0,
+                chats_unread_count:0,
                 comments:[],
                 likes:[],
                 attentions:[],
@@ -125,11 +125,24 @@ import blogFoot from './../com/blogFoot.vue'
         },
         async mounted(){
             this.userId = this.$route.params.userId
+            this.getMessageUnreadCount()
             this.getMessagesWithType()
-            let counts = getStore('message_count')
-            console.log(counts)
+            console.log('message_count')
+            
         },
         methods:{
+           async getMessageUnreadCount(){
+                let res = await userGetUndreaMessageCount()
+                if(res.code != 0){
+                    return
+                }
+                console.log(res)
+                setStore('message_count',res.data)
+                this.comment_unread_count = res.data.comment_unread_count
+                this.like_unread_count = res.data.like_unread_count
+                this.attention_unread_count = res.data.attention_unread_count
+                this.chats_unread_count = res.data.notice_unread_count
+           },
            async getMessagesWithType(){
                this.loading = true
                let res =  await userGetUndreaMessage(this.type)
@@ -141,19 +154,43 @@ import blogFoot from './../com/blogFoot.vue'
                switch (this.type) {
                    case 1:
                        this.comments = res.data
+                       if(this.comment_unread_count < this.comments.length){
+                           this.comment_unread_count = 0
+                       }
+                       else{
+                           this.comment_unread_count -= this.comments.length
+                       }
                        break;
                     case 2:
                        this.likes = res.data
+                       if(this.like_unread_count < this.likes.length){
+                           this.like_unread_count = 0
+                       }
+                       else{
+                           this.like_unread_count -= this.likes.length
+                       }
                        break;
                     case 3:
                         this.attentions = res.data
+                        if(this.attention_unread_count < this.attentions.length){
+                           this.attention_unread_count = 0
+                       }
+                       else{
+                           this.attention_unread_count -= this.attentions.length
+                       }
                         break;
                     case 4:
                         this.chats = res.data;
                         break
                    default:
                        break;
-               } 
+               }
+               let counts = getStore('message_count')
+               counts.comment_unread_count = this.comment_unread_count
+               counts.like_unread_count = this.like_unread_count
+               counts.attention_unread_count = this.attention_unread_count
+               counts.notice_unread_count = this.chats_unread_count
+               setStore('message_count',counts)
            },
            selectType(type){
                if(this.type != type){
@@ -210,19 +247,25 @@ import blogFoot from './../com/blogFoot.vue'
 }
 .message_item{
     min-width: 200px;
-    border-right: 2px solid peru
+    border-right: 2px solid peru;
 }
 .message_content{
     display: flex;
-    padding: 10px 20px 10px 20px;
+    padding: 12px 20px 10px 20px;
     margin-bottom: 2px;
     width: 100%;
 }
-.message_item div{
-
+.message_item_div{
     padding: 10px 10px 10px 20px;
     cursor: pointer;
 }
+
+.message_item_div_selected{
+    padding: 10px 10px 10px 20px;
+    cursor: pointer;
+    background-color: #dddddddd;
+}
+
 .message_item div:hover{
     background: #dddddddd
 }
@@ -232,6 +275,18 @@ import blogFoot from './../com/blogFoot.vue'
     margin-right: 5px;
     font-size: 20px;
 }
+
+.message_item div span{
+   float: right;
+   background-color: red;
+   width: 16px;
+   height: 16px;
+   border-radius: 8px;
+   text-align: center;
+   color: white;
+    margin-top: 3px;
+}
+
 
 .attentionedUsers:hover{
     cursor: pointer;

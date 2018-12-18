@@ -116,6 +116,44 @@ module.exports = {
         }
         console.log(result)
         //这里要设计一下已读信息
+        switch (type) {
+            case 1:
+                 ids = result.data.map(s=>{
+                     return s.id
+                 })
+                 console.log(ids)
+                 if(ids.length > 0){
+                     ids = ids.length == 1 ? ids[0] : ids.join(',')
+                    sql = 'update message_comment set read_status = 1 where id in (' + ids + ')'
+                    await DB.exec(sql)
+                 }
+                
+                break;
+            case 2:
+                ids = result.data.map(s=>{
+                    return s.id
+                })
+                if(ids.length > 0){
+                    ids = ids.length == 1 ? ids[0] : ids.join(',')
+                    sql = `update message_like set read_status = 1 where id in (` + ids + `)`
+                    await DB.exec(sql)
+                }
+               
+               break;
+            case 3:
+                ids = result.data.map(s=>{
+                     return s.id
+                 })
+                 if(ids.length > 0){
+                    ids = ids.length == 1 ? ids[0] : ids.join(',')
+                     sql = `update message_attention set read_status = 1 where id in (` + ids + `)`
+                    await DB.exec(sql)
+                 }
+                
+                break;
+            default:
+                break;
+        }
         ctx.rest(result)
     },
 
@@ -142,31 +180,3 @@ module.exports = {
         ctx.rest(result)
     },
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
