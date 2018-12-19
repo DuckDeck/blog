@@ -24,7 +24,7 @@ module.exports = {
         // console.log(res)
 
         // c.notice_unread_count = res.data[0].count
-        //换成聊天未读信息
+        //换成聊天未读信息,未读信息没问题，因为未读信息肯定是别人发给自己的，所以可以用receive_id
         res = await DB.exec('select count(id) as count from chat_message where receive_id = ? and send_status = 0',[id])
         c.notice_unread_count = res.data[0].count
         let count = c.comment_unread_count + c.like_unread_count + c.attention_unread_count + c.notice_unread_count
@@ -53,6 +53,7 @@ module.exports = {
         let user_id = ctx.params.userId
         let type = parseInt(ctx.params.type)
         let sql = ''
+        let peerIds = []
         switch (type) {
             case 1:  //评论信息
                 sql = 'select * from message_comment where receive_id = ? order by message_time desc limit ?,?'
@@ -68,32 +69,66 @@ module.exports = {
                 result = await DB.exec(sql,[user_id,index,size])
 
                 break;
-            case 4: //全部最新的聊天 信息
-                sql = 'SELECT sender_id,count(id) as count FROM chat_message where receive_id = ? group by  sender_id limit ?,?'
-                result = await DB.exec(sql,[user_id,index,size])
+            case 4: //全部最新的聊天 信息,不能用receive_id和receive_id因为同样两个人聊天id是想反的，要用chat_id
+                sql = 'SELECT chat_id,count(chat_id) as count FROM chat_message where receive_id = ? or sender_id = ? group by  chat_id limit ?,?'
+                result = await DB.exec(sql,[user_id,user_id,index,size])
             default:
                 break;
         }
         let ids = null
-        if(type != 1){
+        if(type == 4){
             ids = result.data.map(s=>{
-                return s.sender_id
+                return s.chat_id
+            })
+        }
+        else if(type == 1){
+           
+            ids = result.data.map(s=>{
+                return s.commenter_id
             })
             
         }
         else{
             ids = result.data.map(s=>{
-                return s.commenter_id
+                return s.sender_id
             })
         }
         if(ids.length > 0){
-            let tmp = new Set(ids)
-            ids = [...tmp].join(',')
-            sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + ids + `)`
+            let tmpIds = null
+            if(type == 4){ //因为这里获取的是chat_id所以要转换一下
+                let tmp = []
+                for(let item of ids){
+                   let t = item.split('_')
+                   if(parseInt(t[0]) != parseInt(user_id)){
+                     tmp.push(parseInt(t[0]))
+                   }
+                   if(parseInt(t[1]) != parseInt(user_id)){
+                    tmp.push(parseInt(t[1]))
+                  }
+                }
+                tmp = new Set(tmp)
+                peerIds = [...tmp]
+                tmpIds = peerIds.join(',')
+                //处理一下聊天的对方ID，因为这里没有
+                result.data.map(s=>{
+                    peerIds.forEach(k=>{
+                        if(s.chat_id.indexOf(k)>=0){
+                            s.peer_id = k
+                        }
+                    })
+                    return s
+                })
+            }
+            else{
+                let tmp = new Set(ids)
+                tmpIds = [...tmp].join(',')
+            }
+            
+            sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + tmpIds + `)`
             let res = await DB.exec(sql)
             result.data = result.data.map(s=>{
                 let info = res.data.find(k=>{
-                    return k.user_id == s.sender_id || k.user_id == s.commenter_id
+                    return k.user_id == s.sender_id || k.user_id == s.commenter_id || k.user_id == s.peer_id
                 })
                 if(info != null){
                     s.user_info = info
@@ -101,18 +136,32 @@ module.exports = {
                 return s
             })
         }
-        if (type == 4) { //这里有优化的空间，应该不需要二次查询
-            sql = `select id,sender_id,chat_content,time,chat_id from chat_message where id in (select max(id) from chat_message where sender_id in (` + ids +`) group by sender_id)` 
-            let res = await DB.exec(sql)
-            result.data = result.data.map(s=>{
-                let chat = res.data.find(k=>{
-                    return k.sender_id == s.sender_id
-                })
-                if(chat != null){
-                    s.chat_info = chat
+        if (type == 4) {
+            if(ids.length>0){
+                let tmp = new Set(ids)
+                ids = [...tmp]
+                if(ids.length == 1){
+                    ids = `\'` + ids[0] + `\'`
                 }
-                return s
-            })
+                else{
+                    ids = ids.map(s=>{
+                        return `\'` + s + `\'`
+                    }).join(',')
+                }
+                sql = `select id,sender_id,chat_content,time,chat_id from chat_message where id in (select max(id) from chat_message where chat_id in (` + ids +`) group by chat_id)` 
+                console.log(sql)
+                let res = await DB.exec(sql)
+                result.data = result.data.map(s=>{
+                    let chat = res.data.find(k=>{
+                        return k.chat_id == s.chat_id
+                    })
+                    if(chat != null){
+                        s.chat_info = chat
+                    }
+                    return s
+                })
+            }
+            
         }
         console.log(result)
         //这里要设计一下已读信息

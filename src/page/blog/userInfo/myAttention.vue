@@ -47,7 +47,9 @@ import loadMore from './../com/loadMore.vue'
         },
         async mounted(){
             this.userId = this.$route.params.userId
-            this.selectedUserId = this.$route.params.targetUserId
+            if(!isEmpty(this.$route.query)){
+                this.selectedUserId = parseInt(this.$route.query.user_id)
+            }
             this.getAttention(this.userId)            
         },
         methods:{
@@ -86,10 +88,15 @@ import loadMore from './../com/loadMore.vue'
                 }
                 this.attentionedUserArticlesCount = res.count
                 this.attentionedUserArticles = this.attentionedUserArticles.concat(res.data)
-                let index = window.location.href.lastIndexOf('/')
-                let tmp = window.location.href.substring(0,index + 1)
-                window.location.href = tmp +  this.selectedUserId
-                //window.location.href = window.location.href.substring(0,window.location.href.length - 1) + type
+                let index = window.location.href.lastIndexOf('?')
+                if(index > 0){
+                     let tmp = window.location.href.substring(0,index)
+                     window.location.href = tmp +  '?user_id=' + this.selectedUserId
+                }
+                else{
+                    window.location.href = window.location.href +  '?user_id=' + this.selectedUserId
+                }
+               
             },
             gotoUser(item){
                 if(isLogin()){

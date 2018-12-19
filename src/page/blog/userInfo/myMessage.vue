@@ -246,7 +246,7 @@ import blogFoot from './../com/blogFoot.vue'
           },
           gotoChat(item){
               
-              this.$router.push('/chat/'+item.sender_id)
+              this.$router.push('/chat/'+item.peer_id)
           }
         },
         components:{

@@ -130,7 +130,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                     
                 }
                 else if(command == 'mymessage'){
-                    this.$router.push('/mymessage/' + this.userInfo.user_id + '?type=3')
+                    this.$router.push('/mymessage/' + this.userInfo.user_id + '?type=1')
                 }
                 else if(command == "like"){
                     this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + this.userInfo.user_id + "/like") 
@@ -139,7 +139,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                      this.$router.push('/mycollect/' + this.userInfo.user_id)
                 }
                 else if(command == "attention"){
-                     this.$router.push('/myattention/' + this.userInfo.user_id + '/0')
+                     this.$router.push('/myattention/' + this.userInfo.user_id)
                 }
                 else if(command == "tag"){
                      this.$router.push('/mytag/' + this.userInfo.user_id)

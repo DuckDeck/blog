@@ -113,7 +113,7 @@ export default [
         component: collectedArticles, 
     },
     {
-        path: '/myattention/:userId/:targetUserId',
+        path: '/myattention/:userId',
         component: myAttention, 
     },
     {
