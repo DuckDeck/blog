@@ -61,6 +61,7 @@ const managerSetting =  r => require.ensure([], () => r(require('../page/backsta
 
 const managerSettingInfo =  r => require.ensure([], () => r(require('../page/backstage/managerSettingInfo')), 'managerSettingInfo')
 
+const managerChatList =  r => require.ensure([], () => r(require('../page/backstage/manageChatLog')), 'managerChatLog')
 
 
 
@@ -198,6 +199,10 @@ export default [
             {
                 path:'manageCommentInfo/:articleId',
                 component:manageCommentInfo
+            },
+            {
+                path:'manageChat',
+                component:managerChatList
             },
             {
                 path:'manageFile',

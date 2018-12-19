@@ -108,3 +108,13 @@ export const managerGetUserAttentionById = function(userId,index = 0,size = 10){
     return setpromiseGet(url)
 }
 
+export const managerChatList = function(index = 0,size = 10){
+    const url = HostName +  'manage/chatlist/' +  manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
+export const managerChatLogById = function(userId,index = 0,size = 10){
+    const url = HostName +  'manage/chatwithid/'+ userId + '/'  +  manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+    return setpromiseGet(url)
+}
+
