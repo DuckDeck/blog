@@ -19,7 +19,7 @@
                             
                         
                         </div>
-                       <button v-show="!isMine" @click="sendMsg" class="writeArticle">发消息</button>
+                       <button v-show="!isMine && isUserLogin" @click="sendMsg" class="writeArticle">发消息</button>
                        <button v-show="isMine" @click="writeArticle" class="writeArticle">写文章</button>
                        <button v-show="!isMine" @click="attentionUser" v-bind:class="[userInfo.is_attention?'attentionUser':'attentionedUser']">
                            {{userInfo.is_attention?"已关注":"关注"}}</button>
@@ -207,6 +207,10 @@ import loadMore from './../com/loadMore.vue'
             this.$router.push('/writeArticle/0')
        },
        sendMsg(){
+            if(!isLogin()){
+                toast(this,"请先登录再发送信息")
+                return
+            }
             this.$router.push('/chat/'+this.userId)
        },
        handleClick(tab,event){
@@ -279,6 +283,9 @@ import loadMore from './../com/loadMore.vue'
             }
             return false
         },
+        isUserLogin(){
+            return isLogin()
+        }
     }
 
   }

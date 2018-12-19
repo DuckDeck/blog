@@ -104,7 +104,10 @@ export default [
         path: '/userInfo/:userId/:tab',
         component: userInfo, 
     },
-   
+    {
+        path: '/userInfo/:userId/:targetUserId/:tab',
+        component: userInfo, 
+    },
     {
         path: '/mytag/:userId',
         component: myTag, 
@@ -114,7 +117,7 @@ export default [
         component: collectedArticles, 
     },
     {
-        path: '/myattention/:userId',
+        path: '/myattention/:userId/:targetUserId',
         component: myAttention, 
     },
     {

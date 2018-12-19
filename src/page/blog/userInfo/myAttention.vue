@@ -47,10 +47,8 @@ import loadMore from './../com/loadMore.vue'
         },
         async mounted(){
             this.userId = this.$route.params.userId
-            console.log(id)
-            
-            this.getAttention(id)
-            
+            this.selectedUserId = this.$route.params.targetUserId
+            this.getAttention(this.userId)            
         },
         methods:{
             async getAttention(id){
@@ -60,8 +58,16 @@ import loadMore from './../com/loadMore.vue'
                 if(res.code == 0){
                     console.log(res.data)
                     this.attentioned = res.data
-                    this.selectedUserId = this.attentioned[0].user_id
-                    this.getUserArticles(this.attentioned[0])
+                    let index = 0
+                    if(this.selectedUserId == 0){
+                        this.selectedUserId = this.attentioned[0].user_id
+                    }
+                    else{
+                        index = res.data.findIndex(s=>{
+                            return s.user_id == this.selectedUserId
+                        })
+                    }
+                    this.getUserArticles(this.attentioned[index])
                 }
             },
             async getUserArticles(user){
@@ -79,7 +85,11 @@ import loadMore from './../com/loadMore.vue'
                     return
                 }
                 this.attentionedUserArticlesCount = res.count
-                this.attentionedUserArticles = this.attentionedUserArticles.concat(res.data)  
+                this.attentionedUserArticles = this.attentionedUserArticles.concat(res.data)
+                let index = window.location.href.lastIndexOf('/')
+                let tmp = window.location.href.substring(0,index + 1)
+                window.location.href = tmp +  this.selectedUserId
+                //window.location.href = window.location.href.substring(0,window.location.href.length - 1) + type
             },
             gotoUser(item){
                 this.$router.push('/userInfo/' + item.user_id + '/articles')

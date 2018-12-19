@@ -138,7 +138,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                      this.$router.push('/mycollect/' + this.userInfo.user_id)
                 }
                 else if(command == "attention"){
-                     this.$router.push('/myattention/' + this.userInfo.user_id)
+                     this.$router.push('/myattention/' + this.userInfo.user_id + '/0')
                 }
                 else if(command == "tag"){
                      this.$router.push('/mytag/' + this.userInfo.user_id)
