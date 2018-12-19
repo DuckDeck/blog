@@ -227,7 +227,13 @@ import blogFoot from './../com/blogFoot.vue'
               this.$router.push('/article/'+item.comment_project_id + '/comment')
           },
           gotoUserInfo(item){
-               this.$router.push('/userInfo/' + item.sender_id + '/articles')
+
+               if(isLogin()){
+                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + item.user_id + "/articles")                
+                }
+                else{
+                    this.$router.push('/userInfo/0/' + item.user_id + "/articles")
+                }
           },
           gotoChat(item){
               

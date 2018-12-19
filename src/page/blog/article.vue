@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle,userCollectArticle,userSetAttentioned} from '../../store/service'
+import {articleById,submitComment,getComment,commentsByArticleId,articlebroswer,userLikeArticle,userCollectArticle,userSetAttentioned, getUserInfo} from '../../store/service'
 import blogHeader from './com/blogHead.vue'
 import writeComment from './com/writeComment.vue'
 import userComment from './com/userComment.vue'
@@ -108,7 +108,13 @@ import collectArticle from './com/collectArticle.vue'
             }
         },
         userHeadClick(userInfo){
-             this.$router.push('/userInfo/' + userInfo.user_id + "/articles")
+            if(isLogin()){
+                this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + userInfo.user_id + "/articles")                
+            }
+            else{
+                this.$router.push('/userInfo/0/' + userInfo.user_id + "/articles")
+            }
+             
         },
         async submitComment(com){
            if(com == ''){

@@ -125,14 +125,15 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                     let last = this.$router
                     console.log(last)
                     //ISSUE1 这个不好解决，同一个页面不能被PUSH，这是个严重的问题
-                    //暂时放着吧
-                    this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
+                    //暂时放着吧,现在我改成不同参数的页面的，还是不行，需要强制
+                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + this.userInfo.user_id + "/articles")                
+                    
                 }
                 else if(command == 'mymessage'){
                     this.$router.push('/mymessage/' + this.userInfo.user_id + '/1')
                 }
                 else if(command == "like"){
-                     this.$router.push('/userInfo/' + this.userInfo.user_id  + "/like")
+                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + this.userInfo.user_id + "/like") 
                 }
                 else if(command == "collect"){
                      this.$router.push('/mycollect/' + this.userInfo.user_id)

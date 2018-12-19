@@ -117,7 +117,7 @@ import loadMore from './../com/loadMore.vue'
       }
     },
     mounted(){
-        let id = this.$route.params.userId
+        let id = this.$route.params.targetUserId
         this.userId = id
         this.activeName = this.$route.params.tab
         console.log(this.activeName)

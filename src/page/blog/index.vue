@@ -188,14 +188,25 @@ import loadMore from './com/loadMore.vue'
 
         },
         clickUser(user){
-            this.$router.push('userInfo/' + user.user_id + '/articles')
+
+            if(isLogin()){
+                this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + user.user_id + "/articles")                
+            }
+            else{
+                this.$router.push('/userInfo/0/' + user.user_id + "/articles")
+            }
         },
         gotoSort(sort){
             localStorage.sortId = sort.sort_id
             this.$router.push('sortArticleList/' + sort.user_id)
         },
         gotoUserInfo(com){
-             this.$router.push('userInfo/' + com.user_id + '/articles')
+             if(isLogin()){
+                this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + com.user_id + "/articles")                
+            }
+            else{
+                this.$router.push('/userInfo/0/' + com.user_id + "/articles")
+            }
         },
      
         async loadMore(){

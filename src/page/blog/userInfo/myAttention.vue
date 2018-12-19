@@ -92,7 +92,12 @@ import loadMore from './../com/loadMore.vue'
                 //window.location.href = window.location.href.substring(0,window.location.href.length - 1) + type
             },
             gotoUser(item){
-                this.$router.push('/userInfo/' + item.user_id + '/articles')
+                if(isLogin()){
+                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + item.user_id + "/articles")                
+                }
+                else{
+                    this.$router.push('/userInfo/0/' + item.user_id + "/articles")
+                }
             }
         },
         components:{

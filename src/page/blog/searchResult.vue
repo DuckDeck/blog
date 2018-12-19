@@ -188,14 +188,24 @@ import loadMore from './com/loadMore.vue'
             }
         },
         gotoUser(user){
-            this.$router.push('/userInfo/' + user.user_id)
+            if(isLogin()){
+                this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + user.user_id + "/articles")                
+            }
+            else{
+                this.$router.push('/userInfo/0/' + user.user_id + "/articles")
+            }
         },
         selectSort(sort){
             localStorage.sortId = sort.sort_article_id
             this.$router.push('/sortArticleList/' + sort.user_info.user_id)
         },
         userHeadClick(user){
-            this.$router.push('/userInfo/' + user.user_id)
+            if(isLogin()){
+                this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + user.user_id + "/articles")                
+            }
+            else{
+                this.$router.push('/userInfo/0/' + user.user_id + "/articles")
+            }
         }
     },
     components:{

@@ -101,10 +101,6 @@ export default [
         component:atricleInfo
     },
     {
-        path: '/userInfo/:userId/:tab',
-        component: userInfo, 
-    },
-    {
         path: '/userInfo/:userId/:targetUserId/:tab',
         component: userInfo, 
     },
