@@ -3,9 +3,9 @@
 			<div style="overflow: hidden">
 				<blogHeader v-show="needShow" ></blogHeader>
                 <keep-alive> 
-                    <router-view :key="$route.fullPath"  v-if="$route.meta.keepAlive"></router-view>
+                    <router-view :key="$route.path"  v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
-				<router-view :key="$route.fullPath" v-if="!$route.meta.keepAlive"></router-view>
+				<router-view :key="$route.path" v-if="!$route.meta.keepAlive"></router-view>
 			</div>
     	</transition>
 </template>

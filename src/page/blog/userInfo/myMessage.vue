@@ -125,7 +125,8 @@ import blogFoot from './../com/blogFoot.vue'
         },
         async mounted(){
             this.userId = this.$route.params.userId
-            this.type = this.$route.params.type
+            this.type = parseInt(this.$route.query.type)
+            console.log(this.$route)
             this.getMessageUnreadCount()
             this.getMessagesWithType()
             console.log('message_count')
@@ -137,8 +138,7 @@ import blogFoot from './../com/blogFoot.vue'
                 if(res.code != 0){
                     return
                 }
-                console.log(res)
-                setStore('message_count',res.data)
+            
                 this.comment_unread_count = res.data.comment_unread_count
                 this.like_unread_count = res.data.like_unread_count
                 this.attention_unread_count = res.data.attention_unread_count
@@ -152,6 +152,7 @@ import blogFoot from './../com/blogFoot.vue'
                    toast(self,res.cMsg)
                    return
                }
+                   
                switch (this.type) {
                    case 1:
                        this.comments = res.data
@@ -173,12 +174,14 @@ import blogFoot from './../com/blogFoot.vue'
                        break;
                     case 3:
                         this.attentions = res.data
+                        console.log(res)
+                        console.log(this.attentions)
                         if(this.attention_unread_count < this.attentions.length){
-                           this.attention_unread_count = 0
-                       }
-                       else{
-                           this.attention_unread_count -= this.attentions.length
-                       }
+                            this.attention_unread_count = 0
+                        }
+                        else{
+                            this.attention_unread_count -= this.attentions.length
+                        }
                         break;
                     case 4:
                         this.chats = res.data;
@@ -197,7 +200,14 @@ import blogFoot from './../com/blogFoot.vue'
                if(this.type != type){
                    this.type = type
                    this.getMessagesWithType()
-                   window.location.href = window.location.href.substring(0,window.location.href.length - 1) + type
+                   let index = window.location.href.indexOf('?')
+                   if(index > 0){
+                        let tmp = window.location.href.substring(0,index)
+                        window.location.href = tmp + '?type='+ type
+                   }
+                   else{
+                        window.location.href = window.location.href + '?type='+ type
+                   }
                    //这招改URL的方式可行
                }
                
@@ -227,12 +237,11 @@ import blogFoot from './../com/blogFoot.vue'
               this.$router.push('/article/'+item.comment_project_id + '/comment')
           },
           gotoUserInfo(item){
-
                if(isLogin()){
-                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + item.user_id + "/articles")                
+                    this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + item.sender_id + "/articles")                
                 }
                 else{
-                    this.$router.push('/userInfo/0/' + item.user_id + "/articles")
+                    this.$router.push('/userInfo/0/' + item.sender_id + "/articles")
                 }
           },
           gotoChat(item){

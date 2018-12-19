@@ -117,7 +117,7 @@ export default [
         component: myAttention, 
     },
     {
-        path: '/mymessage/:userId/:type',
+        path: '/mymessage/:userId',
         component: myMessage, 
     },
     {

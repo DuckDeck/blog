@@ -75,9 +75,9 @@ import {userGetUndreaMessageCount} from '../../../store/service'
             let self = this
             window.addEventListener("afterSetItemEvent", function(e) {
                 // 检测是否为需要监听的key值
-                    console.log('localStorage 改变事件发生')
+                    // console.log('localStorage 改变事件发生')
                     let n = JSON.parse(e.newValue)
-                    console.log(n)
+                    // console.log(n)
                     if(n.comment_unread_count || n.comment_unread_count==0){
                         self.unreadMessageCount = n.comment_unread_count + n.like_unread_count + n.notice_unread_count + n.attention_unread_count
                         console.log(self.unreadMessageCount)
@@ -130,7 +130,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                     
                 }
                 else if(command == 'mymessage'){
-                    this.$router.push('/mymessage/' + this.userInfo.user_id + '/1')
+                    this.$router.push('/mymessage/' + this.userInfo.user_id + '?type=3')
                 }
                 else if(command == "like"){
                     this.$router.push('/userInfo/' + getStore('userInfo').user_id + '/' + this.userInfo.user_id + "/like") 
