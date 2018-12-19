@@ -129,7 +129,7 @@ import {userGetUndreaMessageCount} from '../../../store/service'
                     this.$router.push('/userInfo/' + this.userInfo.user_id + "/articles")
                 }
                 else if(command == 'mymessage'){
-                    this.$router.push('/mymessage/' + this.userInfo.user_id)
+                    this.$router.push('/mymessage/' + this.userInfo.user_id + '/1')
                 }
                 else if(command == "like"){
                      this.$router.push('/userInfo/' + this.userInfo.user_id  + "/like")

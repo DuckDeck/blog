@@ -125,6 +125,7 @@ import blogFoot from './../com/blogFoot.vue'
         },
         async mounted(){
             this.userId = this.$route.params.userId
+            this.type = this.$route.params.type
             this.getMessageUnreadCount()
             this.getMessagesWithType()
             console.log('message_count')
@@ -196,6 +197,8 @@ import blogFoot from './../com/blogFoot.vue'
                if(this.type != type){
                    this.type = type
                    this.getMessagesWithType()
+                   window.location.href = window.location.href.substring(0,window.location.href.length - 1) + type
+                   //这招改URL的方式可行
                }
                
            },

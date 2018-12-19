@@ -118,9 +118,8 @@ export default [
         component: myAttention, 
     },
     {
-        path: '/mymessage/:userId',
+        path: '/mymessage/:userId/:type',
         component: myMessage, 
-        meta:{keepAlive:true}
     },
     {
         path: '/mysetting/:userId',

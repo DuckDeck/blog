@@ -4,7 +4,7 @@
             <div class="myAttentions" v-loading="loadingUser"> 
                 <div v-for="att in attentioned" @click="getUserArticles(att)" v-bind:key="att.user_id" 
                 v-bind:class="[selectedUserId == att.user_id?'attentionedUsersSelected':'attentionedUsers']">
-                   <img class="userHead"  :src="att.user_image_url" alt="">
+                   <img class="userHead" @click="gotoUser(att)" :src="att.user_image_url" alt="">
                  
                         <div style="align-self:center;font-size:16px;color:gray">
                             {{att.user_real_name}}
@@ -46,8 +46,7 @@ import loadMore from './../com/loadMore.vue'
             }
         },
         async mounted(){
-            let id = this.$route.params.userId
-            this.userId = id
+            this.userId = this.$route.params.userId
             console.log(id)
             
             this.getAttention(id)
@@ -81,6 +80,9 @@ import loadMore from './../com/loadMore.vue'
                 }
                 this.attentionedUserArticlesCount = res.count
                 this.attentionedUserArticles = this.attentionedUserArticles.concat(res.data)  
+            },
+            gotoUser(item){
+                this.$router.push('/userInfo/' + item.user_id + '/articles')
             }
         },
         components:{
