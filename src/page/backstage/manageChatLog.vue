@@ -75,7 +75,7 @@ import {managerChatList} from '../../store/manageService'
                 }
             },
             checkChat(item){
-
+                this.$route.push('/manageUserChat/' + item.chat_id)
             },
              async handleCurrentChange(val){
                 this.pageIndex = val

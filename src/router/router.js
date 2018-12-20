@@ -63,6 +63,7 @@ const managerSettingInfo =  r => require.ensure([], () => r(require('../page/bac
 
 const managerChatList =  r => require.ensure([], () => r(require('../page/backstage/manageChatLog')), 'managerChatLog')
 
+const managerChatUserLog =  r => require.ensure([], () => r(require('../page/backstage/manageUserChat')), 'managerUserChat')
 
 
 export default [
@@ -205,6 +206,10 @@ export default [
                 component:managerChatList
             },
             {
+                path:'manageUserChat/:chat_id',
+                component:managerChatUserLog
+            },
+            {
                 path:'manageFile',
                 component:manageFile
             },
@@ -220,6 +225,7 @@ export default [
                 path:'managerSettingInfo/:id',
                 component:managerSettingInfo
             },
+            
         ]
     },
 

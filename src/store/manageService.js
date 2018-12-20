@@ -113,8 +113,7 @@ export const managerChatList = function(index = 0,size = 10){
     return setpromiseGet(url)
 }
 
-export const managerChatLogById = function(userId,index = 0,size = 10){
-    const url = HostName +  'manage/chatwithid/'+ userId + '/'  +  manageId() + '/' + createMtoken()+ '/' + index + '/' + size
+export const managerChatLogById = function(chat_id,index = 0,size = 10){
+    const url = HostName +  'manage/chat/'+ chat_id + '/'  +  manageId() + '/' + createMtoken()+ '/' + index + '/' + size
     return setpromiseGet(url)
 }
-
