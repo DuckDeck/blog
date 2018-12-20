@@ -604,8 +604,9 @@ CREATE TABLE `blog`.`message_comment` (
   `comment_project_id` INT NOT NULL COMMENT '评论的项目ID，一般是文章',
   `comment_project_title` VARCHAR(500) NOT NULL COMMENT '\'评论的项目标题，一般是文章标题\'',
   `message_time` BIGINT(15) NOT NULL COMMENT '评论时间',
+  `read_status` TINYINT(4) NULL DEFAULT 0 COMMENT '是否已读'，
   `content` TEXT(2000) NULL COMMENT '\'评论内容\'',
-  `read_status` TINYINT NULL DEFAULT 0 COMMENT '是否已读'，
+  
   `comment_id` INT NULL COMMENT '主体评论的ID',
   `comment_scope_id` INT NULL COMMENT '评论对象的父ID，这种用于小评论',
   `comment_scope_belong_id` INT NULL COMMENT '评论对象的父ID的所属者ID',
