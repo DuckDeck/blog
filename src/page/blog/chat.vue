@@ -209,10 +209,10 @@ import { baseDomain } from '../../config/env';
             date = new Date(date)
             let now = new Date()
             let prev = new Date(now.getTime() - 1000 * 60 * 60 * 24)
-            if(now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDay() == date.getDay()){
+            if(now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDate() == date.getDate()){
                 return formatTime(time,'hh:mm')
             }
-            else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDay() == date.getDay()){
+            else if(prev.getFullYear() == date.getFullYear() && prev.getMonth() == date.getMonth() && prev.getDate() == date.getDate()){
                 return 'Yesterday ' + formatTime(time,'hh:mm')
             }
             else if(prev.getFullYear() == date.getFullYear()){

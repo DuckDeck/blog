@@ -138,7 +138,6 @@ import blogFoot from './../com/blogFoot.vue'
                 if(res.code != 0){
                     return
                 }
-            
                 this.comment_unread_count = res.data.comment_unread_count
                 this.like_unread_count = res.data.like_unread_count
                 this.attention_unread_count = res.data.attention_unread_count
@@ -149,7 +148,7 @@ import blogFoot from './../com/blogFoot.vue'
                let res =  await userGetUndreaMessage(this.type)
                this.loading = false
                if(res.code != 0){
-                   toast(self,res.cMsg)
+                   toast(this,res.cMsg)
                    return
                }
                    

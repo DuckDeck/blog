@@ -61,7 +61,7 @@ import {managerChatList} from '../../store/manageService'
                     this.count = res.count
                 }
                 else{
-                    toast(self,res.cMsg)
+                    toast(this,res.cMsg)
                 }
             },
            formatter(row, column) {
@@ -75,7 +75,7 @@ import {managerChatList} from '../../store/manageService'
                 }
             },
             checkChat(item){
-                this.$route.push('/manageUserChat/' + item.chat_id)
+                this.$router.push('/manage/userChat/' + item.chat_id)
             },
              async handleCurrentChange(val){
                 this.pageIndex = val

@@ -206,7 +206,7 @@ export default [
                 component:managerChatList
             },
             {
-                path:'manageUserChat/:chat_id',
+                path:'userChat/:chat_id',
                 component:managerChatUserLog
             },
             {

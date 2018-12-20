@@ -50,7 +50,7 @@ module.exports = {
         let size = parseInt(ctx.params.size)
         let chatId = ctx.params.chatId
         //一般取出20条信息
-        let sql = 'select count(id) from chat_message where chat_id = ?'
+        let sql = 'select count(id) as count from chat_message where chat_id = ?'
         let res = await DB.exec(sql,[chatId])
         if(res.code != 0){
             ctx.rest(res)
@@ -67,37 +67,17 @@ module.exports = {
             ctx.rest(res)
             return
         }
-        let id1 = res.data.map(s=>{
-            return s.sender_id
-        })
-        let id2 = res.data.map(s=>{
-            return s.receive_id
-        })
-        id1 = new Set(id1)
-        id2 = new Set(id2)
-        let ids = new Set([...id1, ...id2])
-        ids = [...ids]
-        if(ids.length > 0){
-            ids = ids.length == 1 ? ids[0] : ids.join(',')
-            sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + ids + `)`
-            let result = await DB.exec(sql)
-            res.data = res.data.map(s=>{
-                let info1 = result.data.find(k=>{
-                    return k.user_id == s.sender_id
-                })
-                if(info1 != null){
-                   s.info1 = info1
-                }
-                let info2 = result.data.find(k=>{
-                    return k.user_id == s.receive_id
-                })
-                if(info2 != null){
-                   s.info2 = info2
-                }
-                return s
-            })
-        }
+     
+        let ids = chatId.replace('_',',')
+        sql = `select user_id,user_real_name,user_image_url from user_info where user_id in (` + ids + `)`
+        let result = await DB.exec(sql)
+        let arr = res.data
+        res.data = {}
+        res.data.info1 = result.data[0]
+        res.data.info2 = result.data[1]
+        res.data.content = arr
         res.count = count
+        console.log(res)
         ctx.rest(res)
     },
 }

@@ -56,21 +56,21 @@ import comment from './com/comment.vue'
                   this.articleDetail = res.data
             }
             else{
-                toast(self,res.cMsg)
+                toast(this,res.cMsg)
             }
             res = await userInfoById(this.articleDetail.user_id)
             if(res.code == 0){
                   this.userInfo = res.data
             }
             else{
-                toast(self,res.cMsg)
+                toast(this,res.cMsg)
             } 
             res = await commentsByArticleId(this.articleDetail.article_id)
             if(res.code == 0){
                   this.comments = res.data
             }
             else{
-                toast(self,res.cMsg)
+                toast(this,res.cMsg)
             } 
 
         },
