@@ -78,7 +78,7 @@ module.exports = {
                 if(k.article_id == l.article_id)
                 k.tags.push(l)
             }
-            
+
         }
         
         result.data.sorts = sortArr
@@ -154,6 +154,20 @@ module.exports = {
         let articleIds = res.data.map(s=>{
             return s.article_id
         })
+        sql = `select * from article_tag_map_view where article_id in (`  + articleIds.join(',') + ')'
+        res =  await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        for(let k of result.data){
+            k.tags = []
+            for(let l of res.data){
+                if(k.article_id == l.article_id)
+                k.tags.push(l)
+            }
+            
+        }
         sql = `select user_id,user_real_name,user_image_url from user_detail where user_id in (` + user_ids.join(',') + ')'
         res =  await DB.exec(sql)
         if(res.code != 0){
