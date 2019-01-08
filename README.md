@@ -1,4 +1,4 @@
-**更新，~~目前网站和接口全面启用HTTPS~~因为换了Server,所以暂时去掉了HTTPS, 域名改成了bqbbq.com**
+**更新，~~目前网站和接口全面启用HTTPS~~因为换了Server,所以暂时去掉了HTTPS, 目前准备开发两个平台的APP 域名改成了bqbbq.com**
 
 **dev分支已经更新为支持Webpack4,很费劲，可能还有bug需要修复**
 
