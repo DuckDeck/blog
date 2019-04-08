@@ -27,10 +27,10 @@ function getFive(letter){
 
     console.log(params)
     let options = {
-        url:"http://www.52wubi.com/wbbmcx/search.php",
+        url:"https://www.52wubi.com/wbbmcx/search.php",
         header:{
             "Accept" : "text/html, application/xhtml+xml, image/jxr, */*",
-            "Referer" : "http://www.52wubi.com/wbbmcx/search.php",
+            "Referer" : "https://www.52wubi.com/wbbmcx/search.php",
             "Accept-Language" : "zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3",
             "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063",
             "Content-Type" : "application/x-www-form-urlencoded",
@@ -43,7 +43,9 @@ function getFive(letter){
         encoding:null
     }
     function callback(error, response, body) {
+      console.log(response.statusCode)
         if (!error && response.statusCode == 200) {
+          
              let h = iconv.decode(body,"gb2312")
               var $ = cheerio.load(h,{decodeEntities: false})
               let s = $('.tbhover')
