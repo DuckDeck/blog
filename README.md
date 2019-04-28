@@ -33,6 +33,7 @@ http://bqbbq.com/#/manage
 + 后台管理员登录
 + 侧边栏
 + 喜欢和收藏功能
++ 加入了私信聊天功能
 
 ## 先上效果图
 
@@ -49,7 +50,7 @@ http://bqbbq.com/#/manage
 
 ![写文章](http://upload-images.jianshu.io/upload_images/1281203-6fcfac530be3e214.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-
+![聊天功能](https://upload-images.jianshu.io/upload_images/1281203-97b150e44ce665ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![修改设置](http://upload-images.jianshu.io/upload_images/1281203-affc4a36df17ac7b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
