@@ -158,7 +158,7 @@ function searchFive(key){
                     let text = t[1].children[0].children[0].data
                     let spell = t[3].children[0].data
                     let code = t[5].children[0].data
-                    let imgDecodeUrl = 'http://www.52wubi.com/wbbmcx/'+ t[7].children[0].attribs.src
+                    let imgDecodeUrl = 'https://www.52wubi.com/wbbmcx/'+ t[7].children[0].attribs.src
                     result.push({
                         "text":text,"spell":spell
                         ,"code":code,"imgDecodeUrl":imgDecodeUrl
