@@ -11,6 +11,10 @@ import VueHtml5Editor from 'vue-html5-editor'
 import {baseUrl} from './config/env'
 import  mavonEditor  from 'mavon-editor'
 import Vue2Emoji from 'vuejs-emoji'
+import VideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+import 'videojs-flash'
 Vue.use(Vue2Emoji)
 //import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
@@ -43,6 +47,10 @@ Vue.use(VueHtml5Editor,{
      },
  
  });
+
+// use
+Vue.use(VideoPlayer)
+
 register()
 
 const ah=require("ajax-hook")

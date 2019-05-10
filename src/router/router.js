@@ -20,6 +20,7 @@ const myAttention = r => require.ensure([], () => r(require('../page/blog/userIn
 const myTag = r => require.ensure([], () => r(require('../page/blog/userInfo/myTag')), 'myTag')
 const mySetting = r => require.ensure([], () => r(require('../page/blog/userInfo/myInfoSetting')), 'mySetting')
 const myMessage = r => require.ensure([], () => r(require('../page/blog/userInfo/myMessage')), 'myMessage')
+const pullLive = r => require.ensure([], () => r(require('../page/blog/live/pulllive')), 'pulllive')
 
 const sortArticleList = r => require.ensure([], () => r(require('../page/blog/sortArticleList')), 'sortArticleList')
 
@@ -146,6 +147,10 @@ export default [
     {
         path:'/chat/:id',
         component:chat
+    },
+    {
+        path:'/pulllive',
+        component:pullLive
     },  
     {
         path:'*',
