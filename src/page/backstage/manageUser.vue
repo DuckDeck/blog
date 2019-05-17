@@ -62,7 +62,7 @@ import {allUser,deleteUser} from '../../store/manageService'
                     page_num: 0,
                     page_size: 10,
                 },
-                showDeleteUser:true,
+                showDeleteUser:false,
                 currentDeleteUser:{},
                 deleteLoading:false,
             }
