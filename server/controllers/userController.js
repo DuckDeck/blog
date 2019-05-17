@@ -10,6 +10,7 @@ const DB = require('../sqlhelp/mysql')
 const Sort = require('../model/articleSort')
 const Dynamic = require('../model/dynamic')
 const config = require('../../config/pathConfig')
+//关于删除用户会有比较复杂的逻辑，很多地方都要判断，这里就不判断了
 module.exports = {
     //管理用户
     'GET /api/manage/user/:mId/:token/:index/:size': async (ctx, next) => {
@@ -25,7 +26,7 @@ module.exports = {
         }
        let index = parseInt(ctx.params.index)
        let size = parseInt(ctx.params.size)
-       let sql =  `select count(user_id) as count from user`
+       let sql =  `select count(user_id) as count from user where delete_flag = 0`
        let res = await DB.exec(sql)
         if(res.code != 0){
             ctx.rest(res)
@@ -36,7 +37,7 @@ module.exports = {
             return
         }
         let count = res.data[0].count
-       sql = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
+       sql = 'select user_id,user_name,user_isValidate,user_register_time from user where delete_flag = 0 limit ?,?'
        res = await DB.exec(sql,[index * size,size])
        ctx.rest(Result.createCount(0,count,res.data))
      },
@@ -54,7 +55,7 @@ module.exports = {
         }
         let userId = parseInt(ctx.params.userId)
         
-        let sqlUser = 'select a.* ,b.* from  user a join user_info b on a.user_id = b.user_id where a.user_id = ?'
+        let sqlUser = 'select a.* ,b.* from  user a join user_info b on a.user_id = b.user_id where a.user_id = ? and a.delete_flag = 0'
         let res = await DB.exec(sqlUser,[userId])
         if(res.code == 0){
             if(res.data.length > 0){
@@ -66,6 +67,35 @@ module.exports = {
         }
         ctx.rest(res)
      },
+
+      //管理员删除用户
+    'DELETE /api/manage/user/:userId/:mId/:token': async (ctx, next) => {
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+        let userId = parseInt(ctx.params.userId)
+        
+        let sql = ' update user set delete_flag = 1 where user_id = ?'
+        let res = await DB.exec(sql,[userId])
+       
+        if(res.code == 0){
+            if(res.data.length > 0){
+                res.data = res.data[0]
+            }
+            else{
+                res = Result.create(8)
+            }
+        }
+        ctx.rest(res)
+     },
+
      //管理员获取用户喜欢的文章列表
      'GET /api/manage/userlikearticle/:userId/:mId/:token/:index/:size': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)

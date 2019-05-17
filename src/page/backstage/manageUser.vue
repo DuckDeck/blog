@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import {allUser} from '../../store/manageService'
+import {allUser,deleteUser} from '../../store/manageService'
     export default {
         data() {
             return {
@@ -90,8 +90,17 @@ import {allUser} from '../../store/manageService'
                 this.currentDeleteUser =  userInfo
                 this.showDeleteUser = true
             },
-            deleteUserSubmit(){
-
+            async deleteUserSubmit(){
+                this.showDeleteUser = false
+                this.deleteLoading = true
+                let res = await deleteUser(this.currentDeleteUser.user_id)
+                this.deleteLoading = false
+                if(res.code == 0){
+                    toast(this,"该用户已成功删除")
+                }
+                else{
+                    toast(this,res.cMsg)
+                }
             },
             handleSelectionChange(val){
 

@@ -22,6 +22,10 @@ export const allUser = (index,size)=>{
     return setpromiseGet(url)
 }
 
+export const deleteUser = (userId)=>{
+    let url = HostName +   'manage/user/'+ userId + '/' + manageId() + '/' + createMtoken() 
+    return setpromiseDelete(url)
+}
 
 export const userInfoById = (id)=>{
     let url = HostName +   'manage/userinfo/'+ id + '/' + manageId() + '/' + createMtoken() 
