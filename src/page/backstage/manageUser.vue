@@ -97,6 +97,7 @@ import {allUser,deleteUser} from '../../store/manageService'
                 this.deleteLoading = false
                 if(res.code == 0){
                     toast(this,"该用户已成功删除")
+                    this.loadData(this.queryParam)
                 }
                 else{
                     toast(this,res.cMsg)

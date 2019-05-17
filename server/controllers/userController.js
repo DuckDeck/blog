@@ -84,15 +84,6 @@ module.exports = {
         
         let sql = ' update user set delete_flag = 1 where user_id = ?'
         let res = await DB.exec(sql,[userId])
-       
-        if(res.code == 0){
-            if(res.data.length > 0){
-                res.data = res.data[0]
-            }
-            else{
-                res = Result.create(8)
-            }
-        }
         ctx.rest(res)
      },
 
