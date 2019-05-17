@@ -25,9 +25,20 @@ module.exports = {
         }
        let index = parseInt(ctx.params.index)
        let size = parseInt(ctx.params.size)
-       let sqlUser = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
-       let res = await DB.exec(sqlUser,[index * size,size])
-       ctx.rest(res)
+       let sql =  `select count(user_id) as count from user`
+       let res = await DB.exec(sql)
+        if(res.code != 0){
+            ctx.rest(res)
+            return
+        }
+        if(res.data[0].count == 0){
+            ctx.rest(Result.createCount(0,0,[]))
+            return
+        }
+        let count = res.data[0].count
+       sql = 'select user_id,user_name,user_isValidate,user_register_time from user limit ?,?'
+       res = await DB.exec(sql,[index * size,size])
+       ctx.rest(Result.createCount(0,count,res.data))
      },
      //管理员获取用户信息
     'GET /api/manage/userinfo/:userId/:mId/:token': async (ctx, next) => {

@@ -22,16 +22,29 @@
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                     <el-button size="small" type="primary" @click = "editUserInfo(scope.row)">管理</el-button>
+                    <el-button size="small" @click = "deleteUserInfo(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <div class="pagination">
+        <div class="pagination" v-show="!loading" >
             <el-pagination
+                     @size-change="sizeChange" 
+                     @current-change="currentChange"
+                    :page-size="queryParam.page_size"
                     layout="prev, pager, next"
-                    :total="tableData.length">
+                    :total="count">
             </el-pagination>
         </div>
+        <el-dialog  title="删除用户"  :visible.sync="showDeleteUser"  size="tiny"  >
+		    
 
+		 <div style="margin-top:5px;margin-left:50px">是否确定删除该用户  {{currentDeleteUser.user_name}} ？</div>
+
+			<div slot="footer" class="dialog-footer">
+			<el-button @click="showDeleteUser = false">取消</el-button>
+			<el-button v-loading="deleteLoading" type="primary" @click="deleteUserSubmit">确认</el-button>
+			</div>
+		</el-dialog>
     </div>
 </template>
 
@@ -43,19 +56,28 @@ import {allUser} from '../../store/manageService'
                 tableData: [],
                 dialogVisible:false,
                 deleteMessage:'',
-                loading:false
+                loading:false,
+                count:0,
+                queryParam: {
+                    page_num: 0,
+                    page_size: 10,
+                },
+                showDeleteUser:true,
+                currentDeleteUser:{},
+                deleteLoading:false,
             }
         },
         mounted(){
-            this.loadData()
+            this.loadData(this.queryParam)
         },
         methods:{
-            async loadData(index = 0,size = 10){
+            async loadData(para){
                 this.loading = true
-                let res = await allUser(index,size)
+                let res = await allUser(para.page_num,para.page_size)
                  this.loading = false
                 if(res.code == 0){
                     this.tableData = res.data
+                    this.count = res.count
                 }
                 else{
                     toast(this,res.cMsg)
@@ -64,9 +86,25 @@ import {allUser} from '../../store/manageService'
             editUserInfo(userInfo){
                 this.$router.push('/manage/manageUserInfo/' + userInfo.user_id)
             },
+            deleteUserInfo(userInfo){
+                this.currentDeleteUser =  userInfo
+                this.showDeleteUser = true
+            },
+            deleteUserSubmit(){
+
+            },
             handleSelectionChange(val){
 
             },
+            sizeChange(val) {
+                this.queryParam.page_size = val
+                this.loadData(this.queryParam)
+            },
+            currentChange(val){
+                this.queryParam.page_num = val - 1 
+                this.loadData(this.queryParam)
+            },
+            
             formatter(row, column) {
                 if(column.label == "注册日期"){
                     return formatTime(new Date(row.user_register_time))

@@ -95,5 +95,5 @@ var pool  = mysql.createPool({
 + 5.建好表格后，这个时侯数据库还没有数据。如果你想使用自己的数据库，那么可以用我写的小爬虫程序可来爬取数据。它位于根目录的crawler下，其中jianchumy.js可以爬取我在简书发的文章。然后保存到数据库里。它还可以插入两个用户和一些文章分类。所以建议读者在这里运行这个文件`node jianchumy.js` 来生成一些数据。
 + 6.如果你不会配置Mysql的话也可以使用我server的数据，只需要修改`src/config/env.js`这个文件，将`development`的`baseUrl`改成`https://api.bqbbq.com/api/`即可。
 + 7.再用命令启动前端即可，在项目根目录里使用命令`npm run dev`。
-+ 8.浏览器会自动启动并打开`localhiost:8088`并打开Blog主页面。
++ 8.浏览器会自动启动并打开`localhiost:8080`并打开Blog主页面。
 + 9.如果想发布，使用命令`npm run build`即可，生成的文件在dist目录下，然后就能直接会使用了。
