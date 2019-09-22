@@ -44,3 +44,4 @@ dist
 server/static/img
 server/static/tmp
 server/static/myimg
+crawler/crawler_download
