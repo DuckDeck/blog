@@ -397,7 +397,6 @@ module.exports = {
             ctx.rest(Result.create(502))
             return
         }
-
       },
       //检查用户名合法
     'POST /api/checkusername': async (ctx, next) => {

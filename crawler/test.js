@@ -39,3 +39,12 @@ for(item in s){
         break
     }
 }
+
+
+let a = {a:0,b:{c:1}}
+let b = Object.assign({},a)
+console.log(JSON.stringify(b))
+a.b = {d:111}
+console.log(JSON.stringify(a))
+console.log(JSON.stringify(b))
+
