@@ -3,17 +3,17 @@ var mysql = require('mysql');
 const result = require('../model/result')
 var pool  = mysql.createPool({  
   connectionLimit : 10,  
-  host            : 'localhost',  
+  host            : '139.186.66.34',  
   user            : 'test',  
-  password        : '123456',  
+  password        : 'Qwert12345.',  
   database        : 'blog' ,
 });
 
 var poolCity  = mysql.createPool({  
     connectionLimit : 10,  
-    host            : 'localhost',  
+    host            : '139.186.66.34',  
     user            : 'test',  
-    password        : '123456',  
+    password        : 'Qwert12345.',  
     database        : 'city' ,
   });
   //host            : 'bqbbq.com',  
