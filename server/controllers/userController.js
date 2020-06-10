@@ -86,7 +86,29 @@ module.exports = {
         let res = await DB.exec(sql,[userId])
         ctx.rest(res)
      },
-
+     //管理员上传头像
+    'POST /api/manage/uploadHead/:userId/:mId/:token': async (ctx, next) => {
+        //因为上传图片要很多时间，所以这埋在的checkToken时间就不够，就会有问题
+        let tokenResult = await Check.checkManageToken(ctx)
+        if(tokenResult.code != 0){
+            ctx.rest(tokenResult)
+            return
+        }
+        let paraCheckResult = Check.checkNum(ctx.params,'userId')
+        if(paraCheckResult){
+            ctx.rest(paraCheckResult)
+            return
+        }
+       let id = ctx.params.userId
+       let path = "http://qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
+       let userInsert = {
+           user_id:id,
+           user_image_url:path
+       }
+       let res = await User.updateUserHead(userInsert)
+       res.data = {url:path}
+       ctx.rest(res)
+     },
      //管理员获取用户喜欢的文章列表
      'GET /api/manage/userlikearticle/:userId/:mId/:token/:index/:size': async (ctx, next) => {
         let tokenResult = await Check.checkManageToken(ctx)
@@ -436,8 +458,6 @@ module.exports = {
         await Tool.sendEmailToActive(user.user_real_name,user.user_email,config.emailPath + "#/active/"+userid+"/" + activityCode)
         ctx.rest(Result.create(0))
      },
-     //上传用户头像
-   
     //获取重设码
     'POST /api/resetcode': async (ctx, next) => {
         var  t = ctx.request.body
@@ -538,7 +558,7 @@ module.exports = {
        }
        let id = ctx.params.userId
        let token = ctx.params.token
-       let path = "qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
+       let path = "http://qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
        let userInsert = {
            user_id:id,
            user_image_url:path
@@ -908,6 +928,7 @@ module.exports = {
             return s.article_id
         })
         sql = `select * from article_related_info where  article_id in (` + articleIds.join(',') + `)`
+        console.log(sql)
         //注意，这进而是有被删除的文章的，因为我没有完全删除。
         //所以如果喜欢的文章被删除的话，这里就要产品来判断还要不要返回给已经设为喜欢的文章的用户了
         //这里我就直接返回了
@@ -916,6 +937,7 @@ module.exports = {
             ctx.rest(res)
             return
         }
+        console.log(res.data)
         ctx.rest(Result.createCount(0,count,res.data))    
       },
      //获取用户收藏的文章 

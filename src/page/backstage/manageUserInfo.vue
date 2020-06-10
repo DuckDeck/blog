@@ -58,7 +58,7 @@
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
-                             <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                             <el-upload class="avatar-uploader" action="https://up-z2.qiniup.com" :show-file-list="false" :data="dataObj"
                                         :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                         <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
@@ -160,8 +160,8 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
-import {userInfoById} from '../../store/manageService'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks,getQiniuToken} from '../../store/service'
+import {userInfoById,uploadUserHead} from '../../store/manageService'
 import {imgPath} from '../../../config/pathConfig'
     export default {
         data: function(){
@@ -183,11 +183,14 @@ import {imgPath} from '../../../config/pathConfig'
                 rules: {
                     
                 },
+                dataObj: { token: '' },
                 tableData: [],
+                userId:undefined,
             }
         },
         async mounted(){
             let id = this.$route.params.id
+            this.userId = id
             let self = this
             getTags(id).then(function(result){
                 if(result.code == 0){
@@ -210,6 +213,14 @@ import {imgPath} from '../../../config/pathConfig'
                     self.tableData = res.data
                 }
             })
+            let res = await getQiniuToken()
+           if (res.code == 0){
+               
+               this.dataObj.token = res.data
+           }
+           else{
+                toast(self,res.cMsg)
+           }
         },
         methods:{
            handleSortClose(sort) {
@@ -299,8 +310,12 @@ import {imgPath} from '../../../config/pathConfig'
                 })
             },
             handleAvatarScucess(res, file) {
-                this.userInfo.user_image_url = res.data.url;
-                clearStore()
+                 this.userInfo.user_image_url = URL.createObjectURL(file.raw);
+                let key = file.response.key
+                console.log(key,"key")
+                uploadUserHead(key,this.userId).then(res=>{
+                    console.log(res)
+                })
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -318,11 +333,6 @@ import {imgPath} from '../../../config/pathConfig'
                 window.location.href = link.link_url
             }
             
-        },
-        computed:{
-            uploadHeadUrl(){
-                return imgPath +  'api/user/uploadHead/' + userId + '/' + createToken()
-            }
         },
         components:{
             

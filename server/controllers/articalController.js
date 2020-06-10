@@ -10,7 +10,7 @@ const Check = require('../tool/check')
 const DB = require('../sqlhelp/mysql')
 const Dynamic = require('../model/dynamic')
 const imgPath = require('../../config/pathConfig')
-
+const qiniu = require('qiniu')
 module.exports = {
     //管理员获取所有文章
     'GET /api/manage/article/:mId/:token/:index/:size': async (ctx, next) => {
@@ -536,8 +536,10 @@ module.exports = {
        let newFileName = id + '-' + new Date().getTime()+ '.' + extension
        let newPath =    path.join(__dirname,'../static/img/' + newFileName)
        fs.renameSync(oldPath,newPath)
-       let urlPath = imgPath.imgPath + "static/img/" + newFileName
-       ctx.rest(Result.create(0,urlPath))
+       let qiniuPath = await saveImgToQiniu(newPath)
+       
+     
+       ctx.rest(Result.create(0,qiniuPath))
      },
 
 
@@ -721,4 +723,31 @@ module.exports = {
         
      },
 
+}
+
+
+async function saveImgToQiniu(path){
+    let qiniuToken = Tool.qiniuToken()
+    var config = new qiniu.conf.Config();
+    
+    config.zone = qiniu.zone.Zone_z2;
+    var formUploader = new qiniu.form_up.FormUploader(config)
+    var putExtra = new qiniu.form_up.PutExtra()
+
+    return new Promise((res,ret)=>{
+        formUploader.putFileWithoutKey(qiniuToken,path,putExtra,(err,body,info)=>{
+           if(err ){
+               ret(err)
+           }
+           else{
+               
+              
+               let newPath = "http://qboq7wusr.bkt.clouddn.com/" + body.hash
+               res(newPath)
+           }
+        })
+    })
+
+   
+ 
 }

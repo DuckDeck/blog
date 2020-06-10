@@ -121,3 +121,8 @@ export const managerChatLogById = function(chat_id,index = 0,size = 10){
     const url = HostName +  'manage/chat/'+ chat_id + '/'  +  manageId() + '/' + createMtoken()+ '/' + index + '/' + size
     return setpromiseGet(url)
 }
+
+export const uploadUserHead = function(key,userId){
+    const url = HostName + 'manage/uploadHead/' + userId +'/' + manageId() + '/' + createMtoken()
+    return setpromisePost(url,{path:key})
+}
