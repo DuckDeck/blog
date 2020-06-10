@@ -14,7 +14,7 @@ const cheerio = require('cheerio')
 //     },
 // })
 var mailTransport = Mailer.createTransport('smtps://zoe_blog%40163.com:zoe1234@smtp.163.com');
-var qiniuKey = require('../../config/qiniyKey')
+var qiniuKey = require('../../config/qiniuKey')
 var qiniu = require('qiniu')
 //smtps://username%40163.com:password@smtp.163.com
 class Tool{
