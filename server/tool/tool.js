@@ -24,7 +24,7 @@ class Tool{
     static qiniuToken(){
         var mac = new qiniu.auth.digest.Mac(qiniuKey.ak, qiniuKey.sk);
         var options = {
-            scope: bucket,
+            scope: 'zoeblog',
         };
         var putPolicy = new qiniu.rs.PutPolicy(options);
         var uploadToken=putPolicy.uploadToken(mac);

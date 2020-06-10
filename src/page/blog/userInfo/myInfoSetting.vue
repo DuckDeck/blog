@@ -9,7 +9,7 @@
                         <el-tab-pane   name="basic">
                             <span slot="label"><i class="fa fa-file-text"></i> 基本信息 </span>
                                 <div class="basicInfoEditManageClass">
-                                      <el-upload class="avatar-uploader" action="http://upload.qiniup.com" :show-file-list="false" :data="dataObj"
+                                      <el-upload class="avatar-uploader" action="https://up-z2.qiniup.com" :show-file-list="false" :data="dataObj"
                                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                                 <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-    import {getUserInfo,updateUserInfo,checkUserName,deleteLink} from '../../../store/service'
+    import {getUserInfo,updateUserInfo,checkUserName,deleteLink,getQiniuToken,uploadUserHead} from '../../../store/service'
     import upToTop from './../com/upToTop.vue'
     import blogFoot from './../com/blogFoot.vue'
     import addLink from './com/addLink.vue'
@@ -236,10 +236,9 @@
                 currentDeleteLink:{},
                 isCanResetUserName:false,//是否可以重设用户名
                 dataObj: { token: '' },
-                token:'',
             }
         },
-        mounted(){
+       async mounted(){
             if(getStore('userInfo')){
                 this.userInfo = getStore('userInfo')
                 this.isCanResetUserName = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(this.userInfo.user_name)
@@ -251,6 +250,16 @@
             else{
                 this.getUserInfoFromNet()
             }
+            
+           let res = await getQiniuToken()
+           if (res.code == 0){
+               
+               this.dataObj.token = res.data
+           }
+           else{
+                toast(self,res.cMsg)
+           }
+           
            
         },
         methods:{
@@ -279,15 +288,21 @@
                 })
             },
             handleAvatarScucess(res, file) {
-                if(res.code == 0){
-                    this.userInfo.user_image_url = res.data.url
-                    let u = getStore('userInfo')
-                    u.user_image_url = res.data.url
-                    setStore('userInfo',u)
-                }
-                else{
-                   toast(this,res.cMsg)
-                }
+                 this.userInfo.user_image_url = URL.createObjectURL(file.raw);
+                // if(res.code == 0){
+                //     this.userInfo.user_image_url = res.data.url
+                //     let u = getStore('userInfo')
+                //     u.user_image_url = res.data.url
+                //     setStore('userInfo',u)
+                // }
+                // else{
+                //    toast(this,res.cMsg)
+                // }
+                let key = file.response.key
+                console.log(key,"key")
+                uploadUserHead(key).then(res=>{
+                    console.log(res)
+                })
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';

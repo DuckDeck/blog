@@ -538,25 +538,13 @@ module.exports = {
        }
        let id = ctx.params.userId
        let token = ctx.params.token
-       console.log("ctx.request.body.files")
-       console.log(ctx.request.files)
-       let  t = ctx.request.files.file
-       let oldPath = t.path
-       if (!fs.existsSync(oldPath)){
-           ctx.rest(Result.create(9))
-       }
-       let fileType = t.type
-       let extension = fileType.split('/')[1]
-       let newFileName = id + '-' + new Date().getTime()+ '.' + extension
-       let newPath =  path.join(__dirname,'../static/myimg/' + newFileName)
-       fs.renameSync(oldPath,newPath)
-       let urlPath = config.imgPath +  "static/myimg/" + newFileName
+       let path = "qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
        let userInsert = {
            user_id:id,
-           user_image_url:urlPath
+           user_image_url:path
        }
        let res = await User.updateUserHead(userInsert)
-       res.data = {url:urlPath}
+       res.data = {url:path}
        ctx.rest(res)
      },
     //获取个人信息
@@ -808,7 +796,7 @@ module.exports = {
        }
        ctx.rest(Result.createCount(0,count,dynamics))
      },
-     'Get /api/qiniu/token' : async(ctx,next)=>{
+     'GET /api/qiniu/token' : async(ctx,next)=>{
         let token = Tool.qiniuToken()
         ctx.rest(Result.create(0,token))
      },

@@ -42,7 +42,7 @@ export const uploadImgConfig =  function(){
   
  }
 export const getQiniuToken = function(){
-    const url =  HostName + 'token'
+    const url =  HostName + 'qiniu/token'
     return setpromiseGet(url)
 }
 export const login = function(userName,password){
@@ -169,6 +169,11 @@ export const deleteLink = function(link_id){
 export const updateUserInfo = function(type,data){
     const url = HostName + 'user/' +   type
     return setpromisePost(url,data)
+}
+
+export const uploadUserHead = function(key){
+    const url = HostName + 'user/uploadHead/' + userId() + '/' + createToken()
+    return setpromisePost(url,{path:key})
 }
 // /api/usersetlike/:userId/:articleId/:isLike
 
