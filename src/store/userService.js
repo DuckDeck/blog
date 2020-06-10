@@ -41,7 +41,10 @@ export const uploadImgConfig =  function(){
     }}
   
  }
-
+export const getQiniuToken = function(){
+    const url =  HostName + 'token'
+    return setpromiseGet(url)
+}
 export const login = function(userName,password){
     const url =  HostName + 'login'
     return setpromisePost(url,{userName:userName,password:password})

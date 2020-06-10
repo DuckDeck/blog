@@ -9,7 +9,7 @@
                         <el-tab-pane   name="basic">
                             <span slot="label"><i class="fa fa-file-text"></i> 基本信息 </span>
                                 <div class="basicInfoEditManageClass">
-                                      <el-upload class="avatar-uploader" :action="uploadHeadUrl" :show-file-list="false"
+                                      <el-upload class="avatar-uploader" action="http://upload.qiniup.com" :show-file-list="false" :data="dataObj"
                                                 :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                                 <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -235,6 +235,8 @@
                 dialogVisible:false,
                 currentDeleteLink:{},
                 isCanResetUserName:false,//是否可以重设用户名
+                dataObj: { token: '' },
+                token:'',
             }
         },
         mounted(){
@@ -249,6 +251,7 @@
             else{
                 this.getUserInfoFromNet()
             }
+           
         },
         methods:{
             deleteArticleConfirm(){

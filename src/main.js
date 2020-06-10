@@ -12,6 +12,7 @@ import {baseUrl} from './config/env'
 import  mavonEditor  from 'mavon-editor'
 import Vue2Emoji from 'vuejs-emoji'
 import VideoPlayer from 'vue-video-player'
+import 'font-awesome/css/font-awesome.min.css'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 import 'videojs-flash'

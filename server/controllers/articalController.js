@@ -204,7 +204,13 @@ module.exports = {
        article.like_count = resLikeCount.data[0]['count'] 
        article.collect_count = resCollectCount.data[0]['count'] 
        article.userInfo = resUser.data[0]
+       if(article.userInfo == undefined){
+            ctx.rest(resUser)
+             return
+       }
        article.userInfo.is_attention = false
+       
+       
        let isUserLike = null
        let isUserCollect = null
        if(userId != 0){

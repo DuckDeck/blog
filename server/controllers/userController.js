@@ -808,6 +808,10 @@ module.exports = {
        }
        ctx.rest(Result.createCount(0,count,dynamics))
      },
+     'Get /api/qiniu/token' : async(ctx,next)=>{
+        let token = Tool.qiniuToken()
+        ctx.rest(Result.create(0,token))
+     },
     //获取用户评论
     'GET /api/usercomment/:userId/:index/:size': async (ctx, next) => {
        let pageResult = Check.checkPage(ctx)

@@ -239,7 +239,7 @@ class Tool{
         return decoded;
     };
 
-
+    
 
 }
 
@@ -259,6 +259,8 @@ global.register = function(){
     }
   
 }
+
+
 
 global.toast = function(vue,message,type='normal'){
     if(globalVue != vue){
