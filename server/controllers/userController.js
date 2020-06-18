@@ -100,13 +100,12 @@ module.exports = {
             return
         }
        let id = ctx.params.userId
-       let path = "http://qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
        let userInsert = {
            user_id:id,
-           user_image_url:path
+           user_image_url:ctx.request.body.path
        }
        let res = await User.updateUserHead(userInsert)
-       res.data = {url:path}
+       res.data = {url:ctx.request.body.path}
        ctx.rest(res)
      },
      //管理员获取用户喜欢的文章列表
@@ -558,13 +557,12 @@ module.exports = {
        }
        let id = ctx.params.userId
        let token = ctx.params.token
-       let path = "http://qboq7wusr.bkt.clouddn.com/" + ctx.request.body.path
        let userInsert = {
            user_id:id,
-           user_image_url:path
+           user_image_url:ctx.request.body.path
        }
        let res = await User.updateUserHead(userInsert)
-       res.data = {url:path}
+       res.data = {url:ctx.request.body.path}
        ctx.rest(res)
      },
     //获取个人信息

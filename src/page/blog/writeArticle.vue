@@ -209,8 +209,9 @@ import  toMarkdown  from 'to-markdown'
                 }
             },
             imgCallBack(result){
+                console.log(result)
                 if(result.code == 0){
-                    this.content = this.content +  "<span style='text-align:center;display:block'><img style='max-width:100%;height:auto' src="+ result.data +" ></img></span>"
+                    this.content = this.content +  "<span style='text-align:center;display:block'><img style='max-width:100%;height:auto' src="+ result.data.data +" ></img></span>"
                 }
                 else{
                     toast(this,result.cMsg)

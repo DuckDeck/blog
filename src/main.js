@@ -24,10 +24,10 @@ Vue.use(VueHtml5Editor,{
          // 后端图片上传的地址，如果为空，默认转图片为base64
          // Url of the server-side,default null and convert image to base64
          //这个问题暂时无解，目前只能用不带token的url上传图片
-         server: baseUrl +  'uploadArticleImg' ,
+         server: 'http://lovelive.ink:10087/upload/img' ,
          // 请求时表单参数名
          // the name for file field in multipart request
-         fieldName: "image",
+         fieldName: "upload-key",
          // 文件最大体积，单位字节  max file size
          sizeLimit: 512 * 1024,
          // 是否压缩，默认true，设置为true时会使用localResizeIMG进行压缩
@@ -61,6 +61,8 @@ ah.hookAjax({
   },
   open:function(arg){
 
+    //这个地方是原来在文章里上传图片用了控件的一个功能，本身控件是可以直接上传的但是这里让控件调用指定接口，然后这里hook这个接口来实现
+    //自定义上传功能，在控件里改成了uploadArticleImg相关接口
     if(arg[1].indexOf('uploadArticleImg') >= 0 ){
       arg[1] += "/" + userId() + "/" + createToken()
     }

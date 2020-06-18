@@ -740,10 +740,7 @@ async function saveImgToQiniu(path){
                ret(err)
            }
            else{
-               
-              
-               let newPath = "http://qboq7wusr.bkt.clouddn.com/" + body.hash
-               res(newPath)
+               res(body.path)
            }
         })
     })
