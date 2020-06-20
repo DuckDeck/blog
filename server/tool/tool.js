@@ -14,13 +14,14 @@ const cheerio = require('cheerio')
 //     },
 // })
 var mailTransport = Mailer.createTransport('smtps://zoe_blog%40163.com:zoe1234@smtp.163.com');
-var qiniuKey = require('../../config/qiniuKey')
-var qiniu = require('qiniu')
+// var qiniuKey = require('../../config/qiniuKey')
+// var qiniu = require('qiniu')
 //smtps://username%40163.com:password@smtp.163.com
 class Tool{
     static getType(data){
         return Object.prototype.toString.call(data).slice(8, -1);
      }
+     /*
     static qiniuToken(){
         var mac = new qiniu.auth.digest.Mac(qiniuKey.ak, qiniuKey.sk);
         var options = {
@@ -30,6 +31,7 @@ class Tool{
         var uploadToken=putPolicy.uploadToken(mac);
         return uploadToken
     }
+    */
     static formatTime(date,format){
         if(!(date instanceof Date)){
             return date

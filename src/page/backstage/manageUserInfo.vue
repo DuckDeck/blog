@@ -58,7 +58,7 @@
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
-                             <el-upload class="avatar-uploader" action="https://up-z2.qiniup.com" :show-file-list="false" :data="dataObj"
+                             <el-upload class="avatar-uploader" action="https://lovelive.ink:19996/upload/header" :show-file-list="false" name="upload-key"
                                         :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                         <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks,getQiniuToken} from '../../store/service'
+import {addTag,getTags,getSorts,addSort,deleteSort,deleteTag,getUserInfo,getUserLinks} from '../../store/service'
 import {userInfoById,uploadUserHead} from '../../store/manageService'
 import {imgPath} from '../../../config/pathConfig'
     export default {
@@ -183,7 +183,6 @@ import {imgPath} from '../../../config/pathConfig'
                 rules: {
                     
                 },
-                dataObj: { token: '' },
                 tableData: [],
                 userId:undefined,
             }
@@ -213,14 +212,7 @@ import {imgPath} from '../../../config/pathConfig'
                     self.tableData = res.data
                 }
             })
-            let res = await getQiniuToken()
-           if (res.code == 0){
-               
-               this.dataObj.token = res.data
-           }
-           else{
-                toast(self,res.cMsg)
-           }
+           
         },
         methods:{
            handleSortClose(sort) {
@@ -311,10 +303,10 @@ import {imgPath} from '../../../config/pathConfig'
             },
             handleAvatarScucess(res, file) {
                  this.userInfo.user_image_url = URL.createObjectURL(file.raw);
-                let key = file.response.key
-                console.log(key,"key")
-                uploadUserHead(key,this.userId).then(res=>{
-                    console.log(res)
+                 let url = file.response.data.data
+                
+                uploadUserHead(url).then(res=>{
+                    
                 })
             },
             beforeAvatarUpload(file) {
