@@ -24,7 +24,7 @@ Vue.use(VueHtml5Editor,{
          // 后端图片上传的地址，如果为空，默认转图片为base64
          // Url of the server-side,default null and convert image to base64
          //这个问题暂时无解，目前只能用不带token的url上传图片
-         server: 'http://lovelive.ink:10087/upload/img' ,
+         server: 'https://lovelive.ink:19996/upload/img' ,
          // 请求时表单参数名
          // the name for file field in multipart request
          fieldName: "upload-key",
