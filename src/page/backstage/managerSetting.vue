@@ -12,7 +12,7 @@
             </el-table-column>
             <el-table-column  label="管理员用户名" >
                 <template slot-scope="scope">
-                    <a class="articleTitleClass" @click="gotoArticleDetail(scope.row)" >{{scope.row.m_username}}</a>
+                    <a class="articleTitleClass"  >{{scope.row.m_username}}</a>
                 </template>
             </el-table-column>
             <el-table-column prop="m_last_login_time" label="上一次登录日期" sortable width="200" :formatter="formatter">

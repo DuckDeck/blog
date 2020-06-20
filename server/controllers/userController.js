@@ -1008,7 +1008,7 @@ module.exports = {
         ctx.rest(Result.createCount(0,count,res.data))    
     },
     //获取用户关注的人  
-    'GET /api/userattentioned/:userId/': async (ctx, next) => {
+    'GET /api/userattentioned/:userId': async (ctx, next) => {
         let id = ctx.params.userId
         let sql = `select count(a_id) as count from user_attention where user_id = ?`
         let res = await DB.exec(sql,[id])
