@@ -57,7 +57,7 @@
                     </div>
                     <div class="unCompletedFeatureDiv">
                         存在问题
-                        <el-checkbox   label="富文本不能上传图片到server" ></el-checkbox>
+                        <el-checkbox  checked  label="富文本不能上传图片到server(解决了)" ></el-checkbox>
                         <el-checkbox  label="富文本和Markdown不能完全正确转换" ></el-checkbox>
                         <el-checkbox  label="Markdown编辑器存在一些Bug，比如会重新刷新页面" ></el-checkbox>
                     </div>
@@ -67,7 +67,7 @@
                         <el-checkbox  label="网站HTTPS支持" ></el-checkbox>
                         <el-checkbox  checked label="关注其他作者，粉丝功能" ></el-checkbox>
                         <el-checkbox  checked label="收藏文章,点赞文章" ></el-checkbox>
-                        <el-checkbox  checked label="使用七牛来保存图片" ></el-checkbox>
+                        <el-checkbox  checked label="使用七牛来保存图片(不再使用七牛了，因为七牛需要备案的域名，这里我用了自己的DDNS)" ></el-checkbox>
                         <el-checkbox  label="用户相册功能" ></el-checkbox>
                         <el-checkbox  label="用户之间私信功能和系统通知功能" ></el-checkbox>
                         <el-checkbox  label="其他更多......" ></el-checkbox>
