@@ -58,7 +58,7 @@
                     <div class="basicInfoManageClass" >
                         <div class="headinfoManageTitleClass">   用户头像  </div>
                         <div class="basicInfoEditManageClass">
-                             <el-upload class="avatar-uploader" action="https://lovelive.ink:19996/upload/header" :show-file-list="false" name="upload-key"
+                             <el-upload class="avatar-uploader" action="http://lovelive.ink:19996/7110/header" :show-file-list="false" name="upload-key"
                                         :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
                                         <img v-if="userInfo.user_image_url.length > 10" :src="userInfo.user_image_url" class="avatar"> 
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i> </el-upload>
