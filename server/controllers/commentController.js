@@ -220,7 +220,7 @@ module.exports = {
             if(id != user_id){ //评论自己的文章不发消息
                 let article_name =   res.data[0].article_name
                 let article_id = res.data[0].article_id
-                res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?)',
+                res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?,?)',
                 [user_id,id,article_id,article_name,(new Date().getTime()),0,
                     t.commentContent,0,commitedId,com.comment_scope,t.commentTargetUserId])
             }
@@ -236,7 +236,7 @@ module.exports = {
             res = await DB.exec('select user_id,article_name from article where article_id = ?',[com.comment_target_id])
             let user_id = res.data[0].user_id
             if(user_id != id){ //评论自己的文章不发消息
-                res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?,?)',
+                res = await DB.exec('insert into message_comment values(0,?,?,?,?,?,?,?,?,?,?,?)',
                 [user_id,parseInt(id),parseInt(com.comment_target_id),res.data[0].article_name,
                 (new Date().getTime()),0,t.commentContent,0,0,0,0])
             }
