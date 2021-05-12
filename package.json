@@ -26,7 +26,7 @@
     "mysql": "^2.18.1",
     "mz": "^2.7.0",
     "node-cache": "^5.1.1",
-    "nodemailer": "^6.4.8",
+    "nodemailer": "^6.4.16",
     "qs": "^6.9.4",
     "socket.io": "^2.3.0",
     "to-markdown": "^3.1.1",
